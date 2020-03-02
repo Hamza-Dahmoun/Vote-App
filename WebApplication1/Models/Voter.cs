@@ -9,5 +9,12 @@ namespace WebApplication1.Models
     public class Voter : Person
     {
         public Vote Vote { get; set; }
+
+        public bool hasVoted()
+        {
+            if (this.Vote != null)
+                return true;
+            return false;
+        }
     }
 }

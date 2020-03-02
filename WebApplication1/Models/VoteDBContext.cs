@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApplication1.Models.ViewModels;
 
 namespace WebApplication1.Models
 {
@@ -30,5 +31,6 @@ namespace WebApplication1.Models
         public virtual DbSet<Vote> Vote { get; set; }
         public virtual DbSet<Structure> Structure { get; set; }
         public virtual DbSet<StructureLevel> StructureLevel { get; set; }
+        public DbSet<WebApplication1.Models.ViewModels.PersonViewModel> PersonViewModel { get; set; }
     }
 }
