@@ -8,7 +8,7 @@ namespace WebApplication1.Models
 {
     public class VoteDBContext:DbContext
     {
-        public VoteDBContext():base()
+        public VoteDBContext() : base()
         {
 
         }
