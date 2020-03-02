@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace WebApplication1.Models
 {
-    public class ApplicationDBContext:DbContext
+    public class VoteDBContext:DbContext
     {
-        public ApplicationDBContext():base()
+        public VoteDBContext():base()
         {
 
         }
-        public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options):base(options)
+        public VoteDBContext(DbContextOptions<VoteDBContext> options):base(options)
         {
 
         }

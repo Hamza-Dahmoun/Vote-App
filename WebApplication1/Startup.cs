@@ -12,6 +12,7 @@ using WebApplication1.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WebApplication1.Models;
 
 namespace WebApplication1
 {
@@ -29,9 +30,12 @@ namespace WebApplication1
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                    Configuration.GetConnectionString("IdentityDBConnection")));
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddDbContext<VoteDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("VoteDBConnection")));
+
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
