@@ -10,11 +10,13 @@ namespace WebApplication1.Models
     {
         public Guid Id { get; set; }
         [Required]
-        public DateTime datetime { get; set; }
+        public DateTime Datetime { get; set; }
         [Required]
         public Voter Voter { get; set; }
+        public Guid VoterID { get; set; }
         [Required]
         public Candidate Candidate { get; set; }
+        public Guid CandidateID { get; set; }
 
     }
 }

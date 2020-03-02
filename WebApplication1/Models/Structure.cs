@@ -11,6 +11,8 @@ namespace WebApplication1.Models
         [Required]
         public Guid Id { get; set; }
         [Required]
-        public StructureLevel level { get; set; }
+        public string Name { get; set; }
+        [Required]
+        public StructureLevel Level { get; set; }
     }
 }
