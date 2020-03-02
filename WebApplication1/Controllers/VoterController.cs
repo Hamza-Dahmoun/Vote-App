@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebApplication1.Controllers
 {
+
     public class VoterController : Controller
     {
         public IActionResult Index()
