@@ -10,9 +10,9 @@ namespace WebApplication1.Models.Repositories
         //This interfce contains declaration of CRUD methods without their implementation, and it has a Generic type
         //so that it can be re-used by other classes that implement this interface
         IList<T> GetAll();
-        T GetById(int Id);
+        T GetById(Guid Id);
         void Add(T item);
-        void Edit(int Id, T item);
-        void Delete(int Id);
+        void Edit(Guid Id, T item);
+        void Delete(Guid Id);
     }
 }
