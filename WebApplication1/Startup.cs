@@ -33,6 +33,8 @@ namespace WebApplication1
             services.AddTransient<IRepository<Voter>, VoterRepository>();
             //Lets register the Structure Repository so that it could be used in StructureController
             services.AddTransient<IRepository<Structure>, StructureRepository>();
+            //Lets register the Candidate Repository so that it could be used in CandidateRepository
+            services.AddTransient<IRepository<Candidate>, CandidateRepository>();
 
 
             services.AddDbContext<ApplicationDbContext>(options =>
