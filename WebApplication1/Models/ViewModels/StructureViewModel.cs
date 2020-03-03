@@ -10,5 +10,6 @@ namespace WebApplication1.Models.ViewModels
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string LevelName { get; set; }
+        public int LevelValue { get; set; }
     }
 }

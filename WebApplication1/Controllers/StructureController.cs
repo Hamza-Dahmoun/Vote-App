@@ -21,7 +21,7 @@ namespace WebApplication1.Controllers
 
         public IActionResult Index()
         {
-            return View(convertStructureList_toStructureViewModelList(_structureRepository.GetAll()));
+            return View(convertStructureList_toStructureViewModelList(_structureRepository.GetAll()).OrderBy(svm=>svm.LevelValue));
         }
 
         public IActionResult Details(Guid id)
@@ -40,7 +40,8 @@ namespace WebApplication1.Controllers
             {
                 Id = structure.Id,
                 Name = structure.Name,
-                LevelName = structure.Level?.Name
+                LevelName = structure.Level?.Name,
+                LevelValue = structure.Level.LevelValue
             };
             return s;
         }

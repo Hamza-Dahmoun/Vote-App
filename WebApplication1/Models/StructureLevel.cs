@@ -12,6 +12,7 @@ namespace WebApplication1.Models
         public Guid Id { get; set; }
         [Required]
         public string Name { get; set; }
+        public int LevelValue { get; set; }
         public ICollection<Structure> Structures { get; set; }
     }
 }
