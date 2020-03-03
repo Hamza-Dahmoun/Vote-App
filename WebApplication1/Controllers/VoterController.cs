@@ -44,6 +44,11 @@ namespace WebApplication1.Controllers
             }
         }
 
+        public IActionResult Details(Guid id)
+        {
+            return View(convertVoter_toPersonViewModel(_voterRepository.GetById(id)));
+        }
+
   
 
 
