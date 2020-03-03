@@ -35,8 +35,8 @@ namespace WebApplication1.Controllers
         {
             try
             {
-                //return View(convertVoterList_toPersonViewModelList(_db.Voter.ToList()));
-                return View(convertVoterList_toPersonViewModelList(_voterRepository.GetAll()));
+                //return View(_db.Voter.ToList());
+                return View(_voterRepository.GetAll());
             }
             catch
             {

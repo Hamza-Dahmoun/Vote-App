@@ -1,4 +1,4 @@
-﻿@model IEnumerable<WebApplication1.Models.ViewModels.PersonViewModel>
+﻿@model IEnumerable<WebApplication1.Models.Voter>
 
 @{
     ViewData["Title"] = "Index";
@@ -6,9 +6,9 @@
 
 <h1>Index</h1>
 
-<p>
+@*<p>
     <a asp-action="Create">Create New</a>
-</p>
+</p>*@
 <table class="table">
     <thead>
         <tr>
@@ -17,15 +17,6 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.LastName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StructureName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StructureLevel)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.hasVoted)
             </th>
             <th></th>
         </tr>
@@ -40,18 +31,10 @@
                 @Html.DisplayFor(modelItem => item.LastName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.StructureName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StructureLevel)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.hasVoted)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |*@
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                @*|
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
             </td>
         </tr>
 }
