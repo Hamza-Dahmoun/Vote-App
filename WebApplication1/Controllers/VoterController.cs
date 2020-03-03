@@ -20,32 +20,15 @@ namespace WebApplication1.Controllers
         {
             try
             {
-                List<PersonViewModel> myList = new List<PersonViewModel>();
-                List<Voter> list = _db.Voter.ToList();
-                foreach (var item in list)
-                {
-                    PersonViewModel p = new PersonViewModel
-                    {
-                        Id = item.Id,
-                        FirstName = item.FirstName,
-                        LastName = item.LastName,
-                        StructureName = item.Structure?.Name,
-                        StructureLevel = item.Structure?.Level.Name
-                    };
-                if (item.hasVoted())
-                    p.hasVoted = "Yes";
-                else p.hasVoted = "No";
-
-                    myList.Add(p);
-                }
-                return View(myList);
+                return View(convertVoterList_toPersonViewModelList(_db.Voter.ToList()));
             }
             catch
             {
-
                 return View();
             }
         }
+
+  
 
 
 
@@ -57,6 +40,35 @@ namespace WebApplication1.Controllers
             {
                 _db.Dispose();
             }            
+        }
+
+        //******************** UTILITIES
+        public PersonViewModel convertVoter_toPersonViewModel(Voter voter)
+        {
+            PersonViewModel p = new PersonViewModel
+            {
+                Id = voter.Id,
+                FirstName = voter.FirstName,
+                LastName = voter.LastName,
+                StructureName = voter.Structure?.Name,
+                StructureLevel = voter.Structure?.Level.Name
+            };
+            if (voter.hasVoted())
+                p.hasVoted = "Yes";
+            else p.hasVoted = "No";
+
+            return p;
+        }
+
+        public List<PersonViewModel> convertVoterList_toPersonViewModelList(List<Voter> voters)
+        {
+            List<PersonViewModel> myList = new List<PersonViewModel>();
+            foreach (var item in voters)
+            {
+                myList.Add(convertVoter_toPersonViewModel(item));
+            }
+
+            return myList;
         }
     }
 }
