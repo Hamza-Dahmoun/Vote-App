@@ -12,9 +12,11 @@ namespace WebApplication1.Controllers
     public class CandidateController : Controller
     {
         public IRepository<Candidate> _candidateRepository { get; }
-        public CandidateController(IRepository<Candidate> candidateRepository)
+        public IRepository<Voter> _voterRepository { get; }
+        public CandidateController(IRepository<Candidate> candidateRepository, IRepository<Voter> voterRepository)
         {
             _candidateRepository = candidateRepository;
+            _voterRepository = voterRepository;
         }
 
         public IActionResult Index()
@@ -46,6 +48,13 @@ namespace WebApplication1.Controllers
             {
                 return View();
             }
+        }
+
+
+
+        public IActionResult GoToVotersList()
+        {
+            return View(_voterRepository.GetAll());
         }
 
 
