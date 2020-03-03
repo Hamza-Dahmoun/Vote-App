@@ -18,7 +18,8 @@ namespace WebApplication1.Models.Repositories
 
         public void Add(Candidate item)
         {
-            throw new NotImplementedException();
+            _dBContext.Add(item);
+            _dBContext.SaveChanges();
         }
 
         public void Delete(Guid Id)

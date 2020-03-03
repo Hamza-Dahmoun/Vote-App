@@ -57,11 +57,22 @@ namespace WebApplication1.Controllers
             return View(convertVoterList_toPersonViewModelList(_voterRepository.GetAll()));
         }
 
-        public IActionResult SelectNewCandidate(Guid id)
+        public IActionResult SelectNewCandidate(Guid voterId)
         {
             try
             {
-                return View();
+                Voter voter = _voterRepository.GetById(voterId);
+                _candidateRepository.Add(
+                    new Candidate
+                    {
+                        Id = Guid.NewGuid(),
+                        FirstName = voter.FirstName,
+                        LastName = voter.LastName,
+                        VoterBeing = voter,
+                        Structure = voter.Structure
+                    }
+                    );
+                return RedirectToAction(nameof(GoToVotersList));
             }
             catch
             {
@@ -105,6 +116,16 @@ namespace WebApplication1.Controllers
             return myList;
         }
 
+        public bool IsCandidate(Voter voter)
+        {
+
+            Candidate candidate = _candidateRepository.GetAll().SingleOrDefault(c => c.VoterBeing?.Id == voter.Id);
+
+            if (candidate != null)
+                return true;
+            else return false;
+
+        }
 
 
         //
@@ -140,15 +161,6 @@ namespace WebApplication1.Controllers
             return myList;
         }
 
-        public bool IsCandidate(Voter voter)
-        {
-
-            Candidate candidate = _candidateRepository.GetAll().SingleOrDefault(c => c.VoterBeing?.Id ==voter.Id);
-
-            if (candidate != null)
-                return true;
-            else return false;
-
-        }
+        
     }
 }

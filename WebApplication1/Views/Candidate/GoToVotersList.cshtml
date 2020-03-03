@@ -44,7 +44,7 @@
            
             <td>
                 @if(!item.IsCandidate) {
-                <a asp-route-id="@item.Id">Select as Candidate</a>
+                <a asp-action="SelectNewCandidate" asp-route-voterId="@item.Id">Select as Candidate</a>
                     }
             </td>
         </tr>
