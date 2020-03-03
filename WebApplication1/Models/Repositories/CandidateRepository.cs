@@ -23,7 +23,7 @@ namespace WebApplication1.Models.Repositories
 
         public void Delete(Guid Id)
         {
-            _dBContext.Remove(this.GetById(Id));
+            //_dBContext.Remove(this.GetById(Id));
         }
 
         public void Edit(Guid Id, Candidate item)

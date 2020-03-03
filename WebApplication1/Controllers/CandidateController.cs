@@ -66,6 +66,9 @@ namespace WebApplication1.Controllers
                 StructureLevel = candidate.Structure?.Level.Name,
                 VotesCount = candidate.Votes.Count(),
             };
+            //if (candidate.hasVoted())
+            //    c.hasVoted = "Yes";
+            //else c.hasVoted = "No";
             return c;
         }
 

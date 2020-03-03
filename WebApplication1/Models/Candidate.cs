@@ -8,5 +8,6 @@ namespace WebApplication1.Models
     public class Candidate:Person
     {
         public ICollection<Vote> Votes { get; set; }
+        public Voter VoterBeing { get; set; }
     }
 }
