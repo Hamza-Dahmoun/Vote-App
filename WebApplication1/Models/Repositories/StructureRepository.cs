@@ -35,12 +35,16 @@ namespace WebApplication1.Models.Repositories
 
         public IList<Structure> GetAll()
         {
-            return _dbSet.ToList();
+            //use eager loading to bring Level data too
+            return _dbSet.Include(s => s.Level).ToList();
+            //return _dbSet.ToList();
         }
 
         public Structure GetById(Guid Id)
         {
-            return _dbSet.Find(Id);
+            //use eager loading to bring Level data too
+            return _dbSet.Include(s=>s.Level).SingleOrDefault(s=>s.Id == Id);
+            //return _dbSet.Find(Id);
         }
     }
 }
