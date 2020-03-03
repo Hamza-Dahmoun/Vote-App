@@ -26,7 +26,26 @@ namespace WebApplication1.Controllers
 
         public IActionResult Details(Guid id)
         {
-            return View(convertCandidate_toPersonViewModel(_candidateRepository.GetById(id)));
+            return View(convertCandidate_toCandidateViewModel(_candidateRepository.GetById(id)));
+        }
+
+
+        public IActionResult Delete(Guid id)
+        {
+            return View(convertCandidate_toCandidateViewModel(_candidateRepository.GetById(id)));
+        }
+        [HttpPost]
+        public IActionResult DeleteCandidate(Guid id)
+        {
+            try
+            {
+                _candidateRepository.Delete(id);
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
         }
 
 
@@ -36,26 +55,26 @@ namespace WebApplication1.Controllers
 
 
         //******************** UTILITIES
-        public PersonViewModel convertCandidate_toPersonViewModel(Candidate candidate)
+        public CandidateViewModel convertCandidate_toCandidateViewModel(Candidate candidate)
         {
-            PersonViewModel p = new PersonViewModel
+            CandidateViewModel c = new CandidateViewModel
             {
                 Id = candidate.Id,
                 FirstName = candidate.FirstName,
                 LastName = candidate.LastName,
                 StructureName = candidate.Structure?.Name,
-                StructureLevel = candidate.Structure?.Level.Name
+                StructureLevel = candidate.Structure?.Level.Name,
+                VotesCount = candidate.Votes.Count(),
             };
-
-            return p;
+            return c;
         }
 
-        public List<PersonViewModel> convertCandidateList_toPersonViewModelList(IList<Candidate> candidates)
+        public List<CandidateViewModel> convertCandidateList_toPersonViewModelList(IList<Candidate> candidates)
         {
-            List<PersonViewModel> myList = new List<PersonViewModel>();
+            List<CandidateViewModel> myList = new List<CandidateViewModel>();
             foreach (var item in candidates)
             {
-                myList.Add(convertCandidate_toPersonViewModel(item));
+                myList.Add(convertCandidate_toCandidateViewModel(item));
             }
 
             return myList;

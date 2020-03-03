@@ -23,7 +23,7 @@ namespace WebApplication1.Models.Repositories
 
         public void Delete(Guid Id)
         {
-            throw new NotImplementedException();
+            _dBContext.Remove(this.GetById(Id));
         }
 
         public void Edit(Guid Id, Candidate item)
@@ -34,13 +34,15 @@ namespace WebApplication1.Models.Repositories
         public IList<Candidate> GetAll()
         {
             //use eager loading to bring Structure data and Level data too
-            return _dbSet.Include(c=>c.Structure).Include(c=>c.Structure.Level).ToList();
+            //return _dbSet.Include(c=>c.Structure).Include(c=>c.Structure.Level).ToList();
+            
+            return _dbSet.ToList();
         }
 
         public Candidate GetById(Guid Id)
         {
-            //use eager loading to bring Structure data and Level data too
-            return _dbSet.Include(c=>c.Structure).Include(c=>c.Structure.Level).SingleOrDefault(c=>c.Id == Id);
+            //use eager loading to bring Structure data and Level data and Votes data too
+            return _dbSet.Include(c=>c.Structure).Include(c=>c.Structure.Level).Include(c=>c.Votes).SingleOrDefault(c=>c.Id == Id);
         }
     }
 }

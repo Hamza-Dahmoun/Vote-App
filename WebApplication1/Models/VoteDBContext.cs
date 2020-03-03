@@ -33,5 +33,6 @@ namespace WebApplication1.Models
         public virtual DbSet<StructureLevel> StructureLevel { get; set; }
         public DbSet<WebApplication1.Models.ViewModels.PersonViewModel> PersonViewModel { get; set; }
         public DbSet<WebApplication1.Models.ViewModels.StructureViewModel> StructureViewModel { get; set; }
+        public DbSet<WebApplication1.Models.ViewModels.CandidateViewModel> CandidateViewModel { get; set; }
     }
 }
