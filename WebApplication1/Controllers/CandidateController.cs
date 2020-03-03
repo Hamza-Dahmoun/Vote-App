@@ -54,7 +54,20 @@ namespace WebApplication1.Controllers
 
         public IActionResult GoToVotersList()
         {
-            return View(_voterRepository.GetAll());
+            return View(convertVoterList_toPersonViewModelList(_voterRepository.GetAll()));
+        }
+
+        public IActionResult SelectNewCandidate(Guid id)
+        {
+            try
+            {
+                return View();
+            }
+            catch
+            {
+                return View();
+            }
+            
         }
 
 
@@ -92,5 +105,50 @@ namespace WebApplication1.Controllers
             return myList;
         }
 
+
+
+        //
+
+
+
+        public PersonViewModel convertVoter_toPersonViewModel(Voter voter)
+        {
+            PersonViewModel p = new PersonViewModel
+            {
+                Id = voter.Id,
+                FirstName = voter.FirstName,
+                LastName = voter.LastName,
+                StructureName = voter.Structure?.Name,
+                StructureLevel = voter.Structure?.Level.Name,
+                IsCandidate = IsCandidate(voter)
+            };
+            if (voter.hasVoted())
+                p.hasVoted = "Yes";
+            else p.hasVoted = "No";
+
+            return p;
+        }
+
+        public List<PersonViewModel> convertVoterList_toPersonViewModelList(IList<Voter> voters)
+        {
+            List<PersonViewModel> myList = new List<PersonViewModel>();
+            foreach (var item in voters)
+            {
+                myList.Add(convertVoter_toPersonViewModel(item));
+            }
+
+            return myList;
+        }
+
+        public bool IsCandidate(Voter voter)
+        {
+
+            Candidate candidate = _candidateRepository.GetAll().SingleOrDefault(c => c.VoterBeing?.Id ==voter.Id);
+
+            if (candidate != null)
+                return true;
+            else return false;
+
+        }
     }
 }

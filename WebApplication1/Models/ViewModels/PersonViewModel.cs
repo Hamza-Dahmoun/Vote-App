@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebApplication1.Models.ViewModels
 {
-    [NotMapped]
+    //[NotMapped]
     public class PersonViewModel
     {
         public Guid Id { get; set; }
@@ -15,5 +15,6 @@ namespace WebApplication1.Models.ViewModels
         public string StructureName { get; set; }
         public string StructureLevel { get; set; }
         public string hasVoted { get; set; }
+        public bool IsCandidate { get; set; }
     }
 }

@@ -45,5 +45,12 @@ namespace WebApplication1.Models.Repositories
             //use eager loading to bring Structure data and Level data and Votes data and VoterBeing data too
             return _dbSet.Include(c=>c.Structure).Include(c=>c.Structure.Level).Include(c=>c.Votes).Include(c => c.VoterBeing).SingleOrDefault(c=>c.Id == Id);
         }
+
+        //public Candidate GetByVoterBeingId(Guid VoterBeingId)
+        //{
+        //    Candidate candidate = _dBContext.Candidate.Include(c => c.VoterBeing).SingleOrDefault(c => c.VoterBeing.Id == VoterBeingId);
+        //    //return _dbSet.SingleOrDefault(c => c.VoterBeing.Id == VoterBeingId);
+        //    return candidate;
+        //}
     }
 }
