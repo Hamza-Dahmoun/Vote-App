@@ -31,6 +31,9 @@ namespace WebApplication1
         {
             //Lets register the Voter Repository so that it could be used in VoterController
             services.AddTransient<IRepository<Voter>, VoterRepository>();
+            //Lets register the Structure Repository so that it could be used in StructureController
+            services.AddTransient<IRepository<Structure>, StructureRepository>();
+
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
