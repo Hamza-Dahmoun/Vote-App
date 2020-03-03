@@ -36,7 +36,7 @@ namespace WebApplication1.Models.Repositories
 
         public IList<Voter> GetAll()
         {
-            throw new NotImplementedException();
+            return _dbSet.ToList();
         }
 
         public Voter GetById(Guid Id)

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models;
+using WebApplication1.Models.Repositories;
 using WebApplication1.Models.ViewModels;
 
 namespace WebApplication1.Controllers
@@ -11,16 +12,31 @@ namespace WebApplication1.Controllers
 
     public class VoterController : Controller
     {
-        private readonly VoteDBContext _db;
-        public VoterController(VoteDBContext db)
+        //private readonly VoteDBContext _db;
+        //public VoterController(VoteDBContext db)
+        //{
+        //    _db = db;
+        //}
+        //protected override void Dispose(bool disposing)
+        //{
+        //    if (disposing)
+        //    {
+        //        _db.Dispose();
+        //    }            
+        //}
+
+        public IRepository<Voter> _voterRepository { get; }
+        public VoterController(IRepository<Voter> voterRepository)
         {
-            _db = db;
+            _voterRepository = voterRepository;
         }
+        
         public IActionResult Index()
         {
             try
             {
-                return View(convertVoterList_toPersonViewModelList(_db.Voter.ToList()));
+                //return View(convertVoterList_toPersonViewModelList(_db.Voter.ToList()));
+                return View(convertVoterList_toPersonViewModelList(_voterRepository.GetAll()));
             }
             catch
             {
@@ -34,13 +50,7 @@ namespace WebApplication1.Controllers
 
 
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _db.Dispose();
-            }            
-        }
+        
 
         //******************** UTILITIES
         public PersonViewModel convertVoter_toPersonViewModel(Voter voter)
@@ -60,7 +70,7 @@ namespace WebApplication1.Controllers
             return p;
         }
 
-        public List<PersonViewModel> convertVoterList_toPersonViewModelList(List<Voter> voters)
+        public List<PersonViewModel> convertVoterList_toPersonViewModelList(IList<Voter> voters)
         {
             List<PersonViewModel> myList = new List<PersonViewModel>();
             foreach (var item in voters)
