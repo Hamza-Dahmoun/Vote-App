@@ -24,6 +24,11 @@ namespace WebApplication1.Controllers
             return View(convertStructureList_toStructureViewModelList(_structureRepository.GetAll()));
         }
 
+        public IActionResult Details(Guid id)
+        {
+            return View(convertStructure_toStructureViewModel(_structureRepository.GetById(id)));
+        }
+
 
 
 
