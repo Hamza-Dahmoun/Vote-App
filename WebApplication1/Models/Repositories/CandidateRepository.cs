@@ -36,9 +36,9 @@ namespace WebApplication1.Models.Repositories
         public IList<Candidate> GetAll()
         {
             //use eager loading to bring Structure data and Level data too
-            //return _dbSet.Include(c=>c.Structure).Include(c=>c.Structure.Level).ToList();
+            return _dbSet.Include(c=>c.Structure).Include(c=>c.Structure.Level).Include(c=>c.Votes).Include(c=>c.VoterBeing).ToList();
             
-            return _dbSet.ToList();
+            //return _dbSet.ToList();
         }
 
         public Candidate GetById(Guid Id)

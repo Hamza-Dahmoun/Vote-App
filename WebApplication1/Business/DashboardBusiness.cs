@@ -6,6 +6,7 @@ using WebApplication1.Models;
 using WebApplication1.Models.Repositories;
 using WebApplication1.Models.ViewModels;
 
+
 namespace WebApplication1.Business
 {
     public class DashboardBusiness
@@ -25,22 +26,22 @@ namespace WebApplication1.Business
             _structureRepository = structureRepository;
         }
 
-        public DashboardViewModel getDashboard()
-        {
-            //this function returns a dashboard object filled with data
+        //public DashboardViewModel getDashboard()
+        //{
+        //    //this function returns a dashboard object filled with data
 
-            List<Candidate> candidates = _candidateRepository.GetAll().ToList();
+        //    List<Candidate> candidates = _candidateRepository.GetAll().ToList();
             
 
-            DashboardViewModel d = new DashboardViewModel
-            {
-                NbCandidates = candidates.Count,
-                NbVoters = _voterRepository.GetAll().Count,
-                NbVotes = 1,
-                ParticipationRate = 2,
-                Candidates = candidates
-            };
-            return d;
-        }
+        //    DashboardViewModel d = new DashboardViewModel
+        //    {
+        //        NbCandidates = candidates.Count,
+        //        NbVoters = _voterRepository.GetAll().Count,
+        //        NbVotes = 1,
+        //        ParticipationRate = 2,
+        //        Candidates = candidates
+        //    };
+        //    return d;
+        //}
     }
 }

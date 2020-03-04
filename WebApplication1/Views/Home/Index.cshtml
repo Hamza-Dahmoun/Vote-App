@@ -1,12 +1,35 @@
-﻿@{
+﻿@model WebApplication1.Models.ViewModels.DashboardViewModel
+@{
     ViewData["Title"] = "Home Page";
 }
 
 @*<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>*@
+        <h1 class="display-4">Welcome</h1>
+        <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    </div>*@
 
-<div class="text-center">
-    <p>Welcome to Voting App</p>
+<h1 class="text-center">Welcome to Voting App</h1>
+
+
+<div class="row">
+    <p>@Model.NbCandidates Candidates</p>
+    <p>@Model.NbVoters Voters</p>
+    <p>@Model.NbVotes Votes</p>
+    <p>@Model.ParticipationRate %</p>
 </div>
+@if (@Model.UserHasVoted)
+{
+    @foreach (var candidate in Model.Candidates)
+	{
+		 <p>@candidate.FirstName @candidate.LastName</p>
+         <p>@candidate.VotesCount Votes</p>
+	}
+}
+else
+{
+    <a class="btn btn-block btn-success">Voter >>></a>
+    @*asp-controller="Vote" asp-action="Vote"*@
+}
+
+
+
