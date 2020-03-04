@@ -1,0 +1,112 @@
+﻿@model IList<WebApplication1.Models.ViewModels.CandidateViewModel>
+@{
+    ViewData["Title"] = "Index";
+}
+    <style>
+        .candidate-container {
+            border: 1px solid #e6e6e6;
+            text-align:center;
+            cursor:pointer;
+        }
+
+        .selected-candidate {
+            background-color: green;
+        }
+        .candidate-container{
+            transition-duration:0.5s;
+        }
+            .candidate-container:hover {
+                transition-duration: 0.5s;
+                background-color: green;
+            }
+        .voting-container{
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            width:80%;
+            margin:auto;
+        }
+    </style>
+<h1 class="text-center">Select your choice wisely</h1>
+<br/>
+<div class="voting-container">
+
+
+    @foreach (var candidate in Model)
+    {
+        <div class="candidate-container">
+            <p class="hidden-candidateId" hidden>@candidate.Id</p>
+            <p>@candidate.FirstName @candidate.LastName</p>
+            <p>@candidate.StructureLevel @candidate.StructureName</p>
+        </div>
+        <hr />
+    }
+    <input id="vote-button" type="button" class="btn btn-block btn-primary col-6" value="Validate my Vote" asp-route-candidateId="" disabled /> @*asp-action="Vote"*@
+</div>
+
+<script>
+    //add click event listener to candidate-container divs
+    var maxSelection = 2;
+    var selectedIdArray = [];
+    var candidates = document.getElementsByClassName("candidate-container");
+    for (let i = 0; i < candidates.length; i++) {
+        candidates[i].addEventListener("click", selectCandidate);
+    }
+    function selectCandidate() {
+        let newSelected;
+        let selectedCandidateId;
+        if (event.target.tagName == "DIV") {
+            //alert("div is clicked");
+            newSelected = event.target;
+        }
+        else {
+            //alert("chlild is clicked");
+            newSelected = event.target.parentNode;
+        }
+        selectedCandidateId = newSelected.querySelectorAll(".hidden-candidateId")[0];
+        //alert("its id is: " + selectedCandidateId.textContent);
+
+        if (isAlreadySelected(newSelected)) {
+            //alert("it is already selected");
+            removeSelection(newSelected, selectedCandidateId)
+        }
+        else {
+            //alert("it is not already selected");
+            //there are two cases, 1- whether user is selecting a new candidate within the five, so we'll add the css class and the id to the array
+            //2- or he'is selecting more than 5, do nothing
+            if (document.querySelectorAll(".selected-candidate").length < maxSelection) {
+                addNewSelection(newSelected, selectedCandidateId)
+            }
+            else {
+                //do nothing
+            }
+
+        }
+
+        //now update data-attribute
+        document.getElementById("vote-button").setAttribute("data-candidateId", selectedIdArray);
+        //now enable the button
+        document.getElementById("vote-button").disabled = false;
+    }
+    function isAlreadySelected(candidateContainer) {
+        if (candidateContainer.className.includes("selected-candidate"))
+            return true;
+        else return false;
+    }
+    function removeSelection(candidateContainer, selectedCandidateId) {
+        candidateContainer.className = "candidate-container";
+        //now lets remove its id from the array
+        const index = selectedIdArray.indexOf(selectedCandidateId);
+        if (index > -1) {
+            selectedIdArray.splice(index, 1);
+        }
+    }
+
+    function addNewSelection(newSelection, selectedCandidateId) {
+        newSelection.classList.add("selected-candidate");
+        selectedIdArray.push(selectedCandidateId);
+
+    }
+
+</script>
+

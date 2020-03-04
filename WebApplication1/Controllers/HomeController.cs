@@ -60,7 +60,7 @@ namespace WebApplication1.Controllers
                 NbVotes = 1,//should come from a repository
                 ParticipationRate = 2,
                 Candidates = candidates,
-                UserHasVoted = true
+                UserHasVoted = false
             };
             return d;
         }
