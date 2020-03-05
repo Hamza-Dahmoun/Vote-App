@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebApplication1.Models.ViewModels
 {
-    //[NotMapped]
+    [NotMapped]
     public class PersonViewModel
     {
         public Guid Id { get; set; }

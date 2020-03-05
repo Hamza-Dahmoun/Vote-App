@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 namespace WebApplication1.Models
 {
     public class Person
-    {
+    {//a person is related to one structure
         public Guid Id { get; set; }
         [Required]
         public string FirstName { get; set; }

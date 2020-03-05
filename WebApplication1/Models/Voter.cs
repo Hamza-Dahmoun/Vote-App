@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 namespace WebApplication1.Models
 {
     public class Voter : Person
-    {
-        public Vote Vote { get; set; }
+    {//A Voter is a person with a collection of votes
+        public ICollection<Vote> Votes { get; set; }
 
         public bool hasVoted()
         {
-            if (this.Vote != null)
+            if (this.Votes != null && this.Votes.Count > 0)
                 return true;
             return false;
         }

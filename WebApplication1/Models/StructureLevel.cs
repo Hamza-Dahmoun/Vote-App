@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace WebApplication1.Models
 {
     public class StructureLevel
-    {
+    {//a structurelevel define the level of the structure object, it may have a collection of structures
         [Required]
         public Guid Id { get; set; }
         [Required]
