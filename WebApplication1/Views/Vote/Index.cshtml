@@ -2,33 +2,40 @@
 @{
     ViewData["Title"] = "Index";
 }
-    <style>
-        .candidate-container {
-            border: 1px solid #e6e6e6;
-            text-align:center;
-            cursor:pointer;
-        }
+<style>
+    .candidate-container {
+        border: 1px solid #e6e6e6;
+        text-align: center;
+        cursor: pointer;
+    }
 
-        .selected-candidate {
+    .selected-candidate {
+        background-color: green;
+    }
+
+    .candidate-container {
+        transition-duration: 0.5s;
+    }
+
+        .candidate-container:hover {
+            transition-duration: 0.5s;
             background-color: green;
         }
-        .candidate-container{
-            transition-duration:0.5s;
-        }
-            .candidate-container:hover {
-                transition-duration: 0.5s;
-                background-color: green;
-            }
-        .voting-container{
-            display:flex;
-            flex-direction:column;
-            justify-content:center;
-            width:80%;
-            margin:auto;
-        }
-    </style>
+
+    .voting-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 80%;
+        margin: auto;
+    }
+
+    #vote-button {
+        display: none;
+    }
+</style>
 <h1 class="text-center">Select your choice wisely</h1>
-<br/>
+<br />
 <div class="voting-container">
 
 
@@ -41,18 +48,23 @@
         </div>
         <hr />
     }
-    <input id="vote-button" type="button" class="btn btn-block btn-primary col-6" value="Validate my Vote" asp-route-candidateId="" disabled /> @*asp-action="Vote"*@
-</div>
 
+    <button type="button" id="vote-button" class="btn btn-block btn-primary col-6">Validate my Vote</button>
+    @*<a type="button" id="vote-button" class="btn btn-block btn-primary col-6" asp-route-candidateId="" asp-action="ValidateVote">Validate my Vote</a>*@
+</div>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
 <script>
     //add click event listener to candidate-container divs
     var maxSelection = 2;
-    var selectedIdArray = [];
+    var selectedIdArray = new Array();
     var candidates = document.getElementsByClassName("candidate-container");
     for (let i = 0; i < candidates.length; i++) {
-        candidates[i].addEventListener("click", selectCandidate);
+        candidates[i].addEventListener("click", clickCandidate);
     }
-    function selectCandidate() {
+    //add click event to vote-button
+    document.getElementById("vote-button").addEventListener("click", sendCandidates);
+    function clickCandidate() {
         let newSelected;
         let selectedCandidateId;
         if (event.target.tagName == "DIV") {
@@ -63,7 +75,7 @@
             //alert("chlild is clicked");
             newSelected = event.target.parentNode;
         }
-        selectedCandidateId = newSelected.querySelectorAll(".hidden-candidateId")[0];
+        selectedCandidateId = newSelected.querySelectorAll(".hidden-candidateId")[0].textContent;
         //alert("its id is: " + selectedCandidateId.textContent);
 
         if (isAlreadySelected(newSelected)) {
@@ -85,8 +97,8 @@
 
         //now update data-attribute
         document.getElementById("vote-button").setAttribute("data-candidateId", selectedIdArray);
-        //now enable the button
-        document.getElementById("vote-button").disabled = false;
+        //now display the button
+        document.getElementById("vote-button").style.display = "block";
     }
     function isAlreadySelected(candidateContainer) {
         if (candidateContainer.className.includes("selected-candidate"))
@@ -106,6 +118,25 @@
         newSelection.classList.add("selected-candidate");
         selectedIdArray.push(selectedCandidateId);
 
+    }
+
+
+    function sendCandidates() {
+        //for (let i = 0; i < selectedIdArray.length; i++) {
+        //    alert(selectedIdArray[i] + "  --  " + JSON.stringify(selectedIdArray),);
+        //}
+        
+        //Send the JSON array to Controller using AJAX.
+        $.ajax({
+            type: "POST",
+            url: "/Vote/ValidateVote",
+            data: JSON.stringify(selectedIdArray),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (r) {
+                alert("vote is done successfully");
+            }
+        });
     }
 
 </script>

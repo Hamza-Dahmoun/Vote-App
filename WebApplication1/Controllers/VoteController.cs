@@ -13,6 +13,7 @@ namespace WebApplication1.Controllers
     public class VoteController : Controller
     {
         public IRepository<Candidate> _candidateRepository { get; }
+        
         public VoteController(IRepository<Candidate> candidateRepository)
         {
             _candidateRepository = candidateRepository;
@@ -20,8 +21,22 @@ namespace WebApplication1.Controllers
 
 
         public IActionResult Index()
-        {
+        {//this action returns a view containing all candidates for the user to vote on five of them maximum
             return View(convertCandidateList_toPersonViewModelList(_candidateRepository.GetAll()));
+        }
+
+        [HttpPost]
+        public IActionResult ValidateVote([FromBody] List<string> candidateIdList)
+        {//this action get the list of the candidates ids that the user voted on, and add them to the db as vote objects, and redirect to the
+            //dashboard in home controller
+
+            //lets add 'Vote' objects to the db
+            foreach (var candidateId in candidateIdList)
+            {
+                
+            }
+
+            return RedirectToAction("Index", "Home");
         }
 
 
