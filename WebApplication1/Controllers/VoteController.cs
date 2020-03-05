@@ -14,11 +14,13 @@ namespace WebApplication1.Controllers
     {
         public IRepository<Candidate> _candidateRepository { get; }
         public IRepository<Vote> _voteRepository { get; }
-        
-        public VoteController(IRepository<Candidate> candidateRepository, IRepository<Vote> voteRepository)
+        public IRepository<Voter> _voterRepository { get; }
+
+        public VoteController(IRepository<Candidate> candidateRepository, IRepository<Vote> voteRepository, IRepository<Voter> voterRepository)
         {
             _candidateRepository = candidateRepository;
             _voteRepository = voteRepository;
+            _voterRepository = voterRepository;
         }
 
 
@@ -32,10 +34,15 @@ namespace WebApplication1.Controllers
         {//this action get the list of the candidates ids that the user voted on, and add them to the db as vote objects, and redirect to the
             //dashboard in home controller
 
+            Vote v = new Vote();
             //lets add 'Vote' objects to the db
             foreach (var candidateId in candidateIdList)
             {
-                
+                v.Id = Guid.NewGuid();
+                v.Candidate = _candidateRepository.GetById(Guid.Parse(candidateId));
+                v.Voter = _voterRepository.GetById(Guid.Parse("3fae2a0e-21fe-40d4-a731-6b92bb4fea71"));
+                v.Datetime = DateTime.Now;
+                _voteRepository.Add(v);
             }
 
             return RedirectToAction("Index", "Home");
