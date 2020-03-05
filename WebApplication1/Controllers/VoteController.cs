@@ -13,10 +13,12 @@ namespace WebApplication1.Controllers
     public class VoteController : Controller
     {
         public IRepository<Candidate> _candidateRepository { get; }
+        public IRepository<Vote> _voteRepository { get; }
         
-        public VoteController(IRepository<Candidate> candidateRepository)
+        public VoteController(IRepository<Candidate> candidateRepository, IRepository<Vote> voteRepository)
         {
             _candidateRepository = candidateRepository;
+            _voteRepository = voteRepository;
         }
 
 

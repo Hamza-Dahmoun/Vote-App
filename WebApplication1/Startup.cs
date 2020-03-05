@@ -35,6 +35,8 @@ namespace WebApplication1
             services.AddTransient<IRepository<Structure>, StructureRepository>();
             //Lets register the Candidate Repository so that it could be used in CandidateRepository
             services.AddTransient<IRepository<Candidate>, CandidateRepository>();
+            //Lets register the Vote Repository so that it could be used in VoteRepository
+            services.AddTransient<IRepository<Vote>, VoteRepository>();
 
 
             services.AddDbContext<ApplicationDbContext>(options =>
