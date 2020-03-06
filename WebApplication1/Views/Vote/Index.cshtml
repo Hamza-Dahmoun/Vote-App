@@ -23,6 +23,7 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
+        padding:5px;
     }
     .candidate-container:hover {
         transition-duration: 0.5s;
@@ -37,7 +38,9 @@
     .candidate-name{
         font-size:25px;
     }
-
+    .fa-check-circle-o{
+        display:none;
+    }
     #vote-button {
         display: none;
     }
@@ -51,7 +54,7 @@
     {
     <div class="candidate-container">
         <p class="hidden-candidateId" hidden>@candidate.Id</p>
-        <p class="candidate-name">@candidate.FirstName @candidate.LastName <i class="fa fa-check-circle-o" aria-hidden="true"></i></p>
+        <p class="candidate-name"><i class="fa fa-check-circle-o" aria-hidden="true"></i> @candidate.FirstName @candidate.LastName</p>
         <p>@candidate.StructureLevel @candidate.StructureName</p>        
     </div>        
     }
@@ -102,7 +105,7 @@
         //now update data-attribute
         document.getElementById("vote-button").setAttribute("data-candidateId", selectedIdArray);
         //now display/hide the vote button
-        displayHidevoteButton();        
+        displayHideVoteButton();        
     }
     function isAlreadySelected(candidateContainer) {
         if (candidateContainer.className.includes("selected-candidate"))
@@ -116,21 +119,32 @@
         if (index > -1) {
             selectedIdArray.splice(index, 1);
         }
+        //now lets hide the check icon
+        hideCheckIcon(candidateContainer);
     }
 
     function addNewSelection(newSelection, selectedCandidateId) {
         newSelection.classList.add("selected-candidate");
         selectedIdArray.push(selectedCandidateId);
-
+        //now lets hide the check icon
+        displayCheckIcon(newSelection);
     }
 
-    function displayHidevoteButton() {
+    function displayHideVoteButton() {
         if (selectedIdArray.length > 0) {
             document.getElementById("vote-button").style.display = "block";
         }
         else {
             document.getElementById("vote-button").style.display = "none";
         }
+    }
+
+    function displayCheckIcon(selectedCandidate) {
+        selectedCandidate.querySelector(".fa-check-circle-o").style.display = "block";
+    }
+
+    function hideCheckIcon(selectedCandidate) {
+        selectedCandidate.querySelector(".fa-check-circle-o").style.display = "none";
     }
 
 
