@@ -97,8 +97,8 @@
 
         //now update data-attribute
         document.getElementById("vote-button").setAttribute("data-candidateId", selectedIdArray);
-        //now display the button
-        document.getElementById("vote-button").style.display = "block";
+        //now display/hide the vote button
+        displayHidevoteButton();        
     }
     function isAlreadySelected(candidateContainer) {
         if (candidateContainer.className.includes("selected-candidate"))
@@ -118,6 +118,15 @@
         newSelection.classList.add("selected-candidate");
         selectedIdArray.push(selectedCandidateId);
 
+    }
+
+    function displayHidevoteButton() {
+        if (selectedIdArray.length > 0) {
+            document.getElementById("vote-button").style.display = "block";
+        }
+        else {
+            document.getElementById("vote-button").style.display = "none";
+        }
     }
 
 
