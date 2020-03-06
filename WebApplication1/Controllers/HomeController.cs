@@ -56,13 +56,14 @@ namespace WebApplication1.Controllers
             int NbCandidates = candidates.Count;
             int NbVoters = _voterRepository.GetAll().Count;
             int NbVotes = _voteRepository.GetAll().Count;
+            int votersWithVote = getNumberOfVoterWithVote();
 
             DashboardViewModel d = new DashboardViewModel
             {
                 NbCandidates = NbCandidates,
                 NbVoters = NbVoters,
                 NbVotes = NbVotes,
-                ParticipationRate = getNumberOfVoterWithVote()/NbVoters*100,
+                ParticipationRate = (double)votersWithVote / (double)NbVoters,
                 Candidates = candidates,
                 UserHasVoted = false
             };

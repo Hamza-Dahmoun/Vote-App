@@ -12,7 +12,7 @@ namespace WebApplication1.Models.ViewModels
         public int NbCandidates { get; set; }
         public int NbVoters { get; set; }
         public int NbVotes { get; set; }
-        public int ParticipationRate { get; set; }
+        public double ParticipationRate { get; set; }
         public List<CandidateViewModel> Candidates { get; set; }
         public bool UserHasVoted { get; set; }
     }
