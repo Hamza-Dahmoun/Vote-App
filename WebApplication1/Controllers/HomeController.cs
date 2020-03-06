@@ -18,13 +18,14 @@ namespace WebApplication1.Controllers
 
         public IRepository<Candidate> _candidateRepository { get; }
         public IRepository<Voter> _voterRepository { get; }
+        public IRepository<Vote> _voteRepository { get; }
 
-        public HomeController(ILogger<HomeController> logger, IRepository<Candidate> candidateRepository, IRepository<Voter> voterRepository)
+        public HomeController(ILogger<HomeController> logger, IRepository<Candidate> candidateRepository, IRepository<Voter> voterRepository, IRepository<Vote> voteRepository)
         {
             _logger = logger;
             _candidateRepository = candidateRepository;
             _voterRepository = voterRepository;
-
+            _voteRepository = voteRepository;
         }
 
         public IActionResult Index()
@@ -52,17 +53,25 @@ namespace WebApplication1.Controllers
 
             List<CandidateViewModel> candidates = convertCandidateList_toPersonViewModelList(_candidateRepository.GetAll().ToList());
 
+            int NbCandidates = candidates.Count;
+            int NbVoters = _voterRepository.GetAll().Count;
+            int NbVotes = _voteRepository.GetAll().Count;
 
             DashboardViewModel d = new DashboardViewModel
             {
-                NbCandidates = candidates.Count,
-                NbVoters = _voterRepository.GetAll().Count,
-                NbVotes = 1,//should come from a repository
-                ParticipationRate = 2,
+                NbCandidates = NbCandidates,
+                NbVoters = NbVoters,
+                NbVotes = NbVotes,
+                ParticipationRate = getNumberOfVoterWithVote()/NbVoters*100,
                 Candidates = candidates,
                 UserHasVoted = false
             };
             return d;
+        }
+
+        public int getNumberOfVoterWithVote()
+        {
+            return _voterRepository.GetAll().Where(v => v.hasVoted() == true).Count();
         }
 
 

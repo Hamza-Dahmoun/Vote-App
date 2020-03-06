@@ -45,7 +45,15 @@ namespace WebApplication1.Controllers
                 _voteRepository.Add(v);
             }
 
-            return RedirectToAction("Index", "Home");
+            //-------IMPORTANT: THIS ACTION IS ACCESSIBLE USING AN AJAX CALL, IN THIS CASE, TRYING TO REDIRECTTOACTION FROM
+            //C# CODE WILL EXECUTED THE ACTION BUT THE BROWSER WILL IGNORE REDIRECTING, USER WILL STAY IN THE SAME PAGE
+            //BROWSERS IGNORE THE REDIRECT BECUZ THE ASSUME JS CODE WHICH DID THE AJAX CALL WILL BE IN CHARGE OF THE SUCCESS
+            //RESPONSE TO REDIRECT: WINDOW.LOCATION.HREF="CONTROLLERNAME/ACTION"
+            //return RedirectToAction("Index", "Home");
+            return  Json(new
+            {
+                success = true
+            });
         }
 
 

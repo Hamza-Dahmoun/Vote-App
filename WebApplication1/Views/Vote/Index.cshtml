@@ -133,8 +133,12 @@
             data: JSON.stringify(selectedIdArray),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
+            error: function () {
+                console.log("error");
+            },
             success: function (r) {
-                alert("vote is done successfully");
+                console.log("success");
+                window.location.href = "Home/Index";
             }
         });
     }
