@@ -83,6 +83,7 @@ namespace WebApplication1.Controllers
             CandidateViewModel c = new CandidateViewModel
             {
                 Id = candidate.Id,
+                isNeutralOpinion = candidate.isNeutralOpinion,
                 FirstName = candidate.FirstName,
                 LastName = candidate.LastName,
                 StructureName = candidate.Structure?.Name,

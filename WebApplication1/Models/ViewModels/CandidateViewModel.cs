@@ -10,6 +10,7 @@ namespace WebApplication1.Models.ViewModels
     public class CandidateViewModel
     {
         public Guid Id { get; set; }
+        public bool isNeutralOpinion { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string StructureName { get; set; }

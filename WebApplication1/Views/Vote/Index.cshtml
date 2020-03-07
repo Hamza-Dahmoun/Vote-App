@@ -61,7 +61,7 @@
     }
     @foreach (var candidate in Model)
     {
-        @if (candidate.Id == Guid.Parse("d3e32681-27af-4758-8bb7-5558bd2c7c55"))
+        @if (candidate.isNeutralOpinion == true)
         {
             id = "neutral-candidate";
         }
@@ -78,7 +78,8 @@
                 //add click event listener to candidate-container divs
                 var maxSelection = 5;
                 var selectedIdArray = new Array();
-                var neutralCandidateId = "d3e32681-27af-4758-8bb7-5558bd2c7c55";
+                var neutralCandidateId = document.getElementById("neutral-candidate").querySelector(".hidden-candidateId").textContent /*"d3e32681-27af-4758-8bb7-5558bd2c7c55"*/;
+                //alert(neutralCandidateId);
                 var candidates = document.getElementsByClassName("candidate-container");
                 for (let i = 0; i < candidates.length; i++) {
                     candidates[i].addEventListener("click", clickCandidate);
