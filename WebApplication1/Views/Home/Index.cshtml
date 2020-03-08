@@ -34,7 +34,23 @@
         }
         #vote-button-container a{
             font-size:150%;
+            animation-name:background-switch;
+            animation-duration:5s;
+            animation-iteration-count:infinite;
+            animation-direction:alternate;
+            /*the above line makes the transition between one animation and its next smooth*/
         }
+    @@keyframes background-switch {
+        from {
+            background-color: #212529;
+            color: white;
+        }
+
+        to {
+            background-color: white;
+            color: #212529;
+        }
+    }
 </style>
 
 <h1 class="text-center">Welcome to Voting App</h1>
