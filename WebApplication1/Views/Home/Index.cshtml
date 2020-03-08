@@ -14,11 +14,15 @@
         margin-top:5%;margin-bottom:5%;
     }
     .dashboard-item-container{
+        text-align:center;
         font-size:30px;
         border:1px solid #e6e6e6;
         border-radius: 8px;
         padding: 5%;
-        margin:5%;
+        margin:5%;        
+    }
+    .dashboard-item-container i{
+        font-size:300%;
     }
 </style>
 
@@ -27,16 +31,20 @@
 
 <div id="dashboard-container">
     <div class="dashboard-item-container">
+        <i class="fa fa-user" aria-hidden="true"></i>
         <p>@Model.NbCandidates Candidates</p>
     </div>
     <div class="dashboard-item-container">
+        <i class="fa fa-users" aria-hidden="true"></i>
         <p>@Model.NbVoters Voters</p>
     </div>
     <div class="dashboard-item-container">
+        <i class="fa fa-files-o" aria-hidden="true"></i>
         <p>@Model.NbVotes Votes</p>
     </div>
     <div class="dashboard-item-container">
-        <p>@Model.ParticipationRate %</p>
+        <i class="fa fa-pie-chart" aria-hidden="true"></i>
+        <p>@Model.ParticipationRate.ToString("F2") %</p>
     </div>
 </div>
 @if (@Model.UserHasVoted)
