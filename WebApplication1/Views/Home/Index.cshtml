@@ -3,19 +3,34 @@
     ViewData["Title"] = "Home Page";
 }
 
-@*<div class="text-center">
-        <h1 class="display-4">Welcome</h1>
-        <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    </div>*@
+<style>
+    #dashboard-container{
+        display:flex;
+        flex-direction:row;
+        flex-wrap:wrap;
+        justify-content: center;
+        width:80%;
+        margin-left:auto; margin-right:auto;
+        margin-top:5%;margin-bottom:5%;
+    }
+</style>
 
 <h1 class="text-center">Welcome to Voting App</h1>
 
 
-<div class="row">
-    <p>@Model.NbCandidates Candidates</p>
-    <p>@Model.NbVoters Voters</p>
-    <p>@Model.NbVotes Votes</p>
-    <p>@Model.ParticipationRate %</p>
+<div id="dashboard-container">
+    <div class="dashboard-item-container">
+        <p>@Model.NbCandidates Candidates</p>
+    </div>
+    <div class="dashboard-item-container">
+        <p>@Model.NbVoters Voters</p>
+    </div>
+    <div class="dashboard-item-container">
+        <p>@Model.NbVotes Votes</p>
+    </div>
+    <div class="dashboard-item-container">
+        <p>@Model.ParticipationRate %</p>
+    </div>
 </div>
 @if (@Model.UserHasVoted)
 {
