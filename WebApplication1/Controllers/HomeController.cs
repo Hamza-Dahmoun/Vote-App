@@ -65,7 +65,7 @@ namespace WebApplication1.Controllers
                 NbVotes = NbVotes,
                 ParticipationRate = (double)votersWithVote / (double)NbVoters,
                 Candidates = candidates,
-                UserHasVoted = false
+                UserHasVoted = true
             };
             return d;
         }

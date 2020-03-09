@@ -29,17 +29,21 @@
             font-size: 300%;
         }
 
-        #vote-button-container{
-            display:flex; flex-direction:row; justify-content:end;            
-        }
-        #vote-button-container a{
-            font-size:150%;
-            animation-name:background-switch;
-            animation-duration:5s;
-            animation-iteration-count:infinite;
-            animation-direction:alternate;
+    #vote-button-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: end;
+    }
+
+        #vote-button-container a {
+            font-size: 150%;
+            animation-name: background-switch;
+            animation-duration: 5s;
+            animation-iteration-count: infinite;
+            animation-direction: alternate;
             /*the above line makes the transition between one animation and its next smooth*/
         }
+
     @@keyframes background-switch {
         from {
             background-color: #212529;
@@ -57,11 +61,21 @@
 
 @if (!@Model.UserHasVoted)
 {
-<div id="vote-button-container">
-    <a class="btn btn-default" asp-controller="Vote" asp-action="Index" title="Voter">
-        Voter <i class="fa fa-chevron-right" aria-hidden="true"></i>
-    </a>
-</div>    
+    <div id="vote-button-container">
+        <a class="btn btn-default" asp-controller="Vote" asp-action="Index" title="Vote">
+            Vote <i class="fa fa-chevron-right" aria-hidden="true"></i>
+        </a>
+    </div>
+}
+
+@if (@Model.UserHasVoted)
+{
+    <h2>Updated Results</h2>
+    @foreach (var candidate in Model.Candidates)
+    {
+        <p>@candidate.FirstName @candidate.LastName</p>
+        <p>@candidate.VotesCount Votes</p>
+    }
 }
 
 <div id="dashboard-container">
@@ -83,13 +97,6 @@
     </div>
 </div>
 
-@if (@Model.UserHasVoted)
-{
-    @foreach (var candidate in Model.Candidates)
-    {
-        <p>@candidate.FirstName @candidate.LastName</p>
-        <p>@candidate.VotesCount Votes</p>
-    }
-}
+
 
 
