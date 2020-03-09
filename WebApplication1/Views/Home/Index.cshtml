@@ -4,13 +4,16 @@
 }
 
 <style>
-    h1{
+    h1 {
         text-align: center;
     }
-    hr{
-        width:70%; margin-left:auto; margin-right:auto;
+
+    hr {
+        width: 70%;
+        margin-left: auto;
+        margin-right: auto;
     }
-    
+
     #dashboard-container {
         display: flex;
         flex-direction: row;
@@ -61,21 +64,55 @@
         }
     }
 
-    #results-container{
-        display:flex; flex-direction:column; justify-content:center;
-        text-align:center;
-    }
-    .one-result-container{
+    #results-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
         text-align: center;
     }
-    .margins{
-        margin-top:3%;
-        margin-bottom:3%;
+
+    .one-result-container {
+        text-align: center;
+        font-size: 20px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center; /*in order to vertically center the cup icon*/
+        width: 50%;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 1%;
+        margin-bottom: 1%;
+    }
+
+        .one-result-container .rank-container {
+            /*margin-left: 1%;
+            margin-right: 1%;*/
+            min-width: 50px;
+        }
+
+        .one-result-container .candidate-data-container {
+            width: 250px;
+        }
+
+            .one-result-container .candidate-data-container p {
+                margin-bottom: 0%;
+                margin-top: 0%;
+            }
+
+        .one-result-container span {
+            font-size: 250%;
+        }
+
+
+    .margins {
+        margin-top: 3%;
+        margin-bottom: 3%;
     }
 </style>
 
 <h1 class="margins">Welcome to Voting App</h1>
-<hr/>
+<hr />
 @if (!@Model.UserHasVoted)
 {
     <div id="vote-button-container">
@@ -87,16 +124,33 @@
 
 @if (@Model.UserHasVoted)
 {
-<div id="results-container" class="margins">
-    <h3  class="margins">Updated Results</h3>
-    @foreach (var candidate in Model.Candidates)
-    {
-        <div class="one-result-container">
-            <p>@candidate.FirstName @candidate.LastName</p>
-            <p>@candidate.VotesCount Votes</p>
-        </div>
-    }
-</div>    
+    int i = 0;
+    <div id="results-container" class="margins">
+        <h3 class="margins">Updated Results</h3>
+
+        @foreach (var candidate in Model.Candidates)
+        {
+            i++;
+            //so it is the first candidate, lets add the cup icon to it
+            <div class="one-result-container">
+                <div class="rank-container">
+                    @if (i == 1)
+                    {
+                        <span><i class="fa fa-trophy" aria-hidden="true"></i></span>
+                    }
+                    else
+                    {
+                        <span>@i.ToString()</span>
+                    }
+
+                </div>
+                <div class="candidate-data-container">
+                    <p>@candidate.FirstName @candidate.LastName</p>
+                    <p>@candidate.VotesCount Votes</p>
+                </div>
+            </div>
+        }
+    </div>
 }
 
 <div id="dashboard-container" class="margins">
