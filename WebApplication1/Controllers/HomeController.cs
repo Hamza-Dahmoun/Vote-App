@@ -9,9 +9,12 @@ using WebApplication1.Models;
 using WebApplication1.Models.ViewModels;
 using WebApplication1.Business;
 using WebApplication1.Models.Repositories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApplication1.Controllers
 {
+    //the below attribute will permit only authorized users to access HomeController, anonymous access will be deactivated
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

@@ -6,10 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models.Repositories;
 using WebApplication1.Models;
 using WebApplication1.Models.ViewModels;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApplication1.Controllers
 {
+    //the below attribute will permit only authorized users to access HomeController, anonymous access will be deactivated
+    [Authorize]
     public class VoteController : Controller
     {
         public IRepository<Candidate> _candidateRepository { get; }

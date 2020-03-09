@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models;
 using WebApplication1.Models.Repositories;
@@ -9,6 +10,8 @@ using WebApplication1.Models.ViewModels;
 
 namespace WebApplication1.Controllers
 {
+    //the below attribute will permit only authorized users to access HomeController, anonymous access will be deactivated
+    [Authorize]
     public class CandidateController : Controller
     {
         public IRepository<Candidate> _candidateRepository { get; }
