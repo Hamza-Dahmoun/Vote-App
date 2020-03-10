@@ -59,6 +59,24 @@ namespace WebApplication1
                 }
                 );
             services.AddRazorPages();
+
+            services.AddAuthorization(
+                //we are going to add the policies with their roles
+                //'ManageElections' policy is going to have 'Administrator' role
+                //'DoVote' policy is going to have '' role
+                o =>
+                {
+                    //o.AddPolicy(policyName, policyBuilder);
+                    o.AddPolicy(VoteAppPolicies.ManageElections.ToString(),
+                        pb =>
+                        {
+                            pb.RequireAuthenticatedUser()
+                            .RequireRole("Administrator")
+                            .Build();
+                        }
+                        );
+                }
+                );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
