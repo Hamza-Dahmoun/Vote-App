@@ -14,6 +14,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WebApplication1.Models;
 using WebApplication1.Models.Repositories;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace WebApplication1
 {
@@ -47,7 +49,15 @@ namespace WebApplication1
 
             services.AddDbContext<VoteDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("VoteDBConnection")));
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(
+                o =>
+                {
+                    //Create a policy that accepts only athenticated users
+                    var mySinglePolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                    //adding the created policy as a filter
+                    o.Filters.Add(new AuthorizeFilter(mySinglePolicy));
+                }
+                );
             services.AddRazorPages();
         }
 
