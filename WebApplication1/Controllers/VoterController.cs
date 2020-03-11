@@ -12,6 +12,10 @@ namespace WebApplication1.Controllers
 {
     //the below attribute will permit only authorized users to access HomeController, anonymous access will be deactivated
     [Authorize]
+    //the below attribute will permit only users with set of roles contained in the policy 'ManageElections'
+    //(you can check the set of roles related to this policy in ConfigureServices() in Startup file)
+    [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
+    //[Authorize(Roles = "Administrator")]
     public class VoterController : Controller
     {
         //private readonly VoteDBContext _db;
