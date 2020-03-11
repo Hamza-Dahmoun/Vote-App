@@ -41,11 +41,13 @@ namespace WebApplication1
             services.AddTransient<IRepository<Vote>, VoteRepository>();
 
 
-            services.AddDbContext<IdentityDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("IdentityDBConnection")));
+
+            //1- in IdentityHostingStartup.cs file:
+            //I registered IdentityDbContext service
+            //2- in Startup.cs file:
+            //I registered the DefaultIdentity, the Roles and the EntityFrameworkstores
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<IdentityDbContext>();
+                .AddRoles<IdentityRole>().AddEntityFrameworkStores<IdentityDbContext>();
 
             services.AddDbContext<VoteDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("VoteDBConnection")));
 
@@ -72,6 +74,7 @@ namespace WebApplication1
                         {
                             pb.RequireAuthenticatedUser()
                             .RequireRole("Administrator")
+                            //.RequireRole("Administrator", "RefAdmin", "Administrateurs")
                             .Build();
                         }
                         );
