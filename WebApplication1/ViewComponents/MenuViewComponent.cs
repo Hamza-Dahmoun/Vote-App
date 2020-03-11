@@ -18,7 +18,14 @@ namespace WebApplication1.ViewComponents
     {
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            return View();
+            if (User.Identity.IsAuthenticated)
+            {
+                return View("Default");
+            }
+            else
+            {
+                return View("NoMenuLinks");
+            }
             //this will return the view Views/Shared/Components/Menu/Default.cshtml bcuz (read below)
             /* FROM MICROSOFT.DOCS
              The default view name for a view component is Default, which means your view file will typically be named Default.cshtml.
