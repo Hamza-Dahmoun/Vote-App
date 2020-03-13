@@ -1,7 +1,10 @@
 ﻿@*THIS IS A VIEWCOMPONENT THAT WILL BE RENDERED IN THE TOP OF THE PAGE IF THE USER IS NOT AUTHENTICATED.
     I DID THIS TO AVOID SHOWING THE MENU LINKS FOR NOT-AUTHENTICATED USERS*@
-<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-    <div class="container">
-        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">WebApplication1</a>
-    </div>
-</nav>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container">
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">WebApplication1</a>
+        </div>
+        <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+            <partial name="_LoginPartial" />
+        </div>
+    </nav>

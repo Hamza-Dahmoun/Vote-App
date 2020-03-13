@@ -20,7 +20,10 @@ namespace WebApplication1.ViewComponents
         {
             if (User.Identity.IsAuthenticated)
             {
+                if(User.IsInRole("Administrator"))
                 return View("Default");
+                else
+                return View("NoMenuLinks");
             }
             else
             {
