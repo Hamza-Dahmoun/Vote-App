@@ -23,6 +23,7 @@ namespace WebApplication1.ViewComponents
                 if(User.IsInRole("Administrator"))
                 return View("Default");
                 else
+                    //Users that are not Administrators should not see links to Candidates-Voters-Structures
                 return View("NoMenuLinks");
             }
             else
