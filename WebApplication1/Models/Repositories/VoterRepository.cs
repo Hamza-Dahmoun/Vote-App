@@ -21,7 +21,8 @@ namespace WebApplication1.Models.Repositories
 
         public void Add(Voter item)
         {
-            throw new NotImplementedException();
+            _dbContext.Add(item);
+            _dbContext.SaveChanges();
         }
 
         public void Delete(Guid Id)
