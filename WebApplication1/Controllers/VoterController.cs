@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models;
 using WebApplication1.Models.Repositories;
@@ -31,12 +32,15 @@ namespace WebApplication1.Controllers
         //    }            
         //}
 
+            //the below service is used to store a new user for each new voter
+        private readonly UserManager<IdentityUser> _userManager;
         public IRepository<Voter> _voterRepository { get; }
         public IRepository<Structure> _structureRepository { get; }
-        public VoterController(IRepository<Voter> voterRepository, IRepository<Structure> structureRepository)
+        public VoterController(IRepository<Voter> voterRepository, IRepository<Structure> structureRepository, UserManager<IdentityUser> userManager)
         {
             _voterRepository = voterRepository;
             _structureRepository = structureRepository;
+            _userManager = userManager;
         }
         
         public IActionResult Index()
@@ -59,7 +63,8 @@ namespace WebApplication1.Controllers
 
   
         public IActionResult Create()
-        {//this method will return an empty VoterStructureViewModel but with a list of all Structures, in a view
+        {
+            //this method will return an empty VoterStructureViewModel but with a list of all Structures, in a view
             VoterStructureViewModel vs = new VoterStructureViewModel
             {
                 Structures = _structureRepository.GetAll()
@@ -68,17 +73,33 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(VoterStructureViewModel vs)
-        {//this method receives a VoterStructureViewModel object, and based on it, it creates a voter object and stores it in the DB
-            Voter v = new Voter
+        public async Task<IActionResult> Create(VoterStructureViewModel vs)
+        {
+            if (ModelState.IsValid)
             {
-                Id = Guid.NewGuid(),
-                FirstName = vs.FirstName,
-                LastName = vs.LastName,
-                Structure = _structureRepository.GetById(vs.StructureID)
-            };
-            _voterRepository.Add(v);
-            return RedirectToAction(nameof(Index));
+                //this method receives a VoterStructureViewModel object, and based on it, it creates a voter object and stores it in the DB
+                Voter v = new Voter
+                {
+                    Id = Guid.NewGuid(),
+                    FirstName = vs.FirstName,
+                    LastName = vs.LastName,
+                    Structure = _structureRepository.GetById(vs.StructureID)
+                };
+
+                //now lets add this new voter as a new user to the IdentityDB using UserManager<IdentityUser> service
+                //we'll set its usernam/email, and set 'Pa$$w0rd' as the password
+                string username = v.FirstName.ToLower() +"."+ v.LastName.ToLower();
+                var user = new IdentityUser { UserName = username };
+                //CreateAsync() is an asynchronous method, we have to mark this method with 'async task'
+                var result = await _userManager.CreateAsync(user, "Pa$$w0rd");//this password will be automatically hashed
+                if (result.Succeeded)
+                {
+                    //the user has been stored successully lets insert now the new voter
+                    _voterRepository.Add(v);
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            return View();
         }
 
 
