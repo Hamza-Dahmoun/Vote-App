@@ -46,7 +46,7 @@ namespace WebApplication1
             //I registered IdentityDbContext service
             //2- in Startup.cs file:
             //I registered the DefaultIdentity, the Roles and the EntityFrameworkstores
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddRoles<IdentityRole>().AddEntityFrameworkStores<IdentityDbContext>();
 
             services.AddDbContext<VoteDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("VoteDBConnection")));
