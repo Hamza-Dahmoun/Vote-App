@@ -67,6 +67,20 @@ namespace WebApplication1.Controllers
         return View(vs);
         }
 
+        [HttpPost]
+        public IActionResult Create(VoterStructureViewModel vs)
+        {//this method receives a VoterStructureViewModel object, and based on it, it creates a voter object and stores it in the DB
+            Voter v = new Voter
+            {
+                Id = Guid.NewGuid(),
+                FirstName = vs.FirstName,
+                LastName = vs.LastName,
+                Structure = _structureRepository.GetById(vs.StructureID)
+            };
+            _voterRepository.Add(v);
+            return RedirectToAction(nameof(Index));
+        }
+
 
 
 
