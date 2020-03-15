@@ -14,5 +14,6 @@ namespace WebApplication1.Models
         [Required]
         public string LastName { get; set; }
         public Structure Structure { get; set; }
+        public Guid UserId { get; set; }
     }
 }
