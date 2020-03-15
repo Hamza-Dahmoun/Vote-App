@@ -32,9 +32,11 @@ namespace WebApplication1.Controllers
         //}
 
         public IRepository<Voter> _voterRepository { get; }
-        public VoterController(IRepository<Voter> voterRepository)
+        public IRepository<Structure> _structureRepository { get; }
+        public VoterController(IRepository<Voter> voterRepository, IRepository<Structure> structureRepository)
         {
             _voterRepository = voterRepository;
+            _structureRepository = structureRepository;
         }
         
         public IActionResult Index()
@@ -56,7 +58,14 @@ namespace WebApplication1.Controllers
         }
 
   
-
+        public IActionResult Create()
+        {//this method will return an empty VoterStructureViewModel but with a list of all Structures, in a view
+            VoterStructureViewModel vs = new VoterStructureViewModel
+            {
+                Structures = _structureRepository.GetAll()
+            };
+        return View(vs);
+        }
 
 
 
