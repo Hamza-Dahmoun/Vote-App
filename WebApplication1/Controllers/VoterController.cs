@@ -95,6 +95,7 @@ namespace WebApplication1.Controllers
                 if (result.Succeeded)
                 {
                     //the user has been stored successully lets insert now the new voter
+                    v.UserId = Guid.Parse(user.Id);
                     _voterRepository.Add(v);
                     return RedirectToAction(nameof(Index));
                 }
