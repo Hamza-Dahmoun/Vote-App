@@ -46,5 +46,7 @@ namespace WebApplication1.Models.Repositories
             //use eager loading to bring Structure data and Level data too
             return _dbSet.Include(v => v.Structure).Include(v=> v.Structure.Level).SingleOrDefault(v=>v.Id == Id);
         }
+
+        
     }
 }

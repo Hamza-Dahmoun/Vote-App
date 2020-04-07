@@ -26,7 +26,7 @@ namespace WebApplication1.Controllers
         public IRepository<Candidate> _candidateRepository { get; }
         public IRepository<Voter> _voterRepository { get; }
         public IRepository<Vote> _voteRepository { get; }
-        //this is only used to get able to generate a 'code' needed to reset the password
+        //this is only used to get able to generate a 'code' needed to reset the password, and to get the currentUser ID
         private readonly UserManager<IdentityUser> _userManager;
         public HomeController(ILogger<HomeController> logger, IRepository<Candidate> candidateRepository, IRepository<Voter> voterRepository, IRepository<Vote> voteRepository, UserManager<IdentityUser> userManager)
         {
@@ -42,7 +42,7 @@ namespace WebApplication1.Controllers
         {
             if (User.IsInRole("Voter") || User.IsInRole("Administrator"))
             {//the user has a voter Role, lets display the dashboard
-                DashboardViewModel d = getDashboard();
+                DashboardViewModel d = await getDashboard();
                 //d.UserHasVoted = false;
                 return View(d);
             }
@@ -72,7 +72,7 @@ namespace WebApplication1.Controllers
 
 
         //********************** UTILITIES
-        public DashboardViewModel getDashboard()
+        public async Task<DashboardViewModel> getDashboard()
         {
             //this function returns a dashboard object filled with data
 
@@ -82,7 +82,9 @@ namespace WebApplication1.Controllers
             int NbVoters = _voterRepository.GetAll().Count;
             int NbVotes = _voteRepository.GetAll().Count;
             int votersWithVote = getNumberOfVoterWithVote();
-
+            //Now lets get the currentUser to check if he has voted or not yet
+            var currentUser = await getCurrentUser();
+            bool userHasVoted = getVoterByUserId(Guid.Parse(currentUser.Id)).hasVoted();
             DashboardViewModel d = new DashboardViewModel
             {
                 NbCandidates = NbCandidates,
@@ -90,7 +92,7 @@ namespace WebApplication1.Controllers
                 NbVotes = NbVotes,
                 ParticipationRate = (double)votersWithVote / (double)NbVoters,
                 Candidates = candidates,
-                UserHasVoted = true
+                UserHasVoted = userHasVoted
             };
             return d;
         }
@@ -141,6 +143,14 @@ namespace WebApplication1.Controllers
                 return true;
             else return false;
 
+        }
+        public Task<IdentityUser> getCurrentUser()
+        {//this returns the current user instance, I'll use its Id to get its corresponding Voter instance
+            return _userManager.GetUserAsync(HttpContext.User);
+        }
+        public Voter getVoterByUserId(Guid userId)
+        {
+            return _voterRepository.GetAll().SingleOrDefault(v => v.UserId == userId);
         }
     }
 }

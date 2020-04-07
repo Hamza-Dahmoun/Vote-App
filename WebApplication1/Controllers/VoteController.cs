@@ -7,6 +7,7 @@ using WebApplication1.Models.Repositories;
 using WebApplication1.Models;
 using WebApplication1.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace WebApplication1.Controllers
 {
@@ -17,12 +18,14 @@ namespace WebApplication1.Controllers
         public IRepository<Candidate> _candidateRepository { get; }
         public IRepository<Vote> _voteRepository { get; }
         public IRepository<Voter> _voterRepository { get; }
-
-        public VoteController(IRepository<Candidate> candidateRepository, IRepository<Vote> voteRepository, IRepository<Voter> voterRepository)
+        //this is only used to get able to generate a 'code' needed to reset the password, and to get the currentUser ID
+        private readonly UserManager<IdentityUser> _userManager;
+        public VoteController(IRepository<Candidate> candidateRepository, IRepository<Vote> voteRepository, IRepository<Voter> voterRepository, UserManager<IdentityUser> userManager)
         {
             _candidateRepository = candidateRepository;
             _voteRepository = voteRepository;
             _voterRepository = voterRepository;
+            _userManager = userManager;
         }
 
 
@@ -32,9 +35,14 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
-        public IActionResult ValidateVote([FromBody] List<string> candidateIdList)
+        public async Task<IActionResult> ValidateVote([FromBody] List<string> candidateIdList)
         {//this action get the list of the candidates ids that the user voted on, and add them to the db as vote objects, and redirect to the
             //dashboard in home controller
+
+            //lets get the voter instance of the current user, so that we use its id with his votes
+            var currentUser = await getCurrentUser();
+            Voter currentVoter = getVoterByUserId(Guid.Parse(currentUser.Id));
+
 
             Vote v = new Vote();
             //lets add 'Vote' objects to the db
@@ -42,7 +50,7 @@ namespace WebApplication1.Controllers
             {
                 v.Id = Guid.NewGuid();
                 v.Candidate = _candidateRepository.GetById(Guid.Parse(candidateId));
-                v.Voter = _voterRepository.GetById(Guid.Parse("3fae2a0e-21fe-40d4-a731-6b92bb4fea71"));
+                v.Voter = currentVoter; // _voterRepository.GetById(Guid.Parse("3fae2a0e-21fe-40d4-a731-6b92bb4fea71"));
                 v.Datetime = DateTime.Now;
                 _voteRepository.Add(v);
             }
@@ -91,6 +99,15 @@ namespace WebApplication1.Controllers
             }
 
             return myList.OrderByDescending(c => c.VotesCount).ToList();
+        }
+
+        public Task<IdentityUser> getCurrentUser()
+        {//this returns the current user instance, I'll use its Id to get its corresponding Voter instance
+            return _userManager.GetUserAsync(HttpContext.User);
+        }
+        public Voter getVoterByUserId(Guid userId)
+        {
+            return _voterRepository.GetAll().SingleOrDefault(v => v.UserId == userId);
         }
     }
 }
