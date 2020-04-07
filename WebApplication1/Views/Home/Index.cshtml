@@ -113,45 +113,47 @@
 
 <h1 class="margins">Welcome to Voting App</h1>
 <hr />
-@if (!@Model.UserHasVoted)
-{
-    <div id="vote-button-container">
-        <a class="btn btn-default" asp-controller="Vote" asp-action="Index" title="Vote">
-            Vote <i class="fa fa-chevron-right" aria-hidden="true"></i>
-        </a>
-    </div>
-}
 
-@if (@Model.UserHasVoted)
-{
-    int i = 0;
-    <div id="results-container" class="margins">
-        <h3 class="margins">Updated Results</h3>
+    @if (!@Model.UserHasVoted)
+    {
+        <div id="vote-button-container">
+            <a class="btn btn-default" asp-controller="Vote" asp-action="Index" title="Vote">
+                Vote <i class="fa fa-chevron-right" aria-hidden="true"></i>
+            </a>
+        </div>
+    }
+    else
+    {
+        int i = 0;
+        <div id="results-container" class="margins">
+            <h3 class="margins">Updated Results</h3>
 
-        @foreach (var candidate in Model.Candidates)
-        {
-            i++;
-            //so it is the first candidate, lets add the cup icon to it
-            <div class="one-result-container">
-                <div class="rank-container">
-                    @if (i == 1)
-                    {
-                        <span><i class="fa fa-trophy" aria-hidden="true"></i></span>
-                    }
-                    else
-                    {
-                        <span>@i.ToString()</span>
-                    }
+            @foreach (var candidate in Model.Candidates)
+            {
+                i++;
+                //so it is the first candidate, lets add the cup icon to it
+                <div class="one-result-container">
+                    <div class="rank-container">
+                        @if (i == 1)
+                        {
+                            <span><i class="fa fa-trophy" aria-hidden="true"></i></span>
+                        }
+                        else
+                        {
+                            <span>@i.ToString()</span>
+                        }
 
+                    </div>
+                    <div class="candidate-data-container">
+                        <p>@candidate.FirstName @candidate.LastName</p>
+                        <p>@candidate.VotesCount Votes</p>
+                    </div>
                 </div>
-                <div class="candidate-data-container">
-                    <p>@candidate.FirstName @candidate.LastName</p>
-                    <p>@candidate.VotesCount Votes</p>
-                </div>
-            </div>
-        }
-    </div>
-}
+            }
+        </div>
+    }
+
+
 
 <div id="dashboard-container" class="margins">
     <div class="dashboard-item-container">

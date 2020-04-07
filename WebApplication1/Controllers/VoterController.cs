@@ -94,11 +94,18 @@ namespace WebApplication1.Controllers
                 var result = await _userManager.CreateAsync(user, "Pa$$w0rd");//this password will be automatically hashed
                 if (result.Succeeded)
                 {
-                    //the user has been stored successully lets insert now the new voter
-                    v.UserId = Guid.Parse(user.Id);
-                    _voterRepository.Add(v);
-                    return RedirectToAction(nameof(Index));
+                    var result1 = await _userManager.AddToRoleAsync(user, "PreVoter");
+                    if (result1.Succeeded)
+                    {
+                        //the user has been stored successully lets insert now the new voter
+                        v.UserId = Guid.Parse(user.Id);
+                        _voterRepository.Add(v);
+                        return RedirectToAction(nameof(Index));
+                    }
                 }
+                
+                //N.B: Is it possible to move the above block of code that is responsible of adding a user
+                //to another file (e.g: UserRepository) so that we seperate concerns?
             }
             return View();
         }

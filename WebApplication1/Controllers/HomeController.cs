@@ -10,11 +10,15 @@ using WebApplication1.Models.ViewModels;
 using WebApplication1.Business;
 using WebApplication1.Models.Repositories;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
+using System.Text;
 
 namespace WebApplication1.Controllers
 {
     //the below attribute will permit only authorized users to access HomeController, anonymous access will be deactivated
     [Authorize]
+    
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -22,19 +26,37 @@ namespace WebApplication1.Controllers
         public IRepository<Candidate> _candidateRepository { get; }
         public IRepository<Voter> _voterRepository { get; }
         public IRepository<Vote> _voteRepository { get; }
-
-        public HomeController(ILogger<HomeController> logger, IRepository<Candidate> candidateRepository, IRepository<Voter> voterRepository, IRepository<Vote> voteRepository)
+        //this is only used to get able to generate a 'code' needed to reset the password
+        private readonly UserManager<IdentityUser> _userManager;
+        public HomeController(ILogger<HomeController> logger, IRepository<Candidate> candidateRepository, IRepository<Voter> voterRepository, IRepository<Vote> voteRepository, UserManager<IdentityUser> userManager)
         {
             _logger = logger;
             _candidateRepository = candidateRepository;
             _voterRepository = voterRepository;
             _voteRepository = voteRepository;
+            _userManager = userManager;
         }
 
-        public IActionResult Index()
+        
+        public async Task<IActionResult> Index()
         {
-            DashboardViewModel d = getDashboard();
-            return View(d);
+            if (User.IsInRole("Voter") || User.IsInRole("Administrator"))
+            {//the user has a voter Role, lets display the dashboard
+                DashboardViewModel d = getDashboard();
+                //d.UserHasVoted = false;
+                return View(d);
+            }
+            else
+            {
+                //so this user has 'PreVoter', this happened in only one case: this is a new user who didn't change his password.
+                //    He should be redirected to ResetPassword view.
+                //    Once he change his password he will be provided the role 'Voter' 
+
+                var user = await _userManager.GetUserAsync(HttpContext.User);
+                var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                return RedirectToPage("/Account/ResetPassword", new { area = "Identity", code }); //this returns 'code must be supplied o reset password'
+            }
         }
 
         public IActionResult Privacy()

@@ -65,7 +65,7 @@ namespace WebApplication1
             services.AddAuthorization(
                 //we are going to add the policies with their roles
                 //'ManageElections' policy is going to have 'Administrator' role
-                //'DoVote' policy is going to have '' role
+                //'DoVote' policy is going to have 'Voter' role
                 o =>
                 {
                     //o.AddPolicy(policyName, policyBuilder);
@@ -75,6 +75,16 @@ namespace WebApplication1
                             pb.RequireAuthenticatedUser()
                             .RequireRole("Administrator")
                             //.RequireRole("Administrator", "RefAdmin", "Administrateurs")
+                            .Build();
+                        }
+                        );
+
+                    //o.AddPolicy(policyName, policyBuilder);
+                    o.AddPolicy(VoteAppPolicies.DoVote.ToString(),
+                        pb =>
+                        {
+                            pb.RequireAuthenticatedUser()
+                            .RequireRole("Voter")
                             .Build();
                         }
                         );
