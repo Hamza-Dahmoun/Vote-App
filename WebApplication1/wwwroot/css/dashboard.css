@@ -46,7 +46,7 @@ hr {
         /*the above line makes the transition between one animation and its next smooth*/
     }
 
-@@keyframes background-switch {
+@keyframes background-switch {
     from {
         background-color: #212529;
         color: white;
