@@ -2,6 +2,7 @@
     --blue: #3d7e9a;
     --white: #fff;
 }
+
 .voting-container {
     display: flex;
     flex-direction: column;
