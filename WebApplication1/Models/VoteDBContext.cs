@@ -29,7 +29,7 @@ namespace WebApplication1.Models
         public virtual DbSet<Candidate> Candidate { get; set; }
         public virtual DbSet<Voter> Voter { get; set; }
         public virtual DbSet<Vote> Vote { get; set; }
-        public virtual DbSet<Structure> Structure { get; set; }
+        public virtual DbSet<State> Structure { get; set; }
         public virtual DbSet<StructureLevel> StructureLevel { get; set; }
         public DbSet<WebApplication1.Models.ViewModels.PersonViewModel> PersonViewModel { get; set; }
         public DbSet<WebApplication1.Models.ViewModels.StructureViewModel> StructureViewModel { get; set; }

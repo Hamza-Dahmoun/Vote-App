@@ -13,6 +13,6 @@ namespace WebApplication1.Models
         [Required]
         public string Name { get; set; }
         public int LevelValue { get; set; }
-        public ICollection<Structure> Structures { get; set; }
+        public ICollection<State> Structures { get; set; }
     }
 }

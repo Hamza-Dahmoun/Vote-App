@@ -14,10 +14,10 @@ namespace WebApplication1.Business
         //We are going to different repositories to fill a dashboard
         public IRepository<Voter> _voterRepository { get; }
         public IRepository<Candidate> _candidateRepository { get; }
-        public IRepository<Structure> _structureRepository { get; }
+        public IRepository<State> _structureRepository { get; }
 
 
-        public DashboardBusiness(IRepository<Voter> voterRepository, IRepository<Candidate> candidateRepository, IRepository<Structure> structureRepository)
+        public DashboardBusiness(IRepository<Voter> voterRepository, IRepository<Candidate> candidateRepository, IRepository<State> structureRepository)
         {
             //lets inject the repositories into the constructor
 

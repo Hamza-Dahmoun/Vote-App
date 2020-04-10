@@ -6,19 +6,19 @@ using System.Threading.Tasks;
 
 namespace WebApplication1.Models.Repositories
 {
-    public class StructureRepository : IRepository<Structure>
+    public class StructureRepository : IRepository<State>
     {
         protected readonly VoteDBContext _dbContext;
-        private readonly DbSet<Structure> _dbSet;
+        private readonly DbSet<State> _dbSet;
         public StructureRepository(VoteDBContext dbContext)
         {//lets inject dbContext service
             _dbContext = dbContext;
-            _dbSet = dbContext.Set<Structure>();
+            _dbSet = dbContext.Set<State>();
         }
 
 
 
-        public void Add(Structure item)
+        public void Add(State item)
         {
             throw new NotImplementedException();
         }
@@ -28,19 +28,19 @@ namespace WebApplication1.Models.Repositories
             throw new NotImplementedException();
         }
 
-        public void Edit(Guid Id, Structure item)
+        public void Edit(Guid Id, State item)
         {
             throw new NotImplementedException();
         }
 
-        public IList<Structure> GetAll()
+        public IList<State> GetAll()
         {
             //use eager loading to bring Level data too
             return _dbSet.Include(s => s.Level).ToList();
             //return _dbSet.ToList();
         }
 
-        public Structure GetById(Guid Id)
+        public State GetById(Guid Id)
         {
             //use eager loading to bring Level data too
             return _dbSet.Include(s=>s.Level).SingleOrDefault(s=>s.Id == Id);

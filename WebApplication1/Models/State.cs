@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebApplication1.Models
 {
-    public class Structure
+    public class State
     {//a structure has a structurelevel
         [Required]
         public Guid Id { get; set; }

@@ -13,7 +13,7 @@ namespace WebApplication1.Models
         public string FirstName { get; set; }
         [Required]
         public string LastName { get; set; }
-        public Structure Structure { get; set; }
+        public State Structure { get; set; }
         public Guid UserId { get; set; }
     }
 }

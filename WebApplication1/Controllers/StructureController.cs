@@ -18,8 +18,8 @@ namespace WebApplication1.Controllers
     //[Authorize(Roles = "Administrator")]
     public class StructureController : Controller
     {
-        public IRepository<Structure> _structureRepository { get; }
-        public StructureController(IRepository<Structure> structureRepository)
+        public IRepository<State> _structureRepository { get; }
+        public StructureController(IRepository<State> structureRepository)
         {
             _structureRepository = structureRepository;
         }
@@ -41,7 +41,7 @@ namespace WebApplication1.Controllers
 
 
         //******************** UTILITIES
-        public StructureViewModel convertStructure_toStructureViewModel(Structure structure)
+        public StructureViewModel convertStructure_toStructureViewModel(State structure)
         {
             StructureViewModel s = new StructureViewModel
             {
@@ -53,7 +53,7 @@ namespace WebApplication1.Controllers
             return s;
         }
 
-        public List<StructureViewModel> convertStructureList_toStructureViewModelList(IList<Structure> structures)
+        public List<StructureViewModel> convertStructureList_toStructureViewModelList(IList<State> structures)
         {
             List<StructureViewModel> myList = new List<StructureViewModel>();
             foreach (var item in structures)

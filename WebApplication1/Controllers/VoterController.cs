@@ -35,8 +35,8 @@ namespace WebApplication1.Controllers
             //the below service is used to store a new user for each new voter
         private readonly UserManager<IdentityUser> _userManager;
         public IRepository<Voter> _voterRepository { get; }
-        public IRepository<Structure> _structureRepository { get; }
-        public VoterController(IRepository<Voter> voterRepository, IRepository<Structure> structureRepository, UserManager<IdentityUser> userManager)
+        public IRepository<State> _structureRepository { get; }
+        public VoterController(IRepository<Voter> voterRepository, IRepository<State> structureRepository, UserManager<IdentityUser> userManager)
         {
             _voterRepository = voterRepository;
             _structureRepository = structureRepository;
