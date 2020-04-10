@@ -27,7 +27,8 @@ namespace WebApplication1.Models.Repositories
 
         public void Delete(Guid Id)
         {
-            throw new NotImplementedException();
+            _dbContext.Remove(this.GetById(Id));
+            _dbContext.SaveChanges();
         }
 
         public void Edit(Guid Id, Voter item)

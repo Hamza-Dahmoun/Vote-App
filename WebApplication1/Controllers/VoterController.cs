@@ -111,6 +111,26 @@ namespace WebApplication1.Controllers
         }
 
 
+        public IActionResult Delete(Guid id)
+        {
+            var voter = _voterRepository.GetById(id);
+            return View(convertVoter_toPersonViewModel(voter));
+        }
+        [HttpPost]
+        public IActionResult DeleteVoter(Guid id)
+        {
+            try
+            {
+                _voterRepository.Delete(id);
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                //If there is an error return the same Delete view
+                return View();
+            }
+        }
+
 
 
         
