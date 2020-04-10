@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace WebApplication1.Models.Repositories
 {
-    public class StructureRepository : IRepository<State>
+    public class StateRepository : IRepository<State>
     {
         protected readonly VoteDBContext _dbContext;
         private readonly DbSet<State> _dbSet;
-        public StructureRepository(VoteDBContext dbContext)
+        public StateRepository(VoteDBContext dbContext)
         {//lets inject dbContext service
             _dbContext = dbContext;
             _dbSet = dbContext.Set<State>();
