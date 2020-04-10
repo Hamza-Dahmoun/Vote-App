@@ -35,16 +35,16 @@ namespace WebApplication1.Models.Repositories
 
         public IList<Candidate> GetAll()
         {
-            //use eager loading to bring State data and Level data too
-            return _dbSet.Include(c=>c.State).Include(c=>c.State.Level).Include(c=>c.Votes).Include(c=>c.VoterBeing).ToList();
+            //use eager loading to bring State data 
+            return _dbSet.Include(c=>c.State).Include(c=>c.Votes).Include(c=>c.VoterBeing).ToList();
             
             //return _dbSet.ToList();
         }
 
         public Candidate GetById(Guid Id)
         {
-            //use eager loading to bring State data and Level data and Votes data and VoterBeing data too
-            return _dbSet.Include(c=>c.State).Include(c=>c.State.Level).Include(c=>c.Votes).Include(c => c.VoterBeing).SingleOrDefault(c=>c.Id == Id);
+            //use eager loading to bring State data and Votes data and VoterBeing data too
+            return _dbSet.Include(c=>c.State).Include(c=>c.Votes).Include(c => c.VoterBeing).SingleOrDefault(c=>c.Id == Id);
         }
 
         //public Candidate GetByVoterBeingId(Guid VoterBeingId)

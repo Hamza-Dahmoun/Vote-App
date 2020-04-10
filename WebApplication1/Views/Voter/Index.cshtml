@@ -21,9 +21,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.State)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.State.Level)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -38,9 +35,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.State.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.State.Level.Name)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
