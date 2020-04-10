@@ -182,8 +182,7 @@ namespace WebApplication1.Controllers
                 Id = voter.Id,
                 FirstName = voter.FirstName,
                 LastName = voter.LastName,
-                StateName = voter.State?.Name,
-                StructureLevel = voter.State?.Level.Name
+                StateName = voter.State?.Name
             };
             if (voter.hasVoted())
                 p.hasVoted = "Yes";

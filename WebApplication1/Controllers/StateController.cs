@@ -46,9 +46,7 @@ namespace WebApplication1.Controllers
             StateViewModel s = new StateViewModel
             {
                 Id = state.Id,
-                Name = state.Name,
-                LevelName = state.Level?.Name,
-                LevelValue = state.Level.LevelValue
+                Name = state.Name
             };
             return s;
         }

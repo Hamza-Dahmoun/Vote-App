@@ -104,7 +104,6 @@ namespace WebApplication1.Controllers
                 FirstName = candidate.FirstName,
                 LastName = candidate.LastName,
                 StateName = candidate.State?.Name,
-                StructureLevel = candidate.State?.Level.Name,
                 VotesCount = candidate.Votes.Count(),
             };
             if (candidate.VoterBeing.hasVoted())
@@ -148,7 +147,6 @@ namespace WebApplication1.Controllers
                 FirstName = voter.FirstName,
                 LastName = voter.LastName,
                 StateName = voter.State?.Name,
-                StructureLevel = voter.State?.Level.Name,
                 IsCandidate = IsCandidate(voter)
             };
             if (voter.hasVoted())

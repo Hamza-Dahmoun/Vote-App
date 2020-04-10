@@ -14,7 +14,6 @@ namespace WebApplication1.Models.ViewModels
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string StateName { get; set; }
-        public string StructureLevel { get; set; }
         public int VotesCount { get; set; }
         public string hasVoted { get; set; }
     }

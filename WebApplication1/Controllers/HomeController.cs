@@ -114,7 +114,6 @@ namespace WebApplication1.Controllers
                 FirstName = candidate.FirstName,
                 LastName = candidate.LastName,
                 StateName = candidate.State?.Name,
-                StructureLevel = candidate.State?.Level.Name,
                 VotesCount = candidate.Votes.Count(),
             };
             if (candidate.VoterBeing.hasVoted())

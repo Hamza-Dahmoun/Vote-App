@@ -42,14 +42,14 @@ namespace WebApplication1.Models.Repositories
 
         public IList<Voter> GetAll()
         {
-            //use eager loading to bring State data and Level data too
-            return _dbSet.Include(v=>v.State).Include(v => v.State.Level).ToList();
+            //use eager loading to bring State data too
+            return _dbSet.Include(v=>v.State).ToList();
         }
 
         public Voter GetById(Guid Id)
         {
-            //use eager loading to bring State data and Level data too
-            return _dbSet.Include(v => v.State).Include(v=> v.State.Level).SingleOrDefault(v=>v.Id == Id);
+            //use eager loading to bring State data 
+            return _dbSet.Include(v => v.State).SingleOrDefault(v=>v.Id == Id);
         }
 
         

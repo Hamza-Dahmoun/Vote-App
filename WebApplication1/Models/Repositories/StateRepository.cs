@@ -35,15 +35,13 @@ namespace WebApplication1.Models.Repositories
 
         public IList<State> GetAll()
         {
-            //use eager loading to bring Level data too
-            return _dbSet.Include(s => s.Level).ToList();
+            return _dbSet.ToList();
             //return _dbSet.ToList();
         }
 
         public State GetById(Guid Id)
         {
-            //use eager loading to bring Level data too
-            return _dbSet.Include(s=>s.Level).SingleOrDefault(s=>s.Id == Id);
+            return _dbSet.SingleOrDefault(s=>s.Id == Id);
             //return _dbSet.Find(Id);
         }
     }
