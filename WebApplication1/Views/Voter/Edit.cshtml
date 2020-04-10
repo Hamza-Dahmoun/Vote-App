@@ -1,4 +1,4 @@
-﻿@model WebApplication1.Models.ViewModels.VoterStructureViewModel
+﻿@model WebApplication1.Models.ViewModels.VoterStateViewModel
 @{
     ViewData["Title"] = "Edit";
 }
@@ -25,17 +25,17 @@
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="StructureID" class="control-label"></label>
+                <label asp-for="StateID" class="control-label"></label>
                 <!--THIS LIST WILL DISPPLAY A LIST OF STRUCTURES, THE ONE RELATED TO THE VOTER WILL BE SELECTED? THEN IT'S UP TO THE USER IN EDITION WHAT TO ELECT-->
-                <select asp-for="StructureID" class="form-control" size="1" asp-items="@(new SelectList(Model.Structures, "Id", "Name"))">
+                <select asp-for="StateID" class="form-control" size="1" asp-items="@(new SelectList(Model.States, "Id", "Name"))">
                     <!--IF THE VOTER TO EDIT HAS NO STRUCTURE (NEUTRAL VOTE) LETS NOT BIND StructureId, AND BIND ONLY THE ABOVE LIST OF STRUCTURES-->
-                    @if (Model.StructureID != null)
+                    @if (Model.StateID != null)
                     {
-                        <option asp-for="StructureID"></option>
+                        <option asp-for="StateID"></option>
                     }
 
                 </select>
-                <span asp-validation-for="StructureID" class="text-danger"></span>
+                <span asp-validation-for="StateID" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

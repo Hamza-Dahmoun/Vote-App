@@ -1,4 +1,4 @@
-﻿@model WebApplication1.Models.ViewModels.VoterStructureViewModel
+﻿@model WebApplication1.Models.ViewModels.VoterStateViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -24,10 +24,10 @@
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="StructureID" class="control-label">Structure</label>
-                <select asp-for="StructureID" class="form-control" size="1"
-                        asp-items="@(new SelectList(  Model.Structures, "Id", "Name"))">
-                    <option>Select a Structure</option>
+                <label asp-for="StateID" class="control-label">Structure</label>
+                <select asp-for="StateID" class="form-control" size="1"
+                        asp-items="@(new SelectList(  Model.States, "Id", "Name"))">
+                    <option>Select a State</option>
                 </select>
                 @*HOW SELECTLIST IN RAZOR WORKS?
                     <select
@@ -40,7 +40,7 @@
                         "object property to display as 'text'"
                         ))"
                         >*@
-                <span asp-validation-for="Structures" class="text-danger"></span>
+                <span asp-validation-for="States" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
