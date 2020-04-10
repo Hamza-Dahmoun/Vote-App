@@ -103,7 +103,7 @@ namespace WebApplication1.Controllers
                 isNeutralOpinion = candidate.isNeutralOpinion,
                 FirstName = candidate.FirstName,
                 LastName = candidate.LastName,
-                StructureName = candidate.State?.Name,
+                StateName = candidate.State?.Name,
                 StructureLevel = candidate.State?.Level.Name,
                 VotesCount = candidate.Votes.Count(),
             };
@@ -147,7 +147,7 @@ namespace WebApplication1.Controllers
                 Id = voter.Id,
                 FirstName = voter.FirstName,
                 LastName = voter.LastName,
-                StructureName = voter.State?.Name,
+                StateName = voter.State?.Name,
                 StructureLevel = voter.State?.Level.Name,
                 IsCandidate = IsCandidate(voter)
             };

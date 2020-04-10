@@ -64,20 +64,20 @@ namespace WebApplication1.Controllers
   
         public IActionResult Create()
         {
-            //this method will return an empty VoterStructureViewModel but with a list of all states, in a view
-            VoterStructureViewModel vs = new VoterStructureViewModel
+            //this method will return an empty VoterStateViewModel but with a list of all states, in a view
+            VoterStateViewModel vs = new VoterStateViewModel
             {
-                Structures = _stateRepository.GetAll()
+                States = _stateRepository.GetAll()
             };
         return View(vs);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(VoterStructureViewModel vs)
+        public async Task<IActionResult> Create(VoterStateViewModel vs)
         {
             if (ModelState.IsValid)
             {
-                //this method receives a VoterStructureViewModel object, and based on it, it creates a voter object and stores it in the DB
+                //this method receives a VoterStateViewModel object, and based on it, it creates a voter object and stores it in the DB
                 Voter v = new Voter
                 {
                     Id = Guid.NewGuid(),
@@ -138,12 +138,12 @@ namespace WebApplication1.Controllers
             //In here we are going to return a view where a voter is displayed with his Structure but the structure is in
             //a list of structures
             var voter = _voterRepository.GetById(Id);
-            VoterStructureViewModel voterstructure = new VoterStructureViewModel
+            VoterStateViewModel voterstructure = new VoterStateViewModel
             {
                 Id = voter.Id,
                 FirstName = voter.FirstName,
                 LastName = voter.LastName,                
-                Structures = _stateRepository.GetAll()
+                States = _stateRepository.GetAll()
             };
             /*just in case user wanted to edit info of Neutral vote which doesn't have a structure*/
             if (voter.State != null)
@@ -155,7 +155,7 @@ namespace WebApplication1.Controllers
             return View(voterstructure);
         }
         [HttpPost]
-        public IActionResult EditVoter(VoterStructureViewModel voterstructure)
+        public IActionResult EditVoter(VoterStateViewModel voterstructure)
         {
             if (!ModelState.IsValid)
             {
@@ -182,7 +182,7 @@ namespace WebApplication1.Controllers
                 Id = voter.Id,
                 FirstName = voter.FirstName,
                 LastName = voter.LastName,
-                StructureName = voter.State?.Name,
+                StateName = voter.State?.Name,
                 StructureLevel = voter.State?.Level.Name
             };
             if (voter.hasVoted())

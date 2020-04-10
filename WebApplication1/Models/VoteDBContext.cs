@@ -34,6 +34,6 @@ namespace WebApplication1.Models
         public DbSet<WebApplication1.Models.ViewModels.PersonViewModel> PersonViewModel { get; set; }
         public DbSet<WebApplication1.Models.ViewModels.StateViewModel> StateViewModel { get; set; }
         public DbSet<WebApplication1.Models.ViewModels.CandidateViewModel> CandidateViewModel { get; set; }
-        public DbSet<WebApplication1.Models.ViewModels.VoterStructureViewModel> VoterStructureViewModel { get; set; }
+        public DbSet<WebApplication1.Models.ViewModels.VoterStateViewModel> VoterStateViewModel { get; set; }
     }
 }

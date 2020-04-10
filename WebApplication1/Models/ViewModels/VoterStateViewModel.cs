@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace WebApplication1.Models.ViewModels
 {
     [NotMapped]
-    public class VoterStructureViewModel
+    public class VoterStateViewModel
     {
         public Guid Id { get; set; }
         [Required]
@@ -18,7 +18,7 @@ namespace WebApplication1.Models.ViewModels
         public Guid StateID { get; set; }
 
         //the below list of structures is used to be displayed when adding a new voter
-        public IList<State> Structures { get; set; }
+        public IList<State> States { get; set; }
 
     }
 }
