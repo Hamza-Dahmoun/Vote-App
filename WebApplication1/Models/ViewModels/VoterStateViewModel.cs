@@ -17,7 +17,7 @@ namespace WebApplication1.Models.ViewModels
         public string LastName { get; set; }
         public Guid StateID { get; set; }
 
-        //the below list of structures is used to be displayed when adding a new voter
+        //the below list of states is used to be displayed when adding a new voter
         public IList<State> States { get; set; }
 
     }

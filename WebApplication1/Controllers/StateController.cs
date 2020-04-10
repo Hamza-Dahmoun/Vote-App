@@ -28,12 +28,12 @@ namespace WebApplication1.Controllers
 
         public IActionResult Index()
         {
-            return View(convertStructureList_toStructureViewModelList(_stateRepository.GetAll()).OrderBy(svm=>svm.LevelValue));
+            return View(convertStateList_toStateViewModelList(_stateRepository.GetAll()).OrderBy(svm=>svm.LevelValue));
         }
 
         public IActionResult Details(Guid id)
         {
-            return View(convertStructure_toStructureViewModel(_stateRepository.GetById(id)));
+            return View(convertState_toStateViewModel(_stateRepository.GetById(id)));
         }
 
 
@@ -41,7 +41,7 @@ namespace WebApplication1.Controllers
 
 
         //******************** UTILITIES
-        public StateViewModel convertStructure_toStructureViewModel(State state)
+        public StateViewModel convertState_toStateViewModel(State state)
         {
             StateViewModel s = new StateViewModel
             {
@@ -53,12 +53,12 @@ namespace WebApplication1.Controllers
             return s;
         }
 
-        public List<StateViewModel> convertStructureList_toStructureViewModelList(IList<State> states)
+        public List<StateViewModel> convertStateList_toStateViewModelList(IList<State> states)
         {
             List<StateViewModel> myList = new List<StateViewModel>();
             foreach (var item in states)
             {
-                myList.Add(convertStructure_toStructureViewModel(item));
+                myList.Add(convertState_toStateViewModel(item));
             }
             return myList;
         }

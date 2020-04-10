@@ -26,9 +26,9 @@
             </div>
             <div class="form-group">
                 <label asp-for="StateID" class="control-label"></label>
-                <!--THIS LIST WILL DISPPLAY A LIST OF STRUCTURES, THE ONE RELATED TO THE VOTER WILL BE SELECTED? THEN IT'S UP TO THE USER IN EDITION WHAT TO ELECT-->
+                <!--THIS LIST WILL DISPPLAY A LIST OF STATES, THE ONE RELATED TO THE VOTER WILL BE SELECTED? THEN IT'S UP TO THE USER IN EDITION WHAT TO ELECT-->
                 <select asp-for="StateID" class="form-control" size="1" asp-items="@(new SelectList(Model.States, "Id", "Name"))">
-                    <!--IF THE VOTER TO EDIT HAS NO STRUCTURE (NEUTRAL VOTE) LETS NOT BIND StructureId, AND BIND ONLY THE ABOVE LIST OF STRUCTURES-->
+                    <!--IF THE VOTER TO EDIT HAS NO STATE (NEUTRAL VOTE) LETS NOT BIND StateId, AND BIND ONLY THE ABOVE LIST OF STATES-->
                     @if (Model.StateID != null)
                     {
                         <option asp-for="StateID"></option>

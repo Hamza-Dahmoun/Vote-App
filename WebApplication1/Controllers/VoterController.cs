@@ -135,27 +135,27 @@ namespace WebApplication1.Controllers
 
         public IActionResult Edit(Guid Id)
         {
-            //In here we are going to return a view where a voter is displayed with his Structure but the structure is in
-            //a list of structures
+            //In here we are going to return a view where a voter is displayed with his state but the state is in
+            //a list of states
             var voter = _voterRepository.GetById(Id);
-            VoterStateViewModel voterstructure = new VoterStateViewModel
+            VoterStateViewModel voterstate = new VoterStateViewModel
             {
                 Id = voter.Id,
                 FirstName = voter.FirstName,
                 LastName = voter.LastName,                
                 States = _stateRepository.GetAll()
             };
-            /*just in case user wanted to edit info of Neutral vote which doesn't have a structure*/
+            /*just in case user wanted to edit info of Neutral vote which doesn't have a state*/
             if (voter.State != null)
             {
-                voterstructure.StateID = voter.State.Id;
+                voterstate.StateID = voter.State.Id;
             }
             
 
-            return View(voterstructure);
+            return View(voterstate);
         }
         [HttpPost]
-        public IActionResult EditVoter(VoterStateViewModel voterstructure)
+        public IActionResult EditVoter(VoterStateViewModel voterstate)
         {
             if (!ModelState.IsValid)
             {
@@ -163,12 +163,12 @@ namespace WebApplication1.Controllers
             }
             Voter v = new Voter
             {
-                Id = voterstructure.Id,
-                FirstName = voterstructure.FirstName,
-                LastName = voterstructure.LastName,
-                State = _stateRepository.GetById(voterstructure.StateID)
+                Id = voterstate.Id,
+                FirstName = voterstate.FirstName,
+                LastName = voterstate.LastName,
+                State = _stateRepository.GetById(voterstate.StateID)
             };
-            _voterRepository.Edit(voterstructure.Id, v);
+            _voterRepository.Edit(voterstate.Id, v);
             return RedirectToAction(nameof(Index));
         }
 
