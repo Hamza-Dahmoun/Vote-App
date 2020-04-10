@@ -76,7 +76,7 @@ namespace WebApplication1.Controllers
                         FirstName = voter.FirstName,
                         LastName = voter.LastName,
                         VoterBeing = voter,
-                        Structure = voter.Structure
+                        State = voter.State
                     }
                     );
                 return RedirectToAction(nameof(GoToVotersList));
@@ -103,8 +103,8 @@ namespace WebApplication1.Controllers
                 isNeutralOpinion = candidate.isNeutralOpinion,
                 FirstName = candidate.FirstName,
                 LastName = candidate.LastName,
-                StructureName = candidate.Structure?.Name,
-                StructureLevel = candidate.Structure?.Level.Name,
+                StructureName = candidate.State?.Name,
+                StructureLevel = candidate.State?.Level.Name,
                 VotesCount = candidate.Votes.Count(),
             };
             if (candidate.VoterBeing.hasVoted())
@@ -147,8 +147,8 @@ namespace WebApplication1.Controllers
                 Id = voter.Id,
                 FirstName = voter.FirstName,
                 LastName = voter.LastName,
-                StructureName = voter.Structure?.Name,
-                StructureLevel = voter.Structure?.Level.Name,
+                StructureName = voter.State?.Name,
+                StructureLevel = voter.State?.Level.Name,
                 IsCandidate = IsCandidate(voter)
             };
             if (voter.hasVoted())

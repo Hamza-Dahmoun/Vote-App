@@ -18,22 +18,22 @@ namespace WebApplication1.Controllers
     //[Authorize(Roles = "Administrator")]
     public class StateController : Controller
     {
-        public IRepository<State> _structureRepository { get; }
-        public StateController(IRepository<State> structureRepository)
+        public IRepository<State> _stateRepository { get; }
+        public StateController(IRepository<State> stateRepository)
         {
-            _structureRepository = structureRepository;
+            _stateRepository = stateRepository;
         }
 
 
 
         public IActionResult Index()
         {
-            return View(convertStructureList_toStructureViewModelList(_structureRepository.GetAll()).OrderBy(svm=>svm.LevelValue));
+            return View(convertStructureList_toStructureViewModelList(_stateRepository.GetAll()).OrderBy(svm=>svm.LevelValue));
         }
 
         public IActionResult Details(Guid id)
         {
-            return View(convertStructure_toStructureViewModel(_structureRepository.GetById(id)));
+            return View(convertStructure_toStructureViewModel(_stateRepository.GetById(id)));
         }
 
 
@@ -41,22 +41,22 @@ namespace WebApplication1.Controllers
 
 
         //******************** UTILITIES
-        public StateViewModel convertStructure_toStructureViewModel(State structure)
+        public StateViewModel convertStructure_toStructureViewModel(State state)
         {
             StateViewModel s = new StateViewModel
             {
-                Id = structure.Id,
-                Name = structure.Name,
-                LevelName = structure.Level?.Name,
-                LevelValue = structure.Level.LevelValue
+                Id = state.Id,
+                Name = state.Name,
+                LevelName = state.Level?.Name,
+                LevelValue = state.Level.LevelValue
             };
             return s;
         }
 
-        public List<StateViewModel> convertStructureList_toStructureViewModelList(IList<State> structures)
+        public List<StateViewModel> convertStructureList_toStructureViewModelList(IList<State> states)
         {
             List<StateViewModel> myList = new List<StateViewModel>();
-            foreach (var item in structures)
+            foreach (var item in states)
             {
                 myList.Add(convertStructure_toStructureViewModel(item));
             }

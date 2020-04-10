@@ -15,7 +15,7 @@ namespace WebApplication1.Models.ViewModels
         public string FirstName { get; set; }
         [Required]
         public string LastName { get; set; }
-        public Guid StructureID { get; set; }
+        public Guid StateID { get; set; }
 
         //the below list of structures is used to be displayed when adding a new voter
         public IList<State> Structures { get; set; }

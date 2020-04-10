@@ -35,11 +35,11 @@ namespace WebApplication1.Controllers
             //the below service is used to store a new user for each new voter
         private readonly UserManager<IdentityUser> _userManager;
         public IRepository<Voter> _voterRepository { get; }
-        public IRepository<State> _structureRepository { get; }
-        public VoterController(IRepository<Voter> voterRepository, IRepository<State> structureRepository, UserManager<IdentityUser> userManager)
+        public IRepository<State> _stateRepository { get; }
+        public VoterController(IRepository<Voter> voterRepository, IRepository<State> stateRepository, UserManager<IdentityUser> userManager)
         {
             _voterRepository = voterRepository;
-            _structureRepository = structureRepository;
+            _stateRepository = stateRepository;
             _userManager = userManager;
         }
         
@@ -64,10 +64,10 @@ namespace WebApplication1.Controllers
   
         public IActionResult Create()
         {
-            //this method will return an empty VoterStructureViewModel but with a list of all Structures, in a view
+            //this method will return an empty VoterStructureViewModel but with a list of all states, in a view
             VoterStructureViewModel vs = new VoterStructureViewModel
             {
-                Structures = _structureRepository.GetAll()
+                Structures = _stateRepository.GetAll()
             };
         return View(vs);
         }
@@ -83,7 +83,7 @@ namespace WebApplication1.Controllers
                     Id = Guid.NewGuid(),
                     FirstName = vs.FirstName,
                     LastName = vs.LastName,
-                    Structure = _structureRepository.GetById(vs.StructureID)
+                    State = _stateRepository.GetById(vs.StateID)
                 };
 
                 //now lets add this new voter as a new user to the IdentityDB using UserManager<IdentityUser> service
@@ -143,12 +143,12 @@ namespace WebApplication1.Controllers
                 Id = voter.Id,
                 FirstName = voter.FirstName,
                 LastName = voter.LastName,                
-                Structures = _structureRepository.GetAll()
+                Structures = _stateRepository.GetAll()
             };
             /*just in case user wanted to edit info of Neutral vote which doesn't have a structure*/
-            if (voter.Structure != null)
+            if (voter.State != null)
             {
-                voterstructure.StructureID = voter.Structure.Id;
+                voterstructure.StateID = voter.State.Id;
             }
             
 
@@ -166,7 +166,7 @@ namespace WebApplication1.Controllers
                 Id = voterstructure.Id,
                 FirstName = voterstructure.FirstName,
                 LastName = voterstructure.LastName,
-                Structure = _structureRepository.GetById(voterstructure.StructureID)
+                State = _stateRepository.GetById(voterstructure.StateID)
             };
             _voterRepository.Edit(voterstructure.Id, v);
             return RedirectToAction(nameof(Index));
@@ -182,8 +182,8 @@ namespace WebApplication1.Controllers
                 Id = voter.Id,
                 FirstName = voter.FirstName,
                 LastName = voter.LastName,
-                StructureName = voter.Structure?.Name,
-                StructureLevel = voter.Structure?.Level.Name
+                StructureName = voter.State?.Name,
+                StructureLevel = voter.State?.Level.Name
             };
             if (voter.hasVoted())
                 p.hasVoted = "Yes";

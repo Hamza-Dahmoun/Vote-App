@@ -83,8 +83,8 @@ namespace WebApplication1.Controllers
                 isNeutralOpinion = candidate.isNeutralOpinion,
                 FirstName = candidate.FirstName,
                 LastName = candidate.LastName,
-                StructureName = candidate.Structure?.Name,
-                StructureLevel = candidate.Structure?.Level.Name,
+                StructureName = candidate.State?.Name,
+                StructureLevel = candidate.State?.Level.Name,
                 VotesCount = candidate.Votes.Count(),
             };
             if (candidate.VoterBeing.hasVoted())
