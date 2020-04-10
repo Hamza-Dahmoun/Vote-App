@@ -14,16 +14,16 @@ namespace WebApplication1.Business
         //We are going to different repositories to fill a dashboard
         public IRepository<Voter> _voterRepository { get; }
         public IRepository<Candidate> _candidateRepository { get; }
-        public IRepository<State> _structureRepository { get; }
+        public IRepository<State> _stateRepository { get; }
 
 
-        public DashboardBusiness(IRepository<Voter> voterRepository, IRepository<Candidate> candidateRepository, IRepository<State> structureRepository)
+        public DashboardBusiness(IRepository<Voter> voterRepository, IRepository<Candidate> candidateRepository, IRepository<State> stateRepository)
         {
             //lets inject the repositories into the constructor
 
             _voterRepository = voterRepository;
             _candidateRepository = candidateRepository;
-            _structureRepository = structureRepository;
+            _stateRepository = stateRepository;
         }
 
         //public DashboardViewModel getDashboard()

@@ -16,10 +16,10 @@ namespace WebApplication1.Controllers
     //(you can check the set of roles related to this policy in ConfigureServices() in Startup file)
     [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
     //[Authorize(Roles = "Administrator")]
-    public class StructureController : Controller
+    public class StateController : Controller
     {
         public IRepository<State> _structureRepository { get; }
-        public StructureController(IRepository<State> structureRepository)
+        public StateController(IRepository<State> structureRepository)
         {
             _structureRepository = structureRepository;
         }
