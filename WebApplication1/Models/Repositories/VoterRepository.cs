@@ -33,7 +33,11 @@ namespace WebApplication1.Models.Repositories
 
         public void Edit(Guid Id, Voter item)
         {
-            throw new NotImplementedException();
+            var myVoter = GetById(Id);
+            myVoter.FirstName = item.FirstName;
+            myVoter.LastName = item.LastName;
+            myVoter.Structure = item.Structure;
+            _dbContext.SaveChanges();
         }
 
         public IList<Voter> GetAll()

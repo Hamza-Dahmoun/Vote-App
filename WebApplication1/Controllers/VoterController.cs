@@ -133,6 +133,45 @@ namespace WebApplication1.Controllers
 
 
 
+        public IActionResult Edit(Guid Id)
+        {
+            //In here we are going to return a view where a voter is displayed with his Structure but the structure is in
+            //a list of structures
+            var voter = _voterRepository.GetById(Id);
+            VoterStructureViewModel voterstructure = new VoterStructureViewModel
+            {
+                Id = voter.Id,
+                FirstName = voter.FirstName,
+                LastName = voter.LastName,                
+                Structures = _structureRepository.GetAll()
+            };
+            /*just in case user wanted to edit info of Neutral vote which doesn't have a structure*/
+            if (voter.Structure != null)
+            {
+                voterstructure.StructureID = voter.Structure.Id;
+            }
+            
+
+            return View(voterstructure);
+        }
+        [HttpPost]
+        public IActionResult EditVoter(VoterStructureViewModel voterstructure)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            Voter v = new Voter
+            {
+                Id = voterstructure.Id,
+                FirstName = voterstructure.FirstName,
+                LastName = voterstructure.LastName,
+                Structure = _structureRepository.GetById(voterstructure.StructureID)
+            };
+            _voterRepository.Edit(voterstructure.Id, v);
+            return RedirectToAction(nameof(Index));
+        }
+
         
 
         //******************** UTILITIES

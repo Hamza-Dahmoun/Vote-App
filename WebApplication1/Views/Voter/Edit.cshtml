@@ -1,0 +1,50 @@
+﻿@model WebApplication1.Models.ViewModels.VoterStructureViewModel
+@{
+    ViewData["Title"] = "Edit";
+}
+
+
+<h1>Edit</h1>
+
+<h4>BookAuthorViewModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditVoter">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <!--THIS IS NOT GONNA BE DISPLAYED FOR USER BUT IS MANDATORY IN THE FORM SO THAT THE OBJECT SENT INTO "EDITVOTER" ACTION OF VOTERCONTROLLER WILL HOLD CORRECT DATA-->
+            <input asp-for="Id" type="hidden" />
+            <div class="form-group">
+                <label asp-for="FirstName" class="control-label"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName" class="control-label"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StructureID" class="control-label"></label>
+                <!--THIS LIST WILL DISPPLAY A LIST OF STRUCTURES, THE ONE RELATED TO THE VOTER WILL BE SELECTED? THEN IT'S UP TO THE USER IN EDITION WHAT TO ELECT-->
+                <select asp-for="StructureID" class="form-control" size="1" asp-items="@(new SelectList(Model.Structures, "Id", "Name"))">
+                    <!--IF THE VOTER TO EDIT HAS NO STRUCTURE (NEUTRAL VOTE) LETS NOT BIND StructureId, AND BIND ONLY THE ABOVE LIST OF STRUCTURES-->
+                    @if (Model.StructureID != null)
+                    {
+                        <option asp-for="StructureID"></option>
+                    }
+
+                </select>
+                <span asp-validation-for="StructureID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
