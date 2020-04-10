@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace WebApplication1.Models.ViewModels
 {
     [NotMapped]
-    public class StructureViewModel
+    public class StateViewModel
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

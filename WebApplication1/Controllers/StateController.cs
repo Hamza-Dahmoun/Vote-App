@@ -41,9 +41,9 @@ namespace WebApplication1.Controllers
 
 
         //******************** UTILITIES
-        public StructureViewModel convertStructure_toStructureViewModel(State structure)
+        public StateViewModel convertStructure_toStructureViewModel(State structure)
         {
-            StructureViewModel s = new StructureViewModel
+            StateViewModel s = new StateViewModel
             {
                 Id = structure.Id,
                 Name = structure.Name,
@@ -53,9 +53,9 @@ namespace WebApplication1.Controllers
             return s;
         }
 
-        public List<StructureViewModel> convertStructureList_toStructureViewModelList(IList<State> structures)
+        public List<StateViewModel> convertStructureList_toStructureViewModelList(IList<State> structures)
         {
-            List<StructureViewModel> myList = new List<StructureViewModel>();
+            List<StateViewModel> myList = new List<StateViewModel>();
             foreach (var item in structures)
             {
                 myList.Add(convertStructure_toStructureViewModel(item));
