@@ -155,11 +155,16 @@ namespace WebApplication1.Controllers
             return View(voterstate);
         }
         [HttpPost]
-        public IActionResult EditVoter(VoterStateViewModel voterstate)
+        public IActionResult Edit(VoterStateViewModel voterstate)
         {
             if (!ModelState.IsValid)
             {
-                return View();
+                if(voterstate.States == null)
+                {
+                    //in caase the object received doesn't have a list of states
+                    voterstate.States = _stateRepository.GetAll();
+                }
+                return View(voterstate);
             }
             Voter v = new Voter
             {
