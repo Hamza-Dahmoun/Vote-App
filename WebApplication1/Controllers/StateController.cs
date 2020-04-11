@@ -59,6 +59,31 @@ namespace WebApplication1.Controllers
         }
 
 
+
+        public IActionResult Delete(Guid id)
+        {
+            var state = _stateRepository.GetById(id);
+            return View(state);
+        }
+
+        [HttpPost]
+        public IActionResult DeleteState(Guid id)
+        {
+            try
+            {
+                _stateRepository.Delete(id);
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                //if there is an error return the same delete view
+                return View();
+            }            
+        }
+
+
+
+
         //******************** UTILITIES
         public StateViewModel convertState_toStateViewModel(State state)
         {

@@ -26,7 +26,9 @@ namespace WebApplication1.Models.Repositories
 
         public void Delete(Guid Id)
         {
-            throw new NotImplementedException();
+            var item = GetById(Id);
+            _dbContext.Remove(item);
+            _dbContext.SaveChanges();
         }
 
         public void Edit(Guid Id, State item)
