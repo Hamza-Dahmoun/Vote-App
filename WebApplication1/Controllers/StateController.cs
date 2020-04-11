@@ -84,6 +84,24 @@ namespace WebApplication1.Controllers
 
 
 
+
+
+        public IActionResult Edit(Guid id)
+        {
+            var state = _stateRepository.GetById(id);
+            return View(state);
+        }
+        [HttpPost]
+        public IActionResult Edit(Guid id, State state)
+        {
+            if (ModelState.IsValid)
+            {
+                _stateRepository.Edit(id, state);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(state);
+        }
+
         //******************** UTILITIES
         public StateViewModel convertState_toStateViewModel(State state)
         {

@@ -33,7 +33,9 @@ namespace WebApplication1.Models.Repositories
 
         public void Edit(Guid Id, State item)
         {
-            throw new NotImplementedException();
+            var myState = GetById(Id);
+            myState.Name = item.Name;
+            _dbContext.SaveChanges();
         }
 
         public IList<State> GetAll()
