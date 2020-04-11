@@ -20,7 +20,8 @@ namespace WebApplication1.Models.Repositories
 
         public void Add(State item)
         {
-            throw new NotImplementedException();
+            _dbContext.Add(item);
+            _dbContext.SaveChanges();
         }
 
         public void Delete(Guid Id)

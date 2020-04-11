@@ -37,7 +37,26 @@ namespace WebApplication1.Controllers
         }
 
 
-
+        //1- 'create' button in the 'index' view will execute the method Create(), it will display the Create.cshtml view
+        //2- 'Save' button which is inside the form in the 'create' action view will execute the Action Create(Employee e)
+        //becuz the form has (asp-action="Create") and the action has [HttpPost]
+        //Get : State/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Create(State state)
+        {
+            if (ModelState.IsValid)
+            {
+                state.Id = Guid.NewGuid();
+                _stateRepository.Add(state);
+                return RedirectToAction(nameof(Index));
+            }
+            //so the model isn't valid, lets keep the user in the same view so that he could read the validation msgs
+            return View(state);
+        }
 
 
         //******************** UTILITIES
