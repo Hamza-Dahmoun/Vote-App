@@ -44,7 +44,7 @@ namespace WebApplication1.Controllers
             //dashboard in home controller
 
             //lets get the voter instance of the current user, so that we use its id with his votes
-            var currentUser = await getCurrentUser();
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
             Voter currentVoter = VoterUtilities.getVoterByUserId(Guid.Parse(currentUser.Id), _voterRepository);
 
 
@@ -73,14 +73,6 @@ namespace WebApplication1.Controllers
 
 
 
-
-
-        //************** UTILITIES
-        
-        public Task<IdentityUser> getCurrentUser()
-        {//this returns the current user instance, I'll use its Id to get its corresponding Voter instance
-            return _userManager.GetUserAsync(HttpContext.User);
-        }
         
     }
 }

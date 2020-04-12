@@ -93,7 +93,7 @@ namespace WebApplication1.Controllers
             int NbVotes = _voteRepository.GetAll().Count;
             int votersWithVote = VoterUtilities.getNumberOfVoterWithVote(_voterRepository);
             //Now lets get the currentUser to check if he has voted or not yet
-            var currentUser = await getCurrentUser();
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User)/*getCurrentUser()*/;
             bool userHasVoted = VoterUtilities.getVoterByUserId(Guid.Parse(currentUser.Id), _voterRepository).hasVoted();
             DashboardViewModel d = new DashboardViewModel
             {
@@ -108,16 +108,5 @@ namespace WebApplication1.Controllers
         }
 
 
-
-
-
-
-        
-        
-        public Task<IdentityUser> getCurrentUser()
-        {//this returns the current user instance, I'll use its Id to get its corresponding Voter instance
-            return _userManager.GetUserAsync(HttpContext.User);
-        }
-        
     }
 }
