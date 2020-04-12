@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebApplication1.Business;
 using WebApplication1.Models;
 using WebApplication1.Models.Repositories;
 using WebApplication1.Models.ViewModels;
@@ -28,12 +29,12 @@ namespace WebApplication1.Controllers
 
         public IActionResult Index()
         {
-            return View(convertStateList_toStateViewModelList(_stateRepository.GetAll()).OrderBy(svm=>svm.LevelValue));
+            return View(Utilities.convertStateList_toStateViewModelList(_stateRepository.GetAll()).OrderBy(svm=>svm.LevelValue));
         }
 
         public IActionResult Details(Guid id)
         {
-            return View(convertState_toStateViewModel(_stateRepository.GetById(id)));
+            return View(Utilities.convertState_toStateViewModel(_stateRepository.GetById(id)));
         }
 
 
@@ -102,25 +103,6 @@ namespace WebApplication1.Controllers
             return View(state);
         }
 
-        //******************** UTILITIES
-        public StateViewModel convertState_toStateViewModel(State state)
-        {
-            StateViewModel s = new StateViewModel
-            {
-                Id = state.Id,
-                Name = state.Name
-            };
-            return s;
-        }
-
-        public List<StateViewModel> convertStateList_toStateViewModelList(IList<State> states)
-        {
-            List<StateViewModel> myList = new List<StateViewModel>();
-            foreach (var item in states)
-            {
-                myList.Add(convertState_toStateViewModel(item));
-            }
-            return myList;
-        }
+        
     }
 }

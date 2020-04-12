@@ -8,6 +8,7 @@ using WebApplication1.Models;
 using WebApplication1.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using WebApplication1.Business;
 
 namespace WebApplication1.Controllers
 {
@@ -34,7 +35,7 @@ namespace WebApplication1.Controllers
 
         public IActionResult Index()
         {//this action returns a view containing all candidates for the user to vote on five of them maximum
-            return View(convertCandidateList_toPersonViewModelList(_candidateRepository.GetAll()));
+            return View(Utilities.convertCandidateList_toPersonViewModelList(_candidateRepository.GetAll()));
         }
 
         [HttpPost]
@@ -75,34 +76,7 @@ namespace WebApplication1.Controllers
 
 
         //************** UTILITIES
-        public CandidateViewModel convertCandidate_toCandidateViewModel(Candidate candidate)
-        {
-            CandidateViewModel c = new CandidateViewModel
-            {
-                Id = candidate.Id,
-                isNeutralOpinion = candidate.isNeutralOpinion,
-                FirstName = candidate.FirstName,
-                LastName = candidate.LastName,
-                StateName = candidate.State?.Name,
-                VotesCount = candidate.Votes.Count(),
-            };
-            if (candidate.VoterBeing.hasVoted())
-                c.hasVoted = "Yes";
-            else c.hasVoted = "No";
-            return c;
-        }
-
-        public List<CandidateViewModel> convertCandidateList_toPersonViewModelList(IList<Candidate> candidates)
-        {
-            List<CandidateViewModel> myList = new List<CandidateViewModel>();
-            foreach (var item in candidates)
-            {
-                myList.Add(convertCandidate_toCandidateViewModel(item));
-            }
-
-            return myList.OrderByDescending(c => c.VotesCount).ToList();
-        }
-
+        
         public Task<IdentityUser> getCurrentUser()
         {//this returns the current user instance, I'll use its Id to get its corresponding Voter instance
             return _userManager.GetUserAsync(HttpContext.User);

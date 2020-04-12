@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebApplication1.Business;
 using WebApplication1.Models;
 using WebApplication1.Models.Repositories;
 using WebApplication1.Models.ViewModels;
@@ -35,13 +36,13 @@ namespace WebApplication1.Controllers
 
         public IActionResult Details(Guid id)
         {
-            return View(convertCandidate_toCandidateViewModel(_candidateRepository.GetById(id)));
+            return View(Utilities.convertCandidate_toCandidateViewModel(_candidateRepository.GetById(id)));
         }
 
 
         public IActionResult Delete(Guid id)
         {
-            return View(convertCandidate_toCandidateViewModel(_candidateRepository.GetById(id)));
+            return View(Utilities.convertCandidate_toCandidateViewModel(_candidateRepository.GetById(id)));
         }
         [HttpPost]
         public IActionResult DeleteCandidate(Guid id)
@@ -61,7 +62,7 @@ namespace WebApplication1.Controllers
 
         public IActionResult GoToVotersList()
         {
-            return View(convertVoterList_toPersonViewModelList(_voterRepository.GetAll()));
+            return View(Utilities.convertVoterList_toPersonViewModelList(_voterRepository.GetAll()));
         }
 
         public IActionResult SelectNewCandidate(Guid voterId)
@@ -95,34 +96,7 @@ namespace WebApplication1.Controllers
 
 
         //******************** UTILITIES
-        public CandidateViewModel convertCandidate_toCandidateViewModel(Candidate candidate)
-        {
-            CandidateViewModel c = new CandidateViewModel
-            {
-                Id = candidate.Id,
-                isNeutralOpinion = candidate.isNeutralOpinion,
-                FirstName = candidate.FirstName,
-                LastName = candidate.LastName,
-                StateName = candidate.State?.Name,
-                VotesCount = candidate.Votes.Count(),
-            };
-            if (candidate.VoterBeing.hasVoted())
-                c.hasVoted = "Yes";
-            else c.hasVoted = "No";
-            return c;
-        }
-
-        public List<CandidateViewModel> convertCandidateList_toPersonViewModelList(IList<Candidate> candidates)
-        {
-            List<CandidateViewModel> myList = new List<CandidateViewModel>();
-            foreach (var item in candidates)
-            {
-                myList.Add(convertCandidate_toCandidateViewModel(item));
-            }
-
-            return myList;
-        }
-
+        
         public bool IsCandidate(Voter voter)
         {
 
@@ -134,39 +108,6 @@ namespace WebApplication1.Controllers
 
         }
 
-
-        //
-
-
-
-        public PersonViewModel convertVoter_toPersonViewModel(Voter voter)
-        {
-            PersonViewModel p = new PersonViewModel
-            {
-                Id = voter.Id,
-                FirstName = voter.FirstName,
-                LastName = voter.LastName,
-                StateName = voter.State?.Name,
-                IsCandidate = IsCandidate(voter)
-            };
-            if (voter.hasVoted())
-                p.hasVoted = "Yes";
-            else p.hasVoted = "No";
-
-            return p;
-        }
-
-        public List<PersonViewModel> convertVoterList_toPersonViewModelList(IList<Voter> voters)
-        {
-            List<PersonViewModel> myList = new List<PersonViewModel>();
-            foreach (var item in voters)
-            {
-                myList.Add(convertVoter_toPersonViewModel(item));
-            }
-
-            return myList;
-        }
-
-        
+   
     }
 }

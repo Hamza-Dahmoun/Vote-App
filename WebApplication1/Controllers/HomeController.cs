@@ -41,7 +41,9 @@ namespace WebApplication1.Controllers
         public async Task<IActionResult> Index()
         {
             if (User.IsInRole("Voter") || User.IsInRole("Administrator"))
-            {//the user has a voter Role, lets display the dashboard
+            {
+                //string hello = DashboardBusiness.sayHello();
+                //the user has a voter Role, lets display the dashboard
                 DashboardViewModel d = await getDashboard();
                 //d.UserHasVoted = false;
                 return View(d);
@@ -71,12 +73,20 @@ namespace WebApplication1.Controllers
         }
 
 
+
+
+
+
+
+
+
         //********************** UTILITIES
         public async Task<DashboardViewModel> getDashboard()
         {
             //this function returns a dashboard object filled with data
+            //it is asynchronous becuz it uses another method which uses an asynchronous method GetUserAsync()
 
-            List<CandidateViewModel> candidates = convertCandidateList_toPersonViewModelList(_candidateRepository.GetAll().ToList());
+            List<CandidateViewModel> candidates = Utilities.convertCandidateList_toPersonViewModelList(_candidateRepository.GetAll().ToList());
 
             int NbCandidates = candidates.Count;
             int NbVoters = _voterRepository.GetAll().Count;
@@ -104,35 +114,7 @@ namespace WebApplication1.Controllers
 
 
 
-
-        public CandidateViewModel convertCandidate_toCandidateViewModel(Candidate candidate)
-        {
-            CandidateViewModel c = new CandidateViewModel
-            {
-                Id = candidate.Id,
-                isNeutralOpinion = candidate.isNeutralOpinion,
-                FirstName = candidate.FirstName,
-                LastName = candidate.LastName,
-                StateName = candidate.State?.Name,
-                VotesCount = candidate.Votes.Count(),
-            };
-            if (candidate.VoterBeing.hasVoted())
-                c.hasVoted = "Yes";
-            else c.hasVoted = "No";
-            return c;
-        }
-
-        public List<CandidateViewModel> convertCandidateList_toPersonViewModelList(IList<Candidate> candidates)
-        {
-            List<CandidateViewModel> myList = new List<CandidateViewModel>();
-            foreach (var item in candidates)
-            {
-                myList.Add(convertCandidate_toCandidateViewModel(item));
-            }
-
-            return myList.OrderByDescending(c=>c.VotesCount).ToList();
-        }
-
+        
         public bool IsCandidate(Voter voter)
         {
 
