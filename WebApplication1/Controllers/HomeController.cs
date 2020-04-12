@@ -113,16 +113,7 @@ namespace WebApplication1.Controllers
 
 
         
-        public bool IsCandidate(Voter voter)
-        {
-
-            Candidate candidate = _candidateRepository.GetAll().SingleOrDefault(c => c.VoterBeing?.Id == voter.Id);
-
-            if (candidate != null)
-                return true;
-            else return false;
-
-        }
+        
         public Task<IdentityUser> getCurrentUser()
         {//this returns the current user instance, I'll use its Id to get its corresponding Voter instance
             return _userManager.GetUserAsync(HttpContext.User);

@@ -91,23 +91,6 @@ namespace WebApplication1.Controllers
 
 
 
-
-
-
-
-        //******************** UTILITIES
-        
-        public bool IsCandidate(Voter voter)
-        {
-
-            Candidate candidate = _candidateRepository.GetAll().SingleOrDefault(c => c.VoterBeing?.Id == voter.Id);
-
-            if (candidate != null)
-                return true;
-            else return false;
-
-        }
-
    
     }
 }
