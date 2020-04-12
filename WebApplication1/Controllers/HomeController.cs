@@ -44,8 +44,9 @@ namespace WebApplication1.Controllers
             {
                 //string hello = DashboardBusiness.sayHello();
                 //the user has a voter Role, lets display the dashboard
-                DashboardViewModel d = await getDashboard();
-                //d.UserHasVoted = false;
+                var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+                DashboardViewModel d = DashboardUtilities.getDashboard(_candidateRepository, _voterRepository, _voteRepository, currentUser);
+                
                 return View(d);
             }
             else
@@ -75,37 +76,6 @@ namespace WebApplication1.Controllers
 
 
 
-
-
-
-
-
-        //********************** UTILITIES
-        public async Task<DashboardViewModel> getDashboard()
-        {
-            //this function returns a dashboard object filled with data
-            //it is asynchronous becuz it uses another method which uses an asynchronous method GetUserAsync()
-
-            List<CandidateViewModel> candidates = Utilities.convertCandidateList_toPersonViewModelList(_candidateRepository.GetAll().ToList());
-
-            int NbCandidates = candidates.Count;
-            int NbVoters = _voterRepository.GetAll().Count;
-            int NbVotes = _voteRepository.GetAll().Count;
-            int votersWithVote = VoterUtilities.getNumberOfVoterWithVote(_voterRepository);
-            //Now lets get the currentUser to check if he has voted or not yet
-            var currentUser = await _userManager.GetUserAsync(HttpContext.User)/*getCurrentUser()*/;
-            bool userHasVoted = VoterUtilities.getVoterByUserId(Guid.Parse(currentUser.Id), _voterRepository).hasVoted();
-            DashboardViewModel d = new DashboardViewModel
-            {
-                NbCandidates = NbCandidates,
-                NbVoters = NbVoters,
-                NbVotes = NbVotes,
-                ParticipationRate = (double)votersWithVote / (double)NbVoters,
-                Candidates = candidates,
-                UserHasVoted = userHasVoted
-            };
-            return d;
-        }
 
 
     }
