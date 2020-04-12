@@ -45,7 +45,7 @@ namespace WebApplication1.Controllers
 
             //lets get the voter instance of the current user, so that we use its id with his votes
             var currentUser = await getCurrentUser();
-            Voter currentVoter = getVoterByUserId(Guid.Parse(currentUser.Id));
+            Voter currentVoter = VoterUtilities.getVoterByUserId(Guid.Parse(currentUser.Id), _voterRepository);
 
 
             Vote v = new Vote();
@@ -81,9 +81,6 @@ namespace WebApplication1.Controllers
         {//this returns the current user instance, I'll use its Id to get its corresponding Voter instance
             return _userManager.GetUserAsync(HttpContext.User);
         }
-        public Voter getVoterByUserId(Guid userId)
-        {
-            return _voterRepository.GetAll().SingleOrDefault(v => v.UserId == userId);
-        }
+        
     }
 }
