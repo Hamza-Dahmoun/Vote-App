@@ -91,7 +91,7 @@ namespace WebApplication1.Controllers
             int NbCandidates = candidates.Count;
             int NbVoters = _voterRepository.GetAll().Count;
             int NbVotes = _voteRepository.GetAll().Count;
-            int votersWithVote = getNumberOfVoterWithVote();
+            int votersWithVote = VoterUtilities.getNumberOfVoterWithVote(_voterRepository);
             //Now lets get the currentUser to check if he has voted or not yet
             var currentUser = await getCurrentUser();
             bool userHasVoted = VoterUtilities.getVoterByUserId(Guid.Parse(currentUser.Id), _voterRepository).hasVoted();
@@ -107,10 +107,8 @@ namespace WebApplication1.Controllers
             return d;
         }
 
-        public int getNumberOfVoterWithVote()
-        {
-            return _voterRepository.GetAll().Where(v => v.hasVoted() == true).Count();
-        }
+
+
 
 
 
