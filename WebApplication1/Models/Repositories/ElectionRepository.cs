@@ -40,7 +40,7 @@ namespace WebApplication1.Models.Repositories
 
         public IList<Election> GetAll()
         {
-            return _dBContext.Election.ToList();
+            return _dbSet.ToList();
         }
 
         public Election GetById(Guid Id)
