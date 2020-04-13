@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.Models;
 
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(VoteDBContext))]
-    partial class VoteDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200413145220_Adding_Election_Class")]
+    partial class Adding_Election_Class
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -23,9 +25,6 @@ namespace WebApplication1.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ElectionId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("FirstName")
@@ -50,37 +49,11 @@ namespace WebApplication1.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ElectionId");
-
                     b.HasIndex("StateId");
 
                     b.HasIndex("VoterBeingId");
 
                     b.ToTable("Candidate");
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.Election", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("DurationInDays")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("HasNeutral")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Election");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.State", b =>
@@ -128,9 +101,6 @@ namespace WebApplication1.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ElectionId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -147,8 +117,6 @@ namespace WebApplication1.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ElectionId");
-
                     b.HasIndex("StateId");
 
                     b.ToTable("Voter");
@@ -156,10 +124,6 @@ namespace WebApplication1.Migrations
 
             modelBuilder.Entity("WebApplication1.Models.Candidate", b =>
                 {
-                    b.HasOne("WebApplication1.Models.Election", null)
-                        .WithMany("Candidates")
-                        .HasForeignKey("ElectionId");
-
                     b.HasOne("WebApplication1.Models.State", "State")
                         .WithMany()
                         .HasForeignKey("StateId");
@@ -186,10 +150,6 @@ namespace WebApplication1.Migrations
 
             modelBuilder.Entity("WebApplication1.Models.Voter", b =>
                 {
-                    b.HasOne("WebApplication1.Models.Election", null)
-                        .WithMany("Voters")
-                        .HasForeignKey("ElectionId");
-
                     b.HasOne("WebApplication1.Models.State", "State")
                         .WithMany()
                         .HasForeignKey("StateId");

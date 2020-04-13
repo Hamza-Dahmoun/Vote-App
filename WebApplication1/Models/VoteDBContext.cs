@@ -30,6 +30,8 @@ namespace WebApplication1.Models
         public virtual DbSet<Voter> Voter { get; set; }
         public virtual DbSet<Vote> Vote { get; set; }
         public virtual DbSet<State> State { get; set; }
+        public virtual DbSet<Election> Election { get; set; }
+        
         public DbSet<WebApplication1.Models.ViewModels.PersonViewModel> PersonViewModel { get; set; }
         public DbSet<WebApplication1.Models.ViewModels.StateViewModel> StateViewModel { get; set; }
         public DbSet<WebApplication1.Models.ViewModels.CandidateViewModel> CandidateViewModel { get; set; }
