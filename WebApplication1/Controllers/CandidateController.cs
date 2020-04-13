@@ -19,8 +19,10 @@ namespace WebApplication1.Controllers
     //[Authorize(Roles = "Administrator")]
     public class CandidateController : Controller
     {
+        //the below are services we're going to use in this controller, they will be injected in the constructor
         public IRepository<Candidate> _candidateRepository { get; }
         public IRepository<Voter> _voterRepository { get; }
+        //Lets inject the services using the constructor, this is called Constructor Dependency Injection
         public CandidateController(IRepository<Candidate> candidateRepository, IRepository<Voter> voterRepository)
         {
             _candidateRepository = candidateRepository;

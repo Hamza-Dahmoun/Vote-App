@@ -19,11 +19,13 @@ namespace WebApplication1.Controllers
     [Authorize(Policy = nameof(VoteAppPolicies.DoVote))]
     public class VoteController : Controller
     {
+        //the below are services we're going to use in this controller, they will be injected in the constructor
         public IRepository<Candidate> _candidateRepository { get; }
         public IRepository<Vote> _voteRepository { get; }
         public IRepository<Voter> _voterRepository { get; }
         //this is only used to get able to generate a 'code' needed to reset the password, and to get the currentUser ID
         private readonly UserManager<IdentityUser> _userManager;
+        //Lets inject the services using the constructor, this is called Constructor Dependency Injection
         public VoteController(IRepository<Candidate> candidateRepository, IRepository<Vote> voteRepository, IRepository<Voter> voterRepository, UserManager<IdentityUser> userManager)
         {
             _candidateRepository = candidateRepository;

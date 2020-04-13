@@ -20,23 +20,14 @@ namespace WebApplication1.Controllers
     //[Authorize(Roles = "Administrator")]
     public class VoterController : Controller
     {
-        //private readonly VoteDBContext _db;
-        //public VoterController(VoteDBContext db)
-        //{
-        //    _db = db;
-        //}
-        //protected override void Dispose(bool disposing)
-        //{
-        //    if (disposing)
-        //    {
-        //        _db.Dispose();
-        //    }            
-        //}
 
-            //the below service is used to store a new user for each new voter
+        //the below are services we're going to use in this controller, they will be injected in the constructor
+
+        //the below service is used to store a new user for each new voter
         private readonly UserManager<IdentityUser> _userManager;
         public IRepository<Voter> _voterRepository { get; }
         public IRepository<State> _stateRepository { get; }
+        //Lets inject the services using the constructor, this is called Constructor Dependency Injection
         public VoterController(IRepository<Voter> voterRepository, IRepository<State> stateRepository, UserManager<IdentityUser> userManager)
         {
             _voterRepository = voterRepository;

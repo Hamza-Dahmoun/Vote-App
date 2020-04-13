@@ -19,7 +19,9 @@ namespace WebApplication1.Controllers
     //[Authorize(Roles = "Administrator")]
     public class StateController : Controller
     {
+        //the below are services we're going to use in this controller, they will be injected in the constructor
         public IRepository<State> _stateRepository { get; }
+        //Lets inject the services using the constructor, this is called Constructor Dependency Injection
         public StateController(IRepository<State> stateRepository)
         {
             _stateRepository = stateRepository;
