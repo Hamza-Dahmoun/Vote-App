@@ -75,7 +75,7 @@ namespace WebApplication1.Controllers
                             FirstName = "Neutral",
                             LastName = "Opinion"
                         };
-                        //election.NeutralCandidateID = neutralOpinion.Id;
+                        election.NeutralCandidateID = neutralOpinion.Id;
                         _electionRepository.Add(election);
                         _voterRepository.Add(neutralOpinion);
                     }
