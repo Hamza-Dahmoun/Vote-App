@@ -15,6 +15,6 @@ namespace WebApplication1.Models
         [Required]
         public string LastName { get; set; }
         public State State { get; set; }
-        public Guid UserId { get; set; }
+        public Guid UserId { get; set; }        
     }
 }
