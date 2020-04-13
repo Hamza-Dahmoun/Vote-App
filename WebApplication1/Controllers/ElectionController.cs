@@ -59,13 +59,34 @@ namespace WebApplication1.Controllers
         // POST: Election/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(Election election)
         {
             try
             {
-                // TODO: Add insert logic here
-
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    election.Id = Guid.NewGuid();
+                    //if election has a neutral opinion then we should add it to the db
+                    if (election.HasNeutral)
+                    {
+                        Voter neutralOpinion = new Voter
+                        {
+                            Id = Guid.NewGuid(),
+                            FirstName = "Neutral",
+                            LastName = "Opinion"
+                        };
+                        //election.NeutralCandidateID = neutralOpinion.Id;
+                        _electionRepository.Add(election);
+                        _voterRepository.Add(neutralOpinion);
+                    }
+                    else
+                    {
+                        _electionRepository.Add(election);
+                    }
+                    
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(election);
             }
             catch
             {

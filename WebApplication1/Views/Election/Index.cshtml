@@ -32,16 +32,16 @@
         {
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayFor(model => item.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.StartDate)
+                @Html.DisplayFor(model => item.StartDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DurationInDays)
+                @Html.DisplayFor(model => item.DurationInDays)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HasNeutral)
+                @Html.DisplayFor(model => item.HasNeutral)
             </th>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
