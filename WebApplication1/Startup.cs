@@ -41,6 +41,10 @@ namespace WebApplication1
             services.AddTransient<IRepository<Vote>, VoteRepository>();
             //Lets register the Election Repository so that it could be used in ElectionRepository
             services.AddTransient<IRepository<Election>, ElectionRepository>();
+            //Lets register the ElectionVoter Repository so that it could be used in ElectionVoterRepository
+            services.AddTransient<IRepository<ElectionVoter>, ElectionVoterRepository>();
+            //Lets register the ElectionCandidate Repository so that it could be used in ElectionCandidateRepository
+            services.AddTransient<IRepository<ElectionCandidate>, ElectionCandidateRepository>();
 
 
 
