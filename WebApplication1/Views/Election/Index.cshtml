@@ -1,4 +1,4 @@
-﻿@model IEnumerable<WebApplication1.Models.Election>
+﻿@model IEnumerable<WebApplication1.Models.ViewModels.ElectionViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -24,6 +24,12 @@
             <th>
                 @Html.DisplayNameFor(model => model.HasNeutral)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumberOfCandidates)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumberOfVoters)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -42,6 +48,12 @@
             </th>
             <th>
                 @Html.DisplayFor(model => item.HasNeutral)
+            </th>
+            <th>
+                @Html.DisplayFor(model => item.NumberOfCandidates)
+            </th>
+            <th>
+                @Html.DisplayFor(model => item.NumberOfVoters)
             </th>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WebApplication1.Business;
 using WebApplication1.Models;
 using WebApplication1.Models.Repositories;
 
@@ -45,7 +46,7 @@ namespace WebApplication1.Controllers
         {
             try
             {
-                return View(_electionRepository.GetAll());
+                return View(Utilities.convertElectionList_toElectionViewModelList(_electionRepository.GetAll()));
             }
             catch
             {
