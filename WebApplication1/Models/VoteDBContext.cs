@@ -25,6 +25,14 @@ namespace WebApplication1.Models
                 .WithOne(v => v.Voter)
                 .HasForeignKey<Vote>(v=>v.VoterID);
         }*/
+        /*protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {//I had to override this method bcuz when EF was trying to create the model he found one-to-one relationship Vote->Voter
+            //and Voter->Vote, it was confused how to create foreign keys, so here I am clarifying it
+            modelBuilder.Entity<Election>()
+                .HasMany(e => e.Voters);
+            modelBuilder.Entity<Voter>()
+                .HasMany(e => e.Elections);
+        }*/
 
         public virtual DbSet<Candidate> Candidate { get; set; }
         public virtual DbSet<Voter> Voter { get; set; }
