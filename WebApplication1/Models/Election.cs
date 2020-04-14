@@ -11,8 +11,8 @@ namespace WebApplication1.Models
         public Guid Id { get; set; }
         [Required]
         public string Name { get; set; }
-        public ICollection<Voter> Voters{ get; set; }
-        public ICollection<Candidate> Candidates { get; set; }
+        //public ICollection<Voter> Voters{ get; set; }
+        //public ICollection<Candidate> Candidates { get; set; }
         //public ICollection<Vote> Votes{ get; set; } THIS IS ACCESSIBLE THRU VOTERS
         [Required]
         public DateTime StartDate { get; set; }
