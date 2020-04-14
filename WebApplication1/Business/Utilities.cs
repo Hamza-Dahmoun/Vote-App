@@ -89,5 +89,35 @@ namespace WebApplication1.Business
             }
             return myList;
         }
+
+
+
+
+
+        public static ElectionViewModel convertElection_toElectionViewModel(Election election)
+        {
+            ElectionViewModel e = new ElectionViewModel
+            {
+                Id = election.Id,
+                Name = election.Name,
+                StartDate = election.StartDate,
+                DurationInDays = election.DurationInDays,
+                HasNeutral = election.HasNeutral,
+                NumberOfCandidates = election.ElectionCandidates.Count(),
+                NumberOfVoters = election.ElectionVoters.Count()
+            };
+            return e;
+        }
+
+        public static List<ElectionViewModel> convertElectionList_toElectionViewModelList(IList<Election> elections)
+        {
+            List<ElectionViewModel> myList = new List<ElectionViewModel>();
+            foreach (var item in elections)
+            {
+                myList.Add(convertElection_toElectionViewModel(item));
+            }
+
+            return myList.OrderBy(c => c.StartDate).ToList();
+        }
     }
 }
