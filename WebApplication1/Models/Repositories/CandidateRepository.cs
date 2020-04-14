@@ -8,10 +8,13 @@ namespace WebApplication1.Models.Repositories
 {
     public class CandidateRepository : IRepository<Candidate>
     {
+        //Registering the services needed
         protected readonly VoteDBContext _dBContext;
         private readonly DbSet<Candidate> _dbSet;
+
         public CandidateRepository(VoteDBContext dBContext)
         {
+            //Injecting the dependencies (services) needed (Constructor Dependency Injection)
             _dBContext = dBContext;
             _dbSet = _dBContext.Set<Candidate>();
         }

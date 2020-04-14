@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,6 +16,8 @@ namespace WebApplication1.Models
 
             SO I HAD TO DO THIS TO MANAGE THE RELATIONSHIP MANY TO MANY BETWEEN: ELECTION <--> VOTER
              */
+             [Key]
+        public Guid Id { get; set; }
         public Guid ElectionId { get; set; }
         public Election Election { get; set; }
         public Guid VoterId { get; set; }

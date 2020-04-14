@@ -27,23 +27,27 @@ namespace WebApplication1.Models
         }*/
 
             
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            /*
-             * FROM DOCS.MICROSOFT
-             Many-to-many relationships without an entity class to represent the join table are not yet supported.
-             However, you can represent a many-to-many relationship by including an entity class for the join table
-             and mapping two separate one-to-many relationships.
-             */
-             /*
-             I WROTE THE BELOW LINE OF CODE BECUZ WHEN I PROCEEDED MIGRATION WITHOUT THIS  IT WAS TELLING ME THAT
-             I wrote the below line of code becuz when I proceeded migration without this it was telling me that ElectionVoter doesn't have
-             a key, so the below line of code makes the combination of the two foreign key compose the primary key
-             */
-            modelBuilder.Entity<ElectionVoter>().HasKey(x => new { x.VoterId, x.ElectionId });
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    /*
+        //     * FROM DOCS.MICROSOFT
+        //     Many-to-many relationships without an entity class to represent the join table are not yet supported.
+        //     However, you can represent a many-to-many relationship by including an entity class for the join table
+        //     and mapping two separate one-to-many relationships.
+        //     */
+        //     /*
+        //     I WROTE THE BELOW LINE OF CODE BECUZ WHEN I PROCEEDED MIGRATION WITHOUT THIS  IT WAS TELLING ME THAT
+        //     I wrote the below line of code becuz when I proceeded migration without this it was telling me that ElectionVoter doesn't have
+        //     a key, so the below line of code makes the combination of the two foreign key compose the primary key
+        //     */
+        //    /*modelBuilder.Entity<ElectionVoter>().HasKey(x => new { x.VoterId, x.ElectionId });*/
 
-            modelBuilder.Entity<ElectionCandidate>().HasKey(x => new { x.CandidateId, x.ElectionId });
-        }
+        //    /*modelBuilder.Entity<ElectionCandidate>().HasKey(x => new { x.CandidateId, x.ElectionId });*/
+       
+
+        //    /*IMPORTANT: I HAD TO CANCEL THIS METHOD BECAUSE THE MODEL ELECTIONCANDIDATE.CS AND ELECTIONVOTER.CS BOTH SHOULD HAVE THEIR OWN KEY 'ID'
+        //     BECUZ THEIR REPOSITORIES ARE GOIN INMPLEMENT IREPOSITORY.CS INTERFACE* WHICH ITS METHOD GETBYID() ACCEPT ONE PARAMETER 'ID' NOT TWO*/                
+        //}
 
         public virtual DbSet<Candidate> Candidate { get; set; }
         public virtual DbSet<Voter> Voter { get; set; }

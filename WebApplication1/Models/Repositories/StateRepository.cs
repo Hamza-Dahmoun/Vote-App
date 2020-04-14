@@ -8,8 +8,10 @@ namespace WebApplication1.Models.Repositories
 {
     public class StateRepository : IRepository<State>
     {
+        //Registering the services needed
         protected readonly VoteDBContext _dbContext;
         private readonly DbSet<State> _dbSet;
+
         public StateRepository(VoteDBContext dbContext)
         {//lets inject dbContext service
             _dbContext = dbContext;
