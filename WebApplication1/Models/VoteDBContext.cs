@@ -41,6 +41,8 @@ namespace WebApplication1.Models
              a key, so the below line of code makes the combination of the two foreign key compose the primary key
              */
             modelBuilder.Entity<ElectionVoter>().HasKey(x => new { x.VoterId, x.ElectionId });
+
+            modelBuilder.Entity<ElectionCandidate>().HasKey(x => new { x.CandidateId, x.ElectionId });
         }
 
         public virtual DbSet<Candidate> Candidate { get; set; }
@@ -49,6 +51,7 @@ namespace WebApplication1.Models
         public virtual DbSet<State> State { get; set; }
         public virtual DbSet<Election> Election { get; set; }
         public virtual DbSet<ElectionVoter> ElectionVoter { get; set; }
+        public virtual DbSet<ElectionCandidate> ElectionCandidate { get; set; }
 
         public DbSet<WebApplication1.Models.ViewModels.PersonViewModel> PersonViewModel { get; set; }
         public DbSet<WebApplication1.Models.ViewModels.StateViewModel> StateViewModel { get; set; }

@@ -12,7 +12,8 @@ namespace WebApplication1.Models
         [Required]
         public string Name { get; set; }
         public ICollection<ElectionVoter> ElectionVoters { get; set; }
-        //public ICollection<Candidate> Candidates { get; set; }
+        public ICollection<ElectionCandidate> ElectionCandidates { get; set; }
+        
         //public ICollection<Vote> Votes{ get; set; } THIS IS ACCESSIBLE THRU VOTERS
         [Required]
         public DateTime StartDate { get; set; }
