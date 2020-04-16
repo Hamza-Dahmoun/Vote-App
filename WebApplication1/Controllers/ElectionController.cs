@@ -79,16 +79,27 @@ namespace WebApplication1.Controllers
                     //if election has a neutral opinion then we should add it to the db
                     if (election.HasNeutral)
                     {
-                        Candidate neutralOpinion = new Candidate
+                        Candidate neutral = CandidateUtilities.GetNeutralCandidate();
+                        if (neutral == null)
+                        {//so there is no neutral opinion candidate in the db yet, lets insert it to use it
+                            Candidate neutralOpinion = new Candidate
+                            {
+                                Id = Guid.NewGuid(),
+                                FirstName = "Neutral",
+                                LastName = "Opinion",
+                                isNeutralOpinion = true
+                            };
+                            election.NeutralCandidateID = neutralOpinion.Id;
+                            _electionRepository.Add(election);
+                            _candidateRepository.Add(neutralOpinion);
+                        }
+                        else
                         {
-                            Id = Guid.NewGuid(),
-                            FirstName = "Neutral",
-                            LastName = "Opinion",
-                            isNeutralOpinion = true                            
-                        };
-                        election.NeutralCandidateID = neutralOpinion.Id;
-                        _electionRepository.Add(election);
-                        _candidateRepository.Add(neutralOpinion);
+                            //there is already a neutral opinion candidate stored in the db, lets use it
+                            election.NeutralCandidateID = neutral.Id;
+                            _electionRepository.Add(election);
+                        }
+                        
                     }
                     else
                     {

@@ -32,5 +32,11 @@ namespace WebApplication1.Business
             else return false;
 
         }
+
+        public static Candidate GetNeutralCandidate()
+        {
+            //This method returns the neutral opinion candidate, there is a maximum of one row, or there isn't yet
+            return _candidateRepository.GetAll().SingleOrDefault(c => c.isNeutralOpinion == true);
+        }
     }
 }
