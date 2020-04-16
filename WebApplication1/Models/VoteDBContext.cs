@@ -26,7 +26,7 @@ namespace WebApplication1.Models
                 .HasForeignKey<Vote>(v=>v.VoterID);
         }*/
 
-            
+
         //protected override void OnModelCreating(ModelBuilder modelBuilder)
         //{
         //    /*
@@ -43,11 +43,18 @@ namespace WebApplication1.Models
         //    /*modelBuilder.Entity<ElectionVoter>().HasKey(x => new { x.VoterId, x.ElectionId });*/
 
         //    /*modelBuilder.Entity<ElectionCandidate>().HasKey(x => new { x.CandidateId, x.ElectionId });*/
-       
+
 
         //    /*IMPORTANT: I HAD TO CANCEL THIS METHOD BECAUSE THE MODEL ELECTIONCANDIDATE.CS AND ELECTIONVOTER.CS BOTH SHOULD HAVE THEIR OWN KEY 'ID'
         //     BECUZ THEIR REPOSITORIES ARE GOIN INMPLEMENT IREPOSITORY.CS INTERFACE* WHICH ITS METHOD GETBYID() ACCEPT ONE PARAMETER 'ID' NOT TWO*/                
         //}
+        /*protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Vote>()
+                .HasOne(v => v.Election)
+                .WithMany(v => v.Votes)
+                .HasForeignKey<Vote>(v=>v.ElectionID);
+        }*/
 
         public virtual DbSet<Candidate> Candidate { get; set; }
         public virtual DbSet<Voter> Voter { get; set; }
@@ -56,6 +63,7 @@ namespace WebApplication1.Models
         public virtual DbSet<Election> Election { get; set; }
         public virtual DbSet<ElectionVoter> ElectionVoter { get; set; }
         public virtual DbSet<ElectionCandidate> ElectionCandidate { get; set; }
+        
 
         public DbSet<WebApplication1.Models.ViewModels.PersonViewModel> PersonViewModel { get; set; }
         public DbSet<WebApplication1.Models.ViewModels.StateViewModel> StateViewModel { get; set; }

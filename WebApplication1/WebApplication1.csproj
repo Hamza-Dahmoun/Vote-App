@@ -5,6 +5,25 @@
     <UserSecretsId>aspnet-WebApplication1-EB589D9E-6F5A-4FAF-A2D5-359D5C6D7772</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Migrations\20200414212241_add_vote_belongs_to_election_relationship1.cs" />
+    <Compile Remove="Migrations\20200414212241_add_vote_belongs_to_election_relationship1.Designer.cs" />
+    <Compile Remove="Migrations\20200414213016_add_vote_belongs_to_election_relationship2.cs" />
+    <Compile Remove="Migrations\20200414213016_add_vote_belongs_to_election_relationship2.Designer.cs" />
+    <Compile Remove="Migrations\20200414213736_add_vote_belongs_to_election_relationship3.cs" />
+    <Compile Remove="Migrations\20200414213736_add_vote_belongs_to_election_relationship3.Designer.cs" />
+    <Compile Remove="Migrations\20200414214010_add_vote_belongs_to_election_relationship4.cs" />
+    <Compile Remove="Migrations\20200414214010_add_vote_belongs_to_election_relationship4.Designer.cs" />
+    <Compile Remove="Migrations\20200416152103_Add_Elections_to_Votes_Relatioship.cs" />
+    <Compile Remove="Migrations\20200416152103_Add_Elections_to_Votes_Relatioship.Designer.cs" />
+    <Compile Remove="Migrations\20200416152250_Add_Elections_to_Votes_Relatioship1.cs" />
+    <Compile Remove="Migrations\20200416152250_Add_Elections_to_Votes_Relatioship1.Designer.cs" />
+    <Compile Remove="Migrations\20200416152348_Add_Elections_to_Votes_Relatioship2.cs" />
+    <Compile Remove="Migrations\20200416152348_Add_Elections_to_Votes_Relatioship2.Designer.cs" />
+    <Compile Remove="Migrations\20200416152513_Add_Elections_to_Votes_Relatioship3.cs" />
+    <Compile Remove="Migrations\20200416152513_Add_Elections_to_Votes_Relatioship3.Designer.cs" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.0.0" />

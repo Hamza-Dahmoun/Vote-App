@@ -17,6 +17,9 @@ namespace WebApplication1.Models
         [Required]
         public Candidate Candidate { get; set; }
         //public Guid CandidateID { get; set; }
+        [Required]
+        public Election Election { get; set; }
+        //public Guid ElectionId { get; set; }
 
     }
 }

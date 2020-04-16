@@ -13,8 +13,8 @@ namespace WebApplication1.Models
         public string Name { get; set; }
         public ICollection<ElectionVoter> ElectionVoters { get; set; }
         public ICollection<ElectionCandidate> ElectionCandidates { get; set; }
-        
-        //public ICollection<Vote> Votes{ get; set; } THIS IS ACCESSIBLE THRU VOTERS
+        public ICollection<Vote> Votes { get; set; }
+
         [Required]
         public DateTime StartDate { get; set; }
         [Required]
