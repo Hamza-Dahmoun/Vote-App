@@ -10,36 +10,75 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
+                <input asp-for="Name" class="form-control" id="election-name"/>
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="StartDate" class="control-label"></label>
-                <input type="date" asp-for="StartDate" class="form-control" />
+                <input type="date" asp-for="StartDate" class="form-control" id="start-date-election"/>
                 <span asp-validation-for="StartDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="DurationInDays" class="control-label"></label>
-                <input type="number" asp-for="DurationInDays" class="form-control" />
+                <input type="number" asp-for="DurationInDays" class="form-control" id="duration-in-days"/>
                 <span asp-validation-for="DurationInDays" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="HasNeutral" class="control-label"></label>
-                <input type="checkbox" asp-for="HasNeutral" class="form-control" />
+                <input type="checkbox" asp-for="HasNeutral" class="form-control" id="has-neutral"/>
                 <span asp-validation-for="HasNeutral" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+            <button type="button" id="send-election-button" title="Validate Vote">
+                <i class="fa fa-rocket" aria-hidden="true"></i>
+            </button>
     </div>
 </div>
 
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+
+<script>
+    //add change event to has-neutral
+    document.getElementById("has-neutral").addEventListener("click", changeHasNautral);
+    //add click event to send-election-button
+    document.getElementById("send-election-button").addEventListener("click", sendElection);
+    var hasNeutral = false;
+    function changeHasNautral() {
+        if (event.target.checked) {
+            hasNeutral = true;
+        }
+        else {
+            hasNeutral = false;
+        }
+    }
+    function sendElection() {    
+        var newElection =
+        {
+            Name: document.getElementById("election-name").value,
+            StartDate:  document.getElementById("start-date-election").value,
+            DurationInDays: document.getElementById("duration-in-days").value,
+            HasNeutral: hasNeutral
+        };
+        alert(JSON.stringify(newElection));
+    //Send the JSON object Election to Controller using AJAX.
+    $.ajax({
+        type: "POST",
+        url: "/Election/ValidateElection",
+        data: JSON.stringify(newElection),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        error: function () {
+            alert("error");
+        },
+        success: function (r) {
+            alert("success");
+            //window.location.href = "Home/Index";
+        }
+    });
+}
+</script>

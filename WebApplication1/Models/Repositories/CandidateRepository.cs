@@ -38,8 +38,15 @@ namespace WebApplication1.Models.Repositories
 
         public IList<Candidate> GetAll()
         {
-            //use eager loading to bring State data 
-            return _dbSet.Include(c=>c.State).Include(c=>c.Votes).Include(c=>c.VoterBeing).ToList();
+            try
+            {
+                //use eager loading to bring State data 
+                return _dbSet.Include(c => c.State).Include(c => c.Votes).Include(c => c.VoterBeing).ToList();
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
             
             //return _dbSet.ToList();
         }
