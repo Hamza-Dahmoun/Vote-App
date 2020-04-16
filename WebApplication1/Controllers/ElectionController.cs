@@ -173,7 +173,8 @@ namespace WebApplication1.Controllers
                     //BROWSERS IGNORE THE REDIRECT BECUZ IT ASSUME JS CODE WHICH DID THE AJAX CALL WILL BE IN CHARGE OF THE SUCCESS
                     //RESPONSE TO REDIRECT: WINDOW.LOCATION.HREF="CONTROLLERNAME/ACTION"
                     //return RedirectToAction("Index", "Home");
-                    return Json(new { success = true });                    
+                    return Ok(election);    
+                //return Json(new { success = true });                    
                 }
                 else
                 {

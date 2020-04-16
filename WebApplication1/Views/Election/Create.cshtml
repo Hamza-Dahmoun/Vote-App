@@ -48,6 +48,8 @@
     //add click event to send-election-button
     document.getElementById("send-election-button").addEventListener("click", sendElection);
     var hasNeutral = false;
+
+    //this function change the value of the variable hasNeutral according to the user checking the checkbox #has-neutral
     function changeHasNautral() {
         if (event.target.checked) {
             hasNeutral = true;
@@ -56,12 +58,14 @@
             hasNeutral = false;
         }
     }
+
+    //this function sends the new election object (without the list of the concerned voters & candidates) to the server to be stored in the db (step1)
     function sendElection() {    
         var newElection =
         {
             Name: document.getElementById("election-name").value,
-            StartDate:  document.getElementById("start-date-election").value,
-            DurationInDays: document.getElementById("duration-in-days").value,
+            StartDate: document.getElementById("start-date-election").value,
+            DurationInDays: parseInt(document.getElementById("duration-in-days").value),
             HasNeutral: hasNeutral
         };
         alert(JSON.stringify(newElection));
@@ -75,8 +79,11 @@
         error: function () {
             alert("error");
         },
-        success: function (r) {
-            alert("success");
+        success: function (response) {
+            //'response' represents the object returned from the api which is the Election object newly stored in the db
+            console.log(response);
+            alert("success" + response);
+
             //window.location.href = "Home/Index";
         }
     });
