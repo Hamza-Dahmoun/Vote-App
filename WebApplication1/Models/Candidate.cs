@@ -8,7 +8,7 @@ namespace WebApplication1.Models
     public class Candidate:Person
     {//a candidate may have a collection of votes, and he is a voter
         public ICollection<Vote> Votes { get; set; }
-        public ICollection<ElectionCandidate> ElectionCandidates { get; set; }
+        public Election Election { get; set; }
         public Voter VoterBeing { get; set; }
 
         public bool isNeutralOpinion { get; set; }
