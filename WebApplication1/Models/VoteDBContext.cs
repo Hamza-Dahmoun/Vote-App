@@ -62,7 +62,7 @@ namespace WebApplication1.Models
         public virtual DbSet<State> State { get; set; }
         public virtual DbSet<Election> Election { get; set; }
         public virtual DbSet<ElectionVoter> ElectionVoter { get; set; }
-        public virtual DbSet<ElectionCandidate> ElectionCandidate { get; set; }
+        //public virtual DbSet<ElectionCandidate> ElectionCandidate { get; set; }
         
 
         public DbSet<WebApplication1.Models.ViewModels.PersonViewModel> PersonViewModel { get; set; }

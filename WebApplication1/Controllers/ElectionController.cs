@@ -24,7 +24,7 @@ namespace WebApplication1.Controllers
         //the below are services we're going to use in this controller, they will be injected in the constructor
         public IRepository<Election> _electionRepository { get; }
         public IRepository<ElectionVoter> _electionVoterRepository { get; }
-        public IRepository<ElectionCandidate> _electionCandidateRepository { get; }
+        //public IRepository<ElectionCandidate> _electionCandidateRepository { get; }
         public IRepository<Voter> _voterRepository { get; }
         public IRepository<Candidate> _candidateRepository { get; }
         //Lets inject the services using the constructor, this is called Constructor Dependency Injection
@@ -32,14 +32,14 @@ namespace WebApplication1.Controllers
             IRepository<Voter> voterRepository,
             IRepository<Candidate> candidateRepository,
             IRepository<Election> electionRepository,
-            IRepository<ElectionVoter> electionVoterRepository,
-            IRepository<ElectionCandidate> electionCandidateRepository)
+            IRepository<ElectionVoter> electionVoterRepository
+            /*, IRepository<ElectionCandidate> electionCandidateRepository*/)
         {
             _voterRepository = voterRepository;
             _candidateRepository = candidateRepository;
             _electionRepository = electionRepository;
             _electionVoterRepository = electionVoterRepository;
-            _electionCandidateRepository = electionCandidateRepository;
+            //_electionCandidateRepository = electionCandidateRepository;
         }
 
 
