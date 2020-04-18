@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using WebApplication1.Business;
 using WebApplication1.Models;
 using WebApplication1.Models.Repositories;
+using WebApplication1.Models.ViewModels;
 
 namespace WebApplication1.Controllers
 {
@@ -46,6 +48,7 @@ namespace WebApplication1.Controllers
         {
             try
             {
+                //returning a list of ElectionViewModel
                 return View(Utilities.convertElectionList_toElectionViewModelList(_electionRepository.GetAll()));
             }
             catch
@@ -61,16 +64,15 @@ namespace WebApplication1.Controllers
         }
 
         // GET: Election/Create
-        //if we try to imagine the scenario of adding a new Election I think it will be done in three steps:
+        //if we try to imagine the scenario of adding a new Election I think it will be done in two steps:
         //--> Step1: Adding info of the election(name, duration,,,) and send them to backend using api method in inside the controller,
         //then send back the response to javascript to redirect to step2
-        //--> Step2: Selecting voters concerned by this Election (selecting only, bcuz adding voters is done in VoterController),,, 
-        //and send them to backend using api method in inside the controller, then send back the response to javascript to redirect to step3
-        //--> Step3: Selecting the candidates of this Election from its selectedvoters, and send them to backend using api method in inside the controller, then send back the response to javascript
-        //to redirect to Index.
+        //--> Step2: Selecting the candidates of this Election from a list of Voters, and send them to backend using api method in inside the controller,
+        //then send back the response to javascript to redirect to Index.
 
         public ActionResult Create()
         {
+            //return an empty view
             return View();
         }
 
@@ -128,7 +130,17 @@ namespace WebApplication1.Controllers
         */
 
 
+
+        
+        struct response_Voters_and_NewElection
+        {
+            //this Structure is used to return a javascript object containing the newly inserted election and a list of voters for user to select
+            //from them ass candidates
+            public Election Election;
+            public List<PersonViewModel> Voters;
+        }
         [HttpPost]
+        //[ValidateAntiForgeryToken] If I uncomment this the api will not work
         public async Task<IActionResult> ValidateElection([FromBody] Election election)
         {
             //Step(1): Adding info of the election(name, duration,,,) and send them to backend using api method in inside the controller,
@@ -173,8 +185,13 @@ namespace WebApplication1.Controllers
                     //BROWSERS IGNORE THE REDIRECT BECUZ IT ASSUME JS CODE WHICH DID THE AJAX CALL WILL BE IN CHARGE OF THE SUCCESS
                     //RESPONSE TO REDIRECT: WINDOW.LOCATION.HREF="CONTROLLERNAME/ACTION"
                     //return RedirectToAction("Index", "Home");
-                    return Ok(election);    
-                //return Json(new { success = true });                    
+                    response_Voters_and_NewElection r;
+                    r.Election = election;
+                    r.Voters = Utilities.convertVoterList_toPersonViewModelList(_voterRepository.GetAll());
+
+                    //lets serialize the struct we've got and send it back as a reponse
+                    var json = JsonConvert.SerializeObject(r);
+                    return Ok(json);
                 }
                 else
                 {
@@ -191,19 +208,6 @@ namespace WebApplication1.Controllers
 
             
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

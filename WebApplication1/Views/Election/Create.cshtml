@@ -9,7 +9,7 @@
 <h4>Election</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-4" id="election-input-container">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
@@ -43,6 +43,17 @@
 </div>
 
 <script>
+    /**
+     * 
+     * SCENARIO: A USER ENTERS ALL DATA OF AN ELECION AND SUBMIT. IF IT WAS SUCCESSFULLY INSERTED WE'LL GET A RESPONSE FROM SERVER CONTAINING THE
+     * ELECTION ITSELF AND A LIST OF VOTERS.
+     * THE LIST OF VOTERS WILL BE DISPLAYED FOR THE USER TO SELECT WHICH ONES ARE THE CANDIDATES.
+     * WHEN A USER SELECT A CANDIDATE, WE'LL USE JQUERY TO SEND THE ID OF THE ELECTION ALONG WITH THE ID OF THE VOTER SELECTED AS A CANDIDATE
+     * TO THE SERVER
+     * 
+     * */
+    //this variable is gonna be assigned the new election Id in server side
+    var electionId;
     //add change event to has-neutral
     document.getElementById("has-neutral").addEventListener("click", changeHasNautral);
     //add click event to send-election-button
@@ -82,10 +93,28 @@
         success: function (response) {
             //'response' represents the object returned from the api which is the Election object newly stored in the db
             console.log(response);
-            alert("success" + response);
-
+            //alert("success" + response);
+            electionId = response.Id;
+            disableAllInputs();
+            displayVoters(response.Voters);
             //window.location.href = "Home/Index";
         }
     });
-}
+    }
+    //this function disable all the new Election inputs, and hide the submit button. It is called after storing this new Election successfully
+    function disableAllInputs() {
+        //console.log("disabling inputs started");
+        let election_inputs = document.getElementById("election-input-container").querySelectorAll("input");
+        for (let i = 0; i < election_inputs.length; i++) {
+            //console.log(election_inputs[i]);
+            election_inputs[i].disabled = "true";
+        }
+        document.getElementById("send-election-button").style = "none";
+        //console.log("disabling inputs done");
+    }
+
+    function displayVoters(voters) {
+        console.log(voters);
+    }
+    
 </script>
