@@ -4,42 +4,79 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<style>
+    #step-two{
+        display:none;
+    }
 
-<h4>Election</h4>
+</style>
+
+<h1>Create Election</h1>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+
+@*IN HERE PUT STEP 1 AND STEP 2 JUST LIKE YOU DID IN THE BELFORT PROJECT*@
+
+
 <hr />
-<div class="row">
-    <div class="col-md-4" id="election-input-container">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<div class="row" id="step-one">
+    <h4>Step 1</h4>
+    <div class="col-md-8" id="election-input-container">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" id="election-name"/>
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="StartDate" class="control-label"></label>
-                <input type="date" asp-for="StartDate" class="form-control" id="start-date-election"/>
-                <span asp-validation-for="StartDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DurationInDays" class="control-label"></label>
-                <input type="number" asp-for="DurationInDays" class="form-control" id="duration-in-days"/>
-                <span asp-validation-for="DurationInDays" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="HasNeutral" class="control-label"></label>
-                <input type="checkbox" asp-for="HasNeutral" class="form-control" id="has-neutral"/>
-                <span asp-validation-for="HasNeutral" class="text-danger"></span>
-            </div>
-            <button type="button" id="send-election-button" title="Validate Vote">
-                <i class="fa fa-rocket" aria-hidden="true"></i>
-            </button>
+        <div class="form-group">
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control" id="election-name" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="StartDate" class="control-label"></label>
+            <input type="date" asp-for="StartDate" class="form-control" id="start-date-election" />
+            <span asp-validation-for="StartDate" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="DurationInDays" class="control-label"></label>
+            <input type="number" asp-for="DurationInDays" class="form-control" id="duration-in-days" />
+            <span asp-validation-for="DurationInDays" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="HasNeutral" class="control-label"></label>
+            <input type="checkbox" asp-for="HasNeutral" class="form-control" id="has-neutral" />
+            <span asp-validation-for="HasNeutral" class="text-danger"></span>
+        </div>
+        <button type="button" id="send-election-button" title="Validate Vote">
+            <i class="fa fa-rocket" aria-hidden="true"></i>
+        </button>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+
+
+
+
+<div id="step-two">
+    <h4>Please Select Candidates concerned by this Election</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    FirstName
+                </th>
+                <th>
+                    LastName
+                </th>
+                <th>
+                    StateName
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
 </div>
 
 <script>
@@ -79,7 +116,7 @@
             DurationInDays: parseInt(document.getElementById("duration-in-days").value),
             HasNeutral: hasNeutral
         };
-        alert(JSON.stringify(newElection));
+        //alert(JSON.stringify(newElection));
     //Send the JSON object Election to Controller using AJAX.
     $.ajax({
         type: "POST",
@@ -109,12 +146,41 @@
             //console.log(election_inputs[i]);
             election_inputs[i].disabled = "true";
         }
-        document.getElementById("send-election-button").style = "none";
+        document.getElementById("send-election-button").style.display = "none";
         //console.log("disabling inputs done");
     }
-
+    
     function displayVoters(voters) {
         console.log(voters);
+        var tableBody = document.getElementsByTagName("tbody")[0];
+        for (let i = 0; i < voters.length; i++) {
+            let tdFirstName = document.createElement("td");
+            tdFirstName.innerText = voters[i].FirstName;
+            let tdLastName = document.createElement("td");
+            tdLastName.innerText = voters[i].LastName;
+            let tdState = document.createElement("td");
+            tdState.innerText = voters[i].StateName;
+
+            let tdButton = document.createElement("td");
+            let button = document.createElement("a");
+            button.value = "Select as Candidate";
+            button.setAttribute("voterId", voters[i].Id);
+            button.addEventListener("click", sendCandidate);
+            tdButton.appendChild(button);
+
+
+            let voterRow = document.createElement("tr");
+            voterRow.appendChild(tdFirstName);
+            voterRow.appendChild(tdLastName);
+            voterRow.appendChild(tdState);
+            voterRow.appendChild(tdButton);
+
+            tableBody.appendChild(voterRow);
+        }
+        document.getElementById("step-two").style.display = "block";
+    }
+    function sendCandidate() {
+        console.log("voterId: " + event.getAttribute("voterId") + " -- electionId " + electionId);
     }
     
 </script>
