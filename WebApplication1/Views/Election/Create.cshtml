@@ -235,19 +235,25 @@
             //'response' represents the object returned from the api which is the Election object newly stored in the db
             console.log(response);
             alert("success" + response);
-            
+            displayRemoveCandidateButton(event.target);
             
             //window.location.href = "Home/Index";
         }
     });
     }
-    function displayRemoveCandidateButton() {
-        let buttons = event.target.parentElement.querySelectorAll("a");
+    function displayRemoveCandidateButton(element) {
+        let buttons = element.parentElement.querySelectorAll("a");
+
         for (let i = 0; i < buttons.length; i++) {
-            if (buttons[i].style.display == "none")
-                buttons[i].style.display == "block";
-            if (buttons[i].style.display == "block")
-                buttons[i].style.display == "none";
+            if (window.getComputedStyle(buttons[i]).display == "none") {
+                //console.log("it was hidden");
+                buttons[i].style.display = "block";
+            }
+            else {
+                //console.log("it was visible");
+                buttons[i].style.display = "none";
+            }
+                
         }
     }
     function removeCandidate() {
