@@ -139,6 +139,7 @@ namespace WebApplication1.Controllers
             public Election Election;
             public List<PersonViewModel> Voters;
         }
+        //this is a web api called when adding a new Election instance
         [HttpPost]
         //[ValidateAntiForgeryToken] If I uncomment this the api will not work
         public async Task<IActionResult> ValidateElection([FromBody] Election election)
@@ -209,6 +210,40 @@ namespace WebApplication1.Controllers
             
         }
 
+        public class CandidateElectionRelation
+        {//this class is used to get the data sent by jQuery ajax to the method AddCandidates() below
+            public Guid voterId { get; set; }
+            public Guid electionId { get; set; }
+        }
+        //this is a web api called when user selects candidates from voters list to the election he created or he is editing
+        [HttpPost]
+        public async Task<IActionResult> AddCandidates([FromBody] CandidateElectionRelation mydata)
+        {
+            try
+            {
+                if (mydata.electionId==null || mydata.voterId==null)
+                {
+                    return BadRequest();
+                }
+                Voter voter = _voterRepository.GetById(mydata.voterId);
+                _candidateRepository.Add(
+                    new Candidate
+                    {
+                        Id = Guid.NewGuid(),
+                        FirstName = voter.FirstName,
+                        LastName = voter.LastName,
+                        VoterBeing = voter,
+                        State = voter.State,
+                        Election = _electionRepository.GetById(mydata.electionId)
+                    }
+                    );
+                return Json(new { success = true }); ;
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
 
 
 

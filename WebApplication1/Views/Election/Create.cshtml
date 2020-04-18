@@ -15,6 +15,7 @@
         color:#087360;
     }
     html{
+        /*this is added so that the scrolling will be done smoothly inside the html document ... I needed scrolling when step1 is done*/
         scroll-behavior: smooth;
     }
 </style>
@@ -142,7 +143,7 @@
             //'response' represents the object returned from the api which is the Election object newly stored in the db
             console.log(response);
             //alert("success" + response);
-            electionId = response.Id;
+            electionId = response.Election.Id;
             disableAllInputs();
             changeBgColor();
             displayVoters(response.Voters);
@@ -184,12 +185,21 @@
             tdState.innerText = voters[i].StateName;
 
             let tdButton = document.createElement("td");
-            let button = document.createElement("a");
-            button.innerHTML = "Select as Candidate";
-            button.style.cursor = "pointer";
-            button.setAttribute("voterId", voters[i].Id);
-            button.addEventListener("click", sendCandidate);
-            tdButton.appendChild(button);
+            let addCandidateButton = document.createElement("a");
+            addCandidateButton.innerHTML = "Select as Candidate";
+            addCandidateButton.style.cursor = "pointer";
+            addCandidateButton.setAttribute("voterid", voters[i].Id);
+            addCandidateButton.addEventListener("click", sendCandidate);
+            tdButton.appendChild(addCandidateButton);
+
+            let removeCandidateButton = document.createElement("a");
+            removeCandidateButton.innerHTML = "Remove Candidate";
+            removeCandidateButton.style.cursor = "pointer";
+            removeCandidateButton.style.color = "red";
+            removeCandidateButton.style.display = "none";
+            removeCandidateButton.setAttribute("voterid", voters[i].Id);
+            removeCandidateButton.addEventListener("click", removeCandidate);
+            tdButton.appendChild(removeCandidateButton);
 
 
             let voterRow = document.createElement("tr");
@@ -202,8 +212,47 @@
         }
         document.getElementById("step-two").style.display = "block";
     }
-    function sendCandidate() {
-        console.log("voterId: " + event.getAttribute("voterId") + " -- electionId " + electionId);
+    function sendCandidate(event) {
+        //console.log(event);
+        //console.log("voterId: " + event.target.getAttribute("voterid") + " -- electionId " + electionId);
+        let voterid = event.target.getAttribute("voterid");
+        console.log(voterid);
+        console.log(JSON.stringify(voterid));
+        console.log(electionId);
+        console.log(JSON.stringify(electionId));
+        console.log(JSON.stringify({ electionId: electionId, voterId: voterid }));
+        //Send the JSON data of voterId and electionId to Controller using AJAX.
+        $.ajax({
+            type: "POST",
+            url: "/Election/AddCandidates",
+            data: JSON.stringify({ electionId: electionId, voterId: voterid }),//JSON.stringify(newElection),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        error: function () {
+            alert("error");
+        },
+        success: function (response) {
+            //'response' represents the object returned from the api which is the Election object newly stored in the db
+            console.log(response);
+            alert("success" + response);
+            
+            
+            //window.location.href = "Home/Index";
+        }
+    });
+    }
+    function displayRemoveCandidateButton() {
+        let buttons = event.target.parentElement.querySelectorAll("a");
+        for (let i = 0; i < buttons.length; i++) {
+            if (buttons[i].style.display == "none")
+                buttons[i].style.display == "block";
+            if (buttons[i].style.display == "block")
+                buttons[i].style.display == "none";
+        }
+    }
+    function removeCandidate() {
+        //this function remove the relation between election and candidates
+        console.log("Hi I remove candidates");
     }
     
 </script>
