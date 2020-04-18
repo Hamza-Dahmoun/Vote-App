@@ -11,7 +11,7 @@ namespace WebApplication1.Models
         public Guid Id { get; set; }
         [Required]
         public string Name { get; set; }
-        public ICollection<ElectionVoter> ElectionVoters { get; set; }
+        //public ICollection<ElectionVoter> ElectionVoters { get; set; }
         public ICollection<Candidate> Candidates { get; set; }
         public ICollection<Vote> Votes { get; set; }
 

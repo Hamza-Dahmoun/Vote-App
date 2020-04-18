@@ -42,8 +42,8 @@ namespace WebApplication1.Models.Repositories
 
         public IList<Election> GetAll()
         {
-            //use eager loading to bring ElectionCandidate and ElectionVoter data too
-            return _dbSet.Include(e=>e.ElectionVoters).Include(e => e.Candidates).ToList();
+            //use eager loading to bring Candidaates data too
+            return _dbSet.Include(e => e.Candidates).ToList();
         }
 
         public Election GetById(Guid Id)

@@ -61,7 +61,7 @@ namespace WebApplication1.Models
         public virtual DbSet<Vote> Vote { get; set; }
         public virtual DbSet<State> State { get; set; }
         public virtual DbSet<Election> Election { get; set; }
-        public virtual DbSet<ElectionVoter> ElectionVoter { get; set; }
+        //public virtual DbSet<ElectionVoter> ElectionVoter { get; set; }
         //public virtual DbSet<ElectionCandidate> ElectionCandidate { get; set; }
         
 

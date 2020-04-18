@@ -103,8 +103,8 @@ namespace WebApplication1.Business
                 StartDate = election.StartDate,
                 DurationInDays = election.DurationInDays,
                 HasNeutral = election.HasNeutral,
-                NumberOfCandidates = election.Candidates.Count(),
-                NumberOfVoters = election.ElectionVoters.Count()
+                NumberOfCandidates = election.Candidates.Count()
+                //NumberOfVoters = election.ElectionVoters.Count()
             };
             return e;
         }

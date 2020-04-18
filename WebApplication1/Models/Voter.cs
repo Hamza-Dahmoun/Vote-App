@@ -9,7 +9,7 @@ namespace WebApplication1.Models
     public class Voter : Person
     {//A Voter is a person with a collection of votes
         public ICollection<Vote> Votes { get; set; }
-        public ICollection<ElectionVoter> ElectionVoters { get; set; }
+        //public ICollection<ElectionVoter> ElectionVoters { get; set; }
 
         public bool hasVoted()
         {
