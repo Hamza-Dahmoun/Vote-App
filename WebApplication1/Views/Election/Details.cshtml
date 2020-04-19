@@ -1,0 +1,101 @@
+﻿@model WebApplication1.Models.ViewModels.ElectionViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+<style>
+    #candidates-table{
+        display:none;
+    }
+</style>
+<h1>Details</h1>
+<h4>Election</h4>
+<hr />
+<div>
+    <input id="candidate-id-holder" type="hidden" asp-for="Id" />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.StartDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.StartDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DurationInDays)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DurationInDays)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.NumberOfCandidates)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NumberOfCandidates)
+        </dd>
+    </dl>
+</div>
+<div>
+    @*<a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |*@
+    <a asp-action="Index">Back to List</a>
+</div>
+<div class="col-12"> <h4>List of Candidates</h4></div>
+<div class="spinner-border" id="candidates-table-spinner"></div>
+<div>
+    
+    <table id="candidates-table" class="table">
+        <thead>
+            <tr>
+                <th>
+                    FirstName
+                </th>
+                <th>
+                    LastName
+                </th>
+                <th>
+                    StateName
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+</div>
+
+<script>
+    //WE SHOULD LOAD THE LIST OF CANIDIDATES RELATED TO THIS ELECTION WHEN THE DOCUMENT IS READY
+    function loadCandidatesList() {
+        let electionId = document.getElementById("candidate-id-holder").value);
+        //get the list of candidates using the id of the election
+        $.ajax({
+        type: "GET",
+        url: "/Election/GetCandidatesList_byElectioId" + electionId,
+        //data: JSON.stringify(electionId),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        error: function () {
+            alert("error");
+        },
+        success: function (response) {
+            //'response' represents the object returned from the api which is the Election object newly stored in the db
+            console.log(response);
+            document.getElementById("candidates-table-spinner").style.display = "none";
+            displayCandidates(response);
+
+            
+            //window.location.href = "Home/Index";
+        }
+    });
+    }
+    function displayCandidates(candidatesList); {
+
+    }
+    window.onload = loadCandidatesList();
+</script>

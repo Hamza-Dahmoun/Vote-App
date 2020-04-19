@@ -58,9 +58,9 @@ namespace WebApplication1.Controllers
         }
 
         // GET: Election/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details(Guid id)
         {
-            return View();
+            return View(Utilities.convertElection_toElectionViewModel(_electionRepository.GetById(id)));
         }
 
         // GET: Election/Create
@@ -270,6 +270,22 @@ namespace WebApplication1.Controllers
             }
         }
 
+
+
+
+        //this method is called using jQuery ajax and it returns a list of candidates related to the election
+        [HttpGet]
+        public async Task<IActionResult> GetCandidatesList_byElectioId([FromBody] Guid electionId)
+        {
+            try
+            {
+                return Ok(_candidateRepository.GetAll().Where(c => c.Election.Id == electionId).ToList());
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
 
 
         // GET: Election/Edit/5
