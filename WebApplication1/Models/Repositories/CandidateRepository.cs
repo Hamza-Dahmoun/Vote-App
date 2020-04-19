@@ -41,7 +41,7 @@ namespace WebApplication1.Models.Repositories
             try
             {
                 //use eager loading to bring State data 
-                return _dbSet.Include(c => c.State).Include(c => c.Votes).Include(c => c.VoterBeing).ToList();
+                return _dbSet.Include(c => c.State).Include(c=>c.Election).Include(c => c.Votes).Include(c => c.VoterBeing).ToList();
             }
             catch (Exception E)
             {

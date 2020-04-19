@@ -257,7 +257,10 @@ namespace WebApplication1.Controllers
                 {
                     return BadRequest();
                 }
-                Candidate myCandidate = CandidateUtilities.GetCandidate_byVoter_byElection(_candidateRepository, mydata.voterId, mydata.electionId);
+                Candidate myCandidate = CandidateUtilities.GetCandidate_byVoter_byElection(
+                    _candidateRepository, 
+                    _voterRepository.GetById(mydata.voterId), 
+                    _electionRepository.GetById(mydata.electionId));
                 _candidateRepository.Delete(myCandidate.Id);
                 return Json(new { success = true});
             }

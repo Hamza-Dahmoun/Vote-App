@@ -243,7 +243,6 @@
     }
     function displayRemoveCandidateButton(element) {
         let buttons = element.parentElement.querySelectorAll("a");
-
         for (let i = 0; i < buttons.length; i++) {
             if (window.getComputedStyle(buttons[i]).display == "none") {
                 //console.log("it was hidden");
@@ -252,13 +251,36 @@
             else {
                 //console.log("it was visible");
                 buttons[i].style.display = "none";
-            }
-                
+            }                
         }
     }
-    function removeCandidate() {
+    function removeCandidate(event) {
         //this function remove the relation between election and candidates
         console.log("Hi I remove candidates");
+        let voterid = event.target.getAttribute("voterid");
+        console.log(voterid);
+        console.log(JSON.stringify(voterid));
+        console.log(electionId);
+        console.log(JSON.stringify(electionId));
+        console.log(JSON.stringify({ electionId: electionId, voterId: voterid }));
+        //Send the JSON data of voterId and electionId to Controller using AJAX.
+        $.ajax({
+            type: "POST",
+            url: "/Election/RemoveCandidate",
+            data: JSON.stringify({ electionId: electionId, voterId: voterid }),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        error: function () {
+            alert("error");
+        },
+            success: function (response) {
+            console.log(response);
+            alert("success" + response);
+            displayRemoveCandidateButton(event.target);
+            
+            //window.location.href = "Home/Index";
+        }
+    });
     }
     
 </script>
