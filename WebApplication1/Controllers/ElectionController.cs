@@ -210,6 +210,7 @@ namespace WebApplication1.Controllers
             
         }
 
+        //Step(2): Adding one Candidate to the Election each time
         public class CandidateElectionRelation
         {//this class is used to get the data sent by jQuery ajax to the method AddCandidates() below
             public Guid voterId { get; set; }
@@ -239,14 +240,32 @@ namespace WebApplication1.Controllers
                     );
                 return Json(new { success = true }); ;
             }
-            catch
+            catch (Exception E)
             {
                 return BadRequest();
             }
         }
 
 
-
+        //this is a web api called when user remove a candidate from an election
+        [HttpPost]
+        public async Task<IActionResult> RemoveCandidate([FromBody] CandidateElectionRelation mydata)
+        {
+            try
+            {
+                if (mydata.electionId == null || mydata.voterId == null)
+                {
+                    return BadRequest();
+                }
+                Candidate myCandidate = CandidateUtilities.GetCandidate_byVoter_byElection(_candidateRepository, mydata.voterId, mydata.electionId);
+                _candidateRepository.Delete(myCandidate.Id);
+                return Json(new { success = true});
+            }
+            catch(Exception E)
+            {
+                return BadRequest();
+            }
+        }
 
 
 

@@ -48,5 +48,23 @@ namespace WebApplication1.Business
                 throw E;
             }
         }
+
+
+
+        
+        //Note that this method uses _candidateRepository, so it depends to it, and we passed the repository object as a pramater. This is called Method Dependancy Injection
+        public static Candidate GetCandidate_byVoter_byElection(IRepository<Candidate> candidateRepository, Guid voterId, Guid electionId)
+        {
+            //this method gets a candidate by its voterId and its ElectionId
+            _candidateRepository = candidateRepository;
+            try
+            {
+                return _candidateRepository.GetAll().SingleOrDefault(c => c.VoterBeing.Id == voterId && c.Election.Id == electionId);
+            }
+            catch(Exception E)
+            {
+                throw E;
+            }
+        }
     }
 }
