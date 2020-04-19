@@ -20,9 +20,13 @@ namespace WebApplication1.Business
                 StateName = candidate.State?.Name,
                 VotesCount = candidate.Votes.Count(),
             };
-            if (candidate.VoterBeing.hasVoted())
-                c.hasVoted = "Yes";
-            else c.hasVoted = "No";
+            if (!candidate.isNeutralOpinion)
+            {
+                if (candidate.VoterBeing.hasVoted())
+                    c.hasVoted = "Yes";
+                else c.hasVoted = "No";
+            }
+            
             return c;
         }
 
