@@ -27,9 +27,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.NumberOfCandidates)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NumberOfVoters)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -51,9 +48,6 @@
             </th>
             <th>
                 @Html.DisplayFor(model => item.NumberOfCandidates)
-            </th>
-            <th>
-                @Html.DisplayFor(model => item.NumberOfVoters)
             </th>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>

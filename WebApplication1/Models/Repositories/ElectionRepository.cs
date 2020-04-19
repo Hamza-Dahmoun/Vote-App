@@ -48,7 +48,7 @@ namespace WebApplication1.Models.Repositories
 
         public Election GetById(Guid Id)
         {
-            return _dBContext.Election.SingleOrDefault(e=>e.Id == Id);
+            return _dbSet.Include(e=>e.Candidates).SingleOrDefault(e=>e.Id == Id);
         }
     }
 }

@@ -100,6 +100,7 @@ namespace WebApplication1.Business
 
         public static ElectionViewModel convertElection_toElectionViewModel(Election election)
         {
+            //int numberOfCandidates  = election.Candidates.Count();
             ElectionViewModel e = new ElectionViewModel
             {
                 Id = election.Id,

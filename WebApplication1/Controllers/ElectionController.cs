@@ -296,20 +296,20 @@ namespace WebApplication1.Controllers
         }
 
         // GET: Election/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(Guid id)
         {
-            return View();
+            var election = _electionRepository.GetById(id);
+            return View(Utilities.convertElection_toElectionViewModel(election));
         }
 
         // POST: Election/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult DeleteElection(Guid id)
         {
             try
             {
-                // TODO: Add delete logic here
-
+                _electionRepository.Delete(id);
                 return RedirectToAction(nameof(Index));
             }
             catch
