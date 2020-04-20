@@ -44,7 +44,9 @@
     @*<a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |*@
     <a asp-action="Index">Back to List</a>
 </div>
+<br/>
 <div class="col-12"> <h4>List of Candidates</h4></div>
+<br/>
 <div class="spinner-border" id="candidates-table-spinner"></div>
 <div>
     
@@ -78,7 +80,7 @@
     function loadCandidatesList() {
         let electionId = document.getElementById("candidate-id-holder").value;
 
-        console.log("trying to load data of " + JSON.stringify(electionId));
+        //console.log("trying to load data of " + JSON.stringify(electionId));
         //get the list of candidates using the id of the election
         $.ajax({
         type: "POST",
@@ -91,17 +93,35 @@
         },
         success: function (response) {
             //'response' represents the object returned from the api which is the Election object newly stored in the db
-            console.log(response);
-            document.getElementById("candidates-table-spinner").style.display = "none";
+            //console.log(response);            
+            //console.log(response.length);
             displayCandidates(response);
 
-            
             //window.location.href = "Home/Index";
         }
         });
         //console.log("loaded data");
     }
     function displayCandidates(candidatesList) {
-        alert("I am displaying list of candidates")
+        //console.log(candidatesList.length);
+        //alert("I am displaying list of candidates");
+        var tableBody = document.getElementsByTagName("tbody")[0];
+        for (let i = 0; i < candidatesList.length; i++) {
+            let tdFirstName = document.createElement("td");
+            tdFirstName.innerText = candidatesList[i].FirstName;
+            let tdLastName = document.createElement("td");
+            tdLastName.innerText = candidatesList[i].LastName;
+            let tdState = document.createElement("td");
+            tdState.innerText = candidatesList[i].State;
+
+            let candidateRow = document.createElement("tr");
+            candidateRow.appendChild(tdFirstName);
+            candidateRow.appendChild(tdLastName);
+            candidateRow.appendChild(tdState);
+
+            tableBody.appendChild(candidateRow);
+        }
+        document.getElementById("candidates-table").style.display = "block";
+        document.getElementById("candidates-table-spinner").style.display = "none";
     }
 </script>
