@@ -71,16 +71,22 @@
 
 <script>
     //WE SHOULD LOAD THE LIST OF CANIDIDATES RELATED TO THIS ELECTION WHEN THE DOCUMENT IS READY
+    
+    //window.onload = loadCandidatesList();
+    document.addEventListener("DOMContentLoaded", loadCandidatesList);
+
     function loadCandidatesList() {
-        let electionId = document.getElementById("candidate-id-holder").value);
+        let electionId = document.getElementById("candidate-id-holder").value;
+
+        console.log("trying to load data of " + JSON.stringify(electionId));
         //get the list of candidates using the id of the election
         $.ajax({
-        type: "GET",
-        url: "/Election/GetCandidatesList_byElectioId" + electionId,
-        //data: JSON.stringify(electionId),
+        type: "POST",
+            url: "/Election/GetCandidatesList_byElectionId",
+            data: JSON.stringify(document.getElementById("candidate-id-holder").value),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        error: function () {
+            error: function () {
             alert("error");
         },
         success: function (response) {
@@ -92,10 +98,10 @@
             
             //window.location.href = "Home/Index";
         }
-    });
+        });
+        //console.log("loaded data");
     }
-    function displayCandidates(candidatesList); {
-
+    function displayCandidates(candidatesList) {
+        alert("I am displaying list of candidates")
     }
-    window.onload = loadCandidatesList();
 </script>

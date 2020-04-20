@@ -274,14 +274,22 @@ namespace WebApplication1.Controllers
 
 
         //this method is called using jQuery ajax and it returns a list of candidates related to the election
-        [HttpGet]
-        public async Task<IActionResult> GetCandidatesList_byElectioId([FromBody] Guid electionId)
+        [HttpPost]
+        public async Task<IActionResult> GetCandidatesList_byElectionId([FromBody] string electionId)
         {
             try
             {
-                return Ok(_candidateRepository.GetAll().Where(c => c.Election.Id == electionId).ToList());
+                Election e = _electionRepository.GetById(Guid.Parse(electionId));
+                //lets serialize the list of candidates of the election we've got and send it back as a reponse
+                //note that I didn't retrieve candidates as they are, I selected only needed attributes bcuz when i tried serializing
+                //candidates objects as they are I got this error "self referencing loop detected with type" it means json tried to serialize the candidate object
+                //but it found that each candidate has an Election object, and this election object has a list of candidates and so on, so i excluded election
+                //from the selection to avoid the infinite loop
+                var json = JsonConvert.SerializeObject(e.Candidates.Select(p=>new { p.FirstName, p.LastName, p.State}).ToList());
+                return Ok(json);
+                
             }
-            catch
+            catch(Exception E)
             {
                 return BadRequest();
             }
