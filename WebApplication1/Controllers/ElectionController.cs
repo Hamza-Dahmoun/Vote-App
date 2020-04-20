@@ -298,20 +298,29 @@ namespace WebApplication1.Controllers
 
 
         // GET: Election/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(Guid id)
         {
-            return View();
+            Election election = _electionRepository.GetById(id);
+            return View(election);
         }
 
         // POST: Election/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult EditElection(Election election)
         {
             try
             {
-                // TODO: Add update logic here
 
+                Election myElection = new Election
+                {
+                    Id = election.Id,
+                    Name = election.Name,
+                    StartDate = election.StartDate,
+                    DurationInDays = election.DurationInDays,
+                    HasNeutral = election.HasNeutral
+                };
+                _electionRepository.Edit(myElection.Id, myElection);
                 return RedirectToAction(nameof(Index));
             }
             catch
