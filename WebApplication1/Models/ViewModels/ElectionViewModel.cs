@@ -16,5 +16,6 @@ namespace WebApplication1.Models.ViewModels
         public bool HasNeutral { get; set; }
         public int NumberOfCandidates { get; set; }
         public int NumberOfVoters { get; set; }
+        public int NumberOfVotes { get; set; }
     }
 }

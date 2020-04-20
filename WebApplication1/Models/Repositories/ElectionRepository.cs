@@ -43,12 +43,12 @@ namespace WebApplication1.Models.Repositories
         public IList<Election> GetAll()
         {
             //use eager loading to bring Candidaates data too
-            return _dbSet.Include(e => e.Candidates).ToList();
+            return _dbSet.Include(e => e.Candidates).Include(e => e.Votes).ToList();
         }
 
         public Election GetById(Guid Id)
         {
-            return _dbSet.Include(e=>e.Candidates).SingleOrDefault(e=>e.Id == Id);
+            return _dbSet.Include(e=>e.Candidates).Include(e => e.Votes).SingleOrDefault(e=>e.Id == Id);
         }
     }
 }

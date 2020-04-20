@@ -46,15 +46,15 @@ namespace WebApplication1.Controllers
         // GET: Election
         public ActionResult Index()
         {
-            try
-            {
+            //try
+            //{
                 //returning a list of ElectionViewModel
                 return View(Utilities.convertElectionList_toElectionViewModelList(_electionRepository.GetAll()));
-            }
-            catch
-            {
-                return View();
-            }            
+            //}
+            //catch
+            //{
+            //    return View();
+            //}            
         }
 
         // GET: Election/Details/5
@@ -285,7 +285,8 @@ namespace WebApplication1.Controllers
                 //candidates objects as they are I got this error "self referencing loop detected with type" it means json tried to serialize the candidate object
                 //but it found that each candidate has an Election object, and this election object has a list of candidates and so on, so i excluded election
                 //from the selection to avoid the infinite loop
-                var json = JsonConvert.SerializeObject(e.Candidates.Select(p=>new { p.FirstName, p.LastName, p.State}).ToList());
+                var candidates = e.Candidates.Select(p => new { p.FirstName, p.LastName, p.State}).ToList();
+                var json = JsonConvert.SerializeObject(candidates);
                 return Ok(json);
                 
             }

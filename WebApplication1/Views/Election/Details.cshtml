@@ -38,6 +38,12 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.NumberOfCandidates)
         </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.NumberOfVotes)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NumberOfVotes)
+        </dd>
     </dl>
 </div>
 <div>
@@ -78,8 +84,7 @@
     document.addEventListener("DOMContentLoaded", loadCandidatesList);
 
     function loadCandidatesList() {
-        let electionId = document.getElementById("candidate-id-holder").value;
-
+        
         //console.log("trying to load data of " + JSON.stringify(electionId));
         //get the list of candidates using the id of the election
         $.ajax({
@@ -93,7 +98,7 @@
         },
         success: function (response) {
             //'response' represents the object returned from the api which is the Election object newly stored in the db
-            //console.log(response);            
+            console.log(response);         
             //console.log(response.length);
             displayCandidates(response);
 
