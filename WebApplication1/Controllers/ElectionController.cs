@@ -298,17 +298,9 @@ namespace WebApplication1.Controllers
         }
 
 
-        struct VoterCandidateEntity
-        {
-            //this struct is going to be used to store voter and candidate data, so that we can return a list of candidates of an election
-            //followed by a list of voters that are not candodates of an eelection ... for user to edit the election to be able to
-            //remove candidates and select new candodates
-            public string VoterId;
-            public string FirstName;
-            public string LastName;
-            public string StateName;
-            public string candidateId;
-        }
+        
+
+
         //this method is called using jQuery ajax and it returns a list of candidates related to the election folllowed by the list of all voters 
         //it is called when displaying the election for editing
         [HttpPost]
@@ -325,22 +317,22 @@ namespace WebApplication1.Controllers
 
                 //var candidates = election.Candidates.Select(p => new { p.Id, p.FirstName, p.LastName, p.State, p.VoterBeing.}).ToList();
                 var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, election);
-                List<VoterCandidateEntity> entityList = new List<VoterCandidateEntity>();
+                List<VoterCandidateEntityViewModel> entityList = new List<VoterCandidateEntityViewModel>();
                 foreach (var candidate in candidates)
                 {
-                    VoterCandidateEntity vc = new VoterCandidateEntity();
+                    VoterCandidateEntityViewModel vc = new VoterCandidateEntityViewModel();
                     vc.VoterId = candidate.VoterBeing.Id.ToString();
                     vc.FirstName = candidate.FirstName;
                     vc.LastName = candidate.LastName;
                     vc.StateName = candidate.State.Name;
-                    vc.candidateId = candidate.Id.ToString();
+                    vc.CandidateId = candidate.Id.ToString();
                     entityList.Add(vc);
                 }
 
                 var otherVoters = VoterUtilities.getOtherVoters(_voterRepository, Utilities.getCorrespondingVoters(candidates));
                 foreach (var v in otherVoters)
                 {
-                    VoterCandidateEntity vc = new VoterCandidateEntity();
+                    VoterCandidateEntityViewModel vc = new VoterCandidateEntityViewModel();
                     vc.VoterId = v.Id.ToString();
                     vc.FirstName = v.FirstName;
                     vc.LastName = v.LastName;
