@@ -57,6 +57,7 @@ namespace WebApplication1.Business
                 p.hasVoted = "Yes";
             else p.hasVoted = "No";
 
+
             return p;
         }
 
@@ -124,6 +125,17 @@ namespace WebApplication1.Business
             }
 
             return myList.OrderBy(c => c.StartDate).ToList();
+        }
+
+
+        public static List<Voter> getCorrespondingVoters(List<Candidate> candidates)
+        {
+            List<Voter> voters = new List<Voter>();
+            foreach (var candidate in candidates)
+            {
+                voters.Add(candidate.VoterBeing);
+            }
+            return voters;
         }
     }
 }

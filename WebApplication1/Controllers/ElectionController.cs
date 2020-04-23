@@ -274,6 +274,7 @@ namespace WebApplication1.Controllers
 
 
         //this method is called using jQuery ajax and it returns a list of candidates related to the election
+        //it is called when displaying the details of an election
         [HttpPost]
         public async Task<IActionResult> GetCandidatesList_byElectionId([FromBody] string electionId)
         {
@@ -295,6 +296,70 @@ namespace WebApplication1.Controllers
                 return BadRequest();
             }
         }
+
+
+        struct VoterCandidateEntity
+        {
+            //this struct is going to be used to store voter and candidate data, so that we can return a list of candidates of an election
+            //followed by a list of voters that are not candodates of an eelection ... for user to edit the election to be able to
+            //remove candidates and select new candodates
+            public string VoterId;
+            public string FirstName;
+            public string LastName;
+            public string StateName;
+            public string candidateId;
+        }
+        //this method is called using jQuery ajax and it returns a list of candidates related to the election folllowed by the list of all voters 
+        //it is called when displaying the election for editing
+        [HttpPost]
+        public async Task<IActionResult> GetCandidatesList_andVotersList_byElectionId([FromBody] string electionId)
+        {
+            try
+            {
+                Election election = _electionRepository.GetById(Guid.Parse(electionId));
+                //lets serialize the list of candidates of the election we've got and send it back as a reponse
+                //note that I didn't retrieve candidates as they are, I selected only needed attributes bcuz when i tried serializing
+                //candidates objects as they are I got this error "self referencing loop detected with type" it means json tried to serialize the candidate object
+                //but it found that each candidate has an Election object, and this election object has a list of candidates and so on, so i excluded election
+                //from the selection to avoid the infinite loop
+
+                //var candidates = election.Candidates.Select(p => new { p.Id, p.FirstName, p.LastName, p.State, p.VoterBeing.}).ToList();
+                var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, election);
+                List<VoterCandidateEntity> entityList = new List<VoterCandidateEntity>();
+                foreach (var candidate in candidates)
+                {
+                    VoterCandidateEntity vc = new VoterCandidateEntity();
+                    vc.VoterId = candidate.VoterBeing.Id.ToString();
+                    vc.FirstName = candidate.FirstName;
+                    vc.LastName = candidate.LastName;
+                    vc.StateName = candidate.State.Name;
+                    vc.candidateId = candidate.Id.ToString();
+                    entityList.Add(vc);
+                }
+
+                var otherVoters = VoterUtilities.getOtherVoters(_voterRepository, Utilities.getCorrespondingVoters(candidates));
+                foreach (var v in otherVoters)
+                {
+                    VoterCandidateEntity vc = new VoterCandidateEntity();
+                    vc.VoterId = v.Id.ToString();
+                    vc.FirstName = v.FirstName;
+                    vc.LastName = v.LastName;
+                    vc.StateName = v.State.Name;
+                    entityList.Add(vc);
+                }
+
+
+                var json = JsonConvert.SerializeObject(entityList);
+                return Ok(json);
+
+            }
+            catch (Exception E)
+            {
+                return BadRequest();
+            }
+        }
+
+
 
 
         // GET: Election/Edit/5

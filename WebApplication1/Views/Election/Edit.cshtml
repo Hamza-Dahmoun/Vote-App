@@ -13,7 +13,7 @@
         <form asp-action="EditElection">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <!--THIS IS NOT GONNA BE DISPLAYED FOR USER BUT IS MANDATORY IN THE FORM SO THAT THE OBJECT SENT INTO "EDITVOTER" ACTION OF VOTERCONTROLLER WILL HOLD CORRECT DATA-->
-            <input asp-for="Id" type="hidden" />
+            <input asp-for="Id" type="hidden" id="election-holder-id"/>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
@@ -45,3 +45,197 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
+<br />
+<hr />
+<br />
+
+<div id="step-two">
+    <div class="col-12"> <h4>List of Candidates</h4></div>
+    <br/>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    FirstName
+                </th>
+                <th>
+                    LastName
+                </th>
+                <th>
+                    StateName
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+</div>
+
+<script>
+
+
+
+
+
+
+
+
+    //WE SHOULD LOAD THE LIST OF CANIDIDATES RELATED TO THIS ELECTION WHEN THE DOCUMENT IS READY
+    
+    //window.onload = loadCandidatesList();
+    document.addEventListener("DOMContentLoaded", loadCandidatesList);
+
+    function loadCandidatesList() {
+        
+        //console.log("trying to load data of " + JSON.stringify(electionId));
+        //get the list of candidates using the id of the election
+        $.ajax({
+        type: "POST",
+            url: "/Election/GetCandidatesList_andVotersList_byElectionId",
+            data: JSON.stringify(document.getElementById("election-holder-id").value),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+            error: function () {
+            alert("error");
+        },
+        success: function (response) {
+            //'response' represents the object returned from the api
+            console.log(response);         
+            //console.log(response.length);
+            displayVoters(response);
+
+            //window.location.href = "Home/Index";
+        }
+        });
+        //console.log("loaded data");
+    }
+
+
+    function displayVoters(voters) {
+        console.log(voters);
+        var tableBody = document.getElementsByTagName("tbody")[0];
+        for (let i = 0; i < voters.length; i++) {
+            let tdFirstName = document.createElement("td");
+            tdFirstName.innerText = voters[i].FirstName;
+            let tdLastName = document.createElement("td");
+            tdLastName.innerText = voters[i].LastName;
+            let tdState = document.createElement("td");
+            tdState.innerText = voters[i].StateName;
+
+            let tdButton = document.createElement("td");
+
+            if (voters[i].candidateId != null && voters[i].candidateId != undefined) {
+                //so it is a candidate, lets show the button 'Remove Candidate'
+                let removeCandidateButton = document.createElement("a");
+            removeCandidateButton.innerHTML = "Remove Candidate";
+            removeCandidateButton.style.cursor = "pointer";
+            removeCandidateButton.style.color = "red";
+            //removeCandidateButton.style.display = "none";
+            removeCandidateButton.setAttribute("candidateid", voters[i].candidateId);
+            removeCandidateButton.addEventListener("click", removeCandidate);
+            tdButton.appendChild(removeCandidateButton);
+            }
+            else {
+                //so it is not a candidate, lets show the button 'Set as a Candidate'                
+                let addCandidateButton = document.createElement("a");
+                addCandidateButton.innerHTML = "Select as Candidate";
+                addCandidateButton.style.cursor = "pointer";
+                addCandidateButton.setAttribute("voterid", voters[i].voterId);
+                addCandidateButton.addEventListener("click", sendCandidate);
+                tdButton.appendChild(addCandidateButton);
+            }
+            
+
+            
+
+            /*if (voters[i].candidateId == null) {
+                //so just it is not a candidate, lets display only 'Set as a Candidate'
+                removeCandidateButton.style.display = "none";
+                addCandidateButton.style.display = "block";
+            }
+            else {
+                //so just it is a candidate, lets display only 'Remove Candidate'
+                removeCandidateButton.style.display = "block";
+                addCandidateButton.style.display = "none";
+            }*/
+
+
+            let voterRow = document.createElement("tr");
+            voterRow.appendChild(tdFirstName);
+            voterRow.appendChild(tdLastName);
+            voterRow.appendChild(tdState);
+            voterRow.appendChild(tdButton);
+
+            tableBody.appendChild(voterRow);
+        }
+        document.getElementById("step-two").style.display = "block";
+    }
+    function sendCandidate(event) {
+        let voterid = event.target.getAttribute("voterid");
+        let electionId = document.getElementById("election-holder-id").value;
+        //Send the JSON data of voterId and electionId to Controller using AJAX.
+        $.ajax({
+            type: "POST",
+            url: "/Election/AddCandidates",
+            data: JSON.stringify({ electionId: electionId, voterId: voterid }),//JSON.stringify(newElection),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        error: function () {
+            //alert("error");
+            
+        },
+        success: function (response) {
+            //'response' represents the object returned from the api which is the Election object newly stored in the db
+            //console.log(response);
+            //alert("success" + response);
+            switchCandidateButton(event.target);
+            
+            //window.location.href = "Home/Index";
+        }
+    });
+    }
+    function switchCandidateButton(element) {
+        let buttons = element.parentElement.querySelectorAll("a");
+        for (let i = 0; i < buttons.length; i++) {
+            if (window.getComputedStyle(buttons[i]).display == "none") {
+                //console.log("it was hidden");
+                buttons[i].style.display = "block";
+            }
+            else {
+                //console.log("it was visible");
+                buttons[i].style.display = "none";
+            }                
+        }
+
+    }
+    function removeCandidate(event) {
+        //this function remove the relation between election and candidates
+        let voterId = event.target.getAttribute("voterid");
+        console.log(voterId);
+        let electionId = document.getElementById("election-holder-id").value;
+        console.log(electionId);
+        //Send the JSON data of voterId and electionId to Controller using AJAX.
+        $.ajax({
+            type: "POST",
+            url: "/Election/RemoveCandidate",
+            data: JSON.stringify({ electionId: electionId, voterId: voterId }),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        error: function () {
+            //alert("error");
+        },
+            success: function (response) {
+            //console.log(response);
+            //alert("success" + response);
+            switchCandidateButton(event.target);
+            
+            //window.location.href = "Home/Index";
+        }
+    });
+    }
+    
+
+
+</script>
