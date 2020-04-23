@@ -133,6 +133,7 @@
             removeCandidateButton.style.cursor = "pointer";
             removeCandidateButton.style.color = "red";
             removeCandidateButton.setAttribute("candidateid", voters[i].CandidateId);
+            removeCandidateButton.setAttribute("voterid", voters[i].VoterId);
             removeCandidateButton.addEventListener("click", removeCandidate);
             tdButton.appendChild(removeCandidateButton);
 
@@ -215,9 +216,9 @@
     function removeCandidate(event) {
         //this function remove the relation between election and candidates
         let voterId = event.target.getAttribute("voterid");
-        console.log(voterId);
+        //console.log(voterId);
         let electionId = document.getElementById("election-holder-id").value;
-        console.log(electionId);
+        //console.log(electionId);
         //Send the JSON data of voterId and electionId to Controller using AJAX.
         $.ajax({
             type: "POST",
