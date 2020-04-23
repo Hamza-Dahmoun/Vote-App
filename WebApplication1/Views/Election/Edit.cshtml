@@ -132,7 +132,7 @@
             removeCandidateButton.innerHTML = "Remove Candidate";
             removeCandidateButton.style.cursor = "pointer";
             removeCandidateButton.style.color = "red";
-            removeCandidateButton.setAttribute("candidateid", voters[i].candidateId);
+            removeCandidateButton.setAttribute("candidateid", voters[i].CandidateId);
             removeCandidateButton.addEventListener("click", removeCandidate);
             tdButton.appendChild(removeCandidateButton);
 
@@ -141,7 +141,7 @@
             let addCandidateButton = document.createElement("a");
             addCandidateButton.innerHTML = "Select as Candidate";
             addCandidateButton.style.cursor = "pointer";
-            addCandidateButton.setAttribute("voterid", voters[i].voterId);
+            addCandidateButton.setAttribute("voterid", voters[i].VoterId);
             addCandidateButton.addEventListener("click", sendCandidate);
             tdButton.appendChild(addCandidateButton);
                 
@@ -173,8 +173,10 @@
         document.getElementById("step-two").style.display = "block";
     }
     function sendCandidate(event) {
+        //console.log(event.target);
         let voterid = event.target.getAttribute("voterid");
         let electionId = document.getElementById("election-holder-id").value;
+        //console.log(JSON.stringify({ electionId: electionId, voterId: voterid }));
         //Send the JSON data of voterId and electionId to Controller using AJAX.
         $.ajax({
             type: "POST",
