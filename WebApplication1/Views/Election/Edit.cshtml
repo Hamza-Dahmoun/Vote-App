@@ -10,13 +10,14 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="EditElection">
+        <!--<form asp-action="EditElection">-->
+            <!--<form>-->
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <!--THIS IS NOT GONNA BE DISPLAYED FOR USER BUT IS MANDATORY IN THE FORM SO THAT THE OBJECT SENT INTO "EDITVOTER" ACTION OF VOTERCONTROLLER WILL HOLD CORRECT DATA-->
             <input asp-for="Id" type="hidden" id="election-holder-id"/>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
+                <input asp-for="Name" class="form-control"  id="election-name"/>
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -35,9 +36,9 @@
                 <span asp-validation-for="HasNeutral" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" id="submit-updated-election"/>
             </div>
-        </form>
+        <!--</form>-->
     </div>
 </div>
 
@@ -76,8 +77,34 @@
 <script>
 
 
+    document.getElementById("submit-updated-election").addEventListener("click", sendUpdatedElection);
+    function sendUpdatedElection() {
+        let electionId = document.getElementById("election-holder-id").value;
+        let electionName = document.getElementById("election-name").value;
+        console.log(electionName);
+        let electionStartDate = document.getElementById("start-date-election").value;
+        let electionDuration = document.getElementById("duration-in-days").value;
+        let electionHasNeutral = document.getElementById("has-neutral").value;
 
+        console.log(JSON.stringify({ Id: electionId, Name: electionName, StartDate: electionStartDate, DurationInDays: electionDuration, HasNeutral: electionHasNeutral }));
 
+        //Send the JSON data of election instance to Controller using AJAX.
+        $.ajax({
+            type: "POST",
+            url: "/Election/EditElection",
+            data: JSON.stringify({ Id: electionId, Name: electionName, StartDate: electionStartDate, DurationInDays: electionDuration, HasNeutral: electionHasNeutral}),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        error: function () {
+            alert("error");
+        },
+            success: function (response) {
+            //console.log(response);
+            alert("success" + response);
+            //switchCandidateButton(event.target);            
+        }
+    });
+    }
 
 
 

@@ -364,28 +364,36 @@ namespace WebApplication1.Controllers
             return View(election);
         }
 
+
+        public struct TemporaryElection
+        {
+            public string Id { get; set; }
+            public string Name { get; set; }
+            public string StartDate { get; set; }
+            public string DurationInDays { get; set; }
+            public string HasNeutral { get; set; }
+        }
         // POST: Election/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult EditElection(Election election)
+        [HttpPost]        
+        public async Task<IActionResult> EditElection([FromBody] TemporaryElection election)
         {
             try
             {
 
                 Election myElection = new Election
                 {
-                    Id = election.Id,
+                    Id = Guid.Parse(election.Id),
                     Name = election.Name,
-                    StartDate = election.StartDate,
-                    DurationInDays = election.DurationInDays,
-                    HasNeutral = election.HasNeutral
+                    StartDate = DateTime.Parse(election.StartDate),
+                    DurationInDays = int.Parse(election.DurationInDays),
+                    HasNeutral = bool.Parse(election.HasNeutral)
                 };
                 _electionRepository.Edit(myElection.Id, myElection);
-                return RedirectToAction(nameof(Index));
+                return Json(new { success = true });
             }
             catch
             {
-                return View();
+                return BadRequest();
             }
         }
 
