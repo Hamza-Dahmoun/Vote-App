@@ -315,10 +315,11 @@ namespace WebApplication1.Controllers
                 //but it found that each candidate has an Election object, and this election object has a list of candidates and so on, so i excluded election
                 //from the selection to avoid the infinite loop
 
-                //var candidates = election.Candidates.Select(p => new { p.Id, p.FirstName, p.LastName, p.State, p.VoterBeing.}).ToList();
+
                 var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, election);
                 List<VoterCandidateEntityViewModel> entityList = new List<VoterCandidateEntityViewModel>();
-                foreach (var candidate in candidates)
+                entityList = Utilities.convertCandidateList_toVoterCandidateEntityViewModelList(entityList, candidates);
+                /*foreach (var candidate in candidates)
                 {
                     VoterCandidateEntityViewModel vc = new VoterCandidateEntityViewModel();
                     vc.VoterId = candidate.VoterBeing.Id.ToString();
@@ -327,10 +328,12 @@ namespace WebApplication1.Controllers
                     vc.StateName = candidate.State.Name;
                     vc.CandidateId = candidate.Id.ToString();
                     entityList.Add(vc);
-                }
+                }*/
 
                 var otherVoters = VoterUtilities.getOtherVoters(_voterRepository, Utilities.getCorrespondingVoters(candidates));
-                foreach (var v in otherVoters)
+                entityList = Utilities.convertVoterList_toVoterCandidateEntityViewModelList(entityList, otherVoters);
+                
+                /*foreach (var v in otherVoters)
                 {
                     VoterCandidateEntityViewModel vc = new VoterCandidateEntityViewModel();
                     vc.VoterId = v.Id.ToString();
@@ -338,7 +341,7 @@ namespace WebApplication1.Controllers
                     vc.LastName = v.LastName;
                     vc.StateName = v.State.Name;
                     entityList.Add(vc);
-                }
+                }*/
 
 
                 var json = JsonConvert.SerializeObject(entityList);

@@ -128,6 +128,66 @@ namespace WebApplication1.Business
         }
 
 
+
+
+
+
+
+        public static VoterCandidateEntityViewModel convertVoter_toVoterCandidateEntityViewModel(Voter v)
+        {
+            VoterCandidateEntityViewModel vc = new VoterCandidateEntityViewModel();
+            vc.VoterId = v.Id.ToString();
+            vc.FirstName = v.FirstName;
+            vc.LastName = v.LastName;
+            vc.StateName = v.State.Name;
+            return vc;
+        }
+        public static VoterCandidateEntityViewModel convertCandidate_toVoterCandidateEntityViewModel(Candidate c)
+        {
+            VoterCandidateEntityViewModel vc = new VoterCandidateEntityViewModel();
+            vc.VoterId = c.VoterBeing.Id.ToString();
+            vc.FirstName = c.FirstName;
+            vc.LastName = c.LastName;
+            vc.StateName = c.State.Name;
+            vc.CandidateId = c.Id.ToString();
+            return vc;
+        }
+        //this is used and called when editing an election
+        public static List<VoterCandidateEntityViewModel> convertVoterList_toVoterCandidateEntityViewModelList(
+            List<VoterCandidateEntityViewModel> myList, 
+            List<Voter> voterList)
+        {
+            foreach (var item in voterList)
+            {
+                myList.Add(convertVoter_toVoterCandidateEntityViewModel(item));
+            }
+
+            return myList;
+        }
+        //this is used and called when editing an election
+        public static List<VoterCandidateEntityViewModel> convertCandidateList_toVoterCandidateEntityViewModelList(
+            List<VoterCandidateEntityViewModel> myList,
+            List<Candidate> candidateList)
+        {
+            foreach (var item in candidateList)
+            {
+                myList.Add(convertCandidate_toVoterCandidateEntityViewModel(item));
+            }
+
+            return myList;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
         public static List<Voter> getCorrespondingVoters(List<Candidate> candidates)
         {
             List<Voter> voters = new List<Voter>();

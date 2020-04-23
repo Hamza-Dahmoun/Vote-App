@@ -126,40 +126,40 @@
 
             let tdButton = document.createElement("td");
 
-            if (voters[i].CandidateId != null) {
-                //so it is a candidate, lets show the button 'Remove Candidate'
-                let removeCandidateButton = document.createElement("a");
+
+                //in case it is a candidate, lets show the button 'Remove Candidate'
+            let removeCandidateButton = document.createElement("a");
             removeCandidateButton.innerHTML = "Remove Candidate";
             removeCandidateButton.style.cursor = "pointer";
             removeCandidateButton.style.color = "red";
-            //removeCandidateButton.style.display = "none";
             removeCandidateButton.setAttribute("candidateid", voters[i].candidateId);
             removeCandidateButton.addEventListener("click", removeCandidate);
             tdButton.appendChild(removeCandidateButton);
+
+
+            //in case it is not a candidate, lets show the button 'Set as a Candidate'                
+            let addCandidateButton = document.createElement("a");
+            addCandidateButton.innerHTML = "Select as Candidate";
+            addCandidateButton.style.cursor = "pointer";
+            addCandidateButton.setAttribute("voterid", voters[i].voterId);
+            addCandidateButton.addEventListener("click", sendCandidate);
+            tdButton.appendChild(addCandidateButton);
+                
+            
+            
+
+            
+
+            if (voters[i].CandidateId != null) {
+                //so it is not a candidate, lets display only 'Set as a Candidate'
+                removeCandidateButton.style.display = "block";
+                addCandidateButton.style.display = "none";
             }
             else {
-                //so it is not a candidate, lets show the button 'Set as a Candidate'                
-                let addCandidateButton = document.createElement("a");
-                addCandidateButton.innerHTML = "Select as Candidate";
-                addCandidateButton.style.cursor = "pointer";
-                addCandidateButton.setAttribute("voterid", voters[i].voterId);
-                addCandidateButton.addEventListener("click", sendCandidate);
-                tdButton.appendChild(addCandidateButton);
-            }
-            
-
-            
-
-            /*if (voters[i].candidateId == null) {
-                //so just it is not a candidate, lets display only 'Set as a Candidate'
+                //so it is a candidate, lets display only 'Remove Candidate'
                 removeCandidateButton.style.display = "none";
                 addCandidateButton.style.display = "block";
             }
-            else {
-                //so just it is a candidate, lets display only 'Remove Candidate'
-                removeCandidateButton.style.display = "block";
-                addCandidateButton.style.display = "none";
-            }*/
 
 
             let voterRow = document.createElement("tr");
