@@ -3,10 +3,20 @@
     ViewData["Title"] = "Edit";
 }
 
+<style>
 
-<h1>Edit</h1>
+    #submit-updated-election{
+        display: none;
+    }
 
-<h4>Election</h4>
+</style>
+
+<h1>Edit an Election</h1>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -17,22 +27,22 @@
             <input asp-for="Id" type="hidden" id="election-holder-id"/>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control"  id="election-name"/>
+                <input asp-for="Name" class="form-control changeable"  id="election-name"/>
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="StartDate" class="control-label"></label>
-                <input type="date" asp-for="StartDate" class="form-control" id="start-date-election" />
+                <input type="date" asp-for="StartDate" class="form-control changeable" id="start-date-election" />
                 <span asp-validation-for="StartDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="DurationInDays" class="control-label"></label>
-                <input type="number" asp-for="DurationInDays" class="form-control" id="duration-in-days" />
+                <input type="number" asp-for="DurationInDays" class="form-control changeable" id="duration-in-days" />
                 <span asp-validation-for="DurationInDays" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="HasNeutral" class="control-label"></label>
-                <input type="checkbox" asp-for="HasNeutral" class="form-control" id="has-neutral" />
+                <input type="checkbox" asp-for="HasNeutral" class="form-control changeable" id="has-neutral" />
                 <span asp-validation-for="HasNeutral" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -42,9 +52,7 @@
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
 
 <br />
 <hr />
@@ -75,18 +83,31 @@
 </div>
 
 <script>
+    //adding onChange event to input so that in case user started typing we'll display the button 'Save' to him
+    let inputs = document.getElementsByClassName("changeable");
+    for (let i = 0; i < inputs.length; i++) {
+        inputs[i].addEventListener("change", displayButton);
+    }
+    function displayButton() {
+        //console.log("going to display button");
+        document.getElementById("submit-updated-election").style.display = "block";
+        //console.log("displayed the button");
+    }
+    function hideButton() {
+        document.getElementById("submit-updated-election").style.display = "none";
+    }
 
-
+    //this is updating election part
     document.getElementById("submit-updated-election").addEventListener("click", sendUpdatedElection);
     function sendUpdatedElection() {
         let electionId = document.getElementById("election-holder-id").value;
         let electionName = document.getElementById("election-name").value;
-        console.log(electionName);
+        //console.log(electionName);
         let electionStartDate = document.getElementById("start-date-election").value;
         let electionDuration = document.getElementById("duration-in-days").value;
         let electionHasNeutral = document.getElementById("has-neutral").value;
 
-        console.log(JSON.stringify({ Id: electionId, Name: electionName, StartDate: electionStartDate, DurationInDays: electionDuration, HasNeutral: electionHasNeutral }));
+        //console.log(JSON.stringify({ Id: electionId, Name: electionName, StartDate: electionStartDate, DurationInDays: electionDuration, HasNeutral: electionHasNeutral }));
 
         //Send the JSON data of election instance to Controller using AJAX.
         $.ajax({
@@ -96,12 +117,12 @@
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         error: function () {
-            alert("error");
+            //alert("error");
         },
             success: function (response) {
             //console.log(response);
-            alert("success" + response);
-            //switchCandidateButton(event.target);            
+            //alert("success" + response);
+            hideButton();            
         }
     });
     }
