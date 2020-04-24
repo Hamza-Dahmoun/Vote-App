@@ -18,7 +18,7 @@
         /*this is added so that the scrolling will be done smoothly inside the html document ... I needed scrolling when step1 is done*/
         scroll-behavior: smooth;
     }
-    #send-candidate-spinner{
+    #send-election-spinner{
         display:none;
     }
 
@@ -61,10 +61,10 @@
             <input type="checkbox" asp-for="HasNeutral" class="form-control" id="has-neutral" />
             <span asp-validation-for="HasNeutral" class="text-danger"></span>
         </div>
-        <button class="btn btn-secondary" type="button" id="send-election-button" title="Validate Vote">
+        <button class="btn btn-secondary" type="button" id="send-election-button" title="Validate Election">
             <i class="fa fa-rocket" aria-hidden="true"></i> Save
         </button>
-        <div class="spinner-border" id="send-candidate-spinner">
+        <div class="spinner-border" id="send-election-spinner">
 
         </div>
     </div>
@@ -138,7 +138,7 @@
         };
         //alert(JSON.stringify(newElection));
         //lets hide the button and display the spinner next to it
-        document.getElementById("send-candidate-spinner").style.display = "block";
+        document.getElementById("send-election-spinner").style.display = "block";
         document.getElementById("send-election-button").style.display = "none";
     //Send the JSON object Election to Controller using AJAX.
     $.ajax({
@@ -149,7 +149,7 @@
         dataType: "json",
         error: function () {
             //alert("error");
-            document.getElementById("send-candidate-spinner").style.display = "none";
+            document.getElementById("send-election-spinner").style.display = "none";
             document.getElementById("send-election-button").style.display = "block";
         },
         success: function (response) {
@@ -173,7 +173,7 @@
             //console.log(election_inputs[i]);
             election_inputs[i].disabled = "true";
         }
-        document.getElementById("send-candidate-spinner").style.display = "none";
+        document.getElementById("send-election-spinner").style.display = "none";
         document.getElementById("send-election-button").style.display = "none";
         //console.log("disabling inputs done");
     }
@@ -188,7 +188,7 @@
         document.getElementById("step-two").scrollIntoView();
     }
     function displayVoters(voters) {
-        console.log(voters);
+        //console.log(voters);
         var tableBody = document.getElementsByTagName("tbody")[0];
         for (let i = 0; i < voters.length; i++) {
             let tdFirstName = document.createElement("td");
@@ -215,6 +215,11 @@
             removeCandidateButton.addEventListener("click", removeCandidate);
             tdButton.appendChild(removeCandidateButton);
 
+            //now lets add a spinner to be shown when one of these buttons is clicked
+            let spinner = document.createElement("span");
+            spinner.className = "spinner-border";
+            spinner.style.display = "none";
+            tdButton.appendChild(spinner);
 
             let voterRow = document.createElement("tr");
             voterRow.appendChild(tdFirstName);
@@ -227,6 +232,10 @@
         document.getElementById("step-two").style.display = "block";
     }
     function sendCandidate(event) {
+        //first of all lets display the spinner and hide the button
+        displayBrotherSpinner(event.target);
+        event.target.style.display = "none";
+
         let voterid = event.target.getAttribute("voterid");
         
         //Send the JSON data of voterId and electionId to Controller using AJAX.
@@ -250,22 +259,36 @@
         }
     });
     }
+    function displayBrotherSpinner(btn) {
+        let spinner = btn.parentElement.querySelectorAll(".spinner-border")[0];
+        spinner.style.display = "block";
+    }
+    function hideBrotherSpinner(btn) {
+        let spinner = btn.parentElement.querySelectorAll(".spinner-border")[0];
+        spinner.style.display = "none";
+    }
     function switchCandidateButton(element) {
+        //first of all lets hide the spinner
+        hideBrotherSpinner(element);
+
+        element.style.display = "none";
+
         let buttons = element.parentElement.querySelectorAll("a");
         for (let i = 0; i < buttons.length; i++) {
-            if (window.getComputedStyle(buttons[i]).display == "none") {
-                //console.log("it was hidden");
+            if (buttons[i] != element) {
+                //so lets display the other button
                 buttons[i].style.display = "block";
-            }
-            else {
-                //console.log("it was visible");
-                buttons[i].style.display = "none";
-            }                
+            }            
         }
-
     }
+    
     function removeCandidate(event) {
         //this function remove the relation between election and candidates
+
+        //first of all lets display the spinner and hide the button
+        displayBrotherSpinner(event.target);
+        event.target.style.display = "none";
+
         let voterid = event.target.getAttribute("voterid");
 
         //Send the JSON data of voterId and electionId to Controller using AJAX.
