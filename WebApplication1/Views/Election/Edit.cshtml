@@ -8,7 +8,9 @@
     #submit-updated-election{
         display: none;
     }
-
+    #update-candidate-spinner{
+        display:none;
+    }
 </style>
 
 <h1>Edit an Election</h1>
@@ -21,33 +23,36 @@
 <div class="row">
     <div class="col-md-4">
         <!--<form asp-action="EditElection">-->
-            <!--<form>-->
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <!--THIS IS NOT GONNA BE DISPLAYED FOR USER BUT IS MANDATORY IN THE FORM SO THAT THE OBJECT SENT INTO "EDITVOTER" ACTION OF VOTERCONTROLLER WILL HOLD CORRECT DATA-->
-            <input asp-for="Id" type="hidden" id="election-holder-id"/>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control changeable"  id="election-name"/>
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="StartDate" class="control-label"></label>
-                <input type="date" asp-for="StartDate" class="form-control changeable" id="start-date-election" />
-                <span asp-validation-for="StartDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DurationInDays" class="control-label"></label>
-                <input type="number" asp-for="DurationInDays" class="form-control changeable" id="duration-in-days" />
-                <span asp-validation-for="DurationInDays" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="HasNeutral" class="control-label"></label>
-                <input type="checkbox" asp-for="HasNeutral" class="form-control changeable" id="has-neutral" />
-                <span asp-validation-for="HasNeutral" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" id="submit-updated-election"/>
-            </div>
+        <!--<form>-->
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <!--THIS IS NOT GONNA BE DISPLAYED FOR USER BUT IS MANDATORY IN THE FORM SO THAT THE OBJECT SENT INTO "EDITVOTER" ACTION OF VOTERCONTROLLER WILL HOLD CORRECT DATA-->
+        <input asp-for="Id" type="hidden" id="election-holder-id" />
+        <div class="form-group">
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control changeable" id="election-name" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="StartDate" class="control-label"></label>
+            <input type="date" asp-for="StartDate" class="form-control changeable" id="start-date-election" />
+            <span asp-validation-for="StartDate" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="DurationInDays" class="control-label"></label>
+            <input type="number" asp-for="DurationInDays" class="form-control changeable" id="duration-in-days" />
+            <span asp-validation-for="DurationInDays" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="HasNeutral" class="control-label"></label>
+            <input type="checkbox" asp-for="HasNeutral" class="form-control changeable" id="has-neutral" />
+            <span asp-validation-for="HasNeutral" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Save" class="btn btn-primary" id="submit-updated-election" />
+        </div>
+        <div class="spinner-border" id="update-candidate-spinner">
+
+        </div>
         <!--</form>-->
     </div>
 </div>
@@ -60,7 +65,10 @@
 
 <div id="step-two">
     <div class="col-12"> <h4>List of Candidates</h4></div>
-    <br/>
+    <br />
+    <div class="spinner-border" id="candidate-list-spinner">
+
+    </div>
     <table class="table">
         <thead>
             <tr>
@@ -107,7 +115,8 @@
         let electionDuration = document.getElementById("duration-in-days").value;
         let electionHasNeutral = document.getElementById("has-neutral").value;
 
-        //console.log(JSON.stringify({ Id: electionId, Name: electionName, StartDate: electionStartDate, DurationInDays: electionDuration, HasNeutral: electionHasNeutral }));
+        hideButton();
+        displaySpinner();
 
         //Send the JSON data of election instance to Controller using AJAX.
         $.ajax({
@@ -121,10 +130,17 @@
         },
             success: function (response) {
             //console.log(response);
-            //alert("success" + response);
-            hideButton();            
+            //alert("success" + response);                
+                hideSpinner();
         }
     });
+    }
+
+    function hideSpinner() {
+        document.getElementById("update-candidate-spinner").style.display = "none";
+    }
+    function displaySpinner() {
+        document.getElementById("update-candidate-spinner").style.display = "block";
     }
 
 
@@ -150,8 +166,10 @@
         },
         success: function (response) {
             //'response' represents the object returned from the api
-            console.log(response);         
-            //console.log(response.length);
+            //console.log(response);       
+
+            //lets hide the spinner
+            document.getElementById("candidate-list-spinner").style.display = "none";
             displayVoters(response);
 
             //window.location.href = "Home/Index";
@@ -162,7 +180,7 @@
 
 
     function displayVoters(voters) {
-        console.log(voters);
+        //console.log(voters);
         var tableBody = document.getElementsByTagName("tbody")[0];
         for (let i = 0; i < voters.length; i++) {
             let tdFirstName = document.createElement("td");
@@ -193,9 +211,12 @@
             addCandidateButton.setAttribute("voterid", voters[i].VoterId);
             addCandidateButton.addEventListener("click", sendCandidate);
             tdButton.appendChild(addCandidateButton);
-                
-            
-            
+
+            //add a spinner to be shown when using one of these buttons
+            let spinner = document.createElement("span");
+            spinner.style.display = "none";
+            spinner.className = "spinner-border";
+            tdButton.appendChild(spinner);
 
             
 
@@ -222,6 +243,10 @@
         document.getElementById("step-two").style.display = "block";
     }
     function sendCandidate(event) {
+        //hide this clicked button
+        event.target.style.display = "none";
+        displayBrotherSpinner(event.target);
+
         //console.log(event.target);
         let voterid = event.target.getAttribute("voterid");
         let electionId = document.getElementById("election-holder-id").value;
@@ -247,21 +272,43 @@
         }
     });
     }
+    function displayBrotherSpinner(btn) {
+        let spinner = btn.parentElement.querySelectorAll(".spinner-border")[0];
+        spinner.style.display = "block";
+    }
+    function hideBrotherSpinner(btn) {
+        let spinner = btn.parentElement.querySelectorAll(".spinner-border")[0];
+        spinner.style.display = "none";
+    }
     function switchCandidateButton(element) {
+        //first of all lets hide the spinner
+        hideBrotherSpinner(element);
+
+        element.style.display = "none";
+
         let buttons = element.parentElement.querySelectorAll("a");
         for (let i = 0; i < buttons.length; i++) {
-            if (window.getComputedStyle(buttons[i]).display == "none") {
+            if (buttons[i] != element) {
+                //so lets display the other button
+                buttons[i].style.display = "block";
+            }
+            /*if (window.getComputedStyle(buttons[i]).display == "none") {
                 //console.log("it was hidden");
                 buttons[i].style.display = "block";
             }
             else {
                 //console.log("it was visible");
                 buttons[i].style.display = "none";
-            }                
+            }*/                
         }
 
     }
-    function removeCandidate(event) {
+
+    function removeCandidate(event) {        
+        //hide this clicked button
+        event.target.style.display = "none";
+        displayBrotherSpinner(event.target);
+
         //this function remove the relation between election and candidates
         let voterId = event.target.getAttribute("voterid");
         //console.log(voterId);
