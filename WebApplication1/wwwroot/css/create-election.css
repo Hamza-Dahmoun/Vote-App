@@ -1,0 +1,20 @@
+﻿#step-two {
+    display: none;
+}
+
+.successBG {
+    background-color: #eafaf1 /*#d3febc*/;
+}
+
+.successText {
+    color: #145a32 /*#087360*/;
+}
+
+html {
+    /*this is added so that the scrolling will be done smoothly inside the html document ... I needed scrolling when step1 is done*/
+    scroll-behavior: smooth;
+}
+
+#send-election-spinner {
+    display: none;
+}
