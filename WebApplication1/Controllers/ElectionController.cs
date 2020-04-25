@@ -161,8 +161,8 @@ namespace WebApplication1.Controllers
                             Candidate neutralOpinion = new Candidate
                             {
                                 Id = Guid.NewGuid(),
-                                FirstName = "Neutral",
-                                LastName = "Opinion",
+                                /*FirstName = "Neutral",
+                                LastName = "Opinion",*/
                                 isNeutralOpinion = true
                             };
                             election.NeutralCandidateID = neutralOpinion.Id;
@@ -231,10 +231,10 @@ namespace WebApplication1.Controllers
                     new Candidate
                     {
                         Id = Guid.NewGuid(),
-                        FirstName = voter.FirstName,
-                        LastName = voter.LastName,
+                        /*FirstName = voter.FirstName,
+                        LastName = voter.LastName,*/
                         VoterBeing = voter,
-                        State = voter.State,
+                        /*State = voter.State,*/
                         Election = _electionRepository.GetById(mydata.electionId)
                     }
                     );
@@ -286,8 +286,9 @@ namespace WebApplication1.Controllers
                 //candidates objects as they are I got this error "self referencing loop detected with type" it means json tried to serialize the candidate object
                 //but it found that each candidate has an Election object, and this election object has a list of candidates and so on, so i excluded election
                 //from the selection to avoid the infinite loop
-                var candidates = e.Candidates.Select(p => new { p.FirstName, p.LastName, p.State}).ToList();
-                var json = JsonConvert.SerializeObject(candidates);
+                //var candidates = e.Candidates/*.Select(p => new { p.FirstName, p.LastName, p.State})*/.ToList();
+                var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, e);
+                var json = JsonConvert.SerializeObject(Utilities.convertCandidateList_toPersonViewModelList(_voterRepository, candidates));
                 return Ok(json);
                 
             }
@@ -318,7 +319,7 @@ namespace WebApplication1.Controllers
 
                 var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, election);
                 List<VoterCandidateEntityViewModel> entityList = new List<VoterCandidateEntityViewModel>();
-                entityList = Utilities.convertCandidateList_toVoterCandidateEntityViewModelList(entityList, candidates);
+                entityList = Utilities.convertCandidateList_toVoterCandidateEntityViewModelList(_voterRepository, entityList, candidates);
                 /*foreach (var candidate in candidates)
                 {
                     VoterCandidateEntityViewModel vc = new VoterCandidateEntityViewModel();

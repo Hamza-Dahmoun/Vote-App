@@ -38,13 +38,13 @@ namespace WebApplication1.Controllers
 
         public IActionResult Details(Guid id)
         {
-            return View(Utilities.convertCandidate_toCandidateViewModel(_candidateRepository.GetById(id)));
+            return View(Utilities.convertCandidate_toCandidateViewModel(_voterRepository, _candidateRepository.GetById(id)));
         }
 
 
         public IActionResult Delete(Guid id)
         {
-            return View(Utilities.convertCandidate_toCandidateViewModel(_candidateRepository.GetById(id)));
+            return View(Utilities.convertCandidate_toCandidateViewModel(_voterRepository, _candidateRepository.GetById(id)));
         }
         [HttpPost]
         public IActionResult DeleteCandidate(Guid id)
@@ -76,10 +76,10 @@ namespace WebApplication1.Controllers
                     new Candidate
                     {
                         Id = Guid.NewGuid(),
-                        FirstName = voter.FirstName,
-                        LastName = voter.LastName,
-                        VoterBeing = voter,
-                        State = voter.State
+                        /*FirstName = voter.FirstName,
+                        LastName = voter.LastName,*/
+                        VoterBeing = voter
+                        /*State = voter.State*/
                     }
                     );
                 return RedirectToAction(nameof(GoToVotersList));

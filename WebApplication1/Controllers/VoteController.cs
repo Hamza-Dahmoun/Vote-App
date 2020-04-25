@@ -37,7 +37,7 @@ namespace WebApplication1.Controllers
 
         public IActionResult Index()
         {//this action returns a view containing all candidates for the user to vote on five of them maximum
-            return View(Utilities.convertCandidateList_toPersonViewModelList(_candidateRepository.GetAll()));
+            return View(Utilities.convertCandidateList_toPersonViewModelList(_voterRepository, _candidateRepository.GetAll()));
         }
 
         [HttpPost]

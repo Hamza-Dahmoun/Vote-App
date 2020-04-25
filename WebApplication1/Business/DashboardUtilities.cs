@@ -40,7 +40,7 @@ namespace WebApplication1.Business
             _voterRepository = voterRepository;
             _voteRepository = voteRepository;
 
-            List<CandidateViewModel> candidates = Utilities.convertCandidateList_toPersonViewModelList(_candidateRepository.GetAll().ToList());
+            List<CandidateViewModel> candidates = Utilities.convertCandidateList_toPersonViewModelList(_voterRepository, _candidateRepository.GetAll().ToList());
 
             int NbCandidates = candidates.Count;
             int NbVoters = _voterRepository.GetAll().Count;

@@ -3,39 +3,56 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApplication1.Models;
+using WebApplication1.Models.Repositories;
 using WebApplication1.Models.ViewModels;
 
 namespace WebApplication1.Business
 {
     public static class Utilities
     {
-        public static CandidateViewModel convertCandidate_toCandidateViewModel(Candidate candidate)
-        {
+
+        public static CandidateViewModel convertCandidate_toCandidateViewModel(IRepository<Voter> voterRepository, Candidate candidate)
+        {//the parameter voterRepository is passed to be used in a Method Dependancy Injection in VoterUtilities.getStateName() method
+            try
+            {
             CandidateViewModel c = new CandidateViewModel
-            {
-                Id = candidate.Id,
-                isNeutralOpinion = candidate.isNeutralOpinion,
-                FirstName = candidate.FirstName,
-                LastName = candidate.LastName,
-                StateName = candidate.State?.Name,
-                VotesCount = candidate.Votes.Count(),
-            };
-            if (!candidate.isNeutralOpinion)
-            {
-                if (candidate.VoterBeing.hasVoted())
-                    c.hasVoted = "Yes";
-                else c.hasVoted = "No";
+                {
+                    Id = candidate.Id,
+                    isNeutralOpinion = candidate.isNeutralOpinion,
+                    VotesCount = candidate.Votes.Count(),
+                };
+                if (!candidate.isNeutralOpinion)
+                {
+
+                    c.FirstName = candidate.VoterBeing.FirstName;
+                    c.LastName = candidate.VoterBeing.LastName;
+                    c.StateName = VoterUtilities.getStateName(voterRepository, candidate.VoterBeing.Id);
+
+                    if (candidate.VoterBeing.hasVoted())
+                        c.hasVoted = "Yes";
+                    else c.hasVoted = "No";
+                }
+                else
+                {
+                    c.FirstName = "Neutral";
+                    c.LastName = "Opinion";
+                }
+
+                return c;
             }
-            
-            return c;
+            catch(Exception E)
+            {
+                throw E;
+            }            
         }
 
-        public static List<CandidateViewModel> convertCandidateList_toPersonViewModelList(IList<Candidate> candidates)
-        {
+        public static List<CandidateViewModel> convertCandidateList_toPersonViewModelList(
+            IRepository<Voter> voterRepository, IList<Candidate> candidates)
+        {//the parameter voterRepository is passed to be used in a Method Dependancy Injection in VoterUtilities.getStateName() method
             List<CandidateViewModel> myList = new List<CandidateViewModel>();
             foreach (var item in candidates)
             {
-                myList.Add(convertCandidate_toCandidateViewModel(item));
+                myList.Add(convertCandidate_toCandidateViewModel(voterRepository, item));
             }
 
             return myList.OrderByDescending(c => c.VotesCount).ToList();
@@ -142,13 +159,13 @@ namespace WebApplication1.Business
             vc.StateName = v.State.Name;
             return vc;
         }
-        public static VoterCandidateEntityViewModel convertCandidate_toVoterCandidateEntityViewModel(Candidate c)
+        public static VoterCandidateEntityViewModel convertCandidate_toVoterCandidateEntityViewModel(IRepository<Voter> voterRepository, Candidate c)
         {
             VoterCandidateEntityViewModel vc = new VoterCandidateEntityViewModel();
             vc.VoterId = c.VoterBeing.Id.ToString();
-            vc.FirstName = c.FirstName;
-            vc.LastName = c.LastName;
-            vc.StateName = c.State.Name;
+            vc.FirstName = c.VoterBeing.FirstName;
+            vc.LastName = c.VoterBeing.LastName;
+            vc.StateName = VoterUtilities.getStateName(voterRepository, c.VoterBeing.Id);
             vc.CandidateId = c.Id.ToString();
             return vc;
         }
@@ -166,12 +183,13 @@ namespace WebApplication1.Business
         }
         //this is used and called when editing an election
         public static List<VoterCandidateEntityViewModel> convertCandidateList_toVoterCandidateEntityViewModelList(
+            IRepository<Voter> voterRepository,
             List<VoterCandidateEntityViewModel> myList,
             List<Candidate> candidateList)
-        {
+        {//the parameter voterRepository is passed to be used in a Method Dependancy Injection in VoterUtilities.getStateName() method
             foreach (var item in candidateList)
             {
-                myList.Add(convertCandidate_toVoterCandidateEntityViewModel(item));
+                myList.Add(convertCandidate_toVoterCandidateEntityViewModel(voterRepository, item));
             }
 
             return myList;

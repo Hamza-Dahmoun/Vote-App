@@ -44,5 +44,17 @@ namespace WebApplication1.Business
             return _voterRepository.GetAll().Except(voters).ToList();
         }
 
+
+
+        //Note that this method uses _voterRepository, so it depends to it, and we passed the repository object as a pramater. This is called Method Dependancy Injection
+        public static string getStateName(IRepository<Voter> voterRepository, Guid voterId)
+        {//this is using Method Dependancy Injection
+
+            //this method returns the state name of a voter, I found myself obliged to write this bcuz I am using eager loading
+            //and when I wanted to access a candidate's state name thru candidate.voterbeing.state.name it was always null
+
+            _voterRepository = voterRepository;
+            return _voterRepository.GetById(voterId).State.Name;
+        }
     }
 }
