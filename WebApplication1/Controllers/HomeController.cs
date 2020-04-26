@@ -27,15 +27,23 @@ namespace WebApplication1.Controllers
         public IRepository<Candidate> _candidateRepository { get; }
         public IRepository<Voter> _voterRepository { get; }
         public IRepository<Vote> _voteRepository { get; }
+        public IRepository<Election> _electionRepository { get; }
         //this is only used to get able to generate a 'code' needed to reset the password, and to get the currentUser ID
         private readonly UserManager<IdentityUser> _userManager;
         //Lets inject the services using the constructor, this is called Constructor Dependency Injection
-        public HomeController(ILogger<HomeController> logger, IRepository<Candidate> candidateRepository, IRepository<Voter> voterRepository, IRepository<Vote> voteRepository, UserManager<IdentityUser> userManager)
+        public HomeController(
+            ILogger<HomeController> logger, 
+            IRepository<Candidate> candidateRepository, 
+            IRepository<Voter> voterRepository, 
+            IRepository<Vote> voteRepository,
+            IRepository<Election> electionRepository,
+            UserManager<IdentityUser> userManager)
         {
             _logger = logger;
             _candidateRepository = candidateRepository;
             _voterRepository = voterRepository;
             _voteRepository = voteRepository;
+            _electionRepository = electionRepository;
             _userManager = userManager;
         }
 
@@ -47,7 +55,7 @@ namespace WebApplication1.Controllers
                 //string hello = DashboardBusiness.sayHello();
                 //the user has a voter Role, lets display the dashboard
                 var currentUser = await _userManager.GetUserAsync(HttpContext.User);
-                DashboardViewModel d = DashboardUtilities.getDashboard(_candidateRepository, _voterRepository, _voteRepository, currentUser);
+                DashboardViewModel d = DashboardUtilities.getDashboard(_candidateRepository, _voterRepository, _voteRepository, _electionRepository, currentUser);
                 
                 return View(d);
             }

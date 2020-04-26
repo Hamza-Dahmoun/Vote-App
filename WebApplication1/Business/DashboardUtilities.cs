@@ -30,6 +30,8 @@ namespace WebApplication1.Business
             IRepository<Candidate> candidateRepository,
             IRepository<Voter> voterRepository,
             IRepository<Vote> voteRepository,
+            /*electionRepository is passed only to be passed to getCurrentElection() method, this is why we didn't add it as a field*/
+            IRepository<Election> electionRepository,
             IdentityUser user)
         {
             //this function returns a dashboard object filled with data
@@ -56,7 +58,8 @@ namespace WebApplication1.Business
                 NbVotes = NbVotes,
                 ParticipationRate = (double)votersWithVote / (double)NbVoters,
                 Candidates = candidates,
-                UserHasVoted = userHasVoted
+                UserHasVoted = userHasVoted,
+                CurrentElectionId = ElectionUtilities.getCurrentElection(electionRepository).Id
             };
             return d;
         }
