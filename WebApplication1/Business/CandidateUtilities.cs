@@ -34,7 +34,7 @@ namespace WebApplication1.Business
         }
 
         //Note that this method uses _candidateRepository, so it depends to it, and we passed the repository object as a pramater. This is called Method Dependancy Injection
-        public static Candidate GetNeutralCandidate(IRepository<Candidate> candidateRepository)
+        /*public static Candidate GetNeutralCandidate(IRepository<Candidate> candidateRepository)
         {
             //This method returns the neutral opinion candidate, there is a maximum of one row, or there isn't yet
             
@@ -47,7 +47,7 @@ namespace WebApplication1.Business
             {
                 throw E;
             }
-        }
+        }*/
 
 
 

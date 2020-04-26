@@ -155,14 +155,24 @@ namespace WebApplication1.Controllers
                     //if election has a neutral opinion then we should add it to the db
                     if (election.HasNeutral)
                     {
+                        Candidate neutralOpinion = new Candidate
+                        {
+                            Id = Guid.NewGuid(),
+                            isNeutralOpinion = true,
+                            Election = election
+                        };
+                        election.NeutralCandidateID = neutralOpinion.Id;
+                        _electionRepository.Add(election);
+                        _candidateRepository.Add(neutralOpinion);
+                        
+                    //neutralOpinion.Election = election;
+                        /*
                         Candidate neutral = CandidateUtilities.GetNeutralCandidate(_candidateRepository);
                         if (neutral == null)
                         {//so there is no neutral opinion candidate in the db yet, lets insert it to use it
                             Candidate neutralOpinion = new Candidate
                             {
                                 Id = Guid.NewGuid(),
-                                /*FirstName = "Neutral",
-                                LastName = "Opinion",*/
                                 isNeutralOpinion = true
                             };
                             election.NeutralCandidateID = neutralOpinion.Id;
@@ -175,7 +185,7 @@ namespace WebApplication1.Controllers
                             election.NeutralCandidateID = neutral.Id;
                             _electionRepository.Add(election);
                         }
-
+                        */
                     }
                     else
                     {
@@ -188,11 +198,12 @@ namespace WebApplication1.Controllers
                     //return RedirectToAction("Index", "Home");
                     response_Voters_and_NewElection r;
                     r.Election = election;
-                    r.Voters = Utilities.convertVoterList_toPersonViewModelList(_voterRepository.GetAll());
+                    r.Voters = Utilities.convertVoterList_toPersonViewModelList(
+                        _voterRepository.GetAll());
 
                     //lets serialize the struct we've got and send it back as a reponse
-                    var json = JsonConvert.SerializeObject(r);
-                    return Ok(json);
+                    var json = JsonConvert.SerializeObject(r);                
+                return Ok(json);
                 }
                 else
                 {
