@@ -12,7 +12,7 @@
     @if (!@Model.UserHasVoted)
     {
         <div id="vote-button-container">
-            <a class="btn btn-default" asp-controller="Vote" asp-action="Index" title="Vote">
+            <a class="btn btn-default" asp-controller="Vote" asp-action="Index" asp-route-currentElectionId="@Model.CurrentElectionId" title="Go Vote">
                 Vote <i class="fa fa-chevron-right" aria-hidden="true"></i>
             </a>
         </div>

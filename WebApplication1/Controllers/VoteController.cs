@@ -23,6 +23,7 @@ namespace WebApplication1.Controllers
         public IRepository<Candidate> _candidateRepository { get; }
         public IRepository<Vote> _voteRepository { get; }
         public IRepository<Voter> _voterRepository { get; }
+        public IRepository<Election> _electionRepository { get; }
         //this is only used to get able to generate a 'code' needed to reset the password, and to get the currentUser ID
         private readonly UserManager<IdentityUser> _userManager;
         //Lets inject the services using the constructor, this is called Constructor Dependency Injection
@@ -35,9 +36,14 @@ namespace WebApplication1.Controllers
         }
 
 
-        public IActionResult Index()
-        {//this action returns a view containing all candidates for the user to vote on five of them maximum
-            return View(Utilities.convertCandidateList_toPersonViewModelList(_voterRepository, _candidateRepository.GetAll()));
+        public IActionResult Index(Guid CurrentElectionId)
+        {
+            //this action returns a view containing all candidates of the current election for the user to vote on five of them maximum
+
+            Election election = _electionRepository.GetById(CurrentElectionId);
+            var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, election);
+            //return View(Utilities.convertCandidateList_toPersonViewModelList(_voterRepository, _candidateRepository.GetAll()));
+            return View(Utilities.convertCandidateList_toPersonViewModelList(_voterRepository, candidates));
         }
 
         [HttpPost]
