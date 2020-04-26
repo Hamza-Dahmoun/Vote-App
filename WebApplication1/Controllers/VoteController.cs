@@ -57,6 +57,14 @@ namespace WebApplication1.Controllers
         {//this action get the list of the candidates ids that the user voted on, and add them to the db as vote objects, and redirect to the
             //dashboard in home controller
 
+            //lets first get the concerned election
+            Candidate firstOne = _candidateRepository.GetById(Guid.Parse(candidateIdList.FirstOrDefault()));
+            Election election = _electionRepository.GetById(firstOne.Election.Id);
+            if (election == null)
+            {
+                return BadRequest();
+            }
+
             //lets get the voter instance of the current user, so that we use its id with his votes
             var currentUser = await _userManager.GetUserAsync(HttpContext.User);
             Voter currentVoter = VoterUtilities.getVoterByUserId(Guid.Parse(currentUser.Id), _voterRepository);
@@ -70,6 +78,7 @@ namespace WebApplication1.Controllers
                 v.Candidate = _candidateRepository.GetById(Guid.Parse(candidateId));
                 v.Voter = currentVoter; // _voterRepository.GetById(Guid.Parse("3fae2a0e-21fe-40d4-a731-6b92bb4fea71"));
                 v.Datetime = DateTime.Now;
+                v.Election = election;
                 _voteRepository.Add(v);
             }
 

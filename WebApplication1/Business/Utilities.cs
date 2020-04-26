@@ -20,6 +20,7 @@ namespace WebApplication1.Business
                     Id = candidate.Id,
                     isNeutralOpinion = candidate.isNeutralOpinion,
                     VotesCount = candidate.Votes.Count(),
+                    /*electionId = candidate.Election.Id*/
                 };
                 if (!candidate.isNeutralOpinion)
                 {
