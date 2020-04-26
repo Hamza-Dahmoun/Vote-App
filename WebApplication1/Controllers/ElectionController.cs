@@ -151,6 +151,12 @@ namespace WebApplication1.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    if (ElectionUtilities.isThereElectionInSamePeriod(_electionRepository, election.StartDate, election.DurationInDays))
+                    {//so there is other existing elections which the period overlap with this new election's period
+                        return BadRequest();
+                    }
+
+
                     election.Id = Guid.NewGuid();
                     //if election has a neutral opinion then we should add it to the db
                     if (election.HasNeutral)

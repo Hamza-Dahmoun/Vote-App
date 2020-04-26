@@ -18,6 +18,7 @@ namespace WebApplication1.Models
         [Required]
         public DateTime StartDate { get; set; }
         [Required]
+        [Range(1, 5, ErrorMessage = "An Election must last at least one day and less than five days {1}")]
         public int DurationInDays { get; set; }
         public bool HasNeutral { get; set; }
         /*public Guid NeutralCandidateID { get; set; }*/
