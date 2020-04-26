@@ -54,7 +54,8 @@ function sendElection() {
             //'response' represents the object returned from the api which is the Election object newly stored in the db
             console.log(response);
             //alert("success" + response);
-            electionId = response.Election.Id;
+            //electionId = response.Election.Id;
+            electionId = response.ElectionId;
             disableAllInputs();
             changeBgColor();
             displayVoters(response.Voters);

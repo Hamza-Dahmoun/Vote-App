@@ -134,9 +134,9 @@ namespace WebApplication1.Controllers
         
         struct response_Voters_and_NewElection
         {
-            //this Structure is used to return a javascript object containing the newly inserted election and a list of voters for user to select
+            //this Structure is used to return a javascript object containing the newly inserted election ID and a list of voters for user to select
             //from them ass candidates
-            public Election Election;
+            public Guid ElectionId;
             public List<PersonViewModel> Voters;
         }
         //this is a web api called when adding a new Election instance
@@ -161,7 +161,7 @@ namespace WebApplication1.Controllers
                             isNeutralOpinion = true,
                             Election = election
                         };
-                        election.NeutralCandidateID = neutralOpinion.Id;
+                        //election.NeutralCandidateID = neutralOpinion.Id;
                         _electionRepository.Add(election);
                         _candidateRepository.Add(neutralOpinion);
                         
@@ -197,7 +197,7 @@ namespace WebApplication1.Controllers
                     //RESPONSE TO REDIRECT: WINDOW.LOCATION.HREF="CONTROLLERNAME/ACTION"
                     //return RedirectToAction("Index", "Home");
                     response_Voters_and_NewElection r;
-                    r.Election = election;
+                    r.ElectionId = election.Id;
                     r.Voters = Utilities.convertVoterList_toPersonViewModelList(
                         _voterRepository.GetAll());
 

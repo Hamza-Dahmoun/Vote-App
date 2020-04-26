@@ -20,6 +20,6 @@ namespace WebApplication1.Models
         [Required]
         public int DurationInDays { get; set; }
         public bool HasNeutral { get; set; }
-        public Guid NeutralCandidateID { get; set; }
+        /*public Guid NeutralCandidateID { get; set; }*/
     }
 }
