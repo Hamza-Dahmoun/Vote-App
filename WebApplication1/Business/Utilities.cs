@@ -34,8 +34,8 @@ namespace WebApplication1.Business
                 }
                 else
                 {
-                    c.FirstName = "Neutral";
-                    c.LastName = "Opinion";
+                    c.FirstName = NeutralOpinion.Neutral.ToString();// "Neutral";
+                    c.LastName = NeutralOpinion.Opinion.ToString();// "Opinion";
                 }
 
                 return c;
