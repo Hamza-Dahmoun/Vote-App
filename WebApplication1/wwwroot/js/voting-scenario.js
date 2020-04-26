@@ -72,7 +72,8 @@ function removeSelection(candidateContainer, selectedCandidateId) {
 
 function addNewSelection(newSelection, selectedCandidateId) {
     //this function will add selection of a candidate
-    //but before it checks if "Neutral Opinion" is selected and tries to unselect it
+    //but before, it checks if "Neutral Opinion" is selected and tries to unselect it
+    //console.log(unselectNeutral);
     unselectNeutral();
 
     newSelection.classList.add("selected-candidate");
@@ -138,5 +139,7 @@ function unselectNeutral() {
     if (neutralArea.className.includes("selected-candidate")) {
         neutralArea.className = "candidate-container";
         neutralArea.querySelector(".fa-check-circle-o").style.display = "none";
+        selectedIdArray.pop();
     }
+    console.log(selectedIdArray);
 }
