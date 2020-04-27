@@ -46,7 +46,34 @@
 <br />
 <div class="dashboard-holder">
     <div class="dashboard-left-side">
+        <div id="current-election-area">
 
+        </div>
+        <div id="coming-elections-area">            
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            StartDate
+                        </th>
+                        <th>
+                            Duration (days)
+                        </th>
+                        <th>
+                            Number of Candidates
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <div id="previous-elections-area">
+
+        </div>
     </div>
     <div class="dashboard-right-side">
         <h2 class="text-center">Statistics</h2>
@@ -69,6 +96,70 @@
         </div>
     </div>
 </div>
+
+
+
+
+
+
+
+<script>
+    //Start loading things once the page is ready
+    document.addEventListener("DOMContentLoaded", loadElectionsData);
+
+
+
+    function loadElectionsData() {
+        //1- Load Coming Elections
+        loadComingElections();
+        //2- Load Previous Elections
+
+        //3- Load Current Election
+    }
+
+
+
+
+    function loadComingElections() {
+        //this function load a list of coming elections using jQuery ajax
+        //console.log("trying to load data of " + JSON.stringify(electionId));
+    //get the list of candidates using the id of the election
+    $.ajax({
+        type: "POST",
+        url: "/Election/GetComingElections",
+        /*data: JSON.stringify(document.getElementById("candidate-id-holder").value),*/
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        error: function () {
+            alert("error");
+        },
+        success: function (response) {
+            //'response' represents the object returned from the api which is the Election object newly stored in the db
+            console.log(response);
+            //console.log(response.length);
+            displayElections(response);
+
+            //window.location.href = "Home/Index";
+        }
+    });
+    
+    }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

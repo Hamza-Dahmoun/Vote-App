@@ -171,27 +171,6 @@ namespace WebApplication1.Controllers
                         _electionRepository.Add(election);
                         _candidateRepository.Add(neutralOpinion);
                         
-                    //neutralOpinion.Election = election;
-                        /*
-                        Candidate neutral = CandidateUtilities.GetNeutralCandidate(_candidateRepository);
-                        if (neutral == null)
-                        {//so there is no neutral opinion candidate in the db yet, lets insert it to use it
-                            Candidate neutralOpinion = new Candidate
-                            {
-                                Id = Guid.NewGuid(),
-                                isNeutralOpinion = true
-                            };
-                            election.NeutralCandidateID = neutralOpinion.Id;
-                            _electionRepository.Add(election);
-                            _candidateRepository.Add(neutralOpinion);
-                        }
-                        else
-                        {
-                            //there is already a neutral opinion candidate stored in the db, lets use it
-                            election.NeutralCandidateID = neutral.Id;
-                            _electionRepository.Add(election);
-                        }
-                        */
                     }
                     else
                     {
@@ -435,6 +414,47 @@ namespace WebApplication1.Controllers
             catch
             {
                 return View();
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //this method is called using jQuery ajax and it returns a list of future elections
+        //it is called when displaying the home page
+        [HttpPost]
+        public async Task<IActionResult> GetComingElections()
+        {
+            try
+            {
+                var futureElections = _electionRepository.GetAll().Where(e => e.StartDate > DateTime.Now).Select(e => new { e.Name, e.StartDate, e.DurationInDays, e.Candidates.Count});
+                var json = JsonConvert.SerializeObject(futureElections);
+                return Ok(json);
+                /*Election e = _electionRepository.GetById(Guid.Parse(electionId));
+                //lets serialize the list of candidates of the election we've got and send it back as a reponse
+                //note that I didn't retrieve candidates as they are, I selected only needed attributes bcuz when i tried serializing
+                //candidates objects as they are I got this error "self referencing loop detected with type" it means json tried to serialize the candidate object
+                //but it found that each candidate has an Election object, and this election object has a list of candidates and so on, so i excluded election
+                //from the selection to avoid the infinite loop
+                var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, e);
+                var json = JsonConvert.SerializeObject(Utilities.convertCandidateList_toPersonViewModelList(_voterRepository, candidates));
+                return Ok(json);*/
+
+            }
+            catch (Exception E)
+            {
+                return BadRequest();
             }
         }
     }
