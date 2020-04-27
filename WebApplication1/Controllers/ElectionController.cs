@@ -46,15 +46,15 @@ namespace WebApplication1.Controllers
         // GET: Election
         public ActionResult Index()
         {
-            //try
-            //{
+            try
+            {
                 //returning a list of ElectionViewModel
-                return View(Utilities.convertElectionList_toElectionViewModelList(_electionRepository.GetAll()));
-            //}
-            //catch
-            //{
-            //    return View();
-            //}            
+                return View(Utilities.convertElectionList_toElectionViewModelList(_electionRepository.GetAll()).OrderByDescending(d=>d.StartDate));
+            }
+            catch
+            {
+                return View();
+            }
         }
 
         // GET: Election/Details/5
