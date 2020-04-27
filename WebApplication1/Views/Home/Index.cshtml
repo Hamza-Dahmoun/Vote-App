@@ -1,15 +1,107 @@
-﻿@model WebApplication1.Models.ViewModels.DashboardViewModel
+﻿@*WE LOAD AN EMPTY VIEW THEN IT GETS FILLED USING JQUERY AJAX*@
+@model WebApplication1.Models.ViewModels.DashboardViewModel
+
+<style>
+    .dashboard-holder {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .dashboard-right-side {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        border-left: 1px solid #e6e6e6;
+        max-width: 280px;
+        min-width: 280px;
+        padding-left: 3%;
+    }
+
+    .dashboard-left-side {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        /*border: 1px solid black;*/
+    }
+
+    .dashboard-item-container {
+        text-align: center;
+        font-size: 25px;
+        border: 1px solid #e6e6e6;
+        border-radius: 5px;
+        padding: 5%;
+        margin: 3%;
+    }
+
+        .dashboard-item-container i {
+            font-size: 250%;
+        }
+</style>
+
+
+<br />
+<h1 class="margins text-center">Welcome to Voting App</h1>
+<hr />
+<br />
+<div class="dashboard-holder">
+    <div class="dashboard-left-side">
+
+    </div>
+    <div class="dashboard-right-side">
+        <h2 class="text-center">Statistics</h2>
+        <hr />
+        @*<div class="dashboard-item-container">
+            <i class="fa fa-user" aria-hidden="true"></i>
+            <p>@Model.NbElections Elections</p>
+        </div>*@
+        <div class="dashboard-item-container">
+            <i class="fa fa-user" aria-hidden="true"></i>
+            <p>@Model.NbCandidates Candidates</p>
+        </div>
+        <div class="dashboard-item-container">
+            <i class="fa fa-users" aria-hidden="true"></i>
+            <p>@Model.NbVoters Voters</p>
+        </div>
+        <div class="dashboard-item-container">
+            <i class="fa fa-envelope" aria-hidden="true"></i>
+            <p>@Model.NbVotes Votes</p>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+
+
+    THIS IS THE OLD DASHBOARD USED BEFORE INTRODUCING THE ELECTION NOTION
+
+
+
+
+    @*@model WebApplication1.Models.ViewModels.DashboardViewModel
 @{
     ViewData["Title"] = "Home Page";
-}
+}*@
 
 
-<!--LETS LOAD THE CSS OF THE DASHBOARD-->
+@*LETS LOAD THE CSS OF THE DASHBOARD*@
 <partial name="_dashboardStyle"/>
 <h1 class="margins">Welcome to Voting App</h1>
 <hr />
 
-    @if (!@Model.UserHasVoted)
+    @*@if (!@Model.UserHasVoted)
     {
         <div id="vote-button-container">
             <a class="btn btn-default" asp-controller="Vote" asp-action="Index" asp-route-currentElectionId="@Model.CurrentElectionId" title="Go Vote">
@@ -46,29 +138,26 @@
                 </div>
             }
         </div>
-    }
+    }*@
 
 
 
 <div id="dashboard-container" class="margins">
     <div class="dashboard-item-container">
         <i class="fa fa-user" aria-hidden="true"></i>
-        <p>@Model.NbCandidates Candidates</p>
+        <p>@*@Model.NbCandidates Candidates*@</p>
     </div>
     <div class="dashboard-item-container">
         <i class="fa fa-users" aria-hidden="true"></i>
-        <p>@Model.NbVoters Voters</p>
+        <p>@*@Model.NbVoters Voters*@</p>
     </div>
     <div class="dashboard-item-container">
         <i class="fa fa-envelope" aria-hidden="true"></i>
-        <p>@Model.NbVotes Votes</p>
+        <p>@*@Model.NbVotes Votes*@</p>
     </div>
     <div class="dashboard-item-container">
         <i class="fa fa-pie-chart" aria-hidden="true"></i>
-        <p>@Model.ParticipationRate.ToString("F2") %</p>
+        <p>@*@Model.ParticipationRate.ToString("F2") %*@</p>
     </div>
 </div>
-
-
-
-
+-->

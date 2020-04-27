@@ -52,12 +52,18 @@ namespace WebApplication1.Controllers
         {
             if (User.IsInRole("Voter") || User.IsInRole("Administrator"))
             {
-                //string hello = DashboardBusiness.sayHello();
                 //the user has a voter Role, lets display the dashboard
                 var currentUser = await _userManager.GetUserAsync(HttpContext.User);
-                DashboardViewModel d = DashboardUtilities.getDashboard(_candidateRepository, _voterRepository, _voteRepository, _electionRepository, currentUser);
-                
+                DashboardViewModel d = DashboardUtilities.getDashboard(_candidateRepository, _voterRepository, _voteRepository, _electionRepository, currentUser);                
                 return View(d);
+
+
+                /*
+                THIS IS HOW I USED TO LOAD THE OLD DASHBOARD BEFORE INTRODUCING THE ELECTION NOTION 
+                */
+                //we load an empty view, then it'll be filled using jQuery Ajax
+                //return View();
+
             }
             else
             {
