@@ -453,5 +453,30 @@ namespace WebApplication1.Controllers
                 return BadRequest();
             }
         }
+
+
+
+        //this method is called using jQuery ajax and it returns the current election
+        //it is called when displaying the home page
+        [HttpPost]
+        public async Task<IActionResult> GetCurrentElection()
+        {
+            try
+            {
+                //lets serialize the list of elections we've got and send it back as a reponse
+                //note that I didn't retrieve elections as they are, I selected only needed attributes bcuz when i tried serializing
+                //elections objects as they are I got this error "self referencing loop detected with type" it means json tried to serialize the election object
+                //but it found that each election has an Candidates objects list, and each candidate of them has an election and so on, so i excluded Candidate
+                //from the selection to avoid the infinite loop
+                var currentElection = _electionRepository.GetAll().FirstOrDefault(e => e.StartDate <= DateTime.Now && DateTime.Now <= e.StartDate.AddDays(e.DurationInDays));
+                var json = JsonConvert.SerializeObject(currentElection);
+                return Ok(json);
+
+            }
+            catch (Exception E)
+            {
+                return BadRequest();
+            }
+        }
     }
 }

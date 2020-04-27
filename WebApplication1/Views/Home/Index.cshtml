@@ -55,7 +55,10 @@
 <div class="dashboard-holder">
     <div class="dashboard-left-side">
         <div id="current-election-area">
+            <h2 class="text-center">Current Election</h2>
+            <div class="spinner-border">
 
+            </div>
         </div>
         <div id="coming-elections-area">      
             <h2 class="text-center">Future Elections</h2>
@@ -127,9 +130,13 @@
         displayElement(comingElectionsArea.querySelector(".spinner-border"));
         hideElement(comingElectionsArea.querySelector(".table"));
         loadComingElections();
+
         //2- Load Previous Elections
 
         //3- Load Current Election
+        let currentElectionArea = document.getElementById("current-election-area");
+        displayElement(currentElectionArea.querySelector(".spinner-border"));
+        loadCurrentElection();
     }
 
 
@@ -137,8 +144,7 @@
 
     function loadComingElections() {
         //this function load a list of coming elections using jQuery ajax
-        //console.log("trying to load data of " + JSON.stringify(electionId));
-    //get the list of candidates using the id of the election
+    
     $.ajax({
         type: "POST",
         url: "/Election/GetComingElections",
@@ -149,7 +155,7 @@
             alert("error");
         },
         success: function (response) {
-            //'response' represents the object returned from the api which is the Election object newly stored in the db
+            //'response' represents the object returned from the api which is a list of future elections
             console.log(response);
             //console.log(response.length);
             displayComingElections(response);
@@ -193,6 +199,44 @@
         hideElement(comingElectionsArea.querySelector(".spinner-border"));
         displayElement(table);
     }
+
+
+
+    function loadCurrentElection() {
+         //this function load the current election using jQuery ajax
+    
+    $.ajax({
+        type: "POST",
+        url: "/Election/GetCurrentElection",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        error: function () {
+            alert("error");
+        },
+        success: function (response) {
+            //'response' represents the object returned from the api which is the current election
+            console.log(response);
+            //console.log(response.length);
+            displayCurrentElection(response);
+
+            //window.location.href = "Home/Index";
+        }
+    });
+    }
+    function displayCurrentElection(currentElection) {
+        console.log(currentElection);
+    }
+
+
+
+
+
+
+
+
+
+
+
     function displayElement(elt) {
         //this function displays an element
         elt.style.display = "block";
