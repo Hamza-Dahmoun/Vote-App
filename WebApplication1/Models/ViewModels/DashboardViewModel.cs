@@ -9,6 +9,7 @@ namespace WebApplication1.Models.ViewModels
     [NotMapped]
     public class DashboardViewModel
     {
+        public int NbElections { get; set; }
         public int NbCandidates { get; set; }
         public int NbVoters { get; set; }
         public int NbVotes { get; set; }

@@ -22,7 +22,7 @@ namespace WebApplication1.Business
         public static IRepository<Candidate> _candidateRepository;
         public static IRepository<Voter> _voterRepository;
         public static IRepository<Vote> _voteRepository;
-
+        public static IRepository<Election> _electionRepository;
 
 
         //Note that this method uses _candidateRepository, so it depends to it, and we passed the repository object as a pramater. This is called Method Dependancy Injection
@@ -41,9 +41,11 @@ namespace WebApplication1.Business
             _candidateRepository = candidateRepository;
             _voterRepository = voterRepository;
             _voteRepository = voteRepository;
+            _electionRepository = electionRepository;
 
             List<CandidateViewModel> candidates = Utilities.convertCandidateList_toPersonViewModelList(_voterRepository, _candidateRepository.GetAll().ToList());
 
+            int NbElections = _electionRepository.GetAll().Count;
             int NbCandidates = candidates.Count;
             int NbVoters = _voterRepository.GetAll().Count;
             int NbVotes = _voteRepository.GetAll().Count;
@@ -53,6 +55,7 @@ namespace WebApplication1.Business
             bool userHasVoted = VoterUtilities.getVoterByUserId(Guid.Parse(currentUser.Id), _voterRepository).hasVoted();
             DashboardViewModel d = new DashboardViewModel
             {
+                NbElections = NbElections,
                 NbCandidates = NbCandidates,
                 NbVoters = NbVoters,
                 NbVotes = NbVotes,
