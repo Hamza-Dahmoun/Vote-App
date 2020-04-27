@@ -37,6 +37,14 @@
         .dashboard-item-container i {
             font-size: 250%;
         }
+
+
+        #coming-elections-area .spinner-border{
+            display:none;
+        }
+        #coming-elections-area .table{
+            display:none;
+        }
 </style>
 
 
@@ -49,7 +57,10 @@
         <div id="current-election-area">
 
         </div>
-        <div id="coming-elections-area">            
+        <div id="coming-elections-area">      
+            <div class="spinner-border">
+
+            </div>
             <table class="table">
                 <thead>
                     <tr>
@@ -110,7 +121,10 @@
 
 
     function loadElectionsData() {
-        //1- Load Coming Elections
+        //1- Load Coming Elections, hide table and display spinner
+        let comingElectionsArea = document.getElementById("coming-elections-area");
+        displayElement(comingElectionsArea.querySelector(".spinner-border"));
+        hideElement(comingElectionsArea.querySelector(".table"));
         loadComingElections();
         //2- Load Previous Elections
 
@@ -137,12 +151,54 @@
             //'response' represents the object returned from the api which is the Election object newly stored in the db
             console.log(response);
             //console.log(response.length);
-            displayElections(response);
+            displayComingElections(response);
 
             //window.location.href = "Home/Index";
         }
     });
     
+    }
+    function displayComingElections(comingElections) {
+        let comingElectionsArea = document.getElementById("coming-elections-area");
+        let table = comingElectionsArea.querySelector(".table");
+
+        let tableBody = table.querySelector("tbody");
+
+        for (let i = 0; i < comingElections.length; i++) {
+
+            let tdName = document.createElement("td");
+            tdName.innerText = comingElections[i].Name;
+            
+            let tdStartDate = document.createElement("td");
+            tdStartDate.innerText = comingElections[i].StartDate;
+            
+            let tdDurationInDays = document.createElement("td");
+            tdDurationInDays.innerText = comingElections[i].DurationInDays;
+
+            let tdCandidatesCount = document.createElement("td");
+            tdCandidatesCount.innerText = comingElections[i].Count;
+
+            let electionRow = document.createElement("tr");
+            electionRow.appendChild(tdName);
+            electionRow.appendChild(tdStartDate);
+            electionRow.appendChild(tdDurationInDays);
+            electionRow.appendChild(tdCandidatesCount);
+
+            tableBody.appendChild(electionRow);
+        }
+
+
+        //now lets display the tabl and hide the spinner                
+        hideElement(comingElectionsArea.querySelector(".spinner-border"));
+        displayElement(table);
+    }
+    function displayElement(elt) {
+        //this function displays an element
+        elt.style.display = "block";
+    }
+    function hideElement(elt) {
+        //this function hides an element
+        elt.style.display = "none";
     }
 </script>
 
