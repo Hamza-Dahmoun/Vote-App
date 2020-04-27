@@ -438,18 +438,14 @@ namespace WebApplication1.Controllers
         {
             try
             {
+                //lets serialize the list of elections we've got and send it back as a reponse
+                //note that I didn't retrieve elections as they are, I selected only needed attributes bcuz when i tried serializing
+                //elections objects as they are I got this error "self referencing loop detected with type" it means json tried to serialize the election object
+                //but it found that each election has an Candidates objects list, and each candidate of them has an election and so on, so i excluded Candidate
+                //from the selection to avoid the infinite loop
                 var futureElections = _electionRepository.GetAll().Where(e => e.StartDate > DateTime.Now).Select(e => new { e.Name, e.StartDate, e.DurationInDays, e.Candidates.Count});
                 var json = JsonConvert.SerializeObject(futureElections);
                 return Ok(json);
-                /*Election e = _electionRepository.GetById(Guid.Parse(electionId));
-                //lets serialize the list of candidates of the election we've got and send it back as a reponse
-                //note that I didn't retrieve candidates as they are, I selected only needed attributes bcuz when i tried serializing
-                //candidates objects as they are I got this error "self referencing loop detected with type" it means json tried to serialize the candidate object
-                //but it found that each candidate has an Election object, and this election object has a list of candidates and so on, so i excluded election
-                //from the selection to avoid the infinite loop
-                var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, e);
-                var json = JsonConvert.SerializeObject(Utilities.convertCandidateList_toPersonViewModelList(_voterRepository, candidates));
-                return Ok(json);*/
 
             }
             catch (Exception E)
