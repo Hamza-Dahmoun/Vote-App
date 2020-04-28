@@ -117,6 +117,7 @@ function sendCandidates() {
         },
         success: function (r) {
             console.log("success");
+            alert("success");
             window.location.href = "Home/Index";
         }
     });

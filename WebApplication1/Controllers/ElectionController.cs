@@ -512,17 +512,27 @@ namespace WebApplication1.Controllers
                     .Select(e => new { e.Id, e.Name, e.StartDate, e.DurationInDays, e.Candidates.Count})
                     .FirstOrDefault(e => e.StartDate <= DateTime.Now && DateTime.Now <= e.StartDate.AddDays(e.DurationInDays))
                     ;
-                hasUserVotedCombinedWithElection a = new hasUserVotedCombinedWithElection();
-                a.Id = currentElection.Id;
-                a.Name = currentElection.Name;
-                a.StartDate = currentElection.StartDate;
-                a.DurationInDays = currentElection.DurationInDays;
-                a.CandidatesCount = currentElection.Count;
-                var currentUser = await _userManager.GetUserAsync(HttpContext.User);
-                bool userHasVoted = VoteUtilities.hasVoted(_voteRepository, currentElection.Id, VoterUtilities.getVoterByUserId(Guid.Parse(currentUser.Id), _voterRepository).Id);
-                a.HasUserVoted = userHasVoted;
-                var json = JsonConvert.SerializeObject(a);
-                return Ok(json);
+
+                if(currentElection != null)
+                {
+                    hasUserVotedCombinedWithElection a = new hasUserVotedCombinedWithElection();
+                    a.Id = currentElection.Id;
+                    a.Name = currentElection.Name;
+                    a.StartDate = currentElection.StartDate;
+                    a.DurationInDays = currentElection.DurationInDays;
+                    a.CandidatesCount = currentElection.Count;
+                    var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+                    bool userHasVoted = VoteUtilities.hasVoted(_voteRepository, currentElection.Id, VoterUtilities.getVoterByUserId(Guid.Parse(currentUser.Id), _voterRepository).Id);
+                    a.HasUserVoted = userHasVoted;
+                    var json = JsonConvert.SerializeObject(a);
+                    return Ok(json);
+                }
+                else
+                {
+                    //so there is no election currently, lets return null as a response
+                    var json = JsonConvert.SerializeObject(null);
+                    return Ok(json);
+                }
 
             }
             catch (Exception E)
