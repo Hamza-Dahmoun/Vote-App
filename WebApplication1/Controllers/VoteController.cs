@@ -42,11 +42,11 @@ namespace WebApplication1.Controllers
         }
 
 
-        public IActionResult Index(Guid CurrentElectionId)
+        public IActionResult Index()
         {
             //this action returns a view containing all candidates of the current election for the user to vote on five of them maximum
 
-            Election election = _electionRepository.GetById(CurrentElectionId);
+            Election election = ElectionUtilities.getCurrentElection(_electionRepository);// _electionRepository.GetById(CurrentElectionId);
             var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, election);            
             //return View(Utilities.convertCandidateList_toPersonViewModelList(_voterRepository, _candidateRepository.GetAll()));
             return View(Utilities.convertCandidateList_toPersonViewModelList(_voterRepository, candidates));
