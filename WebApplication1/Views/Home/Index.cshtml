@@ -272,7 +272,7 @@
             let name = document.createElement("p");
             name.innerText = "Name: ";
             let strongName = document.createElement("strong");
-            strongName.innerText = currentElection.Name + " | " + currentElection.Count + " Candidates";
+            strongName.innerText = currentElection.Name + " | " + currentElection.CandidatesCount + " Candidates";
             name.appendChild(strongName);
 
             let startdate = document.createElement("p");
@@ -292,7 +292,8 @@
             currentElectionArea.appendChild(durationindays);
 
             //lets now display the Vote button only if he hasnt voted yet
-            let voteButton = document.createElement("a");
+            if (currentElection.HasUserVoted) {
+                let voteButton = document.createElement("a");
             voteButton.className = "btn btn-default animated-button";
             voteButton.setAttribute("title", "Go Vote");
             voteButton.setAttribute("href", "Vote/Index/" + currentElection.Id);
@@ -301,6 +302,8 @@
             icon.innerText = "Vote";
             voteButton.appendChild(icon);
             currentElectionArea.appendChild(voteButton);
+            }
+            
         }
     }
 

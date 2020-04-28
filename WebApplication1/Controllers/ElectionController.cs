@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WebApplication1.Business;
@@ -27,17 +28,21 @@ namespace WebApplication1.Controllers
         //public IRepository<ElectionCandidate> _electionCandidateRepository { get; }
         public IRepository<Voter> _voterRepository { get; }
         public IRepository<Candidate> _candidateRepository { get; }
+        //this is only used to get the currentUser so that we check whether he voted or not in order to generate the dashboard
+        private readonly UserManager<IdentityUser> _userManager;
         //Lets inject the services using the constructor, this is called Constructor Dependency Injection
         public ElectionController(
             IRepository<Voter> voterRepository,
             IRepository<Candidate> candidateRepository,
-            IRepository<Election> electionRepository
+            IRepository<Election> electionRepository,
+            UserManager<IdentityUser> userManager
             //IRepository<ElectionVoter> electionVoterRepository
             /*, IRepository<ElectionCandidate> electionCandidateRepository*/)
         {
             _voterRepository = voterRepository;
             _candidateRepository = candidateRepository;
             _electionRepository = electionRepository;
+            _userManager = userManager;
             //_electionVoterRepository = electionVoterRepository;
             //_electionCandidateRepository = electionCandidateRepository;
         }
@@ -472,6 +477,17 @@ namespace WebApplication1.Controllers
 
 
 
+
+
+        public struct hasUserVotedCombinedWithElection
+        {
+            public Guid Id { get; set; }
+            public string Name { get; set; }
+            public DateTime StartDate { get; set; }
+            public int DurationInDays { get; set; }
+            public int CandidatesCount { get; set; }
+            public bool HasUserVoted { get; set; }
+        }
         //this method is called using jQuery ajax and it returns the current election
         //it is called when displaying the home page
         //I couldn't move it to ElectionUtilities.cs file bcuz if I did they will need _electionRepository to be passed
@@ -493,6 +509,15 @@ namespace WebApplication1.Controllers
                     .Select(e => new { e.Id, e.Name, e.StartDate, e.DurationInDays, e.Candidates.Count})
                     .FirstOrDefault(e => e.StartDate <= DateTime.Now && DateTime.Now <= e.StartDate.AddDays(e.DurationInDays))
                     ;
+                hasUserVotedCombinedWithElection a = new hasUserVotedCombinedWithElection();
+                a.Id = currentElection.Id;
+                a.Name = currentElection.Name;
+                a.StartDate = currentElection.StartDate;
+                a.DurationInDays = currentElection.DurationInDays;
+                a.CandidatesCount = currentElection.Count;
+                var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+                bool userHasVoted = VoterUtilities.getVoterByUserId(Guid.Parse(currentUser.Id), _voterRepository).hasVoted();
+                a.HasUserVoted = userHasVoted;
                 var json = JsonConvert.SerializeObject(currentElection);
                 return Ok(json);
 
