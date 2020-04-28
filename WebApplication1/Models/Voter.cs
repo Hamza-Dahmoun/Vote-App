@@ -11,11 +11,13 @@ namespace WebApplication1.Models
         public ICollection<Vote> Votes { get; set; }
         //public ICollection<ElectionVoter> ElectionVoters { get; set; }
 
+            /*
+             * THIS METHOD HAS BEEN MOVED TO VOTEUTILITIES SINCE WE INTRODUCED THE ELECTION NOTION
         public bool hasVoted()
         {
             if (this.Votes != null && this.Votes.Count > 0)
                 return true;
             return false;
-        }
+        }*/
     }
 }

@@ -29,9 +29,9 @@ namespace WebApplication1.Business
                     c.LastName = candidate.VoterBeing.LastName;
                     c.StateName = VoterUtilities.getStateName(voterRepository, candidate.VoterBeing.Id);
 
-                    if (candidate.VoterBeing.hasVoted())
+                    /*if (candidate.VoterBeing.hasVoted())
                         c.hasVoted = "Yes";
-                    else c.hasVoted = "No";
+                    else c.hasVoted = "No";*/
                 }
                 else
                 {
@@ -71,10 +71,10 @@ namespace WebApplication1.Business
                 LastName = voter.LastName,
                 StateName = voter.State?.Name
             };
-            if (voter.hasVoted())
+            /*if (voter.hasVoted())
                 p.hasVoted = "Yes";
             else p.hasVoted = "No";
-
+            */
 
             return p;
         }

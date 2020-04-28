@@ -27,11 +27,13 @@ namespace WebApplication1.Controllers
         //public IRepository<ElectionVoter> _electionVoterRepository { get; }
         //public IRepository<ElectionCandidate> _electionCandidateRepository { get; }
         public IRepository<Voter> _voterRepository { get; }
+        public IRepository<Vote> _voteRepository { get; }
         public IRepository<Candidate> _candidateRepository { get; }
         //this is only used to get the currentUser so that we check whether he voted or not in order to generate the dashboard
         private readonly UserManager<IdentityUser> _userManager;
         //Lets inject the services using the constructor, this is called Constructor Dependency Injection
         public ElectionController(
+            IRepository<Vote> voteRepository,
             IRepository<Voter> voterRepository,
             IRepository<Candidate> candidateRepository,
             IRepository<Election> electionRepository,
@@ -39,6 +41,7 @@ namespace WebApplication1.Controllers
             //IRepository<ElectionVoter> electionVoterRepository
             /*, IRepository<ElectionCandidate> electionCandidateRepository*/)
         {
+            _voteRepository = voteRepository;
             _voterRepository = voterRepository;
             _candidateRepository = candidateRepository;
             _electionRepository = electionRepository;
@@ -516,9 +519,9 @@ namespace WebApplication1.Controllers
                 a.DurationInDays = currentElection.DurationInDays;
                 a.CandidatesCount = currentElection.Count;
                 var currentUser = await _userManager.GetUserAsync(HttpContext.User);
-                bool userHasVoted = VoterUtilities.getVoterByUserId(Guid.Parse(currentUser.Id), _voterRepository).hasVoted();
+                bool userHasVoted = VoteUtilities.hasVoted(_voteRepository, currentElection.Id, VoterUtilities.getVoterByUserId(Guid.Parse(currentUser.Id), _voterRepository).Id);
                 a.HasUserVoted = userHasVoted;
-                var json = JsonConvert.SerializeObject(currentElection);
+                var json = JsonConvert.SerializeObject(a);
                 return Ok(json);
 
             }

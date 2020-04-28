@@ -26,12 +26,13 @@ namespace WebApplication1.Business
             return _voterRepository.GetAll().SingleOrDefault(v => v.UserId == userId);
         }
 
+        /*
         //Note that this method uses _voterRepository, so it depends to it, and we passed the repository object as a pramater. This is called Method Dependancy Injection
         public static int getNumberOfVoterWithVote(IRepository<Voter> voterRepository)
         {//this is using Method Dependancy Injection
             _voterRepository = voterRepository;
             return _voterRepository.GetAll().Where(v => v.hasVoted() == true).Count();
-        }
+        }*/
 
 
         //Note that this method uses _voterRepository, so it depends to it, and we passed the repository object as a pramater. This is called Method Dependancy Injection
@@ -56,5 +57,8 @@ namespace WebApplication1.Business
             _voterRepository = voterRepository;
             return _voterRepository.GetById(voterId).State.Name;
         }
+
+
+        
     }
 }

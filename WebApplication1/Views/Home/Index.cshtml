@@ -292,7 +292,7 @@
             currentElectionArea.appendChild(durationindays);
 
             //lets now display the Vote button only if he hasnt voted yet
-            if (currentElection.HasUserVoted) {
+            if (!currentElection.HasUserVoted) {
                 let voteButton = document.createElement("a");
             voteButton.className = "btn btn-default animated-button";
             voteButton.setAttribute("title", "Go Vote");

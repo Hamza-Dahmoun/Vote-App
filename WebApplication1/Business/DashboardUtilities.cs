@@ -49,19 +49,19 @@ namespace WebApplication1.Business
             int NbCandidates = candidates.Count;
             int NbVoters = _voterRepository.GetAll().Count;
             int NbVotes = _voteRepository.GetAll().Count;
-            int votersWithVote = VoterUtilities.getNumberOfVoterWithVote(_voterRepository);
+            //int votersWithVote = VoterUtilities.getNumberOfVoterWithVote(_voterRepository);
             //Now lets get the currentUser to check if he has voted or not yet
             var currentUser = user;
-            bool userHasVoted = VoterUtilities.getVoterByUserId(Guid.Parse(currentUser.Id), _voterRepository).hasVoted();
+            //bool userHasVoted = VoterUtilities.getVoterByUserId(Guid.Parse(currentUser.Id), _voterRepository).hasVoted();
             DashboardViewModel d = new DashboardViewModel
             {
                 NbElections = NbElections,
                 NbCandidates = NbCandidates,
                 NbVoters = NbVoters,
                 NbVotes = NbVotes,
-                ParticipationRate = (double)votersWithVote / (double)NbVoters,
+                //ParticipationRate = (double)votersWithVote / (double)NbVoters,
                 Candidates = candidates,
-                UserHasVoted = userHasVoted,
+                //UserHasVoted = userHasVoted,
                 CurrentElectionId = ElectionUtilities.getCurrentElection(electionRepository).Id
             };
             return d;
