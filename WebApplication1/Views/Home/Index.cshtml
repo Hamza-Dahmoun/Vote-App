@@ -11,18 +11,24 @@
     .dashboard-right-side {
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        border-left: 1px solid #e6e6e6;
+        justify-content: center;        
         max-width: 280px;
         min-width: 280px;
-        padding-left: 3%;
+        align-self:start;
     }
 
     .dashboard-left-side {
         display: flex;
         flex-direction: column;
         justify-content: center;
+        border-right: 1px solid #e6e6e6;
+        padding-right: 3%;
         /*border: 1px solid black;*/
+    }
+
+    .margined-area {
+        margin-top: 10%;
+        margin-bottom: 10%;
     }
 
     .dashboard-item-container {
@@ -45,6 +51,30 @@
         #coming-elections-area .table{
             display:none;
         }
+
+
+
+
+    .animated-button {
+        font-size: 110%;
+        animation-name: background-switch;
+        animation-duration: 3.5s;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+        /*the above line makes the transition between one animation and its next smooth*/
+    }
+
+@@keyframes background-switch {
+    from {
+        background-color: #212529;
+        color: white;
+    }
+
+    to {
+        background-color: white;
+        color: #212529;
+    }
+}
 </style>
 
 
@@ -55,13 +85,14 @@
 <div class="dashboard-holder">
     <div class="dashboard-left-side">
         <div id="current-election-area">
-            <h2 class="text-center">Current Election</h2>
+            <h3>Current Election</h3>
             <div class="spinner-border">
 
             </div>
         </div>
-        <div id="coming-elections-area">      
-            <h2 class="text-center">Future Elections</h2>
+
+        <div class="margined-area" id="coming-elections-area">
+            <h3>Future Elections</h3>
             <div class="spinner-border">
 
             </div>
@@ -86,6 +117,7 @@
                 </tbody>
             </table>
         </div>
+
         <div id="previous-elections-area">
 
         </div>
@@ -224,7 +256,51 @@
     });
     }
     function displayCurrentElection(currentElection) {
-        console.log(currentElection);
+        //console.log(currentElection);
+
+        let currentElectionArea = document.getElementById("current-election-area");
+        hideElement(currentElectionArea.querySelector(".spinner-border"));
+
+        if (currentElection == null) {
+            //so there is no current election, lets just display a simple text
+            let p = document.createElement("p");
+            p.innerText = "There is no Election currently!";
+            currentElectionArea.appendChild(p);
+        }
+        else {
+            //so there is an election currently, lets display its info with a 'Vote' button
+            let name = document.createElement("p");
+            name.innerText = "Name: ";
+            let strongName = document.createElement("strong");
+            strongName.innerText = currentElection.Name + " | " + currentElection.Count + " Candidates";
+            name.appendChild(strongName);
+
+            let startdate = document.createElement("p");
+            startdate.innerText = "Date: ";
+            let strongDate = document.createElement("strong");
+            strongDate.innerText = currentElection.StartDate;
+            startdate.appendChild(strongDate);
+
+            let durationindays = document.createElement("p");
+            durationindays.innerText = "Duration (days): ";
+            let strongDuration = document.createElement("strong");
+            strongDuration.innerText = currentElection.DurationInDays;
+            durationindays.appendChild(strongDuration);
+
+            currentElectionArea.appendChild(name);
+            currentElectionArea.appendChild(startdate);
+            currentElectionArea.appendChild(durationindays);
+
+            //lets now display the Vote button only if he hasnt voted yet
+            let voteButton = document.createElement("a");
+            voteButton.className = "btn btn-default animated-button";
+            voteButton.setAttribute("title", "Go Vote");
+            let icon = document.createElement("i");
+            icon.className = "fa fa-chevron-right";
+            icon.innerText = "Vote";
+            voteButton.appendChild(icon);
+            currentElectionArea.appendChild(voteButton);
+        }
     }
 
 
@@ -246,20 +322,6 @@
         elt.style.display = "none";
     }
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
