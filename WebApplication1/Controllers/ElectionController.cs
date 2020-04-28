@@ -17,7 +17,7 @@ namespace WebApplication1.Controllers
     [Authorize]
     //the below attribute will permit only users with set of roles contained in the policy 'ManageElections'
     //(you can check the set of roles related to this policy in ConfigureServices() in Startup file)
-    [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
+    //[Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
     //[Authorize(Roles = "Administrator")]
     public class ElectionController : Controller
     {
@@ -44,6 +44,7 @@ namespace WebApplication1.Controllers
 
 
         // GET: Election
+        [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
         public ActionResult Index()
         {
             try
@@ -58,6 +59,7 @@ namespace WebApplication1.Controllers
         }
 
         // GET: Election/Details/5
+        [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
         public ActionResult Details(Guid id)
         {
             return View(Utilities.convertElection_toElectionViewModel(_electionRepository.GetById(id)));
@@ -69,7 +71,7 @@ namespace WebApplication1.Controllers
         //then send back the response to javascript to redirect to step2
         //--> Step2: Selecting the candidates of this Election from a list of Voters, and send them to backend using api method in inside the controller,
         //then send back the response to javascript to redirect to Index.
-
+        [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
         public ActionResult Create()
         {
             //return an empty view
@@ -141,6 +143,7 @@ namespace WebApplication1.Controllers
         }
         //this is a web api called when adding a new Election instance
         [HttpPost]
+        [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
         //[ValidateAntiForgeryToken] If I uncomment this the api will not work
         public async Task<IActionResult> ValidateElection([FromBody] Election election)
         {
@@ -214,6 +217,7 @@ namespace WebApplication1.Controllers
         }
         //this is a web api called when user selects candidates from voters list to the election he created or he is editing
         [HttpPost]
+        [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
         public async Task<IActionResult> AddCandidates([FromBody] CandidateElectionRelation mydata)
         {
             try
@@ -245,6 +249,7 @@ namespace WebApplication1.Controllers
 
         //this is a web api called when user remove a candidate from an election
         [HttpPost]
+        [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
         public async Task<IActionResult> RemoveCandidate([FromBody] CandidateElectionRelation mydata)
         {
             try
@@ -272,6 +277,7 @@ namespace WebApplication1.Controllers
         //this method is called using jQuery ajax and it returns a list of candidates related to the election
         //it is called when displaying the details of an election
         [HttpPost]
+        [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
         public async Task<IActionResult> GetCandidatesList_byElectionId([FromBody] string electionId)
         {
             try
@@ -301,6 +307,7 @@ namespace WebApplication1.Controllers
         //this method is called using jQuery ajax and it returns a list of candidates related to the election folllowed by the list of all voters 
         //it is called when displaying the election for editing
         [HttpPost]
+        [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
         public async Task<IActionResult> GetCandidatesList_andVotersList_byElectionId([FromBody] string electionId)
         {
             try
@@ -355,6 +362,7 @@ namespace WebApplication1.Controllers
 
 
         // GET: Election/Edit/5
+        [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
         public ActionResult Edit(Guid id)
         {
             Election election = _electionRepository.GetById(id);
@@ -371,7 +379,8 @@ namespace WebApplication1.Controllers
             public string HasNeutral { get; set; }
         }
         // POST: Election/Edit/5
-        [HttpPost]        
+        [HttpPost]
+        [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
         public async Task<IActionResult> EditElection([FromBody] TemporaryElection election)
         {
             try
@@ -395,6 +404,7 @@ namespace WebApplication1.Controllers
         }
 
         // GET: Election/Delete/5
+        [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
         public ActionResult Delete(Guid id)
         {
             var election = _electionRepository.GetById(id);
@@ -404,6 +414,7 @@ namespace WebApplication1.Controllers
         // POST: Election/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
         public ActionResult DeleteElection(Guid id)
         {
             try
@@ -433,6 +444,11 @@ namespace WebApplication1.Controllers
 
         //this method is called using jQuery ajax and it returns a list of future elections
         //it is called when displaying the home page
+        //I couldn't move it to ElectionUtilities.cs file bcuz if I did they will need _electionRepository to be passed
+        //as a parameter (Method Dependancy Injection), and we know this method is called using jQuery ajax, there is no way to pass
+        //_repositoryElection as a paramter from frontend (jQuery ajax)
+        //since it is used in dashboard, all authenticated users can use it
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> GetComingElections()
         {
@@ -458,6 +474,11 @@ namespace WebApplication1.Controllers
 
         //this method is called using jQuery ajax and it returns the current election
         //it is called when displaying the home page
+        //I couldn't move it to ElectionUtilities.cs file bcuz if I did they will need _electionRepository to be passed
+        //as a parameter (Method Dependancy Injection), and we know this method is called using jQuery ajax, there is no way to pass
+        //_repositoryElection as a paramter from frontend (jQuery ajax)
+        //since it is used in dashboard, all authenticated users can use it
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> GetCurrentElection()
         {

@@ -295,6 +295,7 @@
             let voteButton = document.createElement("a");
             voteButton.className = "btn btn-default animated-button";
             voteButton.setAttribute("title", "Go Vote");
+            voteButton.setAttribute("href", "Vote/Index/" + currentElection.Id);
             let icon = document.createElement("i");
             icon.className = "fa fa-chevron-right";
             icon.innerText = "Vote";
