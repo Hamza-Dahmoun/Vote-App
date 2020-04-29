@@ -5,7 +5,7 @@
 
 
 <partial name="_votingScenarioStyle" />
-<h1 class="text-center">Select your choice wisely</h1>
+<h1 class="text-center" id="voting-title">Select your choice wisely</h1>
 <br />
 <div class="voting-container">
 
@@ -37,7 +37,7 @@
 
 <style>
     #results-container {
-    display: flex;
+    display: none/*flex*/;
     flex-direction: column;
     justify-content: center;
     text-align: center;
@@ -80,32 +80,44 @@
     .one-result-container span {
         font-size: 250%;
     }
+    #voting-spinner{
+        display:none;
+    }
 </style>
 
-@*int i = 0;
+
 <div id="results-container" class="margins">
-    <h3 class="margins">Updated Results</h3>
+    <h1 class="margins">Current Results</h1>
+    
+</div>
+<div class="spinner-border" id="voting-spinner">
 
-    @foreach (var candidate in Model.Candidates)
-    {
-        i++;
-        //so it is the first candidate, lets add the cup icon to it
-        <div class="one-result-container">
-            <div class="rank-container">
-                @if (i == 1)
-                {
-                    <span><i class="fa fa-trophy" aria-hidden="true"></i></span>
-                }
-                else
-                {
-                    <span>@i.ToString()</span>
-                }
+</div>
 
-            </div>
-            <div class="candidate-data-container">
-                <p>@candidate.FirstName @candidate.LastName</p>
-                <p>@candidate.VotesCount Votes</p>
-            </div>
-        </div>
-    }
-</div>*@
+    @*int i = 0;
+        <div id="results-container" class="margins">
+            <h3 class="margins">Current Results</h3>
+
+            @foreach (var candidate in Model.Candidates)
+            {
+                i++;
+                //so it is the first candidate, lets add the cup icon to it
+                <div class="one-result-container">
+                    <div class="rank-container">
+                        @if (i == 1)
+                        {
+                            <span><i class="fa fa-trophy" aria-hidden="true"></i></span>
+                        }
+                        else
+                        {
+                            <span>@i.ToString()</span>
+                        }
+
+                    </div>
+                    <div class="candidate-data-container">
+                        <p>@candidate.FirstName @candidate.LastName</p>
+                        <p>@candidate.VotesCount Votes</p>
+                    </div>
+                </div>
+            }
+        </div>*@

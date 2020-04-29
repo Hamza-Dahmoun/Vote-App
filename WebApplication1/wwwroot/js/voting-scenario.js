@@ -105,6 +105,12 @@ function sendCandidates() {
     //    alert(selectedIdArray[i] + "  --  " + JSON.stringify(selectedIdArray),);
     //}
 
+    //lets hide the voting title
+    hideElement(document.getElementById("voting-title"));
+    //lets hide the list of candidates
+    hideElement(document.getElementsByClassName("voting-container")[0]);
+    //lets display the spinner
+    displayElement(document.getElementById("voting-spinner"));
     //Send the JSON array to Controller using AJAX.
     $.ajax({
         type: "POST",
@@ -117,8 +123,9 @@ function sendCandidates() {
         },
         success: function (response) {
             console.log(response);
-            alert("success");
-            window.location.href = "/Home/Index";
+            //alert("success");
+            //window.location.href = "/Home/Index";
+            displayCurrentResults(response);
         }
     });
 }
@@ -143,4 +150,71 @@ function unselectNeutral() {
         selectedIdArray.pop();
     }
     console.log(selectedIdArray);
+}
+
+
+
+function hideElement(elt) {
+//this function will hide an element
+    elt.style.display = "none";
+}
+function displayElement(elt) {
+    //this function will display an element
+    elt.style.display = "block";
+}
+
+
+
+
+function displayCurrentResults(response) {
+    //the response is a list of candidates viewModel ordered by votes count
+
+    for (let i = 0; i < response.length; i++) {
+        let one_result_container = document.createElement("div");
+        one_result_container.className = "one-result-container";
+
+        let rank_container = document.createElement("rank-container");
+        rank_container.className = "rank-container";
+
+        if (i == 0) {
+            //so its the current winner candidate
+            let icon = document.createElement("i");
+            icon.className = "fa fa-trophy";
+            let span = document.createElement("span");
+            span.appendChild(icon);
+            rank_container.appendChild(span);
+            //<span><i class="fa fa-trophy" aria-hidden="true"></i></span>
+        }
+        else {
+            let span = document.createElement("span");
+            span.innerText = i + 1;
+            rank_container.appendChild(span);
+            //<span>@i.ToString()</span>
+        }
+        one_result_container.appendChild(rank_container);
+
+        let candidate_data_container = document.createElement("div");
+        candidate_data_container.className = "candidate-data-container";
+        let candidateName = document.createElement("p");
+        candidateName.innerText = response[i].FirstName + " " + response[i].LastName;
+        candidate_data_container.appendChild(candidateName);
+        let votesCount = document.createElement("p");
+        votesCount.innerText = response[i].VotesCount;
+        candidate_data_container.appendChild(votesCount);
+        one_result_container.appendChild(candidate_data_container);
+
+        //<div class="candidate-data-container">
+         //   <p>@candidate.FirstName @candidate.LastName</p>
+          //  <p>@candidate.VotesCount Votes</p>
+        //</div>
+
+
+        let results_container = document.getElementById("results-container");
+        results_container.appendChild(one_result_container);
+    }
+
+    //now lets hide the spinner
+    hideElement(document.getElementById("voting-spinner"));
+    //now lets display the result as a flex
+    document.getElementById("results-container").style.display = "flex";
 }
