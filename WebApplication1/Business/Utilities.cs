@@ -47,7 +47,7 @@ namespace WebApplication1.Business
             }            
         }
 
-        public static List<CandidateViewModel> convertCandidateList_toPersonViewModelList(
+        public static List<CandidateViewModel> convertCandidateList_toCandidateViewModelList(
             IRepository<Voter> voterRepository, IList<Candidate> candidates)
         {//the parameter voterRepository is passed to be used in a Method Dependancy Injection in VoterUtilities.getStateName() method
             List<CandidateViewModel> myList = new List<CandidateViewModel>();

@@ -9,6 +9,7 @@ using WebApplication1.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using WebApplication1.Business;
+using Newtonsoft.Json;
 
 namespace WebApplication1.Controllers
 {
@@ -48,8 +49,8 @@ namespace WebApplication1.Controllers
 
             Election election = ElectionUtilities.getCurrentElection(_electionRepository);// _electionRepository.GetById(CurrentElectionId);
             var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, election);            
-            //return View(Utilities.convertCandidateList_toPersonViewModelList(_voterRepository, _candidateRepository.GetAll()));
-            return View(Utilities.convertCandidateList_toPersonViewModelList(_voterRepository, candidates));
+            //return View(Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, _candidateRepository.GetAll()));
+            return View(Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, candidates));
         }
 
         [HttpPost]
@@ -57,40 +58,53 @@ namespace WebApplication1.Controllers
         {//this action get the list of the candidates ids that the user voted on, and add them to the db as vote objects, and redirect to the
             //dashboard in home controller
 
-            //lets first get the concerned election
-            Candidate firstOne = _candidateRepository.GetById(Guid.Parse(candidateIdList.FirstOrDefault()));
-            Election election = _electionRepository.GetById(firstOne.Election.Id);
-            if (election == null)
+            try
+            {
+                //lets first get the concerned election
+                Candidate firstOne = _candidateRepository.GetById(Guid.Parse(candidateIdList.FirstOrDefault()));
+                Election election = _electionRepository.GetById(firstOne.Election.Id);
+                if (election == null)
+                {
+                    return BadRequest();
+                }
+
+                //lets get the voter instance of the current user, so that we use its id with his votes
+                var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+                Voter currentVoter = VoterUtilities.getVoterByUserId(Guid.Parse(currentUser.Id), _voterRepository);
+
+
+                Vote v = new Vote();
+                //lets add 'Vote' objects to the db
+                foreach (var candidateId in candidateIdList)
+                {
+                    v.Id = Guid.NewGuid();
+                    v.Candidate = _candidateRepository.GetById(Guid.Parse(candidateId));
+                    v.Voter = currentVoter; // _voterRepository.GetById(Guid.Parse("3fae2a0e-21fe-40d4-a731-6b92bb4fea71"));
+                    v.Datetime = DateTime.Now;
+                    v.Election = election;
+                    _voteRepository.Add(v);
+                }
+
+                //-------IMPORTANT: THIS ACTION IS ACCESSIBLE USING AN AJAX CALL, IN THIS CASE, TRYING TO REDIRECTTOACTION FROM
+                //C# CODE WILL EXECUTED THE ACTION BUT THE BROWSER WILL IGNORE REDIRECTING, USER WILL STAY IN THE SAME PAGE
+                //BROWSERS IGNORE THE REDIRECT BECUZ IT ASSUME JS CODE WHICH DID THE AJAX CALL WILL BE IN CHARGE OF THE SUCCESS
+                //RESPONSE TO REDIRECT: WINDOW.LOCATION.HREF="CONTROLLERNAME/ACTION"
+                //return RedirectToAction("Index", "Home");
+                /*return Json(new
+                {
+                    success = true
+                });*/
+                //everything is okey, lets return a list of candidates with votes counter ordered so that the winner is the first
+                var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, election);
+                List<CandidateViewModel> candidatesViewModel = Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, candidates);
+                //lets serialize the list of candidatesviewmodel as json object
+                var json = JsonConvert.SerializeObject(candidatesViewModel.OrderByDescending(c => c.VotesCount));
+                return Ok(json);
+            }
+            catch
             {
                 return BadRequest();
-            }
-
-            //lets get the voter instance of the current user, so that we use its id with his votes
-            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
-            Voter currentVoter = VoterUtilities.getVoterByUserId(Guid.Parse(currentUser.Id), _voterRepository);
-
-
-            Vote v = new Vote();
-            //lets add 'Vote' objects to the db
-            foreach (var candidateId in candidateIdList)
-            {
-                v.Id = Guid.NewGuid();
-                v.Candidate = _candidateRepository.GetById(Guid.Parse(candidateId));
-                v.Voter = currentVoter; // _voterRepository.GetById(Guid.Parse("3fae2a0e-21fe-40d4-a731-6b92bb4fea71"));
-                v.Datetime = DateTime.Now;
-                v.Election = election;
-                _voteRepository.Add(v);
-            }
-
-            //-------IMPORTANT: THIS ACTION IS ACCESSIBLE USING AN AJAX CALL, IN THIS CASE, TRYING TO REDIRECTTOACTION FROM
-            //C# CODE WILL EXECUTED THE ACTION BUT THE BROWSER WILL IGNORE REDIRECTING, USER WILL STAY IN THE SAME PAGE
-            //BROWSERS IGNORE THE REDIRECT BECUZ IT ASSUME JS CODE WHICH DID THE AJAX CALL WILL BE IN CHARGE OF THE SUCCESS
-            //RESPONSE TO REDIRECT: WINDOW.LOCATION.HREF="CONTROLLERNAME/ACTION"
-            //return RedirectToAction("Index", "Home");
-            return  Json(new
-            {
-                success = true
-            });
+            }            
         }
 
         

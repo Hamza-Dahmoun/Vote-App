@@ -298,7 +298,7 @@ namespace WebApplication1.Controllers
                 //from the selection to avoid the infinite loop
                 //var candidates = e.Candidates/*.Select(p => new { p.FirstName, p.LastName, p.State})*/.ToList();
                 var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, e);
-                var json = JsonConvert.SerializeObject(Utilities.convertCandidateList_toPersonViewModelList(_voterRepository, candidates));
+                var json = JsonConvert.SerializeObject(Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, candidates));
                 return Ok(json);
                 
             }

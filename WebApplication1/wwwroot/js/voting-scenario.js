@@ -115,8 +115,8 @@ function sendCandidates() {
         error: function () {
             console.log("error");
         },
-        success: function (r) {
-            console.log("success");
+        success: function (response) {
+            console.log(response);
             alert("success");
             window.location.href = "/Home/Index";
         }
