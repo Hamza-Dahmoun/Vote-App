@@ -35,89 +35,14 @@
 
 
 
-<style>
-    #results-container {
-    display: none/*flex*/;
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
-}
-    .margins {
-    margin-top: 3%;
-    margin-bottom: 3%;
-}
 
-    
-.one-result-container {
-    text-align: center;
-    font-size: 20px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center; /*in order to vertically center the cup icon*/
-        width: 50%;
-        margin-left: auto;
-        margin-right: auto;
-        margin-top: 1%;
-        margin-bottom: 1%;
-    }
-
-    .one-result-container .rank-container {
-        /*margin-left: 1%;
-            margin-right: 1%;*/
-        min-width: 50px;
-    }
-
-    .one-result-container .candidate-data-container {
-        width: 250px;
-    }
-
-        .one-result-container .candidate-data-container p {
-            margin-bottom: 0%;
-            margin-top: 0%;
-        }
-
-    .one-result-container span {
-        font-size: 250%;
-    }
-    #voting-spinner{
-        display:none;
-    }
-</style>
-
-
+@*BELOW WE DISPLAY THE CURRENT RESULTS OF THE ELECTION ONCE USER DOES THE VOTE ACTION*@
 <div id="results-container" class="margins">
     <h1 class="margins">Current Results</h1>
-    
+    <div class="spinner-border" id="voting-spinner">
+
+    </div>
+    <div>
+        <a asp-action="Index" asp-controller="Home">Back to home page</a>
+    </div>
 </div>
-<div class="spinner-border" id="voting-spinner">
-
-</div>
-
-    @*int i = 0;
-        <div id="results-container" class="margins">
-            <h3 class="margins">Current Results</h3>
-
-            @foreach (var candidate in Model.Candidates)
-            {
-                i++;
-                //so it is the first candidate, lets add the cup icon to it
-                <div class="one-result-container">
-                    <div class="rank-container">
-                        @if (i == 1)
-                        {
-                            <span><i class="fa fa-trophy" aria-hidden="true"></i></span>
-                        }
-                        else
-                        {
-                            <span>@i.ToString()</span>
-                        }
-
-                    </div>
-                    <div class="candidate-data-container">
-                        <p>@candidate.FirstName @candidate.LastName</p>
-                        <p>@candidate.VotesCount Votes</p>
-                    </div>
-                </div>
-            }
-        </div>*@
