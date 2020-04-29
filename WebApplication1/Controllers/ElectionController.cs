@@ -482,13 +482,14 @@ namespace WebApplication1.Controllers
 
 
 
-        public struct hasUserVotedCombinedWithElection
+        public struct CurrentElectionDashboard
         {
             public Guid Id { get; set; }
             public string Name { get; set; }
             public DateTime StartDate { get; set; }
             public int DurationInDays { get; set; }
             public int CandidatesCount { get; set; }
+            public double ParticipationRate { get; set; }
             public bool HasUserVoted { get; set; }
         }
         //this method is called using jQuery ajax and it returns the current election
@@ -515,15 +516,19 @@ namespace WebApplication1.Controllers
 
                 if(currentElection != null)
                 {
-                    hasUserVotedCombinedWithElection a = new hasUserVotedCombinedWithElection();
+                    CurrentElectionDashboard a = new CurrentElectionDashboard();
                     a.Id = currentElection.Id;
                     a.Name = currentElection.Name;
                     a.StartDate = currentElection.StartDate;
                     a.DurationInDays = currentElection.DurationInDays;
                     a.CandidatesCount = currentElection.Count;
+
                     var currentUser = await _userManager.GetUserAsync(HttpContext.User);
                     bool userHasVoted = VoteUtilities.hasVoted(_voteRepository, currentElection.Id, VoterUtilities.getVoterByUserId(Guid.Parse(currentUser.Id), _voterRepository).Id);
                     a.HasUserVoted = userHasVoted;
+
+                    a.ParticipationRate = (double)VoteUtilities.getNumberOfVotesByElection(_voteRepository, currentElection.Id) / _voterRepository.GetAll().Count;
+
                     var json = JsonConvert.SerializeObject(a);
                     return Ok(json);
                 }

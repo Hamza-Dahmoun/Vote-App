@@ -291,9 +291,17 @@
             strongDuration.innerText = currentElection.DurationInDays;
             durationindays.appendChild(strongDuration);
 
+            let participationRate = document.createElement("p");
+            participationRate.innerText = "Participation Rate: ";
+            let strongParticipationRate = document.createElement("strong");
+            strongParticipationRate.innerText = Math.floor(parseFloat(currentElection.ParticipationRate*100)) + "%";
+            participationRate.appendChild(strongParticipationRate);
+
             currentElectionArea.appendChild(name);
             currentElectionArea.appendChild(startdate);
             currentElectionArea.appendChild(durationindays);
+            currentElectionArea.appendChild(participationRate);
+
 
             //lets now display the Vote button only if he hasnt voted yet
             if (!currentElection.HasUserVoted) {
