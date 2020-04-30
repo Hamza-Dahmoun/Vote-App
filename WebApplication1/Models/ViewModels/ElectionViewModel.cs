@@ -17,5 +17,6 @@ namespace WebApplication1.Models.ViewModels
         public int NumberOfCandidates { get; set; }
         public int NumberOfVoters { get; set; }
         public int NumberOfVotes { get; set; }
+        public string WinnerfullName { get; set; }
     }
 }

@@ -457,7 +457,7 @@ namespace WebApplication1.Controllers
         //_repositoryElection as a paramter from frontend (jQuery ajax)
         //since it is used in dashboard, all authenticated users can use it
         [Authorize]
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> GetComingElections()
         {
             try
@@ -477,6 +477,44 @@ namespace WebApplication1.Controllers
                 return BadRequest();
             }
         }
+
+
+
+        //this method is called using jQuery ajax and it returns a list of previous elections
+        //it is called when displaying the home page
+        //I couldn't move it to ElectionUtilities.cs file bcuz if I did they will need _electionRepository to be passed
+        //as a parameter (Method Dependancy Injection), and we know this method is called using jQuery ajax, there is no way to pass
+        //_repositoryElection as a paramter from frontend (jQuery ajax)
+        //since it is used in dashboard, all authenticated users can use it
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> GetPreviousElections()
+        {
+            try
+            {
+                //lets serialize the list of elections we've got and send it back as a reponse
+                //note that I didn't retrieve elections as they are, I selected only needed attributes bcuz when i tried serializing
+                //elections objects as they are I got this error "self referencing loop detected with type" it means json tried to serialize the election object
+                //but it found that each election has an Candidates objects list, and each candidate of them has an election and so on, so i excluded Candidate
+                //from the selection to avoid the infinite loop
+                var futureElections = _electionRepository.GetAll().Where(e => e.StartDate.AddDays(e.DurationInDays) < DateTime.Now);//.Select(e => new { e.Name, e.StartDate, e.DurationInDays, e.Candidates.Count });
+
+                var futureElectionsViewModel = Utilities.convertElectionList_toElectionViewModelList(futureElections.ToList());
+                
+                var json = JsonConvert.SerializeObject(futureElectionsViewModel);
+                return Ok(json);
+
+            }
+            catch (Exception E)
+            {
+                return BadRequest();
+            }
+        }
+
+
+
+
+
 
 
 
