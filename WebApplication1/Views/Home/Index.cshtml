@@ -464,6 +464,34 @@
 
         }
     }
+
+
+
+
+
+    
+
+
+
+
+
+
+
+    function displayElement(elt) {
+        //this function displays an element
+        elt.style.display = "block";
+    }
+    function hideElement(elt) {
+        //this function hides an element
+        elt.style.display = "none";
+    }
+
+
+
+
+
+    /*THE BELOW METHODS ARE ALWAYS USED TO GET THE RESULTS OF A GIVEN ELECTION AND WRITHE THEM AND DISPLAY THEM IN A SLIDING DIV
+    THEY ARE USED WHEN LOADING: 1- CURRENT ELECTION RESULTS 2- PREVIOUS ELECTIONS RESULTS*/
     function getElectionResults(event) {
         //console.log(event.target.getAttribute("electionId"));
 
@@ -491,7 +519,6 @@
             }
         });
     }
-
     function displayElectionResults(response) {
         console.log(response);
         //this method takes a candidates list ordered by their number of votes (results of a given election)
@@ -499,6 +526,18 @@
         let electionResultsContainer = document.getElementById("election-results-container");
         //lets erase previous results elements if there are any
         electionResultsContainer.innerHTML = "";
+
+        //lets add 'hide button'
+        let hideButton = document.createElement("span");
+        hideButton.addEventListener("click", hideElectionResultsContainer);
+        hideButton.innerText = "Hide Results";
+        hideButton.style.textAlign = "left";
+        hideButton.style.marginBottom = "50px";
+        hideButton.style.marginLeft = "10px";
+        hideButton.style.cursor = "pointer";
+        hideButton.style.textDecoration = "underline";
+        hideButton.style.color = "#000";
+        electionResultsContainer.appendChild(hideButton);
 
     for (let i = 0; i < response.length; i++) {
         let one_result_container = document.createElement("div");
@@ -539,30 +578,13 @@
 
         electionResultsContainer.className = "displayed_results_container";
 
-    //now lets hide the spinner
-    //hideElement(document.getElementById("voting-spinner"));
-    //now lets display the result as a flex
-    //document.getElementById("results-container").style.display = "flex";
-
 
     }
-
-
-
-
-
-
-
-
-
-    function displayElement(elt) {
-        //this function displays an element
-        elt.style.display = "block";
+    function hideElectionResultsContainer() {
+        let electionResultsContainer = document.getElementById("election-results-container");
+        electionResultsContainer.className = "hidden_results_container";
     }
-    function hideElement(elt) {
-        //this function hides an element
-        elt.style.display = "none";
-    }
+
 </script>
 
 
