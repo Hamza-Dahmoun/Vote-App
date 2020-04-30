@@ -304,23 +304,38 @@
 
 
             //lets now display the Vote button only if he hasnt voted yet
+            //else, we'll display 'Results' button
             if (!currentElection.HasUserVoted) {
                 let voteButton = document.createElement("a");
-            voteButton.className = "btn btn-default animated-button";
-            voteButton.setAttribute("title", "Go Vote");
-            //voteButton.setAttribute("href", "Vote/Index/" + currentElection.Id);
+                voteButton.className = "btn btn-default animated-button";
+                voteButton.setAttribute("title", "Go Vote");
+                //voteButton.setAttribute("href", "Vote/Index/" + currentElection.Id);
                 //currentElectionId in Vote/Index() was always received as empty Guid .. lets just get the current election inside the Index() action
                 voteButton.setAttribute("href", "/Vote/Index/");
-            let icon = document.createElement("i");
-            icon.className = "fa fa-chevron-right";
-            icon.innerText = "Vote";
-            voteButton.appendChild(icon);
-            currentElectionArea.appendChild(voteButton);
+                let icon = document.createElement("i");
+                icon.className = "fa fa-chevron-right";
+                icon.innerText = "Vote";
+                voteButton.appendChild(icon);
+                currentElectionArea.appendChild(voteButton);
+            }
+            else {
+                let resultsButton = document.createElement("a");
+                resultsButton.setAttribute("electionId", currentElection.Id);
+                resultsButton.style.color = "#3d7e9a";
+                resultsButton.style.cursor = "pointer";
+                resultsButton.setAttribute("title", "Show Details");
+                resultsButton.innerText = "Show Results";
+                resultsButton.addEventListener("click", getElectionResults);
+                let div = document.createElement("div");
+                div.appendChild(resultsButton);
+                currentElectionArea.appendChild(div);
             }
             
         }
     }
-
+    function getElectionResults(event) {
+        console.log(event.target.getAttribute("electionId"));
+    }
 
 
 
