@@ -335,8 +335,27 @@
     }
     function getElectionResults(event) {
         console.log(event.target.getAttribute("electionId"));
-    }
 
+        //this function load the current election results using jQuery ajax
+        $.ajax({
+            type: "POST",
+            url: "/Home/GetResultsOfElection",
+            data: JSON.stringify(event.target.getAttribute("electionId")),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            error: function () {
+                alert("error");
+            },
+            success: function (response) {
+                //'response' represents the object returned from the api which is the an array of candodates ordered by their number of votes
+                console.log(response);
+                displayElectionResults(response);                
+            }
+        });
+    }
+    function displayElectionResults(response) {
+        console.log(response);
+    }
 
 
 

@@ -13,12 +13,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace WebApplication1.Controllers
 {
     //the below attribute will permit only authorized users to access HomeController, anonymous access will be deactivated
     [Authorize]
-    
+
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -32,9 +33,9 @@ namespace WebApplication1.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         //Lets inject the services using the constructor, this is called Constructor Dependency Injection
         public HomeController(
-            ILogger<HomeController> logger, 
-            IRepository<Candidate> candidateRepository, 
-            IRepository<Voter> voterRepository, 
+            ILogger<HomeController> logger,
+            IRepository<Candidate> candidateRepository,
+            IRepository<Voter> voterRepository,
             IRepository<Vote> voteRepository,
             IRepository<Election> electionRepository,
             UserManager<IdentityUser> userManager)
@@ -47,14 +48,14 @@ namespace WebApplication1.Controllers
             _userManager = userManager;
         }
 
-        
+
         public async Task<IActionResult> Index()
         {
             if (User.IsInRole("Voter") || User.IsInRole("Administrator"))
             {
                 //the user has a voter Role, lets display the dashboard
                 var currentUser = await _userManager.GetUserAsync(HttpContext.User);
-                DashboardViewModel d = DashboardUtilities.getDashboard(_candidateRepository, _voterRepository, _voteRepository, _electionRepository, currentUser);                
+                DashboardViewModel d = DashboardUtilities.getDashboard(_candidateRepository, _voterRepository, _voteRepository, _electionRepository, currentUser);
                 return View(d);
 
 
@@ -76,6 +77,24 @@ namespace WebApplication1.Controllers
                 code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                 return RedirectToPage("/Account/ResetPassword", new { area = "Identity", code }); //this returns 'code must be supplied o reset password'
             }
+        }
+
+        public async Task<IActionResult> GetResultsOfElection([FromBody] Guid electionId)
+        {
+            try
+            {
+                //this method returns a list of candidates (of an election) ordered by their number of votes
+                var election = _electionRepository.GetById(electionId);
+                var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, election);
+                List<CandidateViewModel> candidatesViewModel = Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, candidates);
+                //lets serialize the list of candidatesviewmodel as json object
+                var json = JsonConvert.SerializeObject(candidatesViewModel.OrderByDescending(c => c.VotesCount));
+                return Ok(json);
+            }
+            catch
+            {
+                return BadRequest();
+            }            
         }
 
         public IActionResult Privacy()

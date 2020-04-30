@@ -55,8 +55,8 @@ namespace WebApplication1.Controllers
 
         [HttpPost]
         public async Task<IActionResult> ValidateVote([FromBody] List<string> candidateIdList)
-        {//this action get the list of the candidates ids that the user voted on, and add them to the db as vote objects, and redirect to the
-            //dashboard in home controller
+        {//this action get the list of the candidates ids that the user voted on, and add them to the db as vote objects, 
+            //and return a list of candidates ordered by number of votes
 
             try
             {
