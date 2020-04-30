@@ -79,6 +79,45 @@
         color: #212529;
     }
 }
+
+
+#election-results-container{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    color: #3d7e9a;
+}
+    .one-result-container {
+        text-align: center;
+        font-size: 20px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center; /*in order to vertically center the cup icon*/
+        width: 50%;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 1%;
+        margin-bottom: 1%;
+    }
+
+    .one-result-container .rank-container {
+        min-width: 50px;
+    }
+
+    .one-result-container .candidate-data-container {
+        width: 250px;
+    }
+
+        .one-result-container .candidate-data-container p {
+            margin-bottom: 0%;
+            margin-top: 0%;
+        }
+
+    .one-result-container span {
+        font-size: 250%;
+    }
 </style>
 
 
@@ -147,7 +186,9 @@
         </div>
     </div>
 </div>
-
+<br/>
+<br/>
+<div id="election-results-container"></div>
 
 
 
@@ -180,7 +221,7 @@
 
     function loadComingElections() {
         //this function load a list of coming elections using jQuery ajax
-    
+
     $.ajax({
         type: "POST",
         url: "/Election/GetComingElections",
@@ -199,7 +240,7 @@
             //window.location.href = "Home/Index";
         }
     });
-    
+
     }
     function displayComingElections(comingElections) {
         let comingElectionsArea = document.getElementById("coming-elections-area");
@@ -211,10 +252,10 @@
 
             let tdName = document.createElement("td");
             tdName.innerText = comingElections[i].Name;
-            
+
             let tdStartDate = document.createElement("td");
             tdStartDate.innerText = comingElections[i].StartDate;
-            
+
             let tdDurationInDays = document.createElement("td");
             tdDurationInDays.innerText = comingElections[i].DurationInDays;
 
@@ -231,7 +272,7 @@
         }
 
 
-        //now lets display the tabl and hide the spinner                
+        //now lets display the tabl and hide the spinner
         hideElement(comingElectionsArea.querySelector(".spinner-border"));
         displayElement(table);
     }
@@ -240,7 +281,7 @@
 
     function loadCurrentElection() {
          //this function load the current election using jQuery ajax
-    
+
     $.ajax({
         type: "POST",
         url: "/Election/GetCurrentElection",
@@ -335,7 +376,7 @@
                 div.appendChild(spinner);
                 currentElectionArea.appendChild(div);
             }
-            
+
         }
     }
     function getElectionResults(event) {
@@ -361,12 +402,60 @@
                 hideElement(document.getElementById("current-election-results-spinner"));
                 displayElement(event.target);
                 //lets display the results
-                displayElectionResults(response);                
+                displayElectionResults(response);
             }
         });
     }
+
     function displayElectionResults(response) {
         console.log(response);
+        //this method takes a candidates list ordered by their number of votes (results of a given election)
+        //and displays them in a div that will slide into the screen from the right side
+        let electionResultsContainer = document.getElementById("election-results-container");
+
+    for (let i = 0; i < response.length; i++) {
+        let one_result_container = document.createElement("div");
+        one_result_container.className = "one-result-container";
+
+        let rank_container = document.createElement("div");
+        rank_container.className = "rank-container";
+
+        if (i == 0) {
+            //so its the current winner candidate
+            let icon = document.createElement("i");
+            icon.className = "fa fa-trophy";
+            let span = document.createElement("span");
+            span.appendChild(icon);
+            rank_container.appendChild(span);            
+        }
+        else {
+            let span = document.createElement("span");
+            span.innerText = i + 1;
+            rank_container.appendChild(span);
+        }
+        one_result_container.appendChild(rank_container);
+
+        let candidate_data_container = document.createElement("div");
+        candidate_data_container.className = "candidate-data-container";
+        let candidateName = document.createElement("p");
+        candidateName.innerText = response[i].FirstName + " " + response[i].LastName;
+        candidate_data_container.appendChild(candidateName);
+        let votesCount = document.createElement("p");
+        votesCount.innerText = response[i].VotesCount;
+        candidate_data_container.appendChild(votesCount);
+        one_result_container.appendChild(candidate_data_container);
+
+
+        //let results_container = document.getElementById("results-container");
+        electionResultsContainer.appendChild(one_result_container);
+    }
+
+    //now lets hide the spinner
+    //hideElement(document.getElementById("voting-spinner"));
+    //now lets display the result as a flex
+    //document.getElementById("results-container").style.display = "flex";
+
+
     }
 
 
