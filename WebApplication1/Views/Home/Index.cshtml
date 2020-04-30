@@ -328,14 +328,22 @@
                 resultsButton.addEventListener("click", getElectionResults);
                 let div = document.createElement("div");
                 div.appendChild(resultsButton);
+                let spinner = document.createElement("div");
+                spinner.className = "spinner-border";
+                spinner.setAttribute("Id", "current-election-results-spinner");
+                spinner.style.display = "none";
+                div.appendChild(spinner);
                 currentElectionArea.appendChild(div);
             }
             
         }
     }
     function getElectionResults(event) {
-        console.log(event.target.getAttribute("electionId"));
+        //console.log(event.target.getAttribute("electionId"));
 
+        //lets hide the button and display the spinner
+        displayElement(document.getElementById("current-election-results-spinner"));
+        hideElement(event.target);
         //this function load the current election results using jQuery ajax
         $.ajax({
             type: "POST",
@@ -349,6 +357,10 @@
             success: function (response) {
                 //'response' represents the object returned from the api which is the an array of candodates ordered by their number of votes
                 console.log(response);
+                //lets hide the spinner and display the button
+                hideElement(document.getElementById("current-election-results-spinner"));
+                displayElement(event.target);
+                //lets display the results
                 displayElectionResults(response);                
             }
         });
