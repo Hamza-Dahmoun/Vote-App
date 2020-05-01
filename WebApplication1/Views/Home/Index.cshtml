@@ -701,11 +701,16 @@
 
         electionResultsContainer.className = "displayed_results_container";
 
+        //now lets add a click event to the document so that it also hide the results ... we'll remove the click event once the results are hidden
+        document.addEventListener("click", hideElectionResultsContainer);
 
     }
     function hideElectionResultsContainer() {
         let electionResultsContainer = document.getElementById("election-results-container");
         electionResultsContainer.className = "hidden_results_container";
+
+        //lets remove the click event off the document
+        document.removeEventListener("click", hideElectionResultsContainer);
     }
 
 </script>
