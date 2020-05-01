@@ -631,7 +631,8 @@
     function displayElectionResults(response) {
         console.log(response);
         //this method takes a candidates list ordered by their number of votes (results of a given election)
-        //and displays them in a div that will slide into the screen from the right side
+        //and displays them in a div that will slide into the screen from the right side        
+
         let electionResultsContainer = document.getElementById("election-results-container");
         //lets erase previous results elements if there are any
         electionResultsContainer.innerHTML = "";
@@ -648,42 +649,55 @@
         hideButton.style.color = "#000";
         electionResultsContainer.appendChild(hideButton);
 
-    for (let i = 0; i < response.length; i++) {
-        let one_result_container = document.createElement("div");
-        one_result_container.className = "one-result-container";
-
-        let rank_container = document.createElement("div");
-        rank_container.className = "rank-container";
-
-        if (i == 0) {
-            //so its the current winner candidate
-            let icon = document.createElement("i");
-            icon.className = "fa fa-trophy";
-            let span = document.createElement("span");
-            span.appendChild(icon);
-            rank_container.appendChild(span);            
+        if (response == null || response.length == 0) {
+            //so the respponse is empty, lets just display a text  to tell user that this election has no candidates
+            let para = document.createElement("p");
+            para.innerText = "It seems this election had no Candidates!";
+            para.style.textAlign = "center";
+            electionResultsContainer.appendChild(para);
         }
         else {
-            let span = document.createElement("span");
-            span.innerText = i + 1;
-            rank_container.appendChild(span);
+
+            for (let i = 0; i < response.length; i++) {
+                let one_result_container = document.createElement("div");
+                one_result_container.className = "one-result-container";
+
+                let rank_container = document.createElement("div");
+                rank_container.className = "rank-container";
+
+                if (i == 0) {
+                    //so its the current winner candidate
+                    let icon = document.createElement("i");
+                    icon.className = "fa fa-trophy";
+                    let span = document.createElement("span");
+                    span.appendChild(icon);
+                    rank_container.appendChild(span);
+                }
+                else {
+                    let span = document.createElement("span");
+                    span.innerText = i + 1;
+                    rank_container.appendChild(span);
+                }
+                one_result_container.appendChild(rank_container);
+
+                let candidate_data_container = document.createElement("div");
+                candidate_data_container.className = "candidate-data-container";
+                let candidateName = document.createElement("p");
+                candidateName.innerText = response[i].FirstName + " " + response[i].LastName;
+                candidate_data_container.appendChild(candidateName);
+                let votesCount = document.createElement("p");
+                votesCount.innerText = response[i].VotesCount;
+                candidate_data_container.appendChild(votesCount);
+                one_result_container.appendChild(candidate_data_container);
+
+
+                //let results_container = document.getElementById("results-container");
+                electionResultsContainer.appendChild(one_result_container);
+            }
+
         }
-        one_result_container.appendChild(rank_container);
-
-        let candidate_data_container = document.createElement("div");
-        candidate_data_container.className = "candidate-data-container";
-        let candidateName = document.createElement("p");
-        candidateName.innerText = response[i].FirstName + " " + response[i].LastName;
-        candidate_data_container.appendChild(candidateName);
-        let votesCount = document.createElement("p");
-        votesCount.innerText = response[i].VotesCount;
-        candidate_data_container.appendChild(votesCount);
-        one_result_container.appendChild(candidate_data_container);
 
 
-        //let results_container = document.getElementById("results-container");
-        electionResultsContainer.appendChild(one_result_container);
-        }
 
         electionResultsContainer.className = "displayed_results_container";
 
