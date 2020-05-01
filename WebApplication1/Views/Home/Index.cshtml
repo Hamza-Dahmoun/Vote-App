@@ -85,10 +85,7 @@
 
 
         /********************* RESULTS CONTAINER STYLING **************/
-        #election-results-container {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+        #election-results-container-parent {
             text-align: center;
             color: #3d7e9a;
             /*overflow-y: scroll;*/
@@ -100,6 +97,33 @@
             z-index: 10;
             background-color: #fff;
             box-shadow: 0px 0px 15px #3d7e9a;
+        }
+            #election-results-container-parent #title {
+                font-size: 25px;
+                text-align: center;
+                margin-bottom: 10%;
+            }
+
+        #close-button-container {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: space-between;
+            color: #3d7e9a;
+            padding-right: 10px;
+            padding-top: 10px;
+        }
+            #close-button-container span {
+                cursor: pointer;
+                font-size: 20px;
+            }
+        
+
+        #election-results-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+            color: #3d7e9a;
         }
 
         .one-result-container {
@@ -293,7 +317,17 @@
 </div>
 <br/>
 <br/>
-<div id="election-results-container" class="hidden_results_container"></div>
+<div id="election-results-container-parent"  class="hidden_results_container">
+    <div id="close-button-container">
+        <span onclick="hideElectionResultsContainer">
+            <i class="fa fa-times" aria-hidden="true"></i>
+        </span>             
+    </div>
+    <p id="title">Results of the Election</p>
+
+    <div id="election-results-container"></div>
+</div>
+
 
 
 
@@ -633,17 +667,6 @@
         //lets erase previous results elements if there are any
         electionResultsContainer.innerHTML = "";
 
-        //lets add 'hide button'
-        let hideButton = document.createElement("span");
-        hideButton.addEventListener("click", hideElectionResultsContainer);
-        hideButton.innerText = "Hide Results";
-        hideButton.style.textAlign = "left";
-        hideButton.style.marginBottom = "50px";
-        hideButton.style.marginLeft = "10px";
-        hideButton.style.cursor = "pointer";
-        hideButton.style.textDecoration = "underline";
-        hideButton.style.color = "#000";
-        electionResultsContainer.appendChild(hideButton);
 
         if (response == null || response.length == 0) {
             //so the respponse is empty, lets just display a text  to tell user that this election has no candidates
@@ -695,15 +718,19 @@
 
 
 
-        electionResultsContainer.className = "displayed_results_container";
+        //electionResultsContainer.className = "displayed_results_container";
+        document.getElementById("election-results-container-parent").className = "displayed_results_container";
+
 
         //now lets add a click event to the document so that it also hide the results ... we'll remove the click event once the results are hidden
         document.addEventListener("click", hideElectionResultsContainer);
 
     }
     function hideElectionResultsContainer() {
-        let electionResultsContainer = document.getElementById("election-results-container");
-        electionResultsContainer.className = "hidden_results_container";
+        //let electionResultsContainer = document.getElementById("election-results-container");
+        //electionResultsContainer.className = "hidden_results_container";
+        document.getElementById("election-results-container-parent").className = "hidden_results_container";
+
 
         //lets remove the click event off the document
         document.removeEventListener("click", hideElectionResultsContainer);
