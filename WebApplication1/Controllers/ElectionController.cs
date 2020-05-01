@@ -490,6 +490,7 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public async Task<IActionResult> GetPreviousElections()
         {
+            //this function returns a list of previous elections with their winners
             try
             {
                 //lets serialize the list of elections we've got and send it back as a reponse
@@ -497,11 +498,14 @@ namespace WebApplication1.Controllers
                 //elections objects as they are I got this error "self referencing loop detected with type" it means json tried to serialize the election object
                 //but it found that each election has an Candidates objects list, and each candidate of them has an election and so on, so i excluded Candidate
                 //from the selection to avoid the infinite loop
-                var futureElections = _electionRepository.GetAll().Where(e => e.StartDate.AddDays(e.DurationInDays) < DateTime.Now);//.Select(e => new { e.Name, e.StartDate, e.DurationInDays, e.Candidates.Count });
+                var futureElections = _electionRepository.GetAll().
+                    Where(e => e.StartDate.AddDays(e.DurationInDays) < DateTime.Now).
+                    OrderByDescending(e =>e.Candidates.Count).
+                    Select(e => new { e.Id, e.Name, e.StartDate, e.DurationInDays, e.Candidates.Count, OrderedCandidates = e.Candidates.OrderByDescending(c=>c.Votes.Count) }).
+                    ToList();
 
-                var futureElectionsViewModel = Utilities.convertElectionList_toElectionViewModelList(futureElections.ToList());
-                
-                var json = JsonConvert.SerializeObject(futureElectionsViewModel);
+
+                var json = JsonConvert.SerializeObject(futureElections);
                 return Ok(json);
 
             }

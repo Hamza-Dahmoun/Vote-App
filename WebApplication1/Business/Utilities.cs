@@ -131,6 +131,7 @@ namespace WebApplication1.Business
                 NumberOfVotes = election.Votes.Count()
                 //NumberOfVoters = election.ElectionVoters.Count()
             };
+            
             return e;
         }
 
