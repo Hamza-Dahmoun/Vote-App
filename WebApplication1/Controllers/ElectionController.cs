@@ -457,7 +457,7 @@ namespace WebApplication1.Controllers
         //_repositoryElection as a paramter from frontend (jQuery ajax)
         //since it is used in dashboard, all authenticated users can use it
         [Authorize]
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> GetComingElections()
         {
             try
@@ -487,7 +487,7 @@ namespace WebApplication1.Controllers
         //_repositoryElection as a paramter from frontend (jQuery ajax)
         //since it is used in dashboard, all authenticated users can use it
         [Authorize]
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> GetPreviousElections()
         {
             //this function returns a list of previous elections with their winners
@@ -498,12 +498,46 @@ namespace WebApplication1.Controllers
                 //elections objects as they are I got this error "self referencing loop detected with type" it means json tried to serialize the election object
                 //but it found that each election has an Candidates objects list, and each candidate of them has an election and so on, so i excluded Candidate
                 //from the selection to avoid the infinite loop
+
+
+
+                /*
+                //THE FOLLOWING QUERY SHOULD WORK PROPERLY, IT GETS THE LIST OF FUTURE ELECTIONS WITH THEIR CANDIDATES ORDERED BY VOTES COUNT
+                //BUT IT DIDN'T WORK BECAUSE I AM USING EAGER LOADING, SO AFTER _electionRepository.GetAll() I ONLY CAN ACCESS ELECTIONS & CANDIDATES
+                //SO HOW TO BE ABLE TO USE MORE EFFCIENT QUERIES BUT RESPECTING THESE TWO CONDITIONS:
+                //1- NOT HAVING TO USE _electionRepository.GetAll()
+                //2- NOT MESSING UP THE STRUTURE, I DONT WANT TO QUERY THE DB DIRECTLY IN EVERY SINGLE FILE
+                //HOW??
                 var futureElections = _electionRepository.GetAll().
                     Where(e => e.StartDate.AddDays(e.DurationInDays) < DateTime.Now).
-                    OrderByDescending(e =>e.Candidates.Count).
-                    Select(e => new { e.Id, e.Name, e.StartDate, e.DurationInDays, e.Candidates.Count, OrderedCandidates = e.Candidates.OrderByDescending(c=>c.Votes.Count) }).
+                    Select(e => new
+                    {
+                        e.Id,
+                        e.Name,
+                        e.StartDate,
+                        e.DurationInDays,
+                        CandidatesCount = e.Candidates.Count,
+                        OrderedCandidates = e.Candidates.
+                        Where(c => c.isNeutralOpinion != true).
+                        OrderByDescending(c => c.Votes?.Count).
+                        Select(c => new { c.VoterBeing?.FirstName, c.VoterBeing?.LastName, c.Votes?.Count })
+                    }).
                     ToList();
+                */
 
+
+
+                var futureElections = _electionRepository.GetAll().
+                    Where(e => e.StartDate.AddDays(e.DurationInDays) < DateTime.Now).
+                    Select(e => new
+                    {
+                        e.Id,
+                        e.Name,
+                        e.StartDate,
+                        e.DurationInDays,
+                        CandidatesCount = e.Candidates.Count
+                    }).
+                    ToList();
 
                 var json = JsonConvert.SerializeObject(futureElections);
                 return Ok(json);

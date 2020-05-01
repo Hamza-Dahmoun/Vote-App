@@ -320,7 +320,13 @@
         hideElement(comingElectionsArea.querySelector(".table"));
         loadComingElections();
 
+
         //2- Load Previous Elections
+        let previousElectionsArea = document.getElementById("previous-elections-area");
+        displayElement(previousElectionsArea.querySelector(".spinner-border"));
+        hideElement(previousElectionsArea.querySelector(".table"));
+        loadPreviousElections();
+
 
         //3- Load Current Election
         let currentElectionArea = document.getElementById("current-election-area");
@@ -496,6 +502,32 @@
 
 
 
+    function loadPreviousElections() {
+        //this function load a list of previous elections using jQuery ajax
+
+    $.ajax({
+        type: "POST",
+        url: "/Election/GetPreviousElections",
+        /*data: JSON.stringify(document.getElementById("candidate-id-holder").value),*/
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        error: function () {
+            alert("error");
+        },
+        success: function (response) {
+            //'response' represents the object returned from the api which is a list of previous elections
+            console.log(response);
+            //console.log(response.length);
+            displayPreviousElections(response);
+
+            //window.location.href = "Home/Index";
+        }
+    });
+
+    }
+    function displayPreviousElections(previousElections) {
+        console.log(previousElections);
+    }
     
 
 
