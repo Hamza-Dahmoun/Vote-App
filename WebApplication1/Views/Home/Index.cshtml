@@ -266,9 +266,6 @@
                         <th>
                             Number of Candidates
                         </th>
-                        <th>
-                            Winner
-                        </th>
                         <th></th>
                     </tr>
                 </thead>
@@ -526,7 +523,56 @@
 
     }
     function displayPreviousElections(previousElections) {
-        console.log(previousElections);
+        //console.log(previousElections);
+
+        let previousElectionsArea = document.getElementById("previous-elections-area");
+        let table = previousElectionsArea.querySelector(".table");
+
+        let tableBody = table.querySelector("tbody");
+
+        for (let i = 0; i < previousElections.length; i++) {
+
+            let tdName = document.createElement("td");
+            tdName.innerText = previousElections[i].Name;
+
+            let tdStartDate = document.createElement("td");
+            tdStartDate.innerText = previousElections[i].StartDate;
+
+            let tdDurationInDays = document.createElement("td");
+            tdDurationInDays.innerText = previousElections[i].DurationInDays;
+
+            let tdCandidatesCount = document.createElement("td");
+            tdCandidatesCount.innerText = previousElections[i].CandidatesCount;
+
+            let resultsButton = document.createElement("a");
+            resultsButton.setAttribute("electionId", previousElections[i].Id);
+            resultsButton.style.color = "#3d7e9a";
+            resultsButton.style.cursor = "pointer";
+            resultsButton.setAttribute("title", "Show Details");
+            resultsButton.innerText = "Show Results";
+            resultsButton.addEventListener("click", getElectionResults);
+            let tdResultsButton_andSpinner = document.createElement("td");
+            tdResultsButton_andSpinner.appendChild(resultsButton);
+            let spinner = document.createElement("span");
+            spinner.className = "spinner-border";
+            spinner.style.display = "none";
+            tdResultsButton_andSpinner.appendChild(spinner);
+
+            let electionRow = document.createElement("tr");
+            electionRow.appendChild(tdName);
+            electionRow.appendChild(tdStartDate);
+            electionRow.appendChild(tdDurationInDays);
+            electionRow.appendChild(tdCandidatesCount);
+            electionRow.appendChild(tdResultsButton_andSpinner);
+            
+
+            tableBody.appendChild(electionRow);
+        }
+
+
+        //now lets display the tabl and hide the spinner
+        hideElement(previousElectionsArea.querySelector(".spinner-border"));
+        displayElement(table);
     }
     
 
@@ -555,7 +601,10 @@
         //console.log(event.target.getAttribute("electionId"));
 
         //lets hide the button and display the spinner
-        displayElement(document.getElementById("current-election-results-spinner"));
+        //displayElement(document.getElementById("current-election-results-spinner"));
+        console.log(event);
+        console.log(event.target);
+        displayElement(event.target.parentElement.querySelector(".spinner-border"));
         hideElement(event.target);
         //this function load the current election results using jQuery ajax
         $.ajax({
@@ -571,7 +620,8 @@
                 //'response' represents the object returned from the api which is the an array of candodates ordered by their number of votes
                 console.log(response);
                 //lets hide the spinner and display the button
-                hideElement(document.getElementById("current-election-results-spinner"));
+                //hideElement(document.getElementById("current-election-results-spinner"));
+                hideElement(event.target.parentElement.querySelector(".spinner-border"));
                 displayElement(event.target);
                 //lets display the results
                 displayElectionResults(response);
