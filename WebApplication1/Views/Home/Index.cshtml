@@ -88,7 +88,7 @@
         #election-results-container-parent {
             text-align: center;
             color: #3d7e9a;
-            /*overflow-y: scroll;*/
+            overflow-y: auto;
             height: 100vh;
             width: 35%;
             border-right: 1px solid #3d7e9a;
@@ -319,7 +319,7 @@
 <br/>
 <div id="election-results-container-parent"  class="hidden_results_container">
     <div id="close-button-container">
-        <span onclick="hideElectionResultsContainer">
+        <span>
             <i class="fa fa-times" aria-hidden="true"></i>
         </span>             
     </div>
@@ -723,7 +723,8 @@
 
 
         //now lets add a click event to the document so that it also hide the results ... we'll remove the click event once the results are hidden
-        document.addEventListener("click", hideElectionResultsContainer);
+        //document.addEventListener("click", hideElectionResultsContainer);
+        document.getElementById("close-button-container").querySelector("span").addEventListener("click", hideElectionResultsContainer);
 
     }
     function hideElectionResultsContainer() {
@@ -733,7 +734,7 @@
 
 
         //lets remove the click event off the document
-        document.removeEventListener("click", hideElectionResultsContainer);
+        //document.removeEventListener("click", hideElectionResultsContainer);
     }
 
 </script>
