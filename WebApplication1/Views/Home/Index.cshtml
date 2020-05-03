@@ -1,6 +1,7 @@
 ﻿@*WE LOAD AN EMPTY VIEW THEN IT GETS FILLED USING JQUERY AJAX*@
 @model WebApplication1.Models.ViewModels.DashboardViewModel
 
+<link rel="stylesheet" href="http://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css"/>
     <partial name="_dashboardStyle"/>
 
 
@@ -22,7 +23,7 @@
             <div class="spinner-border">
 
             </div>
-            <table class="table">
+            <table class="table" id="coming-elections-table">
                 <thead>
                     <tr>
                         <th>
@@ -112,6 +113,10 @@
 
 <partial name="_dashboardScript" />
 
-
-
+<script src="http://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready( function () {
+    $('#coming-elections-table').DataTable();
+} );
+</script>
 
