@@ -60,9 +60,7 @@ namespace WebApplication1.Business
                 NbVoters = NbVoters,
                 NbVotes = NbVotes,
                 //ParticipationRate = (double)votersWithVote / (double)NbVoters,
-                Candidates = candidates,
-                //UserHasVoted = userHasVoted,
-                CurrentElectionId = ElectionUtilities.getCurrentElection(electionRepository).Id
+                Candidates = candidates
             };
             return d;
         }

@@ -16,6 +16,6 @@ namespace WebApplication1.Models.ViewModels
         //public double ParticipationRate { get; set; }
         public List<CandidateViewModel> Candidates { get; set; }
         //public bool UserHasVoted { get; set; }
-        public Guid CurrentElectionId { get; set; }
+        //public Guid CurrentElectionId { get; set; }
     }
 }
