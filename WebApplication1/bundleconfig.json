@@ -1,0 +1,26 @@
+[
+  /* datatables component */
+  /**************************/
+  // datatables styles
+  {
+    "outputFileName": "wwwroot/css/datatables.min.css",
+    "inputFiles": [
+      "wwwroot/lib/datatables/css/jquery.dataTables.min.css",
+      "wwwroot/lib/datatables/css/dataTables.bootstrap4.min.css"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  },
+  // datatables scripts
+  {
+    "outputFileName": "wwwroot/js/datatables.min.js",
+    "inputFiles": [
+      "wwwroot/lib/datatables/js/jquery.dataTables.min.js",
+      "wwwroot/lib/datatables/js/dataTables.bootstrap4.min.js"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  }
+]

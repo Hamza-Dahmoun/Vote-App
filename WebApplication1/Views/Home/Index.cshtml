@@ -1,8 +1,7 @@
 ﻿@*WE LOAD AN EMPTY VIEW THEN IT GETS FILLED USING JQUERY AJAX*@
 @model WebApplication1.Models.ViewModels.DashboardViewModel
-
-<link rel="stylesheet" href="http://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css"/>
-    <partial name="_dashboardStyle"/>
+@*<link rel="stylesheet" href="http://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css"/>*@
+<partial name="_dashboardStyle" />
 
 
 <br />
@@ -94,13 +93,13 @@
         </div>
     </div>
 </div>
-<br/>
-<br/>
-<div id="election-results-container-parent"  class="hidden_results_container">
+<br />
+<br />
+<div id="election-results-container-parent" class="hidden_results_container">
     <div id="close-button-container">
         <span>
             <i class="fa fa-times" aria-hidden="true"></i>
-        </span>             
+        </span>
     </div>
     <p id="title">Results of the Election</p>
 
@@ -112,11 +111,13 @@
 
 
 <partial name="_dashboardScript" />
-
-<script src="http://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/datatables/js/dataTables.bootstrap4.min.js"></script>
+<script src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
+@*<script src="http://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>*@
 <script>
-    $(document).ready( function () {
-    $('#coming-elections-table').DataTable();
-} );
+    $(document).ready(function () {
+        $('#coming-elections-table').DataTable();
+    });
 </script>
 
