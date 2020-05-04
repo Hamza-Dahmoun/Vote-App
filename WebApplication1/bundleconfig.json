@@ -5,19 +5,33 @@
   {
     "outputFileName": "wwwroot/css/datatables.min.css",
     "inputFiles": [
-      "wwwroot/lib/datatables/css/jquery.dataTables.min.css",
-      "wwwroot/lib/datatables/css/dataTables.bootstrap4.min.css"
+      "wwwroot/lib/datatables/css/jquery.dataTables.css",
+      "wwwroot/lib/datatables/css/jquery.dataTables_themeroller.css",
+      "wwwroot/lib/datatables/css/dataTables.bootstrap.css",
+      "wwwroot/lib/datatables/css/dataTables.bootstrap4.css",
+      "wwwroot/lib/datatables/css/dataTables.foundation.css",
+      "wwwroot/lib/datatables/css/dataTables.jqueryui.css",
+      "wwwroot/lib/datatables/css/dataTables.material.css",
+      "wwwroot/lib/datatables/css/dataTables.semanticui.css",
+      "wwwroot/lib/datatables/css/dataTables.uikit.css"
     ],
     "minify": {
       "enabled": true
     }
   },
-  // datatables scripts
+  // datatables  scripts
   {
     "outputFileName": "wwwroot/js/datatables.min.js",
     "inputFiles": [
-      "wwwroot/lib/datatables/js/jquery.dataTables.min.js",
-      "wwwroot/lib/datatables/js/dataTables.bootstrap4.min.js"
+      "wwwroot/lib/datatables/js/jquery.dataTables.js",
+      "wwwroot/lib/datatables/js/dataTables.bootstrap.js",
+      "wwwroot/lib/datatables/js/dataTables.bootstrap4.min.js",
+      "wwwroot/lib/datatables/js/dataTables.dataTables.js",
+      "wwwroot/lib/datatables/js/dataTables.foundation.js",
+      "wwwroot/lib/datatables/js/dataTables.jqueryui.js",
+      "wwwroot/lib/datatables/js/dataTables.material.js",
+      "wwwroot/lib/datatables/js/dataTables.semanticui.js",
+      "wwwroot/lib/datatables/js/dataTables.uikit.js"
     ],
     "minify": {
       "enabled": true
