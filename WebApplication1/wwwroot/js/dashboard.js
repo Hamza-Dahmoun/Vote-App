@@ -83,6 +83,8 @@ function displayComingElections(comingElections) {
     //now lets display the tabl and hide the spinner
     hideElement(comingElectionsArea.querySelector(".spinner-border"));
     displayElement(table);
+    //now lets make it a jquery datatables
+    $('#coming-elections-table').DataTable();
 }
 
 

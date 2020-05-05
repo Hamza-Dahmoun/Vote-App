@@ -1,6 +1,6 @@
 ﻿@*WE LOAD AN EMPTY VIEW THEN IT GETS FILLED USING JQUERY AJAX*@
 @model WebApplication1.Models.ViewModels.DashboardViewModel
-    
+
 <partial name="_dashboardStyle" />
 <partial name="_datatablesStyle" />
 
@@ -16,7 +16,32 @@
 
             </div>
         </div>
-
+        @*<table class="table" id="coming-elections-table1">
+            <thead>
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        StartDate
+                    </th>
+                    <th>
+                        Duration (days)
+                    </th>
+                    <th>
+                        Number of Candidates
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Hamza</td>
+                    <td>12/12/2015</td>
+                    <td>20</td>
+                    <td>5</td>
+                </tr>
+            </tbody>
+        </table>*@
         <div class="margined-area" id="coming-elections-area">
             <h3>Future Elections</h3>
             <div class="spinner-border">
@@ -106,16 +131,16 @@
     <div id="election-results-container"></div>
 </div>
 
-
-
-
-
 <partial name="_dashboardScript" />
+<script src="~/lib/jquery/dist/jquery.js"></script>
 <partial name="_datatablesScript" />
-@*<script src="http://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>*@
+
 <script>
-    $(document).ready(function () {
+    document.addEventListener("DOMContentLoaded", datatbl);
+    function datatbl(){
+        console.log("hello");
         $('#coming-elections-table').DataTable();
-    });
+    }
+
 </script>
 
