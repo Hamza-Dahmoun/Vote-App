@@ -3,13 +3,13 @@
 @{
     ViewData["Title"] = "Index";
 }
-
+    <partial name="_datatablesStyle" />
 <h1>Index</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+<table class="table" id="elections-table">
     <thead>
         <tr>
             <th>
@@ -33,30 +33,37 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <th>
-                @Html.DisplayFor(model => item.Name)
-            </th>
-            <th>
-                @Html.DisplayFor(model => item.StartDate)
-            </th>
-            <th>
-                @Html.DisplayFor(model => item.DurationInDays)
-            </th>
-            <th>
-                @Html.DisplayFor(model => item.HasNeutral)
-            </th>
-            <th>
-                @Html.DisplayFor(model => item.NumberOfCandidates)
-            </th>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+            <tr>
+                <th>
+                    @Html.DisplayFor(model => item.Name)
+                </th>
+                <th>
+                    @Html.DisplayFor(model => item.StartDate)
+                </th>
+                <th>
+                    @Html.DisplayFor(model => item.DurationInDays)
+                </th>
+                <th>
+                    @Html.DisplayFor(model => item.HasNeutral)
+                </th>
+                <th>
+                    @Html.DisplayFor(model => item.NumberOfCandidates)
+                </th>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                    |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
         }
     </tbody>
 </table>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<partial name="_datatablesScript" />
+
+<script>
+    //now lets make it a jquery datatables
+    document.addEventListener("DOMContentLoaded", function () { $('#elections-table').DataTable()});
+</script>
