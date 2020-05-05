@@ -40,10 +40,5 @@
 
 <script>
     //now lets make it a jquery datatables
-    document.addEventListener("DOMContentLoaded", makeIt_jQueryDataTable);
-    
-    function makeIt_jQueryDataTable() {
-        $('#states-table').DataTable();
-    }
-    
+    document.addEventListener("DOMContentLoaded", function () { $('#states-table').DataTable()});    
 </script>
