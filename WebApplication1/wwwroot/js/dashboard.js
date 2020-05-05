@@ -268,6 +268,8 @@ function displayPreviousElections(previousElections) {
     //now lets display the tabl and hide the spinner
     hideElement(previousElectionsArea.querySelector(".spinner-border"));
     displayElement(table);
+    //now lets make it a jquery datatables
+    $('#previous-elections-table').DataTable();
 }
 
 
