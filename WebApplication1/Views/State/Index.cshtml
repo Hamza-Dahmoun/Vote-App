@@ -3,13 +3,13 @@
 @{
     ViewData["Title"] = "Index";
 }
-
+<partial name="_datatablesStyle" />
 <h1>List of Sites</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+<table class="table" id="states-table">
     <thead>
         <tr>
             <th>
@@ -19,18 +19,31 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> 
-                |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<partial name="_datatablesScript" />
+
+<script>
+    //now lets make it a jquery datatables
+    document.addEventListener("DOMContentLoaded", makeIt_jQueryDataTable);
+    
+    function makeIt_jQueryDataTable() {
+        $('#states-table').DataTable();
+    }
+    
+</script>
