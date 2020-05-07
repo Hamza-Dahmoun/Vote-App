@@ -51,8 +51,26 @@ namespace WebApplication1.Business
 
 
 
-        
-        //Note that this method uses _candidateRepository, so it depends to it, and we passed the repository object as a pramater. This is called Method Dependancy Injection
+
+
+        //Note that this method uses _candidateRepository, so it depends to it, and we passed the repository object as a pramater. This is called Method Dependancy 
+        public static Candidate GetCandidate_byVoter_byElection(IRepository<Candidate> candidateRepository, Voter voter, Election election)
+        {
+            //this method gets a candidate by its voterId and its ElectionId
+
+
+            _candidateRepository = candidateRepository;
+            try
+            {
+                return _candidateRepository.GetAll().SingleOrDefault(c => c.VoterBeing == voter && c.Election == election);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+        #region SAME METHOD AS ABOVE BUT FILTERING DATA BEFORE KNOWING ABOUT EXPRESSION CLASS
+        /*//Note that this method uses _candidateRepository, so it depends to it, and we passed the repository object as a pramater. This is called Method Dependancy Injection
         public static Candidate GetCandidate_byVoter_byElection(IRepository<Candidate> candidateRepository, Voter voter, Election election)
         {
             //this method gets a candidate by its voterId and its ElectionId
@@ -65,8 +83,8 @@ namespace WebApplication1.Business
             {
                 throw E;
             }
-        }
-
+        }*/
+        #endregion
 
 
         //Note that this method uses _candidateRepository, so it depends to it, and we passed the repository object as a pramater. This is called Method Dependancy Injection

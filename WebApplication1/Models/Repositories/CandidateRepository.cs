@@ -72,6 +72,12 @@ namespace WebApplication1.Models.Repositories
             return _dbSet.Include(c=>c.Election)/*.Include(c=>c.State)*/.Include(c=>c.Votes).Include(c => c.VoterBeing).SingleOrDefault(c=>c.Id == Id);
         }
 
+        public Candidate GetOneFiltered(Expression<Func<Candidate, bool>> predicate)
+        {
+            //use eager loading to bring State data and Votes data and VoterBeing data too
+            return _dbSet.Include(c => c.Election)/*.Include(c=>c.State)*/.Include(c => c.Votes).Include(c => c.VoterBeing).SingleOrDefault(predicate);
+        }
+
         //public Candidate GetByVoterBeingId(Guid VoterBeingId)
         //{
         //    Candidate candidate = _dBContext.Candidate.Include(c => c.VoterBeing).SingleOrDefault(c => c.VoterBeing.Id == VoterBeingId);
