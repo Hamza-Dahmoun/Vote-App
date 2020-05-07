@@ -53,5 +53,10 @@ namespace WebApplication1.Models.Repositories
             //use eager loading to bring Candidate data too
             return _dbSet.Include(v => v.Candidate).SingleOrDefault(v=>v.Id == Id);
         }
+
+        public Vote GetOneFiltered(Expression<Func<Vote, bool>> predicate)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

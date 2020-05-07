@@ -57,5 +57,10 @@ namespace WebApplication1.Models.Repositories
         {
             return _dbSet.Include(e=>e.Candidates).Include(e => e.Votes).SingleOrDefault(e=>e.Id == Id);
         }
+
+        public Election GetOneFiltered(Expression<Func<Election, bool>> predicate)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

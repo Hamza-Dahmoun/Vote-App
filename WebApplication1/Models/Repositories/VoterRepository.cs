@@ -61,6 +61,9 @@ namespace WebApplication1.Models.Repositories
             return _dbSet.Include(v => v.State).SingleOrDefault(v=>v.Id == Id);
         }
 
-        
+        public Voter GetOneFiltered(Expression<Func<Voter, bool>> predicate)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

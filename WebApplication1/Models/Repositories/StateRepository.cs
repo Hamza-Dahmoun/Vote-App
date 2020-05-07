@@ -58,5 +58,10 @@ namespace WebApplication1.Models.Repositories
             return _dbSet.SingleOrDefault(s=>s.Id == Id);
             //return _dbSet.Find(Id);
         }
+
+        public State GetOneFiltered(Expression<Func<State, bool>> predicate)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
