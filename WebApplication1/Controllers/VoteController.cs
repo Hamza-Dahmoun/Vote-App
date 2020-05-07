@@ -48,7 +48,7 @@ namespace WebApplication1.Controllers
             //this action returns a view containing all candidates of the current election for the user to vote on five of them maximum
 
             Election election = ElectionUtilities.getCurrentElection(_electionRepository);// _electionRepository.GetById(CurrentElectionId);
-            var candidates = CandidateUtilities.GetCandidate_byElection(election);            
+            var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, election);            
             //return View(Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, _candidateRepository.GetAll()));
             return View(Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, candidates));
         }
@@ -95,7 +95,7 @@ namespace WebApplication1.Controllers
                     success = true
                 });*/
                 //everything is okey, lets return a list of candidates with votes counter ordered so that the winner is the first
-                var candidates = CandidateUtilities.GetCandidate_byElection(election);
+                var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, election);
                 List<CandidateViewModel> candidatesViewModel = Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, candidates);
                 //lets serialize the list of candidatesviewmodel as json object
                 var json = JsonConvert.SerializeObject(candidatesViewModel.OrderByDescending(c => c.VotesCount));

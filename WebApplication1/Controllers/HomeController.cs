@@ -78,7 +78,7 @@ namespace WebApplication1.Controllers
                 return RedirectToPage("/Account/ResetPassword", new { area = "Identity", code }); //this returns 'code must be supplied o reset password'
             }
         }
-
+        [HttpPost]
         public async Task<IActionResult> GetResultsOfElection([FromBody] Guid electionId)
         {
             if (electionId == null || electionId == Guid.Empty)
@@ -90,7 +90,7 @@ namespace WebApplication1.Controllers
 
                 //this method returns a list of candidates (of an election) ordered by their number of votes
                 var election = _electionRepository.GetById(electionId);
-                var candidates = CandidateUtilities.GetCandidate_byElection(election);
+                var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, election);
                 List<CandidateViewModel> candidatesViewModel = Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, candidates);
                 //lets serialize the list of candidatesviewmodel as json object
                 var json = JsonConvert.SerializeObject(candidatesViewModel.OrderByDescending(c => c.VotesCount));

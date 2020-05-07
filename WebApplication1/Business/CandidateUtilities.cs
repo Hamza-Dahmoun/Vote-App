@@ -69,14 +69,14 @@ namespace WebApplication1.Business
 
 
 
-
-        public static List<Candidate> GetCandidate_byElection(Election election)
+        //Note that this method uses _candidateRepository, so it depends to it, and we passed the repository object as a pramater. This is called Method Dependancy Injection
+        public static List<Candidate> GetCandidate_byElection(IRepository<Candidate> _candidateRepository, Election election)
         {
             try
             {
                 //declaring an expression that is special to Candidate objects and it compares the election instance of the candidates 
                 //with 'election' parameter
-                System.Linq.Expressions.Expression<Func<Candidate, bool>> expr = i => i.Election == election;
+                System.Linq.Expressions.Expression<Func<Candidate, bool>> expr = i => i.Election == election;                
                 return _candidateRepository.GetAllFiltered(expr);
             }
             catch (Exception E)
