@@ -90,7 +90,7 @@ namespace WebApplication1.Controllers
 
                 //this method returns a list of candidates (of an election) ordered by their number of votes
                 var election = _electionRepository.GetById(electionId);
-                var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, election);
+                var candidates = CandidateUtilities.GetCandidate_byElection(election);
                 List<CandidateViewModel> candidatesViewModel = Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, candidates);
                 //lets serialize the list of candidatesviewmodel as json object
                 var json = JsonConvert.SerializeObject(candidatesViewModel.OrderByDescending(c => c.VotesCount));
