@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace WebApplication1.Models.Repositories
@@ -14,5 +15,6 @@ namespace WebApplication1.Models.Repositories
         void Add(T item);
         void Edit(Guid Id, T item);
         void Delete(Guid Id);
+        List<T> GetAllFiltered(Expression<Func<T, bool>> predicate);//what does 'bool' do in here
     }
 }

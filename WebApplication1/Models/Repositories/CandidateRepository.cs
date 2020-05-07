@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace WebApplication1.Models.Repositories
@@ -49,6 +50,20 @@ namespace WebApplication1.Models.Repositories
             }
             
             //return _dbSet.ToList();
+        }
+
+        public List<Candidate> GetAllFiltered(Expression<Func<Candidate, bool>> predicate)
+        {
+            //this function uses the linq expression passed in the object 'predicate' of 'Expression' class to filter the rows from the db
+            try
+            {
+                //use eager loading to bring other tables data 
+                return _dbSet.Where(predicate)/*.Include(c => c.State)*/.Include(c => c.Election).Include(c => c.Votes).Include(c => c.VoterBeing).ToList();
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
         }
 
         public Candidate GetById(Guid Id)
