@@ -21,12 +21,32 @@ namespace WebApplication1.Business
 
         //Note that this method uses _electionRepository, so it depends to it, and we passed the repository object as a pramater. This is called Method Dependancy Injection
         public static Election getCurrentElection(IRepository<Election> electionRepository)
+        {
+            //this is using Method Dependancy Injection
+            _electionRepository = electionRepository;
+            try
+            {
+                //declaring an expression that is special to Election objects
+                //a current Election is the one that 'Date.Now' is between the startDate and the endDate(endDate = startDate + duration in days)
+                System.Linq.Expressions.Expression<Func<Election, bool>> expr = e => DateTime.Now.Date >= e.StartDate && DateTime.Now.Date.AddDays(-e.DurationInDays) <= e.StartDate;
+                Election currentElection = _electionRepository.GetOneFiltered(expr);
+                return currentElection;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }            
+        }
+        #region SAME METHOD AS ABOVE BUT FILTERING DATA BEFORE KNOWING ABOUT EXPRESSION CLASS
+        /*//Note that this method uses _electionRepository, so it depends to it, and we passed the repository object as a pramater. This is called Method Dependancy Injection
+        public static Election getCurrentElection(IRepository<Election> electionRepository)
         {//this is using Method Dependancy Injection
             _electionRepository = electionRepository;
             //a current Election is the one that 'Date.Now' is between the startDate and the endDate(endDate = startDate + duration in days)
-            Election currentElection = _electionRepository.GetAll().FirstOrDefault(e => DateTime.Now.Date >=e.StartDate && DateTime.Now.Date.AddDays(- e.DurationInDays) <= e.StartDate);
+            Election currentElection = _electionRepository.GetAll().FirstOrDefault(e => DateTime.Now.Date >= e.StartDate && DateTime.Now.Date.AddDays(-e.DurationInDays) <= e.StartDate);
             return currentElection;
-        }
+        }*/
+        #endregion
 
         //Note that this method uses _electionRepository, so it depends to it, and we passed the repository object as a pramater. This is called Method Dependancy Injection
         public static bool isThereElectionInSamePeriod(IRepository<Election> electionRepository, DateTime startDate, int durationInDays)
