@@ -48,10 +48,33 @@ namespace WebApplication1.Business
         }*/
         #endregion
 
+
+
         //Note that this method uses _electionRepository, so it depends to it, and we passed the repository object as a pramater. This is called Method Dependancy Injection
         public static bool isThereElectionInSamePeriod(IRepository<Election> electionRepository, DateTime startDate, int durationInDays)
         {//this is using Method Dependancy Injection
             
+            //this method checks if there is an existing election instance in the db in the same duration of a new election that is going to be added to 
+            //the db as well. If there is, the new election will not be inserted to the db
+            _electionRepository = electionRepository;
+
+            //to do so we have to check if one of these cases exist:
+            //(https://stackoverflow.com/questions/13513932/algorithm-to-detect-overlapping-periods)
+            //(tired to think of my own solution right now, lets just use this, it works)
+            DateTime endDate = startDate.AddDays(durationInDays);
+            //declaring an expression that is special to Election objects
+            System.Linq.Expressions.Expression<Func<Election, bool>> expr = e => e.StartDate <= endDate && startDate <= e.StartDate.AddDays(e.DurationInDays);
+            var elections = _electionRepository.GetAllFiltered(expr).ToList();
+
+            if (elections.Count > 0)
+                return true;
+            else return false;
+        }
+        #region SAME METHOD AS ABOVE BUT FILTERING DATA BEFORE KNOWING ABOUT EXPRESSION CLASS
+        //Note that this method uses _electionRepository, so it depends to it, and we passed the repository object as a pramater. This is called Method Dependancy Injection
+        /*public static bool isThereElectionInSamePeriod(IRepository<Election> electionRepository, DateTime startDate, int durationInDays)
+        {//this is using Method Dependancy Injection
+
             //this method checks if there is an existing election instance in the db in the same duration of a new election that is going to be added to 
             //the db as well. If there is, the new election will not be inserted to the db
             _electionRepository = electionRepository;
@@ -66,6 +89,8 @@ namespace WebApplication1.Business
                 return true;
             else return false;
         }
+        */
+        #endregion
 
     }
 }
