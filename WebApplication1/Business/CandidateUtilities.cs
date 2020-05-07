@@ -58,11 +58,13 @@ namespace WebApplication1.Business
         {
             //this method gets a candidate by its voterId and its ElectionId
 
-
             _candidateRepository = candidateRepository;
             try
             {
-                return _candidateRepository.GetAll().SingleOrDefault(c => c.VoterBeing == voter && c.Election == election);
+                //declaring an expression that is special to Candidate objects and it compares the election instance of the candidates 
+                //with 'election' parameter
+                System.Linq.Expressions.Expression<Func<Candidate, bool>> expr = i => i.Election == election && i.VoterBeing == voter;
+                return _candidateRepository.GetOneFiltered(expr);                
             }
             catch (Exception E)
             {
@@ -88,8 +90,9 @@ namespace WebApplication1.Business
 
 
         //Note that this method uses _candidateRepository, so it depends to it, and we passed the repository object as a pramater. This is called Method Dependancy Injection
-        public static List<Candidate> GetCandidate_byElection(IRepository<Candidate> _candidateRepository, Election election)
+        public static List<Candidate> GetCandidate_byElection(IRepository<Candidate> candidateRepository, Election election)
         {
+            _candidateRepository = candidateRepository;
             try
             {
                 //declaring an expression that is special to Candidate objects and it compares the election instance of the candidates 
