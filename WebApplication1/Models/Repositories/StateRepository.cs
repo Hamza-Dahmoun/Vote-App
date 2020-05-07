@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace WebApplication1.Models.Repositories
@@ -44,6 +45,12 @@ namespace WebApplication1.Models.Repositories
         {
             return _dbSet.ToList();
             //return _dbSet.ToList();
+        }
+
+        public List<State> GetAllFiltered(Expression<Func<State, bool>> predicate)
+        {
+            //this function uses the linq expression passed in the object 'predicate' of 'Expression' class to filter the rows from the db
+            throw new NotImplementedException();
         }
 
         public State GetById(Guid Id)
