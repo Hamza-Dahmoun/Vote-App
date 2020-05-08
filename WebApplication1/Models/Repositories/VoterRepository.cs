@@ -52,7 +52,15 @@ namespace WebApplication1.Models.Repositories
         public List<Voter> GetAllFiltered(Expression<Func<Voter, bool>> predicate)
         {
             //this function uses the linq expression passed in the object 'predicate' of 'Expression' class to filter the rows from the db
-            throw new NotImplementedException();
+            try
+            {
+                //use eager loading to bring other tables data 
+                return _dbSet.Where(predicate).Include(v => v.State).ToList();
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
         }
 
         public Voter GetById(Guid Id)
@@ -63,7 +71,7 @@ namespace WebApplication1.Models.Repositories
 
         public Voter GetOneFiltered(Expression<Func<Voter, bool>> predicate)
         {
-            throw new NotImplementedException();
+            return _dbSet.Include(v => v.State).SingleOrDefault(predicate);
         }
     }
 }
