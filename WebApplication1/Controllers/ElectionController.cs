@@ -566,9 +566,16 @@ namespace WebApplication1.Controllers
                 //elections objects as they are I got this error "self referencing loop detected with type" it means json tried to serialize the election object
                 //but it found that each election has an Candidates objects list, and each candidate of them has an election and so on, so i excluded Candidate
                 //from the selection to avoid the infinite loop
-                var currentElection = _electionRepository.GetAll()
-                    .Select(e => new { e.Id, e.Name, e.StartDate, e.DurationInDays, e.Candidates.Count})
-                    .FirstOrDefault(e => e.StartDate <= DateTime.Now && DateTime.Now <= e.StartDate.AddDays(e.DurationInDays))
+
+
+                //declaring an expression that is special to Election objects
+                System.Linq.Expressions.Expression<Func<Election, bool>> expr =
+                    e => e.StartDate <= DateTime.Now && DateTime.Now <= e.StartDate.AddDays(e.DurationInDays);
+
+
+
+                var currentElection = _electionRepository.GetOneFiltered(expr)
+                    /*.Select(e => new { e.Id, e.Name, e.StartDate, e.DurationInDays, e.Candidates.Count})*/
                     ;
 
                 if(currentElection != null)
@@ -578,7 +585,7 @@ namespace WebApplication1.Controllers
                     a.Name = currentElection.Name;
                     a.StartDate = currentElection.StartDate;
                     a.DurationInDays = currentElection.DurationInDays;
-                    a.CandidatesCount = currentElection.Count;
+                    a.CandidatesCount = currentElection.Candidates.Count;
 
                     var currentUser = await _userManager.GetUserAsync(HttpContext.User);
                     bool userHasVoted = VoteUtilities.hasVoted(_voteRepository, currentElection.Id, VoterUtilities.getVoterByUserId(Guid.Parse(currentUser.Id), _voterRepository).Id);
