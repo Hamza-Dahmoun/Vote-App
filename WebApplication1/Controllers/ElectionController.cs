@@ -468,8 +468,7 @@ namespace WebApplication1.Controllers
                 //but it found that each election has an Candidates objects list, and each candidate of them has an election and so on, so i excluded Candidate
                 //from the selection to avoid the infinite loop
 
-                //declaring an expression that is special to Candidate objects and it compares the election instance of the candidates 
-                //with 'election' parameter and voterBeing with voter parameter
+                //declaring an expression that is special to Election objects
                 System.Linq.Expressions.Expression<Func<Election, bool>> expr = e => e.StartDate > DateTime.Now;
 
                 var futureElections = _electionRepository.GetAllFiltered(expr).Select(e => new { e.Name, e.StartDate, e.DurationInDays, e.Candidates.Count});
@@ -506,34 +505,11 @@ namespace WebApplication1.Controllers
 
 
 
-                /*
-                //THE FOLLOWING QUERY SHOULD WORK PROPERLY, IT GETS THE LIST OF FUTURE ELECTIONS WITH THEIR CANDIDATES ORDERED BY VOTES COUNT
-                //BUT IT DIDN'T WORK BECAUSE I AM USING EAGER LOADING, SO AFTER _electionRepository.GetAll() I ONLY CAN ACCESS ELECTIONS & CANDIDATES
-                //SO HOW TO BE ABLE TO USE MORE EFFCIENT QUERIES BUT RESPECTING THESE TWO CONDITIONS:
-                //1- NOT HAVING TO USE _electionRepository.GetAll()
-                //2- NOT MESSING UP THE STRUTURE, I DONT WANT TO QUERY THE DB DIRECTLY IN EVERY SINGLE FILE
-                //HOW??
-                var futureElections = _electionRepository.GetAll().
-                    Where(e => e.StartDate.AddDays(e.DurationInDays) < DateTime.Now).
-                    Select(e => new
-                    {
-                        e.Id,
-                        e.Name,
-                        e.StartDate,
-                        e.DurationInDays,
-                        CandidatesCount = e.Candidates.Count,
-                        OrderedCandidates = e.Candidates.
-                        Where(c => c.isNeutralOpinion != true).
-                        OrderByDescending(c => c.Votes?.Count).
-                        Select(c => new { c.VoterBeing?.FirstName, c.VoterBeing?.LastName, c.Votes?.Count })
-                    }).
-                    ToList();
-                */
+                //declaring an expression that is special to Election objects
+                System.Linq.Expressions.Expression<Func<Election, bool>> expr = e => e.StartDate.AddDays(e.DurationInDays) < DateTime.Now;
 
 
-
-                var futureElections = _electionRepository.GetAll().
-                    Where(e => e.StartDate.AddDays(e.DurationInDays) < DateTime.Now).
+                var futureElections = _electionRepository.GetAllFiltered(expr).
                     Select(e => new
                     {
                         e.Id,
