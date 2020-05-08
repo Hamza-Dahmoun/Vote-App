@@ -36,14 +36,20 @@ namespace WebApplication1.Business
         }
 
         //Note that this method uses _voterRepository, so it depends to it, and we passed the repository object as a pramater. This is called Method Dependancy Injection
-        public static int getNumberOfVotesByElection(IRepository<Vote> voteRepository, Guid ElectionId)
+        public static int getNumberOfVotersVotedOnElection(IRepository<Vote> voteRepository, Guid ElectionId)
         {//this is using Method Dependancy Injection
 
-            //this method returns the number of votes by election
+            //this method returns the number of voters who voted in a given election
 
             _voteRepository = voteRepository;
+
+
+            //declaring an expression that is special to Vote objects
+            System.Linq.Expressions.Expression<Func<Vote, bool>> expr = v => v.Election.Id == ElectionId;
+
+        
             //I used GroupBy() so that I get the rows by voter to count how many voters, not how many vote ... It worked like Distinct()
-            int votesNumber = _voteRepository.GetAll().Where(v => v.Election.Id == ElectionId).GroupBy(v => v.Voter).Count();
+            int votesNumber = _voteRepository.GetAllFiltered(expr).GroupBy(v => v.Voter).Count();
             return votesNumber;
         }
     }

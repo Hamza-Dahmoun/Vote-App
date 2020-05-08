@@ -591,7 +591,7 @@ namespace WebApplication1.Controllers
                     bool userHasVoted = VoteUtilities.hasVoted(_voteRepository, currentElection.Id, VoterUtilities.getVoterByUserId(Guid.Parse(currentUser.Id), _voterRepository).Id);
                     a.HasUserVoted = userHasVoted;
 
-                    a.ParticipationRate = (double)VoteUtilities.getNumberOfVotesByElection(_voteRepository, currentElection.Id) / _voterRepository.GetAll().Count;
+                    a.ParticipationRate = (double)VoteUtilities.getNumberOfVotersVotedOnElection(_voteRepository, currentElection.Id) / _voterRepository.GetAll().Count;
 
                     var json = JsonConvert.SerializeObject(a);
                     return Ok(json);
