@@ -467,7 +467,12 @@ namespace WebApplication1.Controllers
                 //elections objects as they are I got this error "self referencing loop detected with type" it means json tried to serialize the election object
                 //but it found that each election has an Candidates objects list, and each candidate of them has an election and so on, so i excluded Candidate
                 //from the selection to avoid the infinite loop
-                var futureElections = _electionRepository.GetAll().Where(e => e.StartDate > DateTime.Now).Select(e => new { e.Name, e.StartDate, e.DurationInDays, e.Candidates.Count});
+
+                //declaring an expression that is special to Candidate objects and it compares the election instance of the candidates 
+                //with 'election' parameter and voterBeing with voter parameter
+                System.Linq.Expressions.Expression<Func<Election, bool>> expr = e => e.StartDate > DateTime.Now;
+
+                var futureElections = _electionRepository.GetAllFiltered(expr).Select(e => new { e.Name, e.StartDate, e.DurationInDays, e.Candidates.Count});
                 var json = JsonConvert.SerializeObject(futureElections);
                 return Ok(json);
 
