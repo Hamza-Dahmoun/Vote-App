@@ -33,21 +33,6 @@ namespace WebApplication1.Business
 
         }
 
-        //Note that this method uses _candidateRepository, so it depends to it, and we passed the repository object as a pramater. This is called Method Dependancy Injection
-        /*public static Candidate GetNeutralCandidate(IRepository<Candidate> candidateRepository)
-        {
-            //This method returns the neutral opinion candidate, there is a maximum of one row, or there isn't yet
-            
-            _candidateRepository = candidateRepository;
-            try
-            {
-                return _candidateRepository.GetAll().SingleOrDefault(c => c.isNeutralOpinion == true);
-            }
-            catch(Exception E)
-            {
-                throw E;
-            }
-        }*/
 
 
 
@@ -71,23 +56,7 @@ namespace WebApplication1.Business
                 throw E;
             }
         }
-        #region SAME METHOD AS ABOVE BUT FILTERING DATA BEFORE KNOWING ABOUT EXPRESSION CLASS
-        /*//Note that this method uses _candidateRepository, so it depends to it, and we passed the repository object as a pramater. This is called Method Dependancy Injection
-        public static Candidate GetCandidate_byVoter_byElection(IRepository<Candidate> candidateRepository, Voter voter, Election election)
-        {
-            //this method gets a candidate by its voterId and its ElectionId
-            _candidateRepository = candidateRepository;
-            try
-            {
-                return _candidateRepository.GetAll().SingleOrDefault(c => c.VoterBeing == voter && c.Election == election);
-            }
-            catch(Exception E)
-            {
-                throw E;
-            }
-        }*/
-        #endregion
-
+        
 
         //Note that this method uses _candidateRepository, so it depends to it, and we passed the repository object as a pramater. This is called Method Dependancy Injection
         public static List<Candidate> GetCandidate_byElection(IRepository<Candidate> candidateRepository, Election election)
@@ -105,21 +74,5 @@ namespace WebApplication1.Business
                 throw E;
             }
         }
-        #region SAME METHOD AS ABOVE BUT FILTERING DATA BEFORE KNOWING ABOUT EXPRESSION CLASS
-        /*//Note that this method uses _candidateRepository, so it depends to it, and we passed the repository object as a pramater. This is called Method Dependancy Injection
-        public static List<Candidate> GetCandidate_byElection(IRepository<Candidate> candidateRepository, Election election)
-        {
-            //this method gets a list of candidates by its ElectionId
-            _candidateRepository = candidateRepository;
-            try
-            {
-                return _candidateRepository.GetAll().Where(c => c.Election == election).ToList();
-            }
-            catch (Exception E)
-            {
-                throw E;
-            }            
-        }*/
-        #endregion
     }
 }
