@@ -11,49 +11,67 @@
     <a asp-action="Create">Create New</a>
 </p>
 <table class="table" id="voters-table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.State)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+    @*
+            NO NEED FOR THE BELOW BECUZ WE ARE USING JQUERY DATATABLES SERVER SIDE PROCESSING
+
+            <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FirstName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LastName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.State.Name)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                    |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                    |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.LastName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.State)
+                </th>
+                <th></th>
             </tr>
-        }
-    </tbody>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.State.Name)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                        |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                        |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>*@
 </table>
 
 <partial name="_jQuery" />
 <partial name="_datatablesScript" />
 
 <script>
-    //now lets make it a jquery datatables
-    document.addEventListener("DOMContentLoaded", function () { $('#voters-table').DataTable() });
+    //now lets make it a jquery datatables server side processing
+    document.addEventListener("DOMContentLoaded", initializeDatatable);
+
+    function initializeDatatable() {
+        let votersTable = document.getElementById("voters-table");
+        votersTable.DataTable(
+            {
+                serverSide: true,
+                ajax: {
+                    url: '/DataTable',
+                    type: 'POST'
+                }
+            }
+        );
+    }
+
+
 </script>
