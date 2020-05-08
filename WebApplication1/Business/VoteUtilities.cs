@@ -24,7 +24,12 @@ namespace WebApplication1.Business
         {//this is using Method Dependancy Injection
             _voteRepository = voteRepository;
 
-            var votes = _voteRepository.GetAll().Where(v => v.Election.Id == ElectionId && v.Voter.Id == VoterId);
+
+            //declaring an expression that is special to Vote objects
+            System.Linq.Expressions.Expression<Func<Vote, bool>> expr = v => v.Election.Id == ElectionId && v.Voter.Id == VoterId;
+
+
+            var votes = _voteRepository.GetAllFiltered(expr);
             if (votes.Count() > 0)
                 return true;
             else return false;
