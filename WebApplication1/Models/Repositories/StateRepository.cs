@@ -50,7 +50,15 @@ namespace WebApplication1.Models.Repositories
         public List<State> GetAllFiltered(Expression<Func<State, bool>> predicate)
         {
             //this function uses the linq expression passed in the object 'predicate' of 'Expression' class to filter the rows from the db
-            throw new NotImplementedException();
+            try
+            {
+                //use eager loading to bring other tables data 
+                return _dbSet.Where(predicate).ToList();
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
         }
 
         public State GetById(Guid Id)
@@ -61,7 +69,7 @@ namespace WebApplication1.Models.Repositories
 
         public State GetOneFiltered(Expression<Func<State, bool>> predicate)
         {
-            throw new NotImplementedException();
+            return _dbSet.SingleOrDefault(predicate);
         }
     }
 }
