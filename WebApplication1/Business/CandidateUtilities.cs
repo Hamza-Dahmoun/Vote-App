@@ -25,7 +25,10 @@ namespace WebApplication1.Business
         {
             _candidateRepository = candidateRepository;
 
-            Candidate candidate = _candidateRepository.GetAll().SingleOrDefault(c => c.VoterBeing?.Id == voter.Id);
+            //declaring an expression that is special to Candidate objects
+            System.Linq.Expressions.Expression<Func<Candidate, bool>> expr = c => c.VoterBeing == voter;
+
+            Candidate candidate = _candidateRepository.GetOneFiltered(expr);
 
             if (candidate != null)
                 return true;
