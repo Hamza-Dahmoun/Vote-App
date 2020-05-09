@@ -228,10 +228,8 @@ namespace WebApplication1.Controllers
                  Column to which ordering should be applied. This is an index reference to the columns array of information 
                  that is also submitted to the server.
                  */
-                 //for now we'll consider sorting voters only by their FirstName (second column) later we'll see
-                var sortColumnName = HttpContext.Request.Form["order[1][column][name]"].FirstOrDefault();
-                //var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
-
+                var sortColumnName = HttpContext.Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+                
                 /*
                  * order[i][dir]
                  * integer Type

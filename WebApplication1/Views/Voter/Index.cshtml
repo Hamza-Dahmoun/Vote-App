@@ -71,12 +71,15 @@
                     "type": 'POST',
                     "datatype":'json'
                 },
+                "columnDefs": [
+                    { "type": "numeric-comma", targets: "_all" }
+                ],
                 "columns":
                     [//These are the columns to be displayed, and they are the fields of the voters objects brought from the server
                         { "data": "Id", "visible": false, "searchable": false },
-                        { "data": "FirstName", "title": "FirstName", "visible": true, "searchable": true },
-                        { "data": "LastName", "title": "Last Name", "visible": true, "searchable": true },
-                        { "data": "State", "title": "State", "visible": true, "searchable": true },
+                        { "data": "FirstName", "title": "FirstName", "name": "FirstName", "visible": true, "searchable": true},
+                        { "data": "LastName", "title": "Last Name", "name": "LastName", "visible": true, "searchable": true },
+                        { "data": "State", "title": "State", "visible": true, "searchable": true, "sortable": false },
                         {
                             "data": null, "searchable": false, "sortable": false,
                             "render": function (data, type, row, meta) {
