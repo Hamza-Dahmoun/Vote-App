@@ -61,6 +61,16 @@ namespace WebApplication1.Models.Repositories
             }
         }
 
+        public List<State> GetAllFilteredPaged(Expression<Func<State, bool>> predicate, string orderBy, int startRowIndex = 0, int maxRows = 10)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<State> GetAllPaged(string orderBy, int startRowIndex = 0, int maxRows = 10)
+        {
+            throw new NotImplementedException();
+        }
+
         public State GetById(Guid Id)
         {
             return _dbSet.SingleOrDefault(s=>s.Id == Id);

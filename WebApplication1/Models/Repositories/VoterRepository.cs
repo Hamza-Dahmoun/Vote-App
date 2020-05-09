@@ -63,6 +63,16 @@ namespace WebApplication1.Models.Repositories
             }
         }
 
+        public List<Voter> GetAllFilteredPaged(Expression<Func<Voter, bool>> predicate, string orderBy, int startRowIndex = 0, int maxRows = 10)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Voter> GetAllPaged(string orderBy, int startRowIndex = 0, int maxRows = 10)
+        {
+            throw new NotImplementedException();
+        }
+
         public Voter GetById(Guid Id)
         {
             //use eager loading to bring State data 

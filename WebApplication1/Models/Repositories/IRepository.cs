@@ -17,5 +17,9 @@ namespace WebApplication1.Models.Repositories
         void Delete(Guid Id);
         List<T> GetAllFiltered(Expression<Func<T, bool>> predicate);
         T GetOneFiltered(Expression<Func<T, bool>> predicate);
+
+        //for jQuery datatables
+        List<T> GetAllPaged(string orderBy, int startRowIndex = 0, int maxRows = 10);
+        List<T> GetAllFilteredPaged(Expression<Func<T, bool>> predicate, string orderBy, int startRowIndex = 0, int maxRows = 10);
     }
 }

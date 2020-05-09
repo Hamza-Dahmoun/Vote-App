@@ -61,6 +61,16 @@ namespace WebApplication1.Models.Repositories
             }
         }
 
+        public List<Election> GetAllFilteredPaged(Expression<Func<Election, bool>> predicate, string orderBy, int startRowIndex = 0, int maxRows = 10)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Election> GetAllPaged(string orderBy, int startRowIndex = 0, int maxRows = 10)
+        {
+            throw new NotImplementedException();
+        }
+
         public Election GetById(Guid Id)
         {
             return _dbSet.Include(e=>e.Candidates).Include(e => e.Votes).SingleOrDefault(e=>e.Id == Id);

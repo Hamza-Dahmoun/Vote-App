@@ -305,7 +305,9 @@ namespace WebApplication1.Controllers
             {
                 return BadRequest();
             }
-            
+
+            //I followed: https://www.c-sharpcorner.com/article/using-jquery-datatables-grid-with-asp-net-core-mvc/
+            //and https://datatables.net/manual/server-side#Example-data
         }
         #endregion
 

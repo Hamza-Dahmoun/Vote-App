@@ -56,6 +56,16 @@ namespace WebApplication1.Models.Repositories
             }
         }
 
+        public List<Vote> GetAllFilteredPaged(Expression<Func<Vote, bool>> predicate, string orderBy, int startRowIndex = 0, int maxRows = 10)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Vote> GetAllPaged(string orderBy, int startRowIndex = 0, int maxRows = 10)
+        {
+            throw new NotImplementedException();
+        }
+
         public Vote GetById(Guid Id)
         {
             //use eager loading to bring Candidate data too
