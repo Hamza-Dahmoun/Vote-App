@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using WebApplication1.Business;
 using WebApplication1.Models;
 using WebApplication1.Models.Repositories;
@@ -292,16 +293,15 @@ namespace WebApplication1.Controllers
                         State = v.State.Name
                     }).ToList();
 
-                //now lets return json data so that it is understandable by jQuery
-                return Json(
-                    new
-                    {
-                        draw = draw,
-                        recordsFiltered = totalRecords,
-                        recordsTotal = totalRecords, 
-                        data = myData
-                    }
-                    );
+                //now lets return json data so that it is understandable by jQuery                
+                var json = JsonConvert.SerializeObject(new
+                {
+                    draw = draw,
+                    recordsFiltered = totalRecords,
+                    recordsTotal = totalRecords,
+                    data = myData
+                });
+                return Ok(json);
             }
             catch
             {
