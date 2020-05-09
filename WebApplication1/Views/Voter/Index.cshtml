@@ -74,16 +74,16 @@
                 "columns":
                     [//These are the columns to be displayed, and they are the fields of the voters objects brought from the server
                         { "data": "Id", "visible": false, "searchable": false },
-                        { "data": "FirstName", "name": "First Name", "visible": true, "searchable": true },
-                        { "data": "LastName", "name": "Last Name", "visible": true, "searchable": true },
-                        { "data": "State", "name": "State", "visible": true, "searchable": true },
+                        { "data": "FirstName", "title": "FirstName", "visible": true, "searchable": true },
+                        { "data": "LastName", "title": "Last Name", "visible": true, "searchable": true },
+                        { "data": "State", "title": "State", "visible": true, "searchable": true },
                         {
                             "data": null, "searchable": false, "sortable": false,
                             "render": function (data, type, row, meta) {
                                 var buttons =
-                                "<a class='btn btn-secondary btn-sm' href=" + '@Url.Action("Edit")/' + row.Id + "><i class='fa fa-pencil-alt'></i></a>" + " " +
+                                "<a class='btn btn-secondary btn-sm' href=" + '@Url.Action("Edit")/' + row.Id + "><i class='fa fa-pencil'></i></a>" + " " +
                                 "<a class='btn btn-danger btn-sm' href=" + '@Url.Action("Delete")/' + row.Id +"><i class='fa fa-trash'></i></a>";
-                                 return markup;
+                                 return buttons;
                             }
                             }
                     ]
