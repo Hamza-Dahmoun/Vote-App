@@ -74,16 +74,20 @@ namespace WebApplication1.Models.Repositories
 
                 System.Reflection.PropertyInfo propertyName = typeof(Voter).GetProperty(orderBy);
 
-                if (orderDirection == "asc")
+                if (!string.IsNullOrEmpty(orderBy) && !string.IsNullOrEmpty(orderDirection))
                 {
-                    //use eager loading to bring other tables data 
-                    return _dbSet.Where(predicate).OrderBy(v => propertyName.GetValue(v)).Include(v => v.State).Skip(startRowIndex).Take(maxRows).ToList();
+                    if (orderDirection == "asc")
+                    {
+                        //use eager loading to bring other tables data 
+                        return _dbSet.Where(predicate).OrderBy(v => propertyName.GetValue(v)).Include(v => v.State).Skip(startRowIndex).Take(maxRows).ToList();
+                    }
+                    if (orderDirection == "disc")
+                    {
+                        //use eager loading to bring other tables data 
+                        return _dbSet.Where(predicate).OrderByDescending(v => propertyName.GetValue(v)).Include(v => v.State).Skip(startRowIndex).Take(maxRows).ToList();
+                    }
                 }
-                if (orderDirection == "disc")
-                {
-                    //use eager loading to bring other tables data 
-                    return _dbSet.Where(predicate).OrderByDescending(v => propertyName.GetValue(v)).Include(v => v.State).Skip(startRowIndex).Take(maxRows).ToList();
-                }
+                
                 //in case there is no ordering requested
                 return _dbSet.Where(predicate).Include(v => v.State).Skip(startRowIndex).Take(maxRows).ToList();
             }
@@ -103,17 +107,21 @@ namespace WebApplication1.Models.Repositories
                 //to get the name of the property then I'll use it to order the list
 
                 System.Reflection.PropertyInfo propertyName = typeof(Voter).GetProperty(orderBy);
-                
-                if (orderDirection == "asc")
+
+                if (!string.IsNullOrEmpty(orderBy) && !string.IsNullOrEmpty(orderDirection))
                 {
-                    //use eager loading to bring other tables data 
-                    return _dbSet.OrderBy(v => propertyName.GetValue(v)).Include(v => v.State).Skip(startRowIndex).Take(maxRows).ToList();
+                    if (orderDirection == "asc")
+                    {
+                        //use eager loading to bring other tables data 
+                        return _dbSet.OrderBy(v => propertyName.GetValue(v)).Include(v => v.State).Skip(startRowIndex).Take(maxRows).ToList();
+                    }
+                    if (orderDirection == "disc")
+                    {
+                        //use eager loading to bring other tables data 
+                        return _dbSet.OrderByDescending(v => propertyName.GetValue(v)).Include(v => v.State).Skip(startRowIndex).Take(maxRows).ToList();
+                    }
                 }
-                if (orderDirection == "disc")
-                {
-                    //use eager loading to bring other tables data 
-                    return _dbSet.OrderByDescending(v => propertyName.GetValue(v)).Include(v => v.State).Skip(startRowIndex).Take(maxRows).ToList();
-                }
+                 
                 //in case there is no ordering requested
                 return _dbSet.Include(v => v.State).Skip(startRowIndex).Take(maxRows).ToList();
             }
