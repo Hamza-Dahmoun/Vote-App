@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using WebApplication1.Models.Helpers;
 
 namespace WebApplication1.Models.Repositories
 {
@@ -63,7 +64,7 @@ namespace WebApplication1.Models.Repositories
             }
         }
 
-        public List<Voter> GetAllFilteredPaged(Expression<Func<Voter, bool>> predicate, string orderBy, string orderDirection, int startRowIndex = 0, int maxRows = 10)
+        public PagedResult<Voter> GetAllFilteredPaged(Expression<Func<Voter, bool>> predicate, string orderBy, string orderDirection, int startRowIndex = 0, int maxRows = 10)
         {
             //this function returns 'maxRows' row of voters, skipping 'startRowIndex', ordered by the column 'orderBy' and direction of ordering
             //according to 'orderDirection' .... all filtered according to the expression 'predicate'
@@ -101,7 +102,11 @@ namespace WebApplication1.Models.Repositories
                 }*/
 
                 //in case there is no ordering requested
-                return _dbSet.Where(predicate).Include(v => v.State).Skip(startRowIndex).Take(maxRows).ToList();
+                List<Voter> voters = _dbSet.Where(predicate).Include(v => v.State).ToList();
+                int totalCount = voters.Count;
+                voters = voters.Skip(startRowIndex).Take(maxRows).ToList();
+                PagedResult<Voter> p = new PagedResult<Voter>(voters, totalCount);
+                return p;
             }
             catch (Exception E)
             {
@@ -109,7 +114,7 @@ namespace WebApplication1.Models.Repositories
             }
         }
 
-        public List<Voter> GetAllPaged(string orderBy, string orderDirection, int startRowIndex = 0, int maxRows = 10)
+        public PagedResult<Voter> GetAllPaged(string orderBy, string orderDirection, int startRowIndex = 0, int maxRows = 10)
         {
             //this function returns 'maxRows' row of voters, skipping 'startRowIndex', ordered by the column 'orderBy' and direction of ordering
             //according to 'orderDirection'
@@ -143,7 +148,11 @@ namespace WebApplication1.Models.Repositories
                     return _dbSet.OrderByDescending(v => propertyName.GetValue(v)).Include(v => v.State).Skip(startRowIndex).Take(maxRows).ToList();
                 }*/
                 //in case there is no ordering requested
-                return _dbSet.Include(v => v.State).Skip(startRowIndex).Take(maxRows).ToList();
+                var voters = _dbSet.Include(v => v.State).ToList();
+                int totalCount = voters.Count;
+                voters = voters.Skip(startRowIndex).Take(maxRows).ToList();
+                PagedResult<Voter> p = new PagedResult<Voter>(voters, totalCount);
+                return p;
             }
             catch (Exception E)
             {

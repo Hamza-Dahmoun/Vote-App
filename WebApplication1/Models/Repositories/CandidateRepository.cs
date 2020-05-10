@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using WebApplication1.Models.Helpers;
 
 namespace WebApplication1.Models.Repositories
 {
@@ -66,12 +67,12 @@ namespace WebApplication1.Models.Repositories
             }
         }
 
-        public List<Candidate> GetAllFilteredPaged(Expression<Func<Candidate, bool>> predicate, string orderBy, string orderDirection, int startRowIndex = 0, int maxRows = 10)
+        public PagedResult<Candidate> GetAllFilteredPaged(Expression<Func<Candidate, bool>> predicate, string orderBy, string orderDirection, int startRowIndex = 0, int maxRows = 10)
         {
             throw new NotImplementedException();
         }
 
-        public List<Candidate> GetAllPaged(string orderBy, string orderDirection, int startRowIndex = 0, int maxRows = 10)
+        public PagedResult<Candidate> GetAllPaged(string orderBy, string orderDirection, int startRowIndex = 0, int maxRows = 10)
         {
             throw new NotImplementedException();
         }

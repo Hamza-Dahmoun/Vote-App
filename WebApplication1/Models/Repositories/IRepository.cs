@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using WebApplication1.Models.Helpers;
 
 namespace WebApplication1.Models.Repositories
 {
@@ -19,7 +20,7 @@ namespace WebApplication1.Models.Repositories
         T GetOneFiltered(Expression<Func<T, bool>> predicate);
 
         //for jQuery datatables
-        List<T> GetAllPaged(string orderBy, string orderDirection, int startRowIndex = 0, int maxRows = 10);
-        List<T> GetAllFilteredPaged(Expression<Func<T, bool>> predicate, string orderBy, string orderDirection, int startRowIndex = 0, int maxRows = 10);
+        PagedResult<T> GetAllPaged(string orderBy, string orderDirection, int startRowIndex = 0, int maxRows = 10);
+        PagedResult<T> GetAllFilteredPaged(Expression<Func<T, bool>> predicate, string orderBy, string orderDirection, int startRowIndex = 0, int maxRows = 10);
     }
 }

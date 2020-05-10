@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WebApplication1.Business;
 using WebApplication1.Models;
+using WebApplication1.Models.Helpers;
 using WebApplication1.Models.Repositories;
 using WebApplication1.Models.ViewModels;
 
@@ -262,17 +263,10 @@ namespace WebApplication1.Controllers
                         v.State.Name.Contains(searchValue);
 
                     //lets get the list of voters filtered and paged
-                    var voters = _voterRepository.GetAllFilteredPaged(expr, sortColumnName, sortColumnDirection, skip, pageSize)
-                        .Select(v => new
-                        {
-                            v.Id,
-                            v.FirstName,
-                            v.LastName,
-                            State = v.State.Name
-                        }).ToList(); 
+                    PagedResult<Voter> pagedResult = _voterRepository.GetAllFilteredPaged(expr, sortColumnName, sortColumnDirection, skip, pageSize);
 
                     //lets assign totalRecords the correct value
-                    totalRecords = voters.Count;
+                    totalRecords = pagedResult.TotalCount;
 
                     //now lets return json data so that it is understandable by jQuery                
                     var json = JsonConvert.SerializeObject(new
@@ -280,7 +274,7 @@ namespace WebApplication1.Controllers
                         draw = draw,
                         recordsFiltered = totalRecords,
                         recordsTotal = totalRecords,
-                        data = voters
+                        data = pagedResult.Items
                     });
                     return Ok(json);
 
@@ -290,17 +284,10 @@ namespace WebApplication1.Controllers
                     //so user didn't ask for filtering, he only asked for paging
 
                     //lets get the list of voters paged
-                    var voters = _voterRepository.GetAllPaged(sortColumnName, sortColumnDirection, skip, pageSize)
-                        .Select(v => new
-                        {
-                            v.Id,
-                            v.FirstName,
-                            v.LastName,
-                            State = v.State.Name
-                        }).ToList();
+                    PagedResult<Voter> pagedResult = _voterRepository.GetAllPaged(sortColumnName, sortColumnDirection, skip, pageSize);
 
                     //lets assign totalRecords the correct value
-                    totalRecords = voters.Count;
+                    totalRecords = pagedResult.TotalCount;
 
                     //now lets return json data so that it is understandable by jQuery                
                     var json = JsonConvert.SerializeObject(new
@@ -308,7 +295,7 @@ namespace WebApplication1.Controllers
                         draw = draw,
                         recordsFiltered = totalRecords,
                         recordsTotal = totalRecords,
-                        data = voters
+                        data = pagedResult.Items
                     });
                     return Ok(json);
                 }
