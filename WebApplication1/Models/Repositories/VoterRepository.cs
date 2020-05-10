@@ -69,6 +69,17 @@ namespace WebApplication1.Models.Repositories
             //according to 'orderDirection' .... all filtered according to the expression 'predicate'
             try
             {
+                /* WHEN I TRIED SORTING I HAD THE BELOW ERROR
+                 System.InvalidOperationException : 'The LINQ expression 'DbSet<Voter>.OrderBy(v => __propertyName_0.GetValue(v))' 
+                 could not be translated. Either rewrite the query in a form that can be translated, or switch to client evaluation
+                 explicitly by inserting a call to either AsEnumerable(), AsAsyncEnumerable(), ToList(), or ToListAsync(). 
+                 See https://go.microsoft.com/fwlink/?linkid=2101038 for more information.'
+
+                 After looking for this error in the internet but couldn't find a solution to this problem, and the linq query is too simple
+                 to change and write it in another way. So for now I'll keep everything as it is now, but remove Ordering from the linq query.
+                 So the new methods GetAllPaged() and GetAllFilteredPaged() will become like this:
+                 */
+
                 /*
                 //I don't know the name of the property I am going to sort with, so I'll use Refection API
                 //to get the name of the property then I'll use it to order the list
@@ -88,7 +99,7 @@ namespace WebApplication1.Models.Repositories
                         return _dbSet.Where(predicate).OrderByDescending(v => propertyName.GetValue(v)).Include(v => v.State).Skip(startRowIndex).Take(maxRows).ToList();
                     }
                 }*/
-                
+
                 //in case there is no ordering requested
                 return _dbSet.Where(predicate).Include(v => v.State).Skip(startRowIndex).Take(maxRows).ToList();
             }
@@ -104,6 +115,17 @@ namespace WebApplication1.Models.Repositories
             //according to 'orderDirection'
             try
             {
+                /* WHEN I TRIED SORTING I HAD THE BELOW ERROR
+                 System.InvalidOperationException : 'The LINQ expression 'DbSet<Voter>.OrderBy(v => __propertyName_0.GetValue(v))' 
+                 could not be translated. Either rewrite the query in a form that can be translated, or switch to client evaluation
+                 explicitly by inserting a call to either AsEnumerable(), AsAsyncEnumerable(), ToList(), or ToListAsync(). 
+                 See https://go.microsoft.com/fwlink/?linkid=2101038 for more information.'
+
+                 After looking for this error in the internet but couldn't find a solution to this problem, and the linq query is too simple
+                 to change and write it in another way. So for now I'll keep everything as it is now, but remove Ordering from the linq query.
+                 So the new methods GetAllPaged() and GetAllFilteredPaged() will become like this:
+                 */
+
                 /*
                 //I don't know the name of the property I am going to sort with, so I'll use Refection API
                 //to get the name of the property then I'll use it to order the list
