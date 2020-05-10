@@ -69,6 +69,7 @@ namespace WebApplication1.Models.Repositories
             //according to 'orderDirection' .... all filtered according to the expression 'predicate'
             try
             {
+                /*
                 //I don't know the name of the property I am going to sort with, so I'll use Refection API
                 //to get the name of the property then I'll use it to order the list
 
@@ -81,12 +82,12 @@ namespace WebApplication1.Models.Repositories
                         //use eager loading to bring other tables data 
                         return _dbSet.Where(predicate).OrderBy(v => propertyName.GetValue(v)).Include(v => v.State).Skip(startRowIndex).Take(maxRows).ToList();
                     }
-                    if (orderDirection == "disc")
+                    if (orderDirection == "desc")
                     {
                         //use eager loading to bring other tables data 
                         return _dbSet.Where(predicate).OrderByDescending(v => propertyName.GetValue(v)).Include(v => v.State).Skip(startRowIndex).Take(maxRows).ToList();
                     }
-                }
+                }*/
                 
                 //in case there is no ordering requested
                 return _dbSet.Where(predicate).Include(v => v.State).Skip(startRowIndex).Take(maxRows).ToList();
@@ -103,25 +104,22 @@ namespace WebApplication1.Models.Repositories
             //according to 'orderDirection'
             try
             {
+                /*
                 //I don't know the name of the property I am going to sort with, so I'll use Refection API
                 //to get the name of the property then I'll use it to order the list
 
                 System.Reflection.PropertyInfo propertyName = typeof(Voter).GetProperty(orderBy);
 
-                if (!string.IsNullOrEmpty(orderBy) && !string.IsNullOrEmpty(orderDirection))
+                if (orderDirection == "asc")
                 {
-                    if (orderDirection == "asc")
-                    {
-                        //use eager loading to bring other tables data 
-                        return _dbSet.OrderBy(v => propertyName.GetValue(v)).Include(v => v.State).Skip(startRowIndex).Take(maxRows).ToList();
-                    }
-                    if (orderDirection == "disc")
-                    {
-                        //use eager loading to bring other tables data 
-                        return _dbSet.OrderByDescending(v => propertyName.GetValue(v)).Include(v => v.State).Skip(startRowIndex).Take(maxRows).ToList();
-                    }
+                    //use eager loading to bring other tables data 
+                    return _dbSet.OrderBy(v => propertyName.GetValue(v)).Include(v => v.State).Skip(startRowIndex).Take(maxRows).ToList();
                 }
-                 
+                if (orderDirection == "disc")
+                {
+                    //use eager loading to bring other tables data 
+                    return _dbSet.OrderByDescending(v => propertyName.GetValue(v)).Include(v => v.State).Skip(startRowIndex).Take(maxRows).ToList();
+                }*/
                 //in case there is no ordering requested
                 return _dbSet.Include(v => v.State).Skip(startRowIndex).Take(maxRows).ToList();
             }
@@ -129,6 +127,7 @@ namespace WebApplication1.Models.Repositories
             {
                 throw E;
             }
+
         }
 
         public Voter GetById(Guid Id)
