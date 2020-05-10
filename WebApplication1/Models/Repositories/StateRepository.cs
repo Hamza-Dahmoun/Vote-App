@@ -61,7 +61,7 @@ namespace WebApplication1.Models.Repositories
             }
         }
 
-        public List<State> GetAllFilteredPaged(Expression<Func<State, bool>> predicate, string orderBy, int startRowIndex = 0, int maxRows = 10)
+        public List<State> GetAllFilteredPaged(Expression<Func<State, bool>> predicate, string orderBy, string orderDirection, int startRowIndex = 0, int maxRows = 10)
         {
             throw new NotImplementedException();
         }
