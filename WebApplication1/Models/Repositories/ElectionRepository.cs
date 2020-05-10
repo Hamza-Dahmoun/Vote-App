@@ -66,7 +66,7 @@ namespace WebApplication1.Models.Repositories
             throw new NotImplementedException();
         }
 
-        public List<Election> GetAllPaged(string orderBy, int startRowIndex = 0, int maxRows = 10)
+        public List<Election> GetAllPaged(string orderBy, string orderDirection, int startRowIndex = 0, int maxRows = 10)
         {
             throw new NotImplementedException();
         }

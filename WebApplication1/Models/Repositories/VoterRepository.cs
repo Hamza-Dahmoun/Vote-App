@@ -68,9 +68,34 @@ namespace WebApplication1.Models.Repositories
             throw new NotImplementedException();
         }
 
-        public List<Voter> GetAllPaged(string orderBy, int startRowIndex = 0, int maxRows = 10)
+        public List<Voter> GetAllPaged(string orderBy, string orderDirection, int startRowIndex = 0, int maxRows = 10)
         {
-            throw new NotImplementedException();
+            //this function returns 'maxRows' row of voters, skipping 'startRowIndex', ordered by the column 'orderBy' and direction of ordering
+            //according to 'orderDirection'
+            try
+            {
+                //I don't know the name of the property I am going to sort with, so I'll use Refection API
+                //to get the name of the property then I'll use it to order the list
+
+                System.Reflection.PropertyInfo propertyName = typeof(Voter).GetProperty(orderBy);
+                
+                if (orderDirection == "asc")
+                {
+                    //use eager loading to bring other tables data 
+                    return _dbSet.OrderBy(v => propertyName.GetValue(v)).Include(v => v.State).Skip(startRowIndex).Take(maxRows).ToList();
+                }
+                if (orderDirection == "disc")
+                {
+                    //use eager loading to bring other tables data 
+                    return _dbSet.OrderByDescending(v => propertyName.GetValue(v)).Include(v => v.State).Skip(startRowIndex).Take(maxRows).ToList();
+                }
+                //in case there is no ordering requested
+                return _dbSet.Include(v => v.State).Skip(startRowIndex).Take(maxRows).ToList();
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
         }
 
         public Voter GetById(Guid Id)

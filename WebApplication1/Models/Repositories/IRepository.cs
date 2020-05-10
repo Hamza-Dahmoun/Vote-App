@@ -19,7 +19,7 @@ namespace WebApplication1.Models.Repositories
         T GetOneFiltered(Expression<Func<T, bool>> predicate);
 
         //for jQuery datatables
-        List<T> GetAllPaged(string orderBy, int startRowIndex = 0, int maxRows = 10);
+        List<T> GetAllPaged(string orderBy, string orderDirection, int startRowIndex = 0, int maxRows = 10);
         List<T> GetAllFilteredPaged(Expression<Func<T, bool>> predicate, string orderBy, int startRowIndex = 0, int maxRows = 10);
     }
 }
