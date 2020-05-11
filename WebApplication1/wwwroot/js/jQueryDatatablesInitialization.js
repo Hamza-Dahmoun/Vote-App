@@ -1,5 +1,5 @@
 ﻿
-function initializeDatatable(tableSelector, url, columnsArray) {
+function initializeDatatable(tableSelector, url, columnsArray, model) {
     //This function takes the parameters and initialize a jquuery dtatable
     //columnsArray should be added one item which is the column of the action buttons (edit - delete - details)
     columnsArray.push(
@@ -7,9 +7,9 @@ function initializeDatatable(tableSelector, url, columnsArray) {
             "data": null, "searchable": false, "sortable": false,
             "render": function (data, type, row, meta) {
                 var buttons =
-                    "<a class='table-button button-edit' title='Edit' href=" + '@Url.Action("Edit")/' + row.Id + "><i class='fa fa-pencil'></i></a>" + " " +
-                    "<a class='table-button button-details' title='Details' href=" + '@Url.Action("Details")/' + row.Id + "><i class='fa fa-file-text'></i></a>" + " " +
-                    "<a class='table-button button-delete' title='Delete' href=" + '@Url.Action("Delete")/' + row.Id + "><i class='fa fa-trash'></i></a>"
+                    "<a class='table-button button-edit' title='Edit' href=" + model+'/Edit/' + row.Id + "><i class='fa fa-pencil'></i></a>" + " " +
+                    "<a class='table-button button-details' title='Details' href=" + model +'/Details/' + row.Id + "><i class='fa fa-file-text'></i></a>" + " " +
+                    "<a class='table-button button-delete' title='Delete' href=" + model +'/Delete/' + row.Id + "><i class='fa fa-trash'></i></a>"
                     ;
                 return buttons;
             }

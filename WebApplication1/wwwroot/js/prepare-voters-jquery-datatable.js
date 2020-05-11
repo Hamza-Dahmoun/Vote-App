@@ -16,6 +16,6 @@ function preparejQueryDatatable() {
             { "data": "State.Name", "title": "State", "visible": true, "searchable": true, "sortable": false }
         ]
         ;
-    initializeDatatable(tableSelector, url, columnsArray);
+    initializeDatatable(tableSelector, url, columnsArray, "Voter");
 }
 
