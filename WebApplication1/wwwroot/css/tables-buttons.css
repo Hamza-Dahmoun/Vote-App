@@ -1,0 +1,19 @@
+﻿/* THIS IS BUTTONS' STYLE IN TABLES */
+.table-button {
+    font-size: 85%;
+    margin-left: 4px;
+    margin-right: 4px;
+    background-color: transparent;
+}
+
+.button-delete {
+    color: red;
+}
+
+.button-details {
+    color: #212529;
+}
+
+.button-edit {
+    color: #212529;
+}
