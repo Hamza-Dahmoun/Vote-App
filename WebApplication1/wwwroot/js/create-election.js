@@ -101,6 +101,7 @@ function displayVoters(voters) {
         let addCandidateButton = document.createElement("a");
         addCandidateButton.innerHTML = "Select as Candidate";
         addCandidateButton.style.cursor = "pointer";
+        addCandidateButton.style.color = "#3262ec";
         addCandidateButton.setAttribute("voterid", voters[i].Id);
         addCandidateButton.addEventListener("click", sendCandidate);
         tdButton.appendChild(addCandidateButton);
