@@ -60,7 +60,16 @@
     <div class="col-12"> <h4>Step 2</h4></div>
     <div class="col-12"> <p>Please Select Candidates concerned by this Election</p></div>
 
-    <table class="table">
+    <div id="selected-candidates-area">
+
+    </div>
+    <table class="table" id="voters-table">
+    </table>
+    <br/>
+    <br/>
+    <br/>
+    <p>This is the old way</p>
+    <table class="table" id="old-voters-table">
         <thead>
             <tr>
                 <th>
@@ -79,6 +88,8 @@
         </tbody>
     </table>
 
+
 </div>
 <partial name="_jQuery" />
-<partial name="_createElectionScript"/>
+<partial name="_datatablesScript" />
+<partial name="_createElectionScript" />

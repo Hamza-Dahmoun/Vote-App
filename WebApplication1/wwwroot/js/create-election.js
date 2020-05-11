@@ -59,6 +59,7 @@ function sendElection() {
             disableAllInputs();
             changeBgColor();
             displayVoters(response.Voters);
+            prepareVotersjQueryDatatable(response.ElectionId);
             scrollDown();
             //window.location.href = "Home/Index";
         }
@@ -88,7 +89,7 @@ function scrollDown() {
 }
 function displayVoters(voters) {
     //console.log(voters);
-    var tableBody = document.getElementsByTagName("tbody")[0];
+    var tableBody = document.getElementById("old-voters-table").querySelector("tbody");
     for (let i = 0; i < voters.length; i++) {
         let tdFirstName = document.createElement("td");
         tdFirstName.innerText = voters[i].FirstName;
@@ -209,4 +210,44 @@ function removeCandidate(event) {
             //window.location.href = "Home/Index";
         }
     });
+}
+
+
+
+
+
+//ZGTER USING JQUERY DATATABLES
+function prepareVotersjQueryDatatable(electionId) {
+    //this function send a request to the server to get the list of voters not candidates to a fiven election
+    $("#voters-table").DataTable(
+        {
+            "processing": true,//whether to show 'processing' indicator when waiting for a processing result or not
+            "serverSide": true,//for server side processing
+            "filter": true,//this is for disable filter (search box)
+            "ajax": {
+                "url": '/Election/VotersDataTable/' + electionId,
+                "type": 'POST',
+                "datatype": 'json'
+            },
+            "columnDefs": [
+                { "type": "numeric-comma", targets: "_all" }
+            ],
+            "columns":
+                [//These are the columns to be displayed, and they are the fields of the voters objects brought from the server
+                    { "data": "Id", "visible": false, "searchable": false },
+                    { "data": "FirstName", "title": "FirstName", "name": "FirstName", "visible": true, "searchable": true, "sortable": false },
+                    { "data": "LastName", "title": "Last Name", "name": "LastName", "visible": true, "searchable": true, "sortable": false },
+                    { "data": "State.Name", "title": "State", "visible": true, "searchable": true, "sortable": false },
+                    {
+                        "data": null, "searchable": false, "sortable": false,
+                        "render": function (data, type, row, meta) {
+                            var button =
+                                "<a class='table-button button-edit' title='Edit' data-voterid=" + row.Id + " onclick='sendCandidate()'><i class='fa fa-pencil'></i></a>"
+                                ;
+                            return button;
+                        }
+                    }
+                ]
+        }
+    );
 }

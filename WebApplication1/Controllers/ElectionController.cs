@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WebApplication1.Business;
 using WebApplication1.Models;
+using WebApplication1.Models.Helpers;
 using WebApplication1.Models.Repositories;
 using WebApplication1.Models.ViewModels;
 
@@ -192,6 +193,10 @@ namespace WebApplication1.Controllers
                     //BROWSERS IGNORE THE REDIRECT BECUZ IT ASSUME JS CODE WHICH DID THE AJAX CALL WILL BE IN CHARGE OF THE SUCCESS
                     //RESPONSE TO REDIRECT: WINDOW.LOCATION.HREF="CONTROLLERNAME/ACTION"
                     //return RedirectToAction("Index", "Home");
+
+
+
+
                     response_Voters_and_NewElection r;
                     r.ElectionId = election.Id;
                     r.Voters = Utilities.convertVoterList_toPersonViewModelList(
@@ -215,6 +220,137 @@ namespace WebApplication1.Controllers
             }
 
             
+        }
+
+        public IActionResult VotersDataTable([FromBody] Guid electionId)
+        {//returns a list of voters 
+
+            //This method is called by jQuery datatables to get paged data
+            //First, we'll try to read the variables sent from the jQuery request, and then, based on these variables' values we'll query
+            //the db
+
+
+            try
+            {
+                //lets first get the variables of the request (of the form), and then build the linq query accordingly
+                //above each variable I wrote the official doc of jQuery
+
+
+                // draw
+                // integer Type
+                // Draw counter.This is used by DataTables to ensure that the Ajax returns from server - side processing requests
+                // are drawn in sequence by DataTables(Ajax requests are asynchronous and thus can return out of sequence). 
+                // This is used as part of the draw return parameter(see below).
+
+                var draw = HttpContext.Request.Form["draw"].FirstOrDefault();
+
+
+
+                // start
+                // integer type
+                // Paging first record indicator.This is the start point in the current data set(0 index based -i.e. 0 is the first record).
+
+                var start = HttpContext.Request.Form["start"].FirstOrDefault();
+
+
+
+                // length
+                // integer type
+                // Number of records that the table can display in the current draw. It is expected that the number of records returned 
+                // will be equal to this number, unless the server has fewer records to return. Note that this can be -1 to indicate that 
+                // all records should be returned (although that negates any benefits of server-side processing!)
+
+                var length = HttpContext.Request.Form["length"].FirstOrDefault();
+
+
+
+                // search[value]
+                // string Type
+                // Global search value. To be applied to all columns which have searchable as true.
+
+                var searchValue = HttpContext.Request.Form["search[value]"].FirstOrDefault();
+
+
+                // order[i][column]
+                // integer Type
+                // Column to which ordering should be applied. This is an index reference to the columns array of information
+                // that is also submitted to the server.
+
+                var sortColumnName = HttpContext.Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+
+
+                // order[i][dir]
+                // integer Type
+                // Ordering direction for this column.It will be asc or desc to indicate ascending ordering or descending ordering, respectively.
+
+
+                var sortColumnDirection = HttpContext.Request.Form["order[0][dir]"].FirstOrDefault();
+
+
+                //Page Size (10, 20, 50,100) 
+                int pageSize = length != null ? Convert.ToInt32(length) : 0;
+
+                //how many rows too skip?
+                int skip = start != null ? Convert.ToInt32(start) : 0;
+
+                //totalRecords too inform user
+                int totalRecords = 0;
+
+
+
+
+                //now lets look for a value in FirstName/LastName/StateName if user asked to
+                if (!string.IsNullOrEmpty(searchValue))
+                {
+                    //declaring an expression that is special to Voter objects
+                    System.Linq.Expressions.Expression<Func<Voter, bool>> expr =
+                        v => v.FirstName.Contains(searchValue) ||
+                        v.LastName.Contains(searchValue) ||
+                        v.State.Name.Contains(searchValue)
+                    ;
+
+                    //lets get the list of voters filtered and paged
+                    PagedResult<Voter> pagedResult = _voterRepository.GetAllFilteredPaged(expr, sortColumnName, sortColumnDirection, skip, pageSize);
+
+                    //lets assign totalRecords the correct value
+                    totalRecords = pagedResult.TotalCount;
+
+                    //now lets return json data so that it is understandable by jQuery                
+                    var json = JsonConvert.SerializeObject(new
+                    {
+                        draw = draw,
+                        recordsFiltered = totalRecords,
+                        recordsTotal = totalRecords,
+                        data = pagedResult.Items//.Except(GetVoterBeing_ofCandidatesList_byElectionId(electionId)).ToList()
+                    }) ;
+                    return Ok(json);
+
+                }
+                else
+                {
+                    //so user didn't ask for filtering, he only asked for paging
+
+                    //lets get the list of voters paged
+                    PagedResult<Voter> pagedResult = _voterRepository.GetAllPaged(sortColumnName, sortColumnDirection, skip, pageSize);
+
+                    //lets assign totalRecords the correct value
+                    totalRecords = pagedResult.TotalCount;
+
+                    //now lets return json data so that it is understandable by jQuery                
+                    var json = JsonConvert.SerializeObject(new
+                    {
+                        draw = draw,
+                        recordsFiltered = totalRecords,
+                        recordsTotal = totalRecords,
+                        data = pagedResult.Items
+                    });
+                    return Ok(json);
+                }
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         //Step(2): Adding one Candidate to the Election each time
