@@ -79,13 +79,15 @@
                         { "data": "Id", "visible": false, "searchable": false },
                         { "data": "FirstName", "title": "FirstName", "name": "FirstName", "visible": true, "searchable": true, "sortable": false},
                         { "data": "LastName", "title": "Last Name", "name": "LastName", "visible": true, "searchable": true, "sortable": false },
-                        { "data": "State", "title": "State", "visible": true, "searchable": true, "sortable": false },
+                        { "data": "State.Name", "title": "State", "visible": true, "searchable": true, "sortable": false },
                         {
                             "data": null, "searchable": false, "sortable": false,
                             "render": function (data, type, row, meta) {
                                 var buttons =
-                                "<a class='btn btn-secondary btn-sm' href=" + '@Url.Action("Edit")/' + row.Id + "><i class='fa fa-pencil'></i></a>" + " " +
-                                "<a class='btn btn-danger btn-sm' href=" + '@Url.Action("Delete")/' + row.Id +"><i class='fa fa-trash'></i></a>";
+                                "<a class='btn btn-default btn-sm' href=" + '@Url.Action("Edit")/' + row.Id + "><i class='fa fa-pencil'></i></a>" + " " +
+                                    "<a class='btn btn-default btn-sm' href=" + '@Url.Action("Details")/' + row.Id + "><i class='fa fa-file-text'></i></a>"+ " " +
+                                    "<a class='btn btn-danger btn-sm' href=" + '@Url.Action("Delete")/' + row.Id + "><i class='fa fa-trash'></i></a>"
+                                    ;
                                  return buttons;
                             }
                             }
