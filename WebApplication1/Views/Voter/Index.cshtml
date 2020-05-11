@@ -4,53 +4,30 @@
     ViewData["Title"] = "Index";
 }
 <partial name="_datatablesStyle" />
-
+<style>
+    /* THIS IS BUTTONS' STYLE IN TABLES */
+    .table-button{
+        font-size:85%;
+        margin-left:4px; margin-right:4px;
+        background-color:transparent;
+    }
+    .button-delete{
+        color:red;        
+    }
+    .button-details {
+        color: #212529;
+    }
+    .button-edit {
+        color:#212529;
+    }
+</style>
 <h1>Index</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
 <table class="table" id="voters-table">
-    @*
-            NO NEED FOR THE BELOW BECUZ WE ARE USING JQUERY DATATABLES SERVER SIDE PROCESSING
-
-            <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.FirstName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.LastName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.State)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.FirstName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.LastName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.State.Name)
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                        |
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                        |
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>*@
+   
 </table>
 
 <partial name="_jQuery" />
@@ -84,9 +61,9 @@
                             "data": null, "searchable": false, "sortable": false,
                             "render": function (data, type, row, meta) {
                                 var buttons =
-                                "<a class='btn btn-default btn-sm' href=" + '@Url.Action("Edit")/' + row.Id + "><i class='fa fa-pencil'></i></a>" + " " +
-                                    "<a class='btn btn-default btn-sm' href=" + '@Url.Action("Details")/' + row.Id + "><i class='fa fa-file-text'></i></a>"+ " " +
-                                    "<a class='btn btn-danger btn-sm' href=" + '@Url.Action("Delete")/' + row.Id + "><i class='fa fa-trash'></i></a>"
+                                "<a class='table-button button-edit' title='Edit' href=" + '@Url.Action("Edit")/' + row.Id + "><i class='fa fa-pencil'></i></a>" + " " +
+                                    "<a class='table-button button-details' title='Details' href=" + '@Url.Action("Details")/' + row.Id + "><i class='fa fa-file-text'></i></a>"+ " " +
+                                    "<a class='table-button button-delete' title='Delete' href=" + '@Url.Action("Delete")/' + row.Id + "><i class='fa fa-trash'></i></a>"
                                     ;
                                  return buttons;
                             }
