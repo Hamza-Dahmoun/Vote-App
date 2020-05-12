@@ -298,40 +298,32 @@ namespace WebApplication1.Controllers
 
 
 
+                //lets first get the list of voterswho are already candidates of this election
+                Election election = _electionRepository.GetById(electionId);
+                List<Voter> alreadyCandidates = CandidateUtilities.GetVoterBeing_ofCandidatesList_byElection(_candidateRepository, election);
 
+
+                System.Linq.Expressions.Expression<Func<Voter, bool>> expr;
                 //now lets look for a value in FirstName/LastName/StateName if user asked to
                 if (!string.IsNullOrEmpty(searchValue))
                 {
-                    //declaring an expression that is special to Voter objects
-                    System.Linq.Expressions.Expression<Func<Voter, bool>> expr =
-                        v => v.FirstName.Contains(searchValue) ||
+
+                    //declaring an expression that is special to Voter objects according to the search value and the fact that we don't want
+                    //voters who are already candidates
+                    expr =
+                        v => (v.FirstName.Contains(searchValue) ||
                         v.LastName.Contains(searchValue) ||
-                        v.State.Name.Contains(searchValue)
-                    ;
-
-                    //lets get the list of voters filtered and paged
-                    PagedResult<Voter> pagedResult = _voterRepository.GetAllFilteredPaged(expr, sortColumnName, sortColumnDirection, skip, pageSize);
-
-                    //lets assign totalRecords the correct value
-                    totalRecords = pagedResult.TotalCount;
-
-                    //now lets return json data so that it is understandable by jQuery                
-                    var json = JsonConvert.SerializeObject(new
-                    {
-                        draw = draw,
-                        recordsFiltered = totalRecords,
-                        recordsTotal = totalRecords,
-                        data = pagedResult.Items//.Except(GetVoterBeing_ofCandidatesList_byElectionId(electionId)).ToList()
-                    }) ;
-                    return Ok(json);
-
+                        v.State.Name.Contains(searchValue))
+                        && !alreadyCandidates.Any(a => a.Id == v.Id);                    
                 }
                 else
                 {
-                    //so user didn't ask for filtering, he only asked for paging
+                    //lets send a linq Expression exrpessing that we don't want voters who are already candidates
+                    expr = v => !alreadyCandidates.Any(a => a.Id == v.Id);                    
+                }
+                    //lets get the list of voters filtered and paged
+                    PagedResult<Voter> pagedResult = _voterRepository.GetAllFilteredPaged(expr, sortColumnName, sortColumnDirection, skip, pageSize);
 
-                    //lets get the list of voters paged
-                    PagedResult<Voter> pagedResult = _voterRepository.GetAllPaged(sortColumnName, sortColumnDirection, skip, pageSize);
 
                     //lets assign totalRecords the correct value
                     totalRecords = pagedResult.TotalCount;
@@ -343,9 +335,10 @@ namespace WebApplication1.Controllers
                         recordsFiltered = totalRecords,
                         recordsTotal = totalRecords,
                         data = pagedResult.Items
-                    });
+                    }) ;
                     return Ok(json);
-                }
+
+                
             }
             catch
             {

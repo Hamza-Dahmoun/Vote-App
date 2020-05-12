@@ -77,5 +77,27 @@ namespace WebApplication1.Business
                 throw E;
             }
         }
+
+
+
+        public static List<Voter> GetVoterBeing_ofCandidatesList_byElection(IRepository<Candidate> candidateRepository, Election election)
+        {
+            //this methods returns a list of voters who are considered as candidates for this election
+            try
+            {
+                var candidates = GetCandidate_byElection(candidateRepository, election);
+                List<Voter> voters = new List<Voter>();
+                foreach (var item in candidates)
+                {
+                    voters.Add(item.VoterBeing);
+                }
+                return voters;
+
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
     }
 }
