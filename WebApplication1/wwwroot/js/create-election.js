@@ -255,7 +255,7 @@ function prepareVotersjQueryDatatable(electionId) {
                         "data": null, "searchable": false, "sortable": false,
                         "render": function (data, type, row, meta) {
                             var button =
-                                "<a class='table-button button-edit' title='Edit' data-voterid=" + row.Id + " onclick='sendCandidate()'><i class='fa fa-pencil'></i></a>"
+                                "<a class='select-candidate-btn' title='Select this Voter as a Candidate' data-voterid=" + row.Id + " onclick='selectNewCandidate()'>Select as Candidate</a>"
                                 ;
                             return button;
                         }
@@ -263,4 +263,8 @@ function prepareVotersjQueryDatatable(electionId) {
                 ]
         }
     );
+}
+
+function selectNewCandidate() {
+    alert("selecting new candidate");
 }

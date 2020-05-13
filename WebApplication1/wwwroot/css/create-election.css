@@ -18,3 +18,7 @@ html {
 #send-election-spinner {
     display: none;
 }
+.select-candidate-btn {
+    color: #3262ec !important;
+    cursor: pointer;
+}
