@@ -270,6 +270,8 @@ function prepareVotersjQueryDatatable(electionId) {
 }
 
 function selectNewCandidate() {
+    //this function add the selected voter from jquery datatable to the db as a candidate related to the new election, and then reload the voters datatable
+
     //first of all lets display the spinner and hide the button
     //displayBrotherSpinner(event.target);
     event.target.style.display = "none";
@@ -297,8 +299,32 @@ function selectNewCandidate() {
 
             //now lets display the selected candidate into Candidates area
             //alert(candidateFullName + " has been selected successfully");
+            displayAddedCandidate(candidateFullName, voterid);
             //Now lets refresh jquery datatables.. this is speial to iquery datatables
             $("#voters-table").DataTable().ajax.reload();            
         }
     });
+}
+function displayAddedCandidate(candidateFullName, voterid) {
+    //This function write the new candidates of the new electino in a special area, and give the user a button for each candidate to remove this
+    //candidate from the election
+
+    let p = document.createElement("p");
+    p.innerText = candidateFullName;
+    let closeButton = document.createElement("a");
+    closeButton.innerText = "Remove";
+    closeButton.setAttribute("voterid", voterid);
+    closeButton.className = "remove-candidate-btn";
+    closeButton.addEventListener("click", removeCandidateFromElection);
+    let div = document.createElement("div");
+    div.appendChild(p);
+    div.appendChild(closeButton);
+
+    let candidatesArea = document.getElementById("candidates-container");
+    candidatesArea.appendChild(div);
+
+    document.getElementById("selected-candidates-area").style.display = "block";
+}
+function removeCandidateFromElection() {
+    console.log("I'm going to remove the candiate from the election");
 }
