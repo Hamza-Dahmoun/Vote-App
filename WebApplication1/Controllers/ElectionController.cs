@@ -302,7 +302,7 @@ namespace WebApplication1.Controllers
                 //lets first get the list of voterswho are already candidates of this election
                 Election election = _electionRepository.GetById(electionId);
                 List<Voter> alreadyCandidates = CandidateUtilities.GetVoterBeing_ofCandidatesList_byElection(_candidateRepository, election);
-
+                List<Guid> excludedVotersIDs = alreadyCandidates.Select(v => v.Id).ToList();
 
                 System.Linq.Expressions.Expression<Func<Voter, bool>> expr;
                 //now lets look for a value in FirstName/LastName/StateName if user asked to
@@ -315,12 +315,16 @@ namespace WebApplication1.Controllers
                         v => (v.FirstName.Contains(searchValue) ||
                         v.LastName.Contains(searchValue) ||
                         v.State.Name.Contains(searchValue))
-                        && !alreadyCandidates.Any(a => a.Id == v.Id);                    
+                        && !excludedVotersIDs.Contains(v.Id);                    
                 }
                 else
                 {
-                    //lets send a linq Expression exrpessing that we don't want voters who are already candidates
-                    expr = v => !alreadyCandidates.Any(a => a.Id == v.Id);                    
+                    //lets send a linq Expression exrpessing that we don't want voters who are already candidates                                        
+                    expr = v => !excludedVotersIDs.Contains(v.Id);
+
+                    //LINQ couldn't be translated with the below expressions
+                    //expr = v => !alreadyCandidates.Any(a => a.Id == v.Id);
+                    //expr = v => alreadyCandidates.All(a => a.Id != v.Id);
                 }
                 //lets get the list of voters filtered and paged
                 PagedResult<Voter> pagedResult = _voterRepository.GetAllFilteredPaged(expr, sortColumnName, sortColumnDirection, skip, pageSize);

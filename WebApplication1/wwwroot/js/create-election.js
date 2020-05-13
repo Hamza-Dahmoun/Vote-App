@@ -218,7 +218,7 @@ function removeCandidate(event) {
 
 //ZGTER USING JQUERY DATATABLES
 function prepareVotersjQueryDatatable(electionId) {
-    console.log("-" + electionId + "-")
+    //console.log("-" + electionId + "-")
     //this function send a request to the server to get the list of voters not candidates to a fiven election
     $("#voters-table").DataTable(
         {
@@ -234,6 +234,13 @@ function prepareVotersjQueryDatatable(electionId) {
                     // d.custom = $('#myInput').val();
                     // etc
                 },
+                /*
+                 WHEN I USED THE BELOW TO SEND ELECTIONID TO THE SERVER, I GOT EVERY LETTER AND NUMBER OF THE GUID SENT AS A SEPARATE PARAMETER!
+                 THE ABOVE WAY IS THE ONE MENTIONED IN THE DOCUMENTATION
+                 "data": JSON.stringify({electionId: electionId}),
+                 or
+                 "data": electionId,
+                 */
             },
             "columnDefs": [
                 { "type": "numeric-comma", targets: "_all" }
