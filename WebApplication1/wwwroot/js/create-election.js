@@ -216,9 +216,10 @@ function removeCandidate(event) {
 
 
 
-//ZGTER USING JQUERY DATATABLES
+//********************************************* AFTER USING JQUERY DATATABLES *********************/
 function prepareVotersjQueryDatatable(electionId) {
-    //console.log("-" + electionId + "-")
+    console.log("-" + electionId + "-");
+    document.getElementById("voters-table").innerHTML = "";
     //this function send a request to the server to get the list of voters not candidates to a fiven election
     $("#voters-table").DataTable(
         {
@@ -255,7 +256,9 @@ function prepareVotersjQueryDatatable(electionId) {
                         "data": null, "searchable": false, "sortable": false,
                         "render": function (data, type, row, meta) {
                             var button =
-                                "<a class='select-candidate-btn' title='Select this Voter as a Candidate' data-voterid=" + row.Id + " onclick='selectNewCandidate()'>Select as Candidate</a>"
+                                "<a class='select-candidate-btn' title='Select this Voter as a Candidate' voterid=" +
+                                row.Id + " voterfullname='" + row.FirstName + " " + row.LastName
+                                + "' onclick='selectNewCandidate()'>Select as Candidate</a>"
                                 ;
                             return button;
                         }
@@ -263,8 +266,39 @@ function prepareVotersjQueryDatatable(electionId) {
                 ]
         }
     );
+
 }
 
 function selectNewCandidate() {
-    alert("selecting new candidate");
+    //first of all lets display the spinner and hide the button
+    //displayBrotherSpinner(event.target);
+    event.target.style.display = "none";
+
+    //now lets store full name of the selected candidate in a variable, we'll use it if the voter has been added to candidate in db successfully
+    let candidateFullName = event.target.getAttribute("voterfullname");
+
+    let voterid = event.target.getAttribute("voterid"); 
+
+    //Send the JSON data of voterId and electionId to Controller using AJAX.
+    $.ajax({
+        type: "POST",
+        url: "/Election/AddCandidates",
+        data: JSON.stringify({ electionId: electionId, voterId: voterid }),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        error: function () {
+            //alert("error");
+
+        },
+        success: function (response) {
+            //'response' represents the object returned from the api which is the Election object newly stored in the db
+            //console.log(response);
+            //alert("success" + response);
+            //now lets display the selected candidate into Candidates area
+            alert(candidateFullName + " has been selected successfully");
+            //Now lets refresh jquery datatables
+            prepareVotersjQueryDatatable(electionId);
+            
+        }
+    });
 }
