@@ -218,8 +218,8 @@ function removeCandidate(event) {
 
 //********************************************* AFTER USING JQUERY DATATABLES *********************/
 function prepareVotersjQueryDatatable(electionId) {
-    console.log("-" + electionId + "-");
-    document.getElementById("voters-table").innerHTML = "";
+    //console.log("-" + electionId + "-");
+
     //this function send a request to the server to get the list of voters not candidates to a fiven election
     $("#voters-table").DataTable(
         {
@@ -294,11 +294,11 @@ function selectNewCandidate() {
             //'response' represents the object returned from the api which is the Election object newly stored in the db
             //console.log(response);
             //alert("success" + response);
+
             //now lets display the selected candidate into Candidates area
-            alert(candidateFullName + " has been selected successfully");
-            //Now lets refresh jquery datatables
-            prepareVotersjQueryDatatable(electionId);
-            
+            //alert(candidateFullName + " has been selected successfully");
+            //Now lets refresh jquery datatables.. this is speial to iquery datatables
+            $("#voters-table").DataTable().ajax.reload();            
         }
     });
 }
