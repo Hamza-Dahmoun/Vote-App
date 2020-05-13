@@ -218,6 +218,7 @@ function removeCandidate(event) {
 
 //ZGTER USING JQUERY DATATABLES
 function prepareVotersjQueryDatatable(electionId) {
+    console.log("-" + electionId + "-")
     //this function send a request to the server to get the list of voters not candidates to a fiven election
     $("#voters-table").DataTable(
         {
@@ -225,9 +226,14 @@ function prepareVotersjQueryDatatable(electionId) {
             "serverSide": true,//for server side processing
             "filter": true,//this is for disable filter (search box)
             "ajax": {
-                "url": '/Election/VotersDataTable/' + electionId,
+                "url": '/Election/VotersDataTable/' /*+ electionId*/,
                 "type": 'POST',
-                "datatype": 'json'
+                "data": function (d) {
+                    d.electionId = electionId;
+                    //d.myKey = "myValue";
+                    // d.custom = $('#myInput').val();
+                    // etc
+                },
             },
             "columnDefs": [
                 { "type": "numeric-comma", targets: "_all" }

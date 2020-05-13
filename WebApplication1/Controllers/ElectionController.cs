@@ -221,8 +221,9 @@ namespace WebApplication1.Controllers
 
             
         }
-
-        public IActionResult VotersDataTable([FromBody] Guid electionId)
+        [HttpPost]
+        //If I leave [FromBody] next to the parameter the request will not even access this method, bcuz jquery already has passed parameters
+        public async Task<IActionResult> VotersDataTable(Guid electionId)
         {//returns a list of voters 
 
             //This method is called by jQuery datatables to get paged data
@@ -321,12 +322,11 @@ namespace WebApplication1.Controllers
                     //lets send a linq Expression exrpessing that we don't want voters who are already candidates
                     expr = v => !alreadyCandidates.Any(a => a.Id == v.Id);                    
                 }
-                    //lets get the list of voters filtered and paged
-                    PagedResult<Voter> pagedResult = _voterRepository.GetAllFilteredPaged(expr, sortColumnName, sortColumnDirection, skip, pageSize);
-
-
-                    //lets assign totalRecords the correct value
-                    totalRecords = pagedResult.TotalCount;
+                //lets get the list of voters filtered and paged
+                PagedResult<Voter> pagedResult = _voterRepository.GetAllFilteredPaged(expr, sortColumnName, sortColumnDirection, skip, pageSize);
+                
+                //lets assign totalRecords the correct value
+                totalRecords = pagedResult.TotalCount;
 
                     //now lets return json data so that it is understandable by jQuery                
                     var json = JsonConvert.SerializeObject(new
@@ -340,7 +340,7 @@ namespace WebApplication1.Controllers
 
                 
             }
-            catch
+            catch(Exception E)
             {
                 return BadRequest();
             }
