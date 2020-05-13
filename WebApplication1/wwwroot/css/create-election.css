@@ -22,3 +22,21 @@ html {
     color: #3262ec !important;
     cursor: pointer;
 }
+
+
+
+#selected-candidates-area {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    flex-wrap: wrap;
+}
+
+    #selected-candidates-area div {
+        border: 1px solid #145a32;
+        border-radius: 4px;
+        color: #145a32;
+    }
+
+    #selected-candidates-area .remove-candidate-btn {
+    }
