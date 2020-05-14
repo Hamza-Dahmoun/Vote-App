@@ -54,3 +54,6 @@ html {
         color:red;
         font-size:90%;
     }
+.hidden-spinner{
+    display:none;
+}

@@ -259,7 +259,10 @@ function prepareVotersjQueryDatatable(electionId) {
                                 "<a class='select-candidate-btn' title='Select this Voter as a Candidate' voterid=" +
                                 row.Id + " voterfullname='" + row.FirstName + " " + row.LastName
                                 + "' onclick='selectNewCandidate()'>Select as Candidate</a>"
+                                + "<div class='spinner-border hidden-spinner'></div>"
                                 ;
+
+            
                             return button;
                         }
                     }
@@ -272,9 +275,9 @@ function prepareVotersjQueryDatatable(electionId) {
 function selectNewCandidate() {
     //this function add the selected voter from jquery datatable to the db as a candidate related to the new election, and then reload the voters datatable
 
-    //first of all lets display the spinner and hide the button
-    //displayBrotherSpinner(event.target);
+    //first of all lets display the spinner and hide the button    
     event.target.style.display = "none";
+    event.target.parentElement.querySelector(".spinner-border").style.display = "block";
 
     //now lets store full name of the selected candidate in a variable, we'll use it if the voter has been added to candidate in db successfully
     let candidateFullName = event.target.getAttribute("voterfullname");
