@@ -341,6 +341,7 @@ function removeCandidateFromElection() {
     event.target.parentElement.querySelector(".spinner-border").style.display = "block";
 
     //console.log("I'm going to remove the candiate from the election");
+    let removeButton = event.target;
 
     let voterid = event.target.getAttribute("voterid");
 
@@ -359,9 +360,18 @@ function removeCandidateFromElection() {
             //alert("success" + response);
 
             //now lets remove the concerned candidate from the Candidates area
-            //removeAddedCandidate(event);
+            console.log("i just removed the candidate from DB:");
+            console.log(removeButton);
+            removeAddedCandidateFromUI(removeButton);
             //Now lets refresh jquery datatables.. this is speial to iquery datatables
             $("#voters-table").DataTable().ajax.reload();            
         }
     });
+}
+function removeAddedCandidateFromUI(element) {
+    console.log("I'm going to remove candidate from UI:")
+    console.log(element);
+    //this function removes the candidate conntainer which the user has just removed from the election
+    let candidateContainer = element.parentElement; //event.target.parentElement();
+    document.getElementById("candidates-container").removeChild(candidateContainer);
 }
