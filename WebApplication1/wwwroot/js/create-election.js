@@ -319,6 +319,7 @@ function displayAddedCandidate(candidateFullName, voterid) {
     let closeButton = document.createElement("a");
     closeButton.innerText = "Remove";
     closeButton.setAttribute("voterid", voterid);
+    closeButton.setAttribute("title", "Remove Candidate");
     closeButton.className = "remove-candidate-btn";
     closeButton.addEventListener("click", removeCandidateFromElection);
     let div = document.createElement("div");
