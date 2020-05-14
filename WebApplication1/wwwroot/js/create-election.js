@@ -334,9 +334,34 @@ function displayAddedCandidate(candidateFullName, voterid) {
     document.getElementById("selected-candidates-area").style.display = "block";
 }
 function removeCandidateFromElection() {
+    //this function removes a candidate from the newly created election (from db and from ui)
+
     //first of all lets display the spinner and hide the button    
     event.target.style.display = "none";
     event.target.parentElement.querySelector(".spinner-border").style.display = "block";
 
-    console.log("I'm going to remove the candiate from the election");
+    //console.log("I'm going to remove the candiate from the election");
+
+    let voterid = event.target.getAttribute("voterid");
+
+    //Send the JSON data of voterId and electionId to Controller using AJAX.
+    $.ajax({
+        type: "POST",
+        url: "/Election/RemoveCandidate",
+        data: JSON.stringify({ electionId: electionId, voterId: voterid }),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        error: function () {
+            //alert("error");
+        },
+        success: function (response) {
+            //console.log(response);
+            //alert("success" + response);
+
+            //now lets remove the concerned candidate from the Candidates area
+            //removeAddedCandidate(event);
+            //Now lets refresh jquery datatables.. this is speial to iquery datatables
+            $("#voters-table").DataTable().ajax.reload();            
+        }
+    });
 }
