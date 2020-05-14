@@ -82,13 +82,14 @@ namespace WebApplication1.Business
 
         public static List<Voter> GetVoterBeing_ofCandidatesList_byElection(IRepository<Candidate> candidateRepository, Election election)
         {
-            //this methods returns a list of voters who are considered as candidates for this election
+            //this methods returns a list of voters who are considered as candidates for this election except the neutral opinion
             try
             {
                 var candidates = GetCandidate_byElection(candidateRepository, election);
                 List<Voter> voters = new List<Voter>();
                 foreach (var item in candidates)
                 {
+                    if(!item.isNeutralOpinion)
                     voters.Add(item.VoterBeing);
                 }
                 return voters;
