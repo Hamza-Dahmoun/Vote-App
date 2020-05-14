@@ -259,7 +259,7 @@ function prepareVotersjQueryDatatable(electionId) {
                                 "<a class='select-candidate-btn' title='Select this Voter as a Candidate' voterid=" +
                                 row.Id + " voterfullname='" + row.FirstName + " " + row.LastName
                                 + "' onclick='selectNewCandidate()'>Select as Candidate</a>"
-                                + "<div class='spinner-border hidden-spinner'></div>"
+                                + "<div class='spinner-border text-success hidden-spinner'></div>"
                                 ;
 
             
@@ -314,13 +314,17 @@ function displayAddedCandidate(candidateFullName, voterid) {
 
     let p = document.createElement("p");
     p.innerText = candidateFullName;
+    let spinner = document.createElement("div");
+    spinner.className = "spinner-border text-danger hidden-spinner centered-spinner";
     let closeButton = document.createElement("a");
     closeButton.innerText = "Remove";
     closeButton.setAttribute("voterid", voterid);
     closeButton.className = "remove-candidate-btn";
     closeButton.addEventListener("click", removeCandidateFromElection);
     let div = document.createElement("div");
+    div.className = "one-container";
     div.appendChild(p);
+    div.appendChild(spinner);
     div.appendChild(closeButton);
 
     let candidatesArea = document.getElementById("candidates-container");
@@ -329,5 +333,9 @@ function displayAddedCandidate(candidateFullName, voterid) {
     document.getElementById("selected-candidates-area").style.display = "block";
 }
 function removeCandidateFromElection() {
+    //first of all lets display the spinner and hide the button    
+    event.target.style.display = "none";
+    event.target.parentElement.querySelector(".spinner-border").style.display = "block";
+
     console.log("I'm going to remove the candiate from the election");
 }

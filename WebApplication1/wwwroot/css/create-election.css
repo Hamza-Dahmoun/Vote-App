@@ -37,7 +37,7 @@ html {
     flex-wrap: wrap;
     margin-left:5px; margin-right:5px;
 }
-    #candidates-container div {
+    #candidates-container .one-container {
         border: 1px solid #145a32;
         border-radius: 4px;
         color: #145a32;
@@ -45,15 +45,18 @@ html {
         text-align: center;
         background-color: #eafaf1;
     }
-    #candidates-container div {
+    #candidates-container .one-container p {
         font-size:120%;
     }
 
-    #candidates-container .remove-candidate-btn {
-        text-align:center;
-        color:red;
-        font-size:90%;
+    #candidates-container .one-container .remove-candidate-btn {
+        text-align: center;
+        color: red;
+        font-size: 80%;
     }
 .hidden-spinner{
     display:none;
+}
+.centered-spinner{
+    margin-left:auto; margin-right:auto;
 }
