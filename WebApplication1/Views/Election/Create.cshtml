@@ -18,9 +18,9 @@
 
 <hr />
 <div class="row" id="step-one">
-    <div class="col-12 text-center"> <h2>Step 1</h2></div>
+    <div class="col-12"> <h2>Step 1</h2></div>
 
-    <div class="col-md-8" id="election-input-container">
+    <div class="col-md-6" id="election-input-container">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
         <div class="form-group">
@@ -57,13 +57,15 @@
 <br />
 
 <div id="step-two">
-    <div class="col-12 text-center"> <h2>Step 2</h2></div>
-    <div class="col-12 text-center"> <p id="candidates-title-text">Please Select Candidates concerned by this Election</p></div>
+    <div class="col-12"> <h2>Step 2</h2></div>
+    <div class="col-12"> <p id="candidates-title-text">Please Select Candidates concerned by this Election</p></div>
 
     <div id="selected-candidates-area">
         <p id="selected-candidates-title">Selected Candidates</p>
         <div id="candidates-container">
-
+            <div class="one-container transparent-candidate">
+                <p>No Candidates Selected</p>
+            </div>
         </div>
     </div>
     <table class="table" id="voters-table">

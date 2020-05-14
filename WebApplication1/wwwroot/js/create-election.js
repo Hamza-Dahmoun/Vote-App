@@ -189,6 +189,9 @@ function displayAddedCandidate(candidateFullName, voterid) {
     //This function write the new candidates of the new electino in a special area, and give the user a button for each candidate to remove this
     //candidate from the election
 
+    //lets first hide the transparent candidate which has=s text 'No Candidates Selected'
+    document.getElementsByClassName("transparent-candidate")[0].style.display = "none";
+
     let p = document.createElement("p");
     p.innerText = candidateFullName;
     let spinner = document.createElement("div");
@@ -208,7 +211,7 @@ function displayAddedCandidate(candidateFullName, voterid) {
     let candidatesArea = document.getElementById("candidates-container");
     candidatesArea.appendChild(div);
 
-    document.getElementById("selected-candidates-area").style.display = "block";
+    //document.getElementById("selected-candidates-area").style.display = "block";
 }
 function removeCandidateFromElection() {
     //this function removes a candidate from the newly created election (from db and from ui)
