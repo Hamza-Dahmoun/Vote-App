@@ -319,7 +319,40 @@ function loadCandidates(electionId) {
             //'response' represents the object returned from the api
             document.getElementById("candidates-spinner").style.display = "none";
             console.log(response);
-            //displayCandidates(response);
+            displayCandidates(response);
         }
     });
+}
+function displayCandidates(response) {
+    if (response.length == 0 || response == null) {
+        //lets display a container stating "No candidates selected"
+        let div = document.createElement("div");
+        div.className = "one-container transparent-candidate";
+        let p = document.createElement("p");
+        p.innerText = "No Candidates Selected";
+        div.appendChild(p);
+        document.getElementById("candidates-container").appendChild(div);
+    }
+    for (let i = 0; i < response.length; i++) {
+
+        let p = document.createElement("p");
+        p.innerText = response[i].FirstName + " " + response[i].LastName;
+        let spinner = document.createElement("div");
+        spinner.className = "spinner-border text-danger hidden-spinner centered-spinner";
+        let closeButton = document.createElement("a");
+        closeButton.innerText = "Remove";
+        closeButton.setAttribute("candidateid", response[i].Id);
+        closeButton.setAttribute("title", "Remove Candidate");
+        closeButton.className = "remove-candidate-btn";
+        //closeButton.addEventListener("click", removeCandidateFromElection);
+        let div = document.createElement("div");
+        div.className = "one-container";
+        div.appendChild(p);
+        div.appendChild(spinner);
+        div.appendChild(closeButton);
+
+        let candidatesArea = document.getElementById("candidates-container");
+        candidatesArea.appendChild(div);
+
+    }
 }
