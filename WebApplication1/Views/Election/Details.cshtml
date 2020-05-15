@@ -4,7 +4,7 @@
     ViewData["Title"] = "Details";
 }
 
-<partial name="_detailsElectionStyle"/>
+<partial name="_detailsElectionStyle" />
 
 <h1>Details</h1>
 <h4>Election</h4>
@@ -48,12 +48,12 @@
     @*<a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |*@
     <a asp-action="Index">Back to List</a>
 </div>
-<br/>
+<br />
 <div class="col-12"> <h4>List of Candidates</h4></div>
-<br/>
+<br />
 <div class="spinner-border" id="candidates-table-spinner"></div>
 <div>
-    
+
     <table id="candidates-table" class="table">
         <thead>
             <tr>
@@ -75,4 +75,5 @@
 
 </div>
 
+<partial name="_jQuery" />
 <partial name="_detailsElectionScript" />
