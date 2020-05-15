@@ -75,9 +75,8 @@ function loadCandidatesList() {
             //'response' represents the object returned from the api
             //console.log(response);       
 
-            //lets hide the spinner
-            document.getElementById("candidate-list-spinner").style.display = "none";
-            displayVoters(response);
+            //displayVoters(response);
+            document.getElementById("candidates-spinner").style.display = "block";
             loadCandidates(electionId);
             prepareVotersjQueryDatatable(electionId);
             //window.location.href = "Home/Index";
@@ -318,9 +317,7 @@ function loadCandidates(electionId) {
         },
         success: function (response) {
             //'response' represents the object returned from the api
-            //console.log(response);       
-
-            //lets hide the spinner           
+            document.getElementById("candidates-spinner").style.display = "none";
             console.log(response);
             //displayCandidates(response);
         }
