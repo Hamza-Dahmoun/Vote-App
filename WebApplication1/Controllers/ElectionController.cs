@@ -416,7 +416,7 @@ namespace WebApplication1.Controllers
 
 
         //this method is called using jQuery ajax and it returns a list of candidates related to the election
-        //it is called when displaying the details of an election
+        //it is called when displaying the details of an election (it gets also neutral opinion)
         [HttpPost]
         [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
         public async Task<IActionResult> GetCandidatesList_byElectionId([FromBody] string electionId)
@@ -442,7 +442,39 @@ namespace WebApplication1.Controllers
         }
 
 
-        
+        //this method is called using jQuery ajax and it returns a list of candidates related to the election
+        //it is called when displaying the details of an election (it gets also neutral opinion)
+        [HttpPost]
+        [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
+        public async Task<IActionResult> GetCandidatesList_byElectionId_ExcepNeutralOpinion([FromBody] string electionId)
+        {
+            try
+            {
+                Election e = _electionRepository.GetById(Guid.Parse(electionId));
+                //lets serialize the list of candidates of the election we've got and send it back as a reponse
+                //note that I didn't retrieve candidates as they are, I selected only needed attributes bcuz when i tried serializing
+                //candidates objects as they are I got this error "self referencing loop detected with type" it means json tried to serialize the candidate object
+                //but it found that each candidate has an Election object, and this election object has a list of candidates and so on, so i excluded election
+                //from the selection to avoid the infinite loop
+                //var candidates = e.Candidates/*.Select(p => new { p.FirstName, p.LastName, p.State})*/.ToList();
+
+                //declaring an expression that is special to Election objects
+                System.Linq.Expressions.Expression<Func<Candidate, bool>> expr = e => e.Election.Id == Guid.Parse(electionId) && e.isNeutralOpinion !=true;
+
+                var candidates = _candidateRepository.GetAllFiltered(expr);
+
+                //var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, e);
+                var json = JsonConvert.SerializeObject(Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, candidates));
+                return Ok(json);
+
+            }
+            catch (Exception E)
+            {
+                return BadRequest();
+            }
+        }
+
+
 
 
         //this method is called using jQuery ajax and it returns a list of candidates related to the election folllowed by the list of all voters 
