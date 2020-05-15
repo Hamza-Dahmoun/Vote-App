@@ -78,6 +78,7 @@ function loadCandidatesList() {
             //lets hide the spinner
             document.getElementById("candidate-list-spinner").style.display = "none";
             displayVoters(response);
+            loadCandidates(electionId);
             prepareVotersjQueryDatatable(electionId);
             //window.location.href = "Home/Index";
         }
@@ -302,4 +303,26 @@ function prepareVotersjQueryDatatable(electionId) {
         }
     );
 
+}
+
+function loadCandidates(electionId) {
+    //get the list of candidates using the id of the election except the neutral opinion
+    $.ajax({
+        type: "POST",
+        url: "/Election/GetCandidatesList_byElectionId_ExcepNeutralOpinion",
+        data: JSON.stringify(electionId),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        error: function () {
+            alert("error");
+        },
+        success: function (response) {
+            //'response' represents the object returned from the api
+            //console.log(response);       
+
+            //lets hide the spinner           
+            console.log(response);
+            //displayCandidates(response);
+        }
+    });
 }
