@@ -241,3 +241,8 @@ function removeCandidate(event) {
     });
 }
 
+
+
+
+//********************************************* AFTER USING JQUERY DATATABLES *********************/
+//We'll load list of candidates related to this electino in candidates area, and load other voters who are not candidates in the datatable
