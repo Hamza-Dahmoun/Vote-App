@@ -5,3 +5,20 @@
 #update-candidate-spinner {
     display: none;
 }
+
+
+
+
+
+
+#voters-table{
+    display:none;
+}
+.hidden-spinner {
+    display: none;
+}
+
+.centered-spinner {
+    margin-left: auto;
+    margin-right: auto;
+}

@@ -59,13 +59,13 @@ function displaySpinner() {
 document.addEventListener("DOMContentLoaded", loadCandidatesList);
 
 function loadCandidatesList() {
-
+    let electionId = document.getElementById("election-holder-id").value;
     //console.log("trying to load data of " + JSON.stringify(electionId));
     //get the list of candidates using the id of the election
     $.ajax({
         type: "POST",
         url: "/Election/GetCandidatesList_andVotersList_byElectionId",
-        data: JSON.stringify(document.getElementById("election-holder-id").value),
+        data: JSON.stringify(electionId),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         error: function () {
@@ -78,7 +78,7 @@ function loadCandidatesList() {
             //lets hide the spinner
             document.getElementById("candidate-list-spinner").style.display = "none";
             displayVoters(response);
-
+            prepareVotersjQueryDatatable(electionId);
             //window.location.href = "Home/Index";
         }
     });
@@ -246,3 +246,60 @@ function removeCandidate(event) {
 
 //********************************************* AFTER USING JQUERY DATATABLES *********************/
 //We'll load list of candidates related to this electino in candidates area, and load other voters who are not candidates in the datatable
+
+
+function prepareVotersjQueryDatatable(electionId) {
+    //console.log("-" + electionId + "-");
+    document.getElementById("voters-table").style.display = "block";
+
+    //this function send a request to the server to get the list of voters not candidates to a fiven election
+    $("#voters-table").DataTable(
+        {
+            "processing": true,//whether to show 'processing' indicator when waiting for a processing result or not
+            "serverSide": true,//for server side processing
+            "filter": true,//this is for disable filter (search box)
+            "ajax": {
+                "url": '/Election/VotersDataTable/' /*+ electionId*/,
+                "type": 'POST',
+                "data": function (d) {
+                    d.electionId = electionId;
+                    //d.myKey = "myValue";
+                    // d.custom = $('#myInput').val();
+                    // etc
+                },
+                /*
+                 WHEN I USED THE BELOW TO SEND ELECTIONID TO THE SERVER, I GOT EVERY LETTER AND NUMBER OF THE GUID SENT AS A SEPARATE PARAMETER!
+                 THE ABOVE WAY IS THE ONE MENTIONED IN THE DOCUMENTATION
+                 "data": JSON.stringify({electionId: electionId}),
+                 or
+                 "data": electionId,
+                 */
+            },
+            "columnDefs": [
+                { "type": "numeric-comma", targets: "_all" }
+            ],
+            "columns":
+                [//These are the columns to be displayed, and they are the fields of the voters objects brought from the server
+                    { "data": "Id", "visible": false, "searchable": false },
+                    { "data": "FirstName", "title": "FirstName", "name": "FirstName", "visible": true, "searchable": true, "sortable": false },
+                    { "data": "LastName", "title": "Last Name", "name": "LastName", "visible": true, "searchable": true, "sortable": false },
+                    { "data": "State.Name", "title": "State", "visible": true, "searchable": true, "sortable": false },
+                    {
+                        "data": null, "searchable": false, "sortable": false,
+                        "render": function (data, type, row, meta) {
+                            var button =
+                                "<a class='select-candidate-btn' title='Select this Voter as a Candidate' voterid=" +
+                                row.Id + " voterfullname='" + row.FirstName + " " + row.LastName
+                                + "' onclick='selectNewCandidate()'>Select as Candidate</a>"
+                                + "<div class='spinner-border text-success hidden-spinner'></div>"
+                                ;
+
+
+                            return button;
+                        }
+                    }
+                ]
+        }
+    );
+
+}
