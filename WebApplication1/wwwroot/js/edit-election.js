@@ -56,7 +56,7 @@ function displaySpinner() {
 //WE SHOULD LOAD THE LIST OF CANIDIDATES RELATED TO THIS ELECTION WHEN THE DOCUMENT IS READY
 
 //window.onload = loadCandidatesList();
-document.addEventListener("DOMContentLoaded", loadCandidatesList);
+//document.addEventListener("DOMContentLoaded", loadCandidatesList);
 
 function loadCandidatesList() {
     let electionId = document.getElementById("election-holder-id").value;
@@ -77,8 +77,7 @@ function loadCandidatesList() {
 
             //displayVoters(response);
             document.getElementById("candidates-spinner").style.display = "block";
-            loadCandidates(electionId);
-            prepareVotersjQueryDatatable(electionId);
+            
             //window.location.href = "Home/Index";
         }
     });
@@ -247,6 +246,12 @@ function removeCandidate(event) {
 //********************************************* AFTER USING JQUERY DATATABLES *********************/
 //We'll load list of candidates related to this electino in candidates area, and load other voters who are not candidates in the datatable
 
+document.addEventListener("DOMContentLoaded", function () {
+    let electionId = document.getElementById("election-holder-id").value;
+    loadCandidates(electionId);
+    prepareVotersjQueryDatatable(electionId);
+});
+
 
 function prepareVotersjQueryDatatable(electionId) {
     //console.log("-" + electionId + "-");
@@ -358,7 +363,7 @@ function displayCandidates(response) {
     }
 }
 function removeCandidateFromElection() {
-    //this function removes a canidate from db, then from the ui
+    //this function removes a canidate from db and from the ui ... then it reloads the jquery datatable of voters
     let candidateId = event.target.getAttribute("candidateid");
     $.ajax({
         type: "POST",
@@ -371,7 +376,9 @@ function removeCandidateFromElection() {
         },
         success: function (response) {
             //'response' represents the object returned from the api
-            console.log("candidate removed");
+            //console.log("candidate removed");
+            //now lets reload voters datatable who aren't candidates for this election .. this code is speial to iquery datatables
+            $("#voters-table").DataTable().ajax.reload();     
         }
     });
 }
