@@ -414,12 +414,13 @@ function selectNewCandidate() {
     //this function will add a new candidate to the db and UI and then reload voters datatable
 
     let electionId = document.getElementById("election-holder-id").value;
-    let voterId = event.target.getAttribute("voterid");
-    let voterFullName = event.target.getAttribute("voterfullname");
+    let selectCandidateButton = event.target;
+    let voterId = selectCandidateButton.getAttribute("voterid");
+    let voterFullName = selectCandidateButton.getAttribute("voterfullname");
 
     //lets display the spinner
-    event.target.parentElement.querySelector(".spinner-border").style.display = "block";
-    event.target.style.display = "none";
+    selectCandidateButton.parentElement.querySelector(".spinner-border").style.display = "block";
+    selectCandidateButton.style.display = "none";
 
     //Send the JSON data of voterId and electionId to Controller using AJAX.
     $.ajax({
@@ -434,6 +435,13 @@ function selectNewCandidate() {
         success: function (response) {
             //console.log(response);
             //console.log("canddiate inserted");
+
+            //now lets hide and delete 'no selected candidate' container from the candidates area
+            if (document.getElementsByClassName("transparent-candidate").length > 0) {
+                //so beore this new candidate, there were none ... lets hide and delete the information 'no candidate' elt
+                hide_andDeleteElt(document.getElementById("candidates-container"), document.getElementsByClassName("transparent-candidate")[0]);
+            }
+            
 
             //now lets reload voters datatable who aren't candidates for this election .. this code is speial to jquery datatables
             $("#voters-table").DataTable().ajax.reload();   
