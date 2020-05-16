@@ -386,7 +386,39 @@ namespace WebApplication1.Controllers
                 return BadRequest();
             }
         }
-
+        //this is a web api called when user selects candidates from voters list to the election he created or he is editing
+        [HttpPost]
+        [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
+        public async Task<IActionResult> AddCandidate([FromBody] CandidateElectionRelation mydata)
+        {
+            //difference from above is that it returns the new candidate ID
+            try
+            {
+                if (mydata.electionId == null || mydata.voterId == null)
+                {
+                    return BadRequest();
+                }
+                Voter voter = _voterRepository.GetById(mydata.voterId);
+                Candidate newCandidate = new Candidate
+                {
+                    Id = Guid.NewGuid(),
+                    VoterBeing = voter,
+                    Election = _electionRepository.GetById(mydata.electionId)
+                };
+                _candidateRepository.Add(newCandidate);
+                //now lets return json data so that it is understandable by jQuery                
+                var json = JsonConvert.SerializeObject(new
+                {
+                    candidateId = newCandidate.Id
+                }) ;
+                return Ok(json);
+                //return Json(new { success = true }); ;
+            }
+            catch (Exception E)
+            {
+                return BadRequest();
+            }
+        }
 
         //this is a web api called when user remove a candidate from an election
         [HttpPost]

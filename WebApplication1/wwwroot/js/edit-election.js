@@ -425,7 +425,7 @@ function selectNewCandidate() {
     //Send the JSON data of voterId and electionId to Controller using AJAX.
     $.ajax({
         type: "POST",
-        url: "/Election/AddCandidates",
+        url: "/Election/AddCandidate",
         data: JSON.stringify({ electionId: electionId, voterId: voterId }),//JSON.stringify(newElection),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
@@ -433,7 +433,8 @@ function selectNewCandidate() {
             //alert("error");
         },
         success: function (response) {
-            //console.log(response);
+            //In here the response is the new candidate id
+            console.log(response);
             //console.log("canddiate inserted");
 
             //now lets hide and delete 'no selected candidate' container from the candidates area
@@ -441,10 +442,34 @@ function selectNewCandidate() {
                 //so beore this new candidate, there were none ... lets hide and delete the information 'no candidate' elt
                 hide_andDeleteElt(document.getElementById("candidates-container"), document.getElementsByClassName("transparent-candidate")[0]);
             }
-            
+
+            //now lets display a candidate container for this new candidate in the canidates-area            
+            let candidateId = response.candidateId;
+            displayNewCandidate(voterFullName, candidateId);
 
             //now lets reload voters datatable who aren't candidates for this election .. this code is speial to jquery datatables
             $("#voters-table").DataTable().ajax.reload();   
         }
     });
+}
+
+function displayNewCandidate(candidateFullName, candidateId) {
+    let p = document.createElement("p");
+    p.innerText = candidateFullName;
+    let spinner = document.createElement("div");
+    spinner.className = "spinner-border text-danger hidden-spinner centered-spinner";
+    let closeButton = document.createElement("a");
+    closeButton.innerText = "Remove";
+    closeButton.setAttribute("candidateid", candidateId);
+    closeButton.setAttribute("title", "Remove Candidate");
+    closeButton.className = "remove-candidate-btn";
+    closeButton.addEventListener("click", removeCandidateFromElection);
+    let div = document.createElement("div");
+    div.className = "one-container";
+    div.appendChild(p);
+    div.appendChild(spinner);
+    div.appendChild(closeButton);
+
+    let candidatesArea = document.getElementById("candidates-container");
+    candidatesArea.appendChild(div);
 }
