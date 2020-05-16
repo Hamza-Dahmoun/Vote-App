@@ -311,6 +311,9 @@ function prepareVotersjQueryDatatable(electionId) {
 
 function loadCandidates(electionId) {
     //get the list of candidates using the id of the election except the neutral opinion
+
+    //lets first display the spinner 
+    document.getElementById("candidates-spinner").style.display = "block";
     $.ajax({
         type: "POST",
         url: "/Election/GetCandidatesList_byElectionId_ExcepNeutralOpinion",
