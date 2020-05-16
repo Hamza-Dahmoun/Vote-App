@@ -393,6 +393,7 @@ namespace WebApplication1.Controllers
         [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
         public async Task<IActionResult> RemoveCandidate([FromBody] CandidateElectionRelation mydata)
         {
+            //this function removes a candidate from the db using its electionID and its voterBeing ID
             try
             {
                 if (mydata.electionId == null || mydata.voterId == null)
@@ -412,6 +413,27 @@ namespace WebApplication1.Controllers
             }
         }
 
+        //this is a web api called when user remove a candidate from an election
+        [HttpPost]
+        [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
+        public async Task<IActionResult> RemoveCandidate_byID([FromBody] string candidateId)
+        {
+            //this function removes a candidate from the db using its ID
+            try
+            {
+                if (String.IsNullOrEmpty(candidateId))
+                {
+                    return BadRequest();
+                }
+                Candidate myCandidate = _candidateRepository.GetById(Guid.Parse(candidateId)) ;
+                _candidateRepository.Delete(myCandidate.Id);
+                return Json(new { success = true });
+            }
+            catch (Exception E)
+            {
+                return BadRequest();
+            }
+        }
 
 
 

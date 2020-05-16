@@ -324,6 +324,7 @@ function loadCandidates(electionId) {
     });
 }
 function displayCandidates(response) {
+    //display the list of candidates of this election .. this function is used in the first page load
     if (response.length == 0 || response == null) {
         //lets display a container stating "No candidates selected"
         let div = document.createElement("div");
@@ -344,7 +345,7 @@ function displayCandidates(response) {
         closeButton.setAttribute("candidateid", response[i].Id);
         closeButton.setAttribute("title", "Remove Candidate");
         closeButton.className = "remove-candidate-btn";
-        //closeButton.addEventListener("click", removeCandidateFromElection);
+        closeButton.addEventListener("click", removeCandidateFromElection);
         let div = document.createElement("div");
         div.className = "one-container";
         div.appendChild(p);
@@ -355,4 +356,22 @@ function displayCandidates(response) {
         candidatesArea.appendChild(div);
 
     }
+}
+function removeCandidateFromElection() {
+    //this function removes a canidate from db, then from the ui
+    let candidateId = event.target.getAttribute("candidateid");
+    $.ajax({
+        type: "POST",
+        url: "/Election/RemoveCandidate_byID",
+        data: JSON.stringify(candidateId),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        error: function () {
+            alert("error");
+        },
+        success: function (response) {
+            //'response' represents the object returned from the api
+            console.log("candidate removed");
+        }
+    });
 }
