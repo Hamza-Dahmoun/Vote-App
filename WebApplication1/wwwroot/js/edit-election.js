@@ -364,7 +364,14 @@ function displayCandidates(response) {
 }
 function removeCandidateFromElection() {
     //this function removes a canidate from db and from the ui ... then it reloads the jquery datatable of voters
-    let candidateId = event.target.getAttribute("candidateid");
+    let removeButton = event.target;
+    removeButton.style.display = "none";
+
+    //lets first display the spinner
+    let spinner = removeButton.parentElement.querySelector(".spinner-border");
+    spinner.style.display = "block";
+
+    let candidateId = removeButton.getAttribute("candidateid");
     $.ajax({
         type: "POST",
         url: "/Election/RemoveCandidate_byID",
@@ -377,8 +384,25 @@ function removeCandidateFromElection() {
         success: function (response) {
             //'response' represents the object returned from the api
             //console.log("candidate removed");
-            //now lets reload voters datatable who aren't candidates for this election .. this code is speial to iquery datatables
+
+            //now lets remove the candidate container from DOM slowly
+            let candidateContainer = removeButton.parentElement;
+            let allCandidatesContainer = document.getElementById("candidates-container");
+            hide_andDeleteElt(allCandidatesContainer, candidateContainer);
+            //now lets reload voters datatable who aren't candidates for this election .. this code is speial to jquery datatables
             $("#voters-table").DataTable().ajax.reload();     
         }
     });
+}
+function hide_andDeleteElt(parentElt, childElt) {
+    console.log("going to animate and remove elt");
+    //this function add to an element a class to make it fade, and wait for a period of time equal to the animation-duration,
+    //then remove elt from DOM
+    childElt.classList.add("hiding-container");
+
+    //now lets wait for the animation of hiding the container to complete, then remove the elt from dom
+    setTimeout(function () {
+        parentElt.removeChild(childElt);
+    }, 500);
+    console.log("elt animated and removed");
 }
