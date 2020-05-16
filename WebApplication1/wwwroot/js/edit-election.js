@@ -430,12 +430,13 @@ function selectNewCandidate() {
         dataType: "json",
         error: function () {
             //alert("error");
-
         },
         success: function (response) {
-            //'response' represents the object returned from the api which is the Election object newly stored in the db
             //console.log(response);
-            console.log("canddiate inserted");
+            //console.log("canddiate inserted");
+
+            //now lets reload voters datatable who aren't candidates for this election .. this code is speial to jquery datatables
+            $("#voters-table").DataTable().ajax.reload();   
         }
     });
 }
