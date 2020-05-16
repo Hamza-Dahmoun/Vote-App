@@ -409,3 +409,33 @@ function hide_andDeleteElt(parentElt, childElt) {
     }, 500);
     console.log("elt animated and removed");
 }
+
+function selectNewCandidate() {
+    //this function will add a new candidate to the db and UI and then reload voters datatable
+
+    let electionId = document.getElementById("election-holder-id").value;
+    let voterId = event.target.getAttribute("voterid");
+    let voterFullName = event.target.getAttribute("voterfullname");
+
+    //lets display the spinner
+    event.target.parentElement.querySelector(".spinner-border").style.display = "block";
+    event.target.style.display = "none";
+
+    //Send the JSON data of voterId and electionId to Controller using AJAX.
+    $.ajax({
+        type: "POST",
+        url: "/Election/AddCandidates",
+        data: JSON.stringify({ electionId: electionId, voterId: voterId }),//JSON.stringify(newElection),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        error: function () {
+            //alert("error");
+
+        },
+        success: function (response) {
+            //'response' represents the object returned from the api which is the Election object newly stored in the db
+            //console.log(response);
+            console.log("canddiate inserted");
+        }
+    });
+}
