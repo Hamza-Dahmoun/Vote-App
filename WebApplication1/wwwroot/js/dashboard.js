@@ -180,7 +180,7 @@ function displayCurrentElection(currentElection) {
             let div = document.createElement("div");
             div.appendChild(resultsButton);
             let spinner = document.createElement("div");
-            spinner.className = "spinner-border";
+            spinner.className = "spinner-border text-primary";
             spinner.setAttribute("Id", "current-election-results-spinner");
             spinner.style.display = "none";
             div.appendChild(spinner);
@@ -249,7 +249,7 @@ function displayPreviousElections(previousElections) {
         let tdResultsButton_andSpinner = document.createElement("td");
         tdResultsButton_andSpinner.appendChild(resultsButton);
         let spinner = document.createElement("span");
-        spinner.className = "spinner-border";
+        spinner.className = "spinner-border text-primary";
         spinner.style.display = "none";
         tdResultsButton_andSpinner.appendChild(spinner);
 
