@@ -60,6 +60,10 @@ namespace WebApplication1.Controllers
 
             try
             {
+                if (candidateIdList == null || candidateIdList.Count <= 0)
+                {
+                    return BadRequest();
+                }
                 //lets first get the concerned election
                 Candidate firstOne = _candidateRepository.GetById(Guid.Parse(candidateIdList.FirstOrDefault()));
                 Election election = _electionRepository.GetById(firstOne.Election.Id);
