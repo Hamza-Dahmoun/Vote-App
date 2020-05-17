@@ -9,7 +9,7 @@ function loadCandidatesList() {
     //get the list of candidates using the id of the election
     $.ajax({
         type: "POST",
-        url: "/Election/GetCandidatesList_byElectionId",
+        url: "/Election/GetCandidatesList_byElectionId_ExcepNeutralOpinion",
         data: JSON.stringify(document.getElementById("candidate-id-holder").value),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
