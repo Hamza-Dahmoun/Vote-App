@@ -391,7 +391,7 @@ namespace WebApplication1.Controllers
         [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
         public async Task<IActionResult> AddCandidate([FromBody] CandidateElectionRelation mydata)
         {
-            //difference from above is that it returns the new candidate ID
+            //difference from above is that it returns the new candidate ID ... it is used when editing an election (after using jquey datatables)
             try
             {
                 if (mydata.electionId == null || mydata.voterId == null)
