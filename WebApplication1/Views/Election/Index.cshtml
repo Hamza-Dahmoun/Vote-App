@@ -1,9 +1,8 @@
-﻿@model IEnumerable<WebApplication1.Models.ViewModels.ElectionViewModel>
-
+﻿@model IEnumerable<WebApplication1.Models.Election>
 @{
     ViewData["Title"] = "Index";
 }
-    <partial name="_datatablesStyle" />
+<partial name="_datatablesStyle" />
 <h1>Index</h1>
 
 <p>
@@ -25,7 +24,7 @@
                 @Html.DisplayNameFor(model => model.HasNeutral)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NumberOfCandidates)
+                @Html.DisplayNameFor(model => model.Candidates)
             </th>
             <th></th>
         </tr>
@@ -47,7 +46,7 @@
                     @Html.DisplayFor(model => item.HasNeutral)
                 </th>
                 <th>
-                    @Html.DisplayFor(model => item.NumberOfCandidates)
+                    @Html.DisplayFor(model => item.Candidates.Count)
                 </th>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
@@ -66,5 +65,5 @@
 
 <script>
     //now lets make it a jquery datatables
-    document.addEventListener("DOMContentLoaded", function () { $('#elections-table').DataTable()});
+    document.addEventListener("DOMContentLoaded", function () { $('#elections-table').DataTable() });
 </script>

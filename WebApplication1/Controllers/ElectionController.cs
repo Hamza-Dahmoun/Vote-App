@@ -58,8 +58,18 @@ namespace WebApplication1.Controllers
         {
             try
             {
-                //returning a list of ElectionViewModel
-                return View(Utilities.convertElectionList_toElectionViewModelList(_electionRepository.GetAll()).OrderByDescending(d=>d.StartDate));
+                //returning a list of Elections but without their neutral candidate
+                
+                return View(_electionRepository.GetAll().OrderByDescending(d => d.StartDate).
+                Select(e => new Election
+                {
+                    Id = e.Id,
+                    Name = e.Name,
+                    StartDate = e.StartDate,
+                    DurationInDays = e.DurationInDays,
+                    HasNeutral = e.HasNeutral,
+                    Candidates = e.Candidates.Where(c => c.isNeutralOpinion != true).ToList()
+                }));
             }
             catch
             {
