@@ -7,12 +7,14 @@
 }
 
 
-
-
-
-
-#voters-table{
+#response-msg{
     display:none;
+}
+
+
+
+#voters-table {
+    display: none;
 }
 
 #selected-candidates-area {

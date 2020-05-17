@@ -1,12 +1,14 @@
 ﻿//adding onChange event to input so that in case user started typing we'll display the button 'Save' to him
 let inputs = document.getElementsByClassName("changeable");
 for (let i = 0; i < inputs.length; i++) {
-    inputs[i].addEventListener("change", displayButton);
+    inputs[i].addEventListener("keyup", displayButton);
+    inputs[i].addEventListener("change", displayButton);//becuz the above doesn't work properly for input numbers field
 }
 function displayButton() {
     //console.log("going to display button");
     document.getElementById("submit-updated-election").style.display = "block";
-    //console.log("displayed the button");
+    //lets hide the response msg in case it is the second update
+    document.getElementById("response-msg").style.display = "none";
 }
 function hideButton() {
     document.getElementById("submit-updated-election").style.display = "none";
@@ -33,12 +35,14 @@ function sendUpdatedElection() {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         error: function () {
-            //alert("error");
+            console.log("error");
+            displayResponseMsg(false);
         },
         success: function (response) {
-            //console.log(response);
+            console.log("success");
             //alert("success" + response);                
             hideSpinner();
+            displayResponseMsg(true);
         }
     });
 }
@@ -49,7 +53,19 @@ function hideSpinner() {
 function displaySpinner() {
     document.getElementById("update-candidate-spinner").style.display = "block";
 }
-
+function displayResponseMsg(success) {
+    let responseMsg = document.getElementById("response-msg");
+    let p = responseMsg.querySelector("p");
+    if (success) {
+        responseMsg.className = "alert alert-success";        
+        p.innerHTML = "<strong>Success!</strong> The updates have been done successfully";
+    }
+    else {
+        responseMsg.className = "alert alert-danger";        
+        p.innerHTML = "<strong>Error!</strong> Something went wrong, please try again!";
+    }
+    responseMsg.style.display = "block";
+}
 
 
 
