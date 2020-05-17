@@ -735,7 +735,7 @@ namespace WebApplication1.Controllers
                         e.Name,
                         e.StartDate,
                         e.DurationInDays,
-                        CandidatesCount = e.Candidates.Count
+                        CandidatesCount = e.Candidates.Where(c => c.isNeutralOpinion != true).ToList().Count
                     }).
                     ToList();
 
