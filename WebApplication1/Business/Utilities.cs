@@ -127,7 +127,7 @@ namespace WebApplication1.Business
                 StartDate = election.StartDate,
                 DurationInDays = election.DurationInDays,
                 HasNeutral = election.HasNeutral,
-                NumberOfCandidates = election.Candidates.Count(),
+                NumberOfCandidates = election.Candidates.Where(c =>c.isNeutralOpinion != true).Count(),
                 NumberOfVotes = election.Votes.Count()
                 //NumberOfVoters = election.ElectionVoters.Count()
             };
