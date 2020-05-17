@@ -487,6 +487,10 @@ namespace WebApplication1.Controllers
         {
             try
             {
+                if (String.IsNullOrEmpty(electionId))
+                {
+                    return BadRequest();
+                }
                 Election e = _electionRepository.GetById(Guid.Parse(electionId));
                 //lets serialize the list of candidates of the election we've got and send it back as a reponse
                 //note that I didn't retrieve candidates as they are, I selected only needed attributes bcuz when i tried serializing
@@ -514,6 +518,10 @@ namespace WebApplication1.Controllers
         {
             try
             {
+                if (String.IsNullOrEmpty(electionId))
+                {
+                    return BadRequest();
+                }
                 Election e = _electionRepository.GetById(Guid.Parse(electionId));
                 //lets serialize the list of candidates of the election we've got and send it back as a reponse
                 //note that I didn't retrieve candidates as they are, I selected only needed attributes bcuz when i tried serializing
@@ -549,6 +557,10 @@ namespace WebApplication1.Controllers
         {
             try
             {
+                if (String.IsNullOrEmpty(electionId))
+                {
+                    return BadRequest();
+                }
                 Election election = _electionRepository.GetById(Guid.Parse(electionId));
                 //lets serialize the list of candidates of the election we've got and send it back as a reponse
                 //note that I didn't retrieve candidates as they are, I selected only needed attributes bcuz when i tried serializing
