@@ -3,6 +3,7 @@
     ViewData["Title"] = "Index";
 }
 <partial name="_datatablesStyle" />
+<partial name="_tablesButtonsStyling" />
 <h1>Index</h1>
 
 <p>
@@ -49,11 +50,11 @@
                     @Html.DisplayFor(model => item.Candidates.Count)
                 </th>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                    <a class='table-button button-edit' title='Edit'  asp-action="Edit" asp-route-id="@item.Id">Edit</a>
                     |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    <a class='table-button button-details' title='Details' asp-action="Details" asp-route-id="@item.Id">Details</a>
                     |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <a class='table-button button-delete' title='Delete' asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 </td>
             </tr>
         }
