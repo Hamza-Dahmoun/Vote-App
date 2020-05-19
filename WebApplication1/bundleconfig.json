@@ -32,5 +32,15 @@
     "minify": {
       "enabled": true
     }
+  },
+  // select2 scripts
+  {
+    "outputFileName": "wwwroot/js/select2.min.js",
+    "inputFiles": [
+      "wwwroot/lib/select2/js/select2.js"
+    ],
+    "minify": {
+      "enabled": true
+    }
   }
 ]
