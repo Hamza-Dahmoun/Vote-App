@@ -9,7 +9,7 @@
       "wwwroot/lib/datatables/css/dataTables.bootstrap4.min.css"
     ],
     "minify": {
-      "enabled":  true
+      "enabled": true
     }
   },
   // datatables scripts
@@ -18,6 +18,16 @@
     "inputFiles": [
       "wwwroot/lib/datatables/js/jquery.dataTables.min.js",
       "wwwroot/lib/datatables/js/dataTables.bootstrap4.js"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  },
+  // select2 styles
+  {
+    "outputFileName": "wwwroot/css/select2.min.css",
+    "inputFiles": [
+      "wwwroot/lib/select2/css/select2.css"
     ],
     "minify": {
       "enabled": true
