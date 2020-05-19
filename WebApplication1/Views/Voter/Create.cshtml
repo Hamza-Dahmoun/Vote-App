@@ -4,6 +4,9 @@
     ViewData["Title"] = "Create";
 }
 @*IN THIS VOEW WE'ARE GOING TO DISPLAY FEW INPUTS RELATED TO VOTER AND A LIST OF STATES FOR THE USER TO SELECT ONE OF THEM*@
+    
+<partial name="_select2Style" />
+
 <h1>Create</h1>
 
 <h4>VoterStateViewModel</h4>
@@ -26,7 +29,7 @@
             <div class="form-group">
                 <label asp-for="StateID" class="control-label">State</label>
                 <select asp-for="StateID" class="form-control" size="1"
-                        asp-items="@(new SelectList(  Model.States, "Id", "Name"))">
+                        asp-items="@(new SelectList(  Model.States, "Id", "Name"))" id="stateId">
                     <option>Select a State</option>
                 </select>
                 @*HOW SELECTLIST IN RAZOR WORKS?
@@ -52,3 +55,14 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+
+
+<partial name="_jQuery" />
+<partial name="_select2Script" />
+
+<script>
+    $(function () {
+            //Init Select2 compoenent on stateId element
+            $("#stateId").select2();
+        });
+</script>
