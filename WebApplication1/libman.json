@@ -20,6 +20,14 @@
         "js/dataTables.bootstrap4.js",
         "js/jquery.dataTables.min.js"
       ]
+    },
+    {
+      "library": "select2@4.0.12",
+      "destination": "wwwroot/lib/select2/",
+      "files": [
+        "css/select2.css",
+        "js/select2.js"
+      ]
     }
   ]
 }
