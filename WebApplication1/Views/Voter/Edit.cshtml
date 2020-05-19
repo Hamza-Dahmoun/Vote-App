@@ -3,6 +3,7 @@
     ViewData["Title"] = "Edit";
 }
 
+<partial name="_select2Style"/>
 
 <h1>Edit</h1>
 
@@ -27,7 +28,7 @@
             <div class="form-group">
                 <label asp-for="StateID" class="control-label"></label>
                 <!--THIS LIST WILL DISPPLAY A LIST OF STATES, THE ONE RELATED TO THE VOTER WILL BE SELECTED? THEN IT'S UP TO THE USER IN EDITION WHAT TO ELECT-->
-                <select asp-for="StateID" class="form-control" size="1" asp-items="@(new SelectList(Model.States, "Id", "Name"))">
+                <select id="stateId" asp-for="StateID" class="form-control" size="1" asp-items="@(new SelectList(Model.States, "Id", "Name"))">
                     <!--IF THE VOTER TO EDIT HAS NO STATE (NEUTRAL VOTE) LETS NOT BIND StateId, AND BIND ONLY THE ABOVE LIST OF STATES-->
                     @if (Model.StateID != null)
                     {
@@ -48,3 +49,12 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
+<partial name="_jQuery" />
+<partial name="_select2Script" />
+
+<script>
+    $(function () {
+        //Init Select2 compoenent on stateId element
+        $("#stateId").select2();
+    })
+</script>
