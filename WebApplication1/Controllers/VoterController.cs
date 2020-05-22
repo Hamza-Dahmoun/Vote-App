@@ -446,5 +446,38 @@ namespace WebApplication1.Controllers
         #endregion
 
 
+        #region SELECT2 REGION
+        //this is a web api called when user remove a candidate from an election
+        [HttpPost]
+        [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
+        public async Task<IActionResult> States(string q)
+        {
+            //this function removes a candidate from the db using its ID
+            try
+            {
+                if (String.IsNullOrEmpty(q))
+                {
+                    return BadRequest();
+                }
+
+                //declaring an expression that is special to State objects according to the search value
+                System.Linq.Expressions.Expression<Func<State, bool>> expr;
+                expr = s => s.Name.Contains(q);
+                var states = _stateRepository.GetAllFiltered(expr).Select(s => new { text = s.Name, id = s.Id});
+                //now lets return json data
+                var json = JsonConvert.SerializeObject(new
+                {
+                    states
+                });
+                return Ok(json);
+            }
+            catch (Exception E)
+            {
+                return BadRequest();
+            }
+        }
+
+        #endregion
+
     }
 }

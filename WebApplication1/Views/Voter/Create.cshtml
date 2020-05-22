@@ -28,24 +28,23 @@
             </div>
             <div class="form-group">
                 <label asp-for="StateID" class="control-label">State</label>
-                <select asp-for="StateID" class="form-control" id="stateId">
-                    
+                <select asp-for="StateID" class="form-control" id="stateId" >
                 </select>
                 @*<select asp-for="StateID" class="form-control" size="1"
-                        asp-items="@(new SelectList(  Model.States, "Id", "Name"))" id="stateId">
-                    <option>Select a State</option>
-                </select>*@
+                            asp-items="@(new SelectList(  Model.States, "Id", "Name"))" id="stateId">
+                        <option>Select a State</option>
+                    </select>*@
                 @*HOW SELECTLIST IN RAZOR WORKS?
-        <select
-            asp-for="AuthorId" (the selected value will be considered as AuthorId)
-            size="1"
-            asp-items="@(
-            new SelectList(
-            ListOfObjects,
-            "object property to dislplay as 'value'",
-            "object property to display as 'text'"
-            ))"
-            >*@
+                    <select
+                        asp-for="AuthorId" (the selected value will be considered as AuthorId)
+                        size="1"
+                        asp-items="@(
+                        new SelectList(
+                        ListOfObjects,
+                        "object property to dislplay as 'value'",
+                        "object property to display as 'text'"
+                        ))"
+                        >*@
                 <span asp-validation-for="States" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -70,9 +69,14 @@
             $("#stateId").select2();
     });
     */
+   
+
+
+
     $(function () {
         $("#stateId").select2({
             ajax: {
+                type: "POST",
                 url: "/Voter/States",
                 dataType: 'json',
                 delay: 250,//wait for 250ms after user stopped tying, then send the request to the server
@@ -82,24 +86,19 @@
                         page: params.page
                     };
                 },
-                processResults: function (data, params) {
-                    // parse the results into the format expected by Select2
-                    // since we are using custom formatting functions we do not need to
-                    // alter the remote JSON data, except to indicate that infinite
-                    // scrolling can be used
-                    params.page = params.page || 1;
-
-                    return {
-                        results: data.items,
-                        pagination: {
-                            more: (params.page * 30) < data.total_count
-                        }
-                    };
-                },
-                cache: true
+                processResults:
+                    function (data) {
+                        //data is an object we've got from server and has one property 'states' which is an array of {id: .., text: ..}
+                        //console.log(data.states);                        
+                        return {
+                            results: data.states
+                        };
+                    },
+                
             },
-            placeholder: 'Search a State',
-            minimumInputLength: 1
+            minimumInputLength: 1, // Minimum length of input in search box before ajax call triggers        
+
         });
     })
+
 </script>
