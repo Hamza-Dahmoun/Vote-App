@@ -452,7 +452,6 @@ namespace WebApplication1.Controllers
         [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
         public async Task<IActionResult> States(string q)
         {
-            //this function removes a candidate from the db using its ID
             try
             {
                 if (String.IsNullOrEmpty(q))
@@ -462,7 +461,7 @@ namespace WebApplication1.Controllers
 
                 //declaring an expression that is special to State objects according to the search value
                 System.Linq.Expressions.Expression<Func<State, bool>> expr;
-                expr = s => s.Name.Contains(q);
+                expr = s => s.Name.StartsWith(q);
                 var states = _stateRepository.GetAllFiltered(expr).Select(s => new { text = s.Name, id = s.Id});
                 //now lets return json data
                 var json = JsonConvert.SerializeObject(new
