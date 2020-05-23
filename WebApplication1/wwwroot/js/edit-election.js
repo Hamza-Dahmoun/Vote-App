@@ -36,6 +36,7 @@ function sendUpdatedElection() {
         dataType: "json",
         error: function () {
             console.log("error");
+            hideSpinner();
             displayResponseMsg(false);
         },
         success: function (response) {
