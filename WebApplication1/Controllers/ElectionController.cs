@@ -632,6 +632,12 @@ namespace WebApplication1.Controllers
         [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
         public async Task<IActionResult> EditElection([FromBody] TemporaryElection election)
         {
+            //first of all lets check if this election is in future, if it is not then we'll not edit it
+            if (DateTime.Parse(election.StartDate) <= DateTime.Now)
+            {
+                //so it is not a future election
+                return BadRequest();
+            }
             try
             {
                 //this variable is going to be used when checking if user updated hasNeutral opinion
