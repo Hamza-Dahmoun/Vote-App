@@ -634,6 +634,9 @@ namespace WebApplication1.Controllers
         {
             try
             {
+                //this variable is going to be used when checking if user updated hasNeutral opinion
+                bool oldHasNeutral = _electionRepository.GetById(Guid.Parse(election.Id)).HasNeutral;
+
 
                 Election myElection = new Election
                 {
@@ -644,12 +647,13 @@ namespace WebApplication1.Controllers
                     HasNeutral = bool.Parse(election.HasNeutral)
                 };
 
-                //if hasNeutral field was updated then we should add/delete neutralCandidate from the db
-                Election oldElection = _electionRepository.GetById(Guid.Parse(election.Id));
-                if(oldElection.HasNeutral == myElection.HasNeutral)
+                _electionRepository.Edit(myElection.Id, myElection);
+
+                //if hasNeutral field was updated then we should add/delete neutralCandidate from the db                
+                if(myElection.HasNeutral == oldHasNeutral)
                 {
                     //user didn't update hasNeutral property, lets proceed editing the Election instance
-                    _electionRepository.Edit(myElection.Id, myElection);
+                    //so do nothing
                 }
                 else
                 {
@@ -661,10 +665,9 @@ namespace WebApplication1.Controllers
                         {
                             Id = Guid.NewGuid(),
                             isNeutralOpinion = true,
-                            Election = myElection
+                            Election = _electionRepository.GetById(myElection.Id)
                         };
                         _candidateRepository.Add(neutralOpinion);
-                        _electionRepository.Edit(myElection.Id, myElection);
                     }
                     else
                     {
@@ -672,7 +675,6 @@ namespace WebApplication1.Controllers
                         System.Linq.Expressions.Expression<Func<Candidate, bool>> expr = e => e.Election.Id == myElection.Id && e.isNeutralOpinion == true;
                         Candidate myNeutralCandidate = _candidateRepository.GetOneFiltered(expr);
                         _candidateRepository.Delete(myNeutralCandidate.Id);
-                        _electionRepository.Edit(myElection.Id, myElection);
                     }
                 }
                 

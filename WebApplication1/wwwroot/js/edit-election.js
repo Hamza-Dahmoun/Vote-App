@@ -22,8 +22,8 @@ function sendUpdatedElection() {
     //console.log(electionName);
     let electionStartDate = document.getElementById("start-date-election").value;
     let electionDuration = document.getElementById("duration-in-days").value;
-    let electionHasNeutral = document.getElementById("has-neutral").value;
-
+    let electionHasNeutral = getCheckBoxValue("has-neutral").toString();
+    console.log(electionHasNeutral);
     hideButton();
     displaySpinner();
 
@@ -67,6 +67,16 @@ function displayResponseMsg(success) {
     responseMsg.style.display = "block";
 }
 
+
+function getCheckBoxValue(id) {
+    let checkBox = document.getElementById(id);
+    if (checkBox.checked) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
 
 
 
