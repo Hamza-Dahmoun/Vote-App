@@ -709,8 +709,20 @@ namespace WebApplication1.Controllers
         [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
         public ActionResult DeleteElection(Guid id)
         {
+            //removing an election means removing all votes and candidates of it
             try
             {
+                //1- Remove all Votes related to an Election
+                //declaring an expression that is special to Vote objects
+                System.Linq.Expressions.Expression<Func<Vote, bool>> expr1 = e => e.Election.Id == id;
+                List<Vote> votesList = _voteRepository.GetAllFiltered(expr1);
+                foreach (var vote in votesList)
+                {
+                    _voteRepository.Delete(vote.Id);
+                }
+
+
+                //2- Now remove the Election from the db
                 _electionRepository.Delete(id);
                 return RedirectToAction(nameof(Index));
             }
