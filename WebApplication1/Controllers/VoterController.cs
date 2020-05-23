@@ -29,10 +29,12 @@ namespace WebApplication1.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         public IRepository<Voter> _voterRepository { get; }
         public IRepository<State> _stateRepository { get; }
+        public IRepository<Vote> _voteRepository { get; }
         //Lets inject the services using the constructor, this is called Constructor Dependency Injection
-        public VoterController(IRepository<Voter> voterRepository, IRepository<State> stateRepository, UserManager<IdentityUser> userManager)
+        public VoterController(IRepository<Voter> voterRepository, IRepository<State> stateRepository, IRepository<Vote> voteRepository, UserManager<IdentityUser> userManager)
         {
             _voterRepository = voterRepository;
+            _voteRepository = voteRepository;
             _stateRepository = stateRepository;
             _userManager = userManager;
         }
@@ -113,12 +115,25 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public IActionResult DeleteVoter(Guid id)
         {
+            //removing a voter means removing all his actions (votes  & identity account)
             try
             {
+                Voter voter = _voterRepository.GetById(id);
+                //declaring an expression that is special to Vote objects
+                System.Linq.Expressions.Expression<Func<Vote, bool>> expr = e => e.Voter == voter;
+                List<Vote> votesList = _voteRepository.GetAllFiltered(expr);
+
+                //1- Remove all this voter's votes
+                foreach (var vote in votesList)
+                {
+                    _voteRepository.Delete(vote.Id);
+                }
+                
+                //2- Remove the Voter
                 _voterRepository.Delete(id);
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch(Exception E)
             {
                 //If there is an error return the same Delete view
                 return View();
