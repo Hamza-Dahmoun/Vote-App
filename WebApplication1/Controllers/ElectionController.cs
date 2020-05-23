@@ -643,10 +643,45 @@ namespace WebApplication1.Controllers
                     DurationInDays = int.Parse(election.DurationInDays),
                     HasNeutral = bool.Parse(election.HasNeutral)
                 };
-                _electionRepository.Edit(myElection.Id, myElection);
+
+                //if hasNeutral field was updated then we should add/delete neutralCandidate from the db
+                Election oldElection = _electionRepository.GetById(Guid.Parse(election.Id));
+                if(oldElection.HasNeutral == myElection.HasNeutral)
+                {
+                    //user didn't update hasNeutral property, lets proceed editing the Election instance
+                    _electionRepository.Edit(myElection.Id, myElection);
+                }
+                else
+                {
+                    //user did updated hasNeutral property
+                    if (myElection.HasNeutral)
+                    {
+                        //lets add a neutral candidate to the db related to this instance of Election
+                        Candidate neutralOpinion = new Candidate
+                        {
+                            Id = Guid.NewGuid(),
+                            isNeutralOpinion = true,
+                            Election = myElection
+                        };
+                        _candidateRepository.Add(neutralOpinion);
+                        _electionRepository.Edit(myElection.Id, myElection);
+                    }
+                    else
+                    {
+                        //lets remove a neutral candidate instance from db which is related to this instance of Election
+                        System.Linq.Expressions.Expression<Func<Candidate, bool>> expr = e => e.Election.Id == myElection.Id && e.isNeutralOpinion == true;
+                        Candidate myNeutralCandidate = _candidateRepository.GetOneFiltered(expr);
+                        _candidateRepository.Delete(myNeutralCandidate.Id);
+                        _electionRepository.Edit(myElection.Id, myElection);
+                    }
+                }
+                
+
+                
+
                 return Json(new { success = true });
             }
-            catch
+            catch(Exception E)
             {
                 return BadRequest();
             }
