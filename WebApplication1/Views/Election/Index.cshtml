@@ -50,8 +50,12 @@
                     @Html.DisplayFor(model => item.Candidates.Count)
                 </th>
                 <td>
-                    <a class='table-button button-edit' title='Edit'  asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                    |
+                    @*display Edit button only when this Election is in future*@
+                    @if (item.StartDate > DateTime.Now)
+                    {
+                        <a class='table-button button-edit' title='Edit' asp-action="Edit" asp-route-id="@item.Id">Edit</a>                                             
+                        <span>|</span>
+                        }
                     <a class='table-button button-details' title='Details' asp-action="Details" asp-route-id="@item.Id">Details</a>
                     |
                     <a class='table-button button-delete' title='Delete' asp-action="Delete" asp-route-id="@item.Id">Delete</a>
