@@ -712,7 +712,7 @@ namespace WebApplication1.Controllers
             //removing an election means removing all votes and candidates of it
             try
             {
-                //1- Remove all Votes related to an Election
+                //1- Remove all Votes related to this Election
                 //declaring an expression that is special to Vote objects
                 System.Linq.Expressions.Expression<Func<Vote, bool>> expr1 = e => e.Election.Id == id;
                 List<Vote> votesList = _voteRepository.GetAllFiltered(expr1);
@@ -722,7 +722,17 @@ namespace WebApplication1.Controllers
                 }
 
 
-                //2- Now remove the Election from the db
+                //2- Remove all Candidates of this Election
+                //declaring an expression that is special to Election objects
+                System.Linq.Expressions.Expression<Func<Candidate, bool>> expr2 = e => e.Election.Id == id;
+                List<Candidate> candidatesList = _candidateRepository.GetAllFiltered(expr2);
+                foreach (var candidate in candidatesList)
+                {
+                    _candidateRepository.Delete(candidate.Id);
+                }
+
+
+                //3- Now remove the Election from the db
                 _electionRepository.Delete(id);
                 return RedirectToAction(nameof(Index));
             }
