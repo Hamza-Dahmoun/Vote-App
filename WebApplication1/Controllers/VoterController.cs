@@ -30,12 +30,19 @@ namespace WebApplication1.Controllers
         public IRepository<Voter> _voterRepository { get; }
         public IRepository<State> _stateRepository { get; }
         public IRepository<Vote> _voteRepository { get; }
+        public IRepository<Candidate> _candidateRepository { get; }
         //Lets inject the services using the constructor, this is called Constructor Dependency Injection
-        public VoterController(IRepository<Voter> voterRepository, IRepository<State> stateRepository, IRepository<Vote> voteRepository, UserManager<IdentityUser> userManager)
+        public VoterController(
+            IRepository<Voter> voterRepository,
+            IRepository<State> stateRepository,
+            IRepository<Vote> voteRepository,
+            IRepository<Candidate> candidateRepository,
+            UserManager<IdentityUser> userManager)
         {
             _voterRepository = voterRepository;
             _voteRepository = voteRepository;
             _stateRepository = stateRepository;
+            _candidateRepository = candidateRepository;
             _userManager = userManager;
         }
         
@@ -119,17 +126,24 @@ namespace WebApplication1.Controllers
             try
             {
                 Voter voter = _voterRepository.GetById(id);
-                //declaring an expression that is special to Vote objects
-                System.Linq.Expressions.Expression<Func<Vote, bool>> expr = e => e.Voter == voter;
-                List<Vote> votesList = _voteRepository.GetAllFiltered(expr);
 
                 //1- Remove all this voter's votes
+                //declaring an expression that is special to Vote objects
+                System.Linq.Expressions.Expression<Func<Vote, bool>> expr1 = e => e.Voter == voter;
+                List<Vote> votesList = _voteRepository.GetAllFiltered(expr1);
                 foreach (var vote in votesList)
                 {
                     _voteRepository.Delete(vote.Id);
                 }
-                
-                //2- Remove the Voter
+                //2- Remove corresponding Candidates objects
+                //declaring an expression that is special to Vote objects
+                System.Linq.Expressions.Expression<Func<Candidate, bool>> expr2 = e => e.VoterBeing == voter;
+                List<Candidate> candidatesList = _candidateRepository.GetAllFiltered(expr2);
+                foreach (var candidate in candidatesList)
+                {
+                    _candidateRepository.Delete(candidate.Id);
+                }
+                //3- Remove the Voter
                 _voterRepository.Delete(id);
                 return RedirectToAction(nameof(Index));
             }
