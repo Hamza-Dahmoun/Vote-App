@@ -120,7 +120,7 @@ namespace WebApplication1.Controllers
             return View(Utilities.convertVoter_toPersonViewModel(voter));
         }
         [HttpPost]
-        public IActionResult DeleteVoter(Guid id)
+        public async Task<IActionResult> DeleteVoter(Guid id)
         {
             //removing a voter means removing all his actions (votes  & identity account)
             try
@@ -135,6 +135,7 @@ namespace WebApplication1.Controllers
                 {
                     _voteRepository.Delete(vote.Id);
                 }
+
                 //2- Remove corresponding Candidates objects
                 //declaring an expression that is special to Vote objects
                 System.Linq.Expressions.Expression<Func<Candidate, bool>> expr2 = e => e.VoterBeing == voter;
@@ -143,8 +144,19 @@ namespace WebApplication1.Controllers
                 {
                     _candidateRepository.Delete(candidate.Id);
                 }
-                //3- Remove the Voter
-                _voterRepository.Delete(id);
+
+                //3- Delete this voter's account from the Identity Db
+                //lets get the User by his ID
+                var voterUserAccount = await _userManager.FindByIdAsync(_voterRepository.GetById(id).UserId.ToString());
+                //DeleteAsync() is an asynchronous method, we have to mark this method with 'async task'
+                var result = await _userManager.DeleteAsync(voterUserAccount);
+                if (result.Succeeded)
+                {
+                    //4- Remove the Voter
+                    _voterRepository.Delete(id);
+                }
+
+                
                 return RedirectToAction(nameof(Index));
             }
             catch(Exception E)
