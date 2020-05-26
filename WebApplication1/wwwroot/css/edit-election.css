@@ -12,11 +12,12 @@
 }
 
 
-
+/*
+    I USED TO LOAD THE TABLE HIDDEN THEN IN JS CODE I DISPLAY IT, BUT THIS MISBEHAVED AND THE TABLE DIDNT HAVE A PROPER WIDTH
 #voters-table {
     display: none;
 }
-
+*/
 #selected-candidates-area {
     margin-top: 3%;
     margin-bottom: 3%;

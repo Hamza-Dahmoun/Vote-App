@@ -93,7 +93,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function prepareVotersjQueryDatatable(electionId) {
     //console.log("-" + electionId + "-");
-    document.getElementById("voters-table").style.display = "block";
+    //I USED TO LOAD THE TABLE HIDDEN THEN IN JS CODE I DISPLAY IT, BUT THIS MISBEHAVED AND THE TABLE DIDNT HAVE A PROPER WIDTH
+    //document.getElementById("voters-table").style.display = "block";
 
     //this function send a request to the server to get the list of voters not candidates to a fiven election
     $("#voters-table").DataTable(
