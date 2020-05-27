@@ -66,6 +66,12 @@
             cursor: pointer;
         }
 
+
+.select-candidate-btn {
+    color: #3262ec !important;
+    cursor: pointer;
+}
+
 .hidden-spinner {
     display: none;
 }
