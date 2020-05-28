@@ -23,6 +23,17 @@
       "enabled": true
     }
   },
+  // pdfMake scripts
+  {
+    "outputFileName": "wwwroot/js/pdfmake.min.js",
+    "inputFiles": [
+      "wwwroot/lib/pdfmake/pdfmake.min.js",
+      "wwwroot/lib/pdfmake/vfs_fonts.min.js"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  },
   // select2 styles
   {
     "outputFileName": "wwwroot/css/select2.min.css",
