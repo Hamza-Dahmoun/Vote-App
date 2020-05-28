@@ -253,13 +253,26 @@ function displayPreviousElections(previousElections) {
         spinner.style.display = "none";
         tdResultsButton_andSpinner.appendChild(spinner);
 
+
+        let pdfButton = document.createElement("a");
+        pdfButton.setAttribute("electionId", previousElections[i].Id);
+        pdfButton.style.color = "#3d7e9a";
+        pdfButton.style.cursor = "pointer";
+        pdfButton.setAttribute("title", "Download PDF");
+        pdfButton.innerText = "Results as PDF";
+        pdfButton.addEventListener("click", function () {console.log("hello pdf")});
+        let tdResultsPDF = document.createElement("td");
+        tdResultsPDF.appendChild(pdfButton);
+
+
+
         let electionRow = document.createElement("tr");
         electionRow.appendChild(tdName);
         electionRow.appendChild(tdStartDate);
         electionRow.appendChild(tdDurationInDays);
         electionRow.appendChild(tdCandidatesCount);
         electionRow.appendChild(tdResultsButton_andSpinner);
-
+        electionRow.appendChild(tdResultsPDF);
 
         tableBody.appendChild(electionRow);
     }
