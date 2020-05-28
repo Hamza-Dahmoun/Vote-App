@@ -28,6 +28,14 @@
         "css/select2.css",
         "js/select2.js"
       ]
+    },
+    {
+      "library": "pdfmake@0.1.65",
+      "destination": "wwwroot/lib/pdfmake/",
+      "files": [
+        "pdfmake.min.js",
+        "vfs_fonts.min.js"
+      ]
     }
   ]
 }
