@@ -30,7 +30,7 @@
       ]
     },
     {
-      "library": "pdfmake@0.1.65",
+      "library": "pdfmake@0.1.32",
       "destination": "wwwroot/lib/pdfmake/",
       "files": [
         "pdfmake.min.js",

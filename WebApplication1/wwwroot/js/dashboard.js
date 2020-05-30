@@ -344,6 +344,9 @@ function getElectionResults(event) {
             //1 - displaying the results of an election from the left side
             //2 - displaying the results of an election in a pdf file
             //so lets check which action to do based on which event.target launched this function
+
+            //displayElectionResults(response);
+            
             let classes = event.target.className;
             if (classes.includes("results-in-pdf-btn")) {
                 //so it is the pdf button
@@ -436,5 +439,302 @@ function hideElectionResultsContainer() {
     //document.removeEventListener("click", hideElectionResultsContainer);
 }
 function buildPdf(response) {
-    alert("building pdf");
+    //alert("building pdf");
+    let reportContainer = document.createElement("div");
+    reportContainer.setAttribute("id", "reportContainer");
+    reportContainer.style.color = "#000000";
+    reportContainer.style.display = "none";
+    reportContainer.innerText = "hello pdf";
+
+    /*
+    let title = document.createElement("h1");
+    title.innerText = "Report Title";
+    title.style.textAlign = "center";
+    reportContainer.appendChild(title);
+
+    let introP = document.createElement("p");
+    introP.innerText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+    reportContainer.appendChild(introP);
+    
+    let listDiv = document.createElement("div");
+    if (response == null || response.length == 0) {
+        //so the respponse is empty, lets just display a text  to tell user that this election has no candidates
+        let para = document.createElement("p");
+        para.innerText = "It seems this election had no Candidates!";
+        para.style.textAlign = "center";
+        listDiv.appendChild(para);
+    }
+    else {
+        for (let i = 0; i < response.length; i++) {
+            let one_result_container = document.createElement("div");
+            one_result_container.className = "one-result-container";
+
+            let rank_container = document.createElement("div");
+            rank_container.className = "rank-container";
+
+            if (i == 0) {
+                //so its the current winner candidate
+                let icon = document.createElement("i");
+                icon.className = "fa fa-trophy";
+                let span = document.createElement("span");
+                span.appendChild(icon);
+                rank_container.appendChild(span);
+            }
+            else {
+                let span = document.createElement("span");
+                span.innerText = i + 1;
+                rank_container.appendChild(span);
+            }
+            one_result_container.appendChild(rank_container);
+
+            let candidate_data_container = document.createElement("div");
+            candidate_data_container.className = "candidate-data-container";
+            let candidateName = document.createElement("p");
+            candidateName.innerText = response[i].FirstName + " " + response[i].LastName;
+            candidate_data_container.appendChild(candidateName);
+            let votesCount = document.createElement("p");
+            votesCount.innerText = response[i].VotesCount;
+            candidate_data_container.appendChild(votesCount);
+            one_result_container.appendChild(candidate_data_container);
+
+
+            listDiv.appendChild(one_result_container);
+        }
+    }
+    reportContainer.appendChild(listDiv);*/
+    let g = document.getElementById("previous-elections-area");
+    g.appendChild(reportContainer);
+
+    
+    pdfForElement("reportContainer").download();
+    
+}
+
+function pdfForElement(id) {
+    function ParseContainer(cnt, e, p, styles) {
+        var elements = [];
+        var children = e.childNodes;
+        if (children.length != 0) {
+            for (var i = 0; i < children.length; i++) p = ParseElement(elements, children[i], p, styles);
+        }
+        if (elements.length != 0) {
+            for (var i = 0; i < elements.length; i++) cnt.push(elements[i]);
+        }
+        return p;
+    }
+
+    function ComputeStyle(o, styles) {
+        for (var i = 0; i < styles.length; i++) {
+            var st = styles[i].trim().toLowerCase().split(":");
+            if (st.length == 2) {
+                switch (st[0]) {
+                    case "font-size":
+                        {
+                            o.fontSize = parseInt(st[1]);
+                            break;
+                        }
+                    case "text-align":
+                        {
+                            switch (st[1]) {
+                                case "right":
+                                    o.alignment = 'right';
+                                    break;
+                                case "center":
+                                    o.alignment = 'center';
+                                    break;
+                            }
+                            break;
+                        }
+                    case "font-weight":
+                        {
+                            switch (st[1]) {
+                                case "bold":
+                                    o.bold = true;
+                                    break;
+                            }
+                            break;
+                        }
+                    case "text-decoration":
+                        {
+                            switch (st[1]) {
+                                case "underline":
+                                    o.decoration = "underline";
+                                    break;
+                            }
+                            break;
+                        }
+                    case "font-style":
+                        {
+                            switch (st[1]) {
+                                case "italic":
+                                    o.italics = true;
+                                    break;
+                            }
+                            break;
+                        }
+                }
+            }
+        }
+    }
+
+    function ParseElement(cnt, e, p, styles) {
+        if (!styles) styles = [];
+        if (e.getAttribute) {
+            var nodeStyle = e.getAttribute("style");
+            if (nodeStyle) {
+                var ns = nodeStyle.split(";");
+                for (var k = 0; k < ns.length; k++) styles.push(ns[k]);
+            }
+        }
+
+        switch (e.nodeName.toLowerCase()) {
+            case "#text":
+                {
+                    var t = {
+                        text: e.textContent.replace(/\n/g, "")
+                    };
+                    if (styles) ComputeStyle(t, styles);
+                    p.text.push(t);
+                    break;
+                }
+            case "b":
+            case "strong":
+                {
+                    //styles.push("font-weight:bold");
+                    ParseContainer(cnt, e, p, styles.concat(["font-weight:bold"]));
+                    break;
+                }
+            case "u":
+                {
+                    //styles.push("text-decoration:underline");
+                    ParseContainer(cnt, e, p, styles.concat(["text-decoration:underline"]));
+                    break;
+                }
+            case "i":
+                {
+                    //styles.push("font-style:italic");
+                    ParseContainer(cnt, e, p, styles.concat(["font-style:italic"]));
+                    //styles.pop();
+                    break;
+                    //cnt.push({ text: e.innerText, bold: false });
+                }
+            case "span":
+                {
+                    ParseContainer(cnt, e, p, styles);
+                    break;
+                }
+            case "br":
+                {
+                    p = CreateParagraph();
+                    cnt.push(p);
+                    break;
+                }
+            case "table":
+                {
+                    var t = {
+                        table: {
+                            widths: [],
+                            body: []
+                        }
+                    }
+                    var border = e.getAttribute("border");
+                    var isBorder = false;
+                    if (border)
+                        if (parseInt(border) == 1) isBorder = true;
+                    if (!isBorder) t.layout = 'noBorders';
+                    ParseContainer(t.table.body, e, p, styles);
+
+                    var widths = e.getAttribute("widths");
+                    if (!widths) {
+                        if (t.table.body.length != 0) {
+                            if (t.table.body[0].length != 0)
+                                for (var k = 0; k < t.table.body[0].length; k++) t.table.widths.push("*");
+                        }
+                    } else {
+                        var w = widths.split(",");
+                        for (var k = 0; k < w.length; k++) t.table.widths.push(w[k]);
+                    }
+                    cnt.push(t);
+                    break;
+                }
+            case "tbody":
+                {
+                    ParseContainer(cnt, e, p, styles);
+                    //p = CreateParagraph();
+                    break;
+                }
+            case "tr":
+                {
+                    var row = [];
+                    ParseContainer(row, e, p, styles);
+                    cnt.push(row);
+                    break;
+                }
+            case "td":
+                {
+                    p = CreateParagraph();
+                    var st = {
+                        stack: []
+                    }
+                    st.stack.push(p);
+
+                    var rspan = e.getAttribute("rowspan");
+                    if (rspan) st.rowSpan = parseInt(rspan);
+                    var cspan = e.getAttribute("colspan");
+                    if (cspan) st.colSpan = parseInt(cspan);
+
+                    ParseContainer(st.stack, e, p, styles);
+                    cnt.push(st);
+                    break;
+                }
+            case "div":
+            case "p":
+                {
+                    p = CreateParagraph();
+                    var st = {
+                        stack: []
+                    }
+                    st.stack.push(p);
+                    ComputeStyle(st, styles);
+                    ParseContainer(st.stack, e, p);
+
+                    cnt.push(st);
+                    break;
+                }
+            default:
+                {
+                    console.log("Parsing for node " + e.nodeName + " not found");
+                    break;
+                }
+        }
+        return p;
+    }
+
+    function ParseHtml(cnt, htmlText) {
+        var html = $(htmlText.replace(/\t/g, "").replace(/\n/g, ""));
+        var p = CreateParagraph();
+        for (var i = 0; i < html.length; i++) ParseElement(cnt, html.get(i), p);
+    }
+
+    function CreateParagraph() {
+        var p = {
+            text: []
+        };
+        return p;
+    }
+    content = [];
+    ParseHtml(content, document.getElementById(id).outerHTML);
+    return pdfMake.createPdf({
+        pageOrientation: 'landscape',
+        pageMargins: [3, 20, 3, 20],
+        //lineHeight: 15,
+        //layout: {
+        //    paddingLeft: function(i, node) { return 4; },
+        //    paddingRight: function(i, node) { return 4; },
+        //    paddingTop: function(i, node) { return 20; },
+        //    paddingBottom: function(i, node) { return 20; },
+        //    // fillColor: function (i, node) { return null; }
+        //},
+        content: content
+    });
 }
