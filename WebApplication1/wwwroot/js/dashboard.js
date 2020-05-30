@@ -245,13 +245,14 @@ function displayPreviousElections(previousElections) {
         resultsButton.style.cursor = "pointer";
         resultsButton.setAttribute("title", "Show Details");
         resultsButton.innerText = "Show Results";
+        resultsButton.classList.add("results-in-div-btn");
         resultsButton.addEventListener("click", getElectionResults);
         let tdResultsButton_andSpinner = document.createElement("td");
         tdResultsButton_andSpinner.appendChild(resultsButton);
-        let spinner = document.createElement("span");
-        spinner.className = "spinner-border text-primary";
-        spinner.style.display = "none";
-        tdResultsButton_andSpinner.appendChild(spinner);
+        let resultsButtonSpinner = document.createElement("span");
+        resultsButtonSpinner.className = "spinner-border text-primary";
+        resultsButtonSpinner.style.display = "none";
+        tdResultsButton_andSpinner.appendChild(resultsButtonSpinner);
 
 
         let pdfButton = document.createElement("a");
@@ -260,9 +261,14 @@ function displayPreviousElections(previousElections) {
         pdfButton.style.cursor = "pointer";
         pdfButton.setAttribute("title", "Download PDF");
         pdfButton.innerText = "Results as PDF";
-        pdfButton.addEventListener("click", function () {console.log("hello pdf")});
+        pdfButton.classList.add("results-in-pdf-btn");
+        pdfButton.addEventListener("click", getElectionResults);
         let tdResultsPDF = document.createElement("td");
         tdResultsPDF.appendChild(pdfButton);
+        let pdfButtonSpinner = document.createElement("span");
+        pdfButtonSpinner.className = "spinner-border text-primary";
+        pdfButtonSpinner.style.display = "none";
+        tdResultsPDF.appendChild(pdfButtonSpinner);
 
 
 
@@ -312,8 +318,8 @@ function getElectionResults(event) {
 
     //lets hide the button and display the spinner
     //displayElement(document.getElementById("current-election-results-spinner"));
-    console.log(event);
-    console.log(event.target);
+    //console.log(event);
+    //console.log(event.target);
     displayElement(event.target.parentElement.querySelector(".spinner-border"));
     hideElement(event.target);
     //this function load the current election results using jQuery ajax
@@ -328,13 +334,26 @@ function getElectionResults(event) {
         },
         success: function (response) {
             //'response' represents the object returned from the api which is the an array of candodates ordered by their number of votes
-            console.log(response);
+            //console.log(response);
             //lets hide the spinner and display the button
             //hideElement(document.getElementById("current-election-results-spinner"));
             hideElement(event.target.parentElement.querySelector(".spinner-border"));
             displayElement(event.target);
-            //lets display the results
-            displayElectionResults(response);
+
+            //this function is released in two places:
+            //1 - displaying the results of an election from the left side
+            //2 - displaying the results of an election in a pdf file
+            //so lets check which action to do based on which event.target launched this function
+            let classes = event.target.className;
+            if (classes.includes("results-in-pdf-btn")) {
+                //so it is the pdf button
+                buildPdf(response);
+            }
+            else {
+                //so it iif the sliding div button
+                displayElectionResults(response);
+            }
+            
         }
     });
 }
@@ -415,4 +434,7 @@ function hideElectionResultsContainer() {
 
     //lets remove the click event off the document
     //document.removeEventListener("click", hideElectionResultsContainer);
+}
+function buildPdf(response) {
+    alert("building pdf");
 }
