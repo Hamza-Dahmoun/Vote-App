@@ -333,6 +333,7 @@ function getElectionResults(event) {
             alert("error");
         },
         success: function (response) {
+            
             //'response' represents the object returned from the api which is the an array of candodates ordered by their number of votes
             //console.log(response);
             //lets hide the spinner and display the button
@@ -439,6 +440,8 @@ function hideElectionResultsContainer() {
     //document.removeEventListener("click", hideElectionResultsContainer);
 }
 function buildPdf(response) {
+    //console.log(response);
+    
     //alert("building pdf");
     let reportContainer = document.createElement("div");
     reportContainer.setAttribute("id", "reportContainer");
@@ -446,7 +449,7 @@ function buildPdf(response) {
     reportContainer.style.display = "none";
     reportContainer.innerText = "hello pdf";
 
-    /*
+    
     let title = document.createElement("h1");
     title.innerText = "Report Title";
     title.style.textAlign = "center";
@@ -458,6 +461,7 @@ function buildPdf(response) {
     
     let listDiv = document.createElement("div");
     if (response == null || response.length == 0) {
+        //console.log("no candiodates");
         //so the respponse is empty, lets just display a text  to tell user that this election has no candidates
         let para = document.createElement("p");
         para.innerText = "It seems this election had no Candidates!";
@@ -465,6 +469,7 @@ function buildPdf(response) {
         listDiv.appendChild(para);
     }
     else {
+        console.log(response.length + " candiodates");
         for (let i = 0; i < response.length; i++) {
             let one_result_container = document.createElement("div");
             one_result_container.className = "one-result-container";
@@ -499,15 +504,18 @@ function buildPdf(response) {
 
 
             listDiv.appendChild(one_result_container);
+
         }
     }
-    reportContainer.appendChild(listDiv);*/
+    reportContainer.appendChild(listDiv);
     let g = document.getElementById("previous-elections-area");
     g.appendChild(reportContainer);
 
     
     pdfForElement("reportContainer").download();
-    
+
+    //lets remove the element now
+    document.getElementById("reportContainer").remove();
 }
 
 function pdfForElement(id) {
