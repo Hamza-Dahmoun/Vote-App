@@ -439,7 +439,55 @@ function hideElectionResultsContainer() {
     //lets remove the click event off the document
     //document.removeEventListener("click", hideElectionResultsContainer);
 }
-function buildPdf(response) {
+/*
+function buildPdf() {
+        var doc = new jsPDF('p', 'pt', 'a4', true); //for portrait
+        //var doc = new jsPDF('l', 'pt', 'a4', true);//for landscape
+        var specialElementHandlers = {
+            '#editor': function (element, renderer) {
+                return true;
+            }
+    };
+
+        beforePageContent: {
+            doc.setFontSize(18);
+            doc.setFont("courier");
+            doc.text("Bilan Trimestriel de la Gestion des Réclamations", 20, 40);
+        }
+    let strArr = doc.splitTextToSize("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", 50);
+    beforePageContent: {
+            doc.setFontSize(14);
+            doc.setFont("courier");
+        doc.text(strArr, 20, 100);
+    };
+
+    let electionName = "";
+    let startDate = "";
+    let endDate = "";
+    let candidatesCount = 5;
+
+    beforePageContent: {
+        doc.setFontSize(14);
+        doc.setFont("courier");
+        doc.text("- Election Name: " + electionName , 20, 140);
+    };
+    beforePageContent: {
+        doc.setFontSize(14);
+        doc.setFont("courier");
+        doc.text("- Period: " + startDate + " To " + endDate, 20, 160);
+    };
+    beforePageContent: {
+        doc.setFontSize(14);
+        doc.setFont("courier");
+        doc.text("- Number of Candidates: " + candidatesCount, 20, 180);
+    };
+
+    
+        doc.save("election-result.pdf");
+    
+
+}*/
+/*function buildPdf(response) {
     //console.log(response);
     
     //alert("building pdf");
@@ -447,12 +495,14 @@ function buildPdf(response) {
     reportContainer.setAttribute("id", "reportContainer");
     reportContainer.style.color = "#000000";
     reportContainer.style.display = "none";
-    reportContainer.innerText = "hello pdf";
+    reportContainer.style.textAlign = "center";
+    //reportContainer.innerText = "hello pdf";
 
     
     let title = document.createElement("h1");
-    title.innerText = "Report Title";
+    title.innerText = "Election Results";
     title.style.textAlign = "center";
+    title.style.marginBottom = "10%";
     reportContainer.appendChild(title);
 
     let introP = document.createElement("p");
@@ -460,12 +510,13 @@ function buildPdf(response) {
     reportContainer.appendChild(introP);
     
     let listDiv = document.createElement("div");
+    listDiv.style.marginTop = "100px";
     if (response == null || response.length == 0) {
         //console.log("no candiodates");
         //so the respponse is empty, lets just display a text  to tell user that this election has no candidates
         let para = document.createElement("p");
         para.innerText = "It seems this election had no Candidates!";
-        para.style.textAlign = "center";
+        para.style.textAlign = "center";        
         listDiv.appendChild(para);
     }
     else {
@@ -514,9 +565,141 @@ function buildPdf(response) {
     
     pdfForElement("reportContainer").download();
 
+
+
+
     //lets remove the element now
     document.getElementById("reportContainer").remove();
 }
+*/
+function buildPdf() {
+    let electionName = "name";
+    let candidatesCount = 3;
+    let electionPeriod = "period";
+    let neutralVotes = 12;
+    let totalVotes = 59;
+
+    var documentDefinition = {
+        content:
+            [
+                {
+                    text: 'Election Results', style: 'title'
+                },
+                {
+                    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+                    style: "text"
+                },
+                //'pdfmake does not generate pdfs from the html. Rather, it generates them directly from javascript.',
+                //'It is very fast, but very limited, especially compared to PHP alternatives.', 
+                {
+                    text: "- Election Name: " + electionName,
+                    style: "points"
+                },
+                {
+                    text: "- Period: " + electionPeriod,
+                    style: "points"
+                },
+                {
+                    text: "- Number of Candidates: " + candidatesCount,
+                    style: "points"
+                },
+                {
+                    text: "Results:",
+                    style: "resultsTitle"
+                },
+                {
+                    table:
+                    {
+                        headerRows: 1,
+                        widths: ['*', '*', '*', '*'],
+                        body: [
+                            [
+                                { text: 'Rank', style: 'tableHeader' },
+                                { text: 'Candidate', style: 'tableHeader' },
+                                { text: 'Votes', style: 'tableHeader' }
+                            ],
+                            [
+                                { text: '1' },
+                                { text: 'Hamza Dahmoun' },
+                                { text: '20' }
+                            ],
+                            [
+                                { text: '2' },
+                                { text: 'Sidahmed Dahmoun' },
+                                { text: '15' }
+                            ],
+                            [
+                                { text: '3' },
+                                { text: 'Ikram Dahmoun' },
+                                { text: '12' }
+                            ]
+                        ]
+                    }
+                },
+                {
+                    text: "Notes: ",
+                    style: "notes"
+                },
+                {
+                    text: "Neutral Votes: " + neutralVotes + ".",
+                    style: "points"
+                },
+                {
+                    text: "Total Number of Votes: " + totalVotes + ".",
+                    style: "points"
+                },
+            ],
+        styles:
+        {
+            title:
+            {
+                fontSize: 26,
+                bold: false,
+                margin: [0, 0, 0, 60],
+                //margin: [left, top, right, bottom],
+                alignment: 'center'
+            },
+            text:
+            {
+                fontSize: 13,
+                bold: false,
+                margin: [0, 20, 0, 50],
+                alignment: 'justify',
+                //lineHeight: "18px"
+            },
+            points:
+            {
+                fontSize: 13,
+                bold: false,
+                margin: [0, 6, 0, 6],
+                alignment: 'left',
+            },
+            resultsTitle:
+            {
+                fontSize: 18,
+                bold: false,
+                margin: [0, 40, 0, 20],
+                alignment: 'left'
+            },
+            tableHeader:
+            {
+                margin: [0, 0, 0, 0],
+                fillColor: '#3262ec',
+                color: '#ffffff'
+            },
+            notes: {
+                fontSize: 15,
+                bold: true,
+                italics: true,
+                margin: [0, 40, 0, 9],
+                alignment: 'left',  
+            },
+        }
+    };
+
+    pdfMake.createPdf(documentDefinition).download('election-result.pdf');
+}
+
 
 function pdfForElement(id) {
     function ParseContainer(cnt, e, p, styles) {
