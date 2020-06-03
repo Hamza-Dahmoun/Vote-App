@@ -557,9 +557,9 @@ function buildPdf(electionInfo, results) {
             },
             points:
             {
-                fontSize: 13,
+                fontSize: 12,
                 bold: false,
-                margin: [0, 6, 0, 6],
+                margin: [0, 4, 0, 4],
                 alignment: 'left',
             },
             resultsTitle:
