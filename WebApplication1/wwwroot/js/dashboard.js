@@ -485,7 +485,10 @@ function buildPdf(electionInfo, results) {
     var documentDefinition = {
         pageMargins: [20, 60, 40, 60],
         pageSize: 'A4',
-        
+        footer: //we're going to get the footer from the below function which returns a valid pdfMake element composed of {text, style}
+            function (currentPage, pageCount) {
+            return { text: currentPage.toString() + ' of ' + pageCount, style: "footer" }
+        },
         //the below represents the content of the document
         content:
             [
@@ -586,9 +589,15 @@ function buildPdf(electionInfo, results) {
                 margin: [0, 40, 0, 9],
                 alignment: 'left',  
             },
+            footer:
+            {
+                fontSize: 12,
+                italics: true,
+                alignment: 'center',  
+            }
         }
     };
-
+    //now lets download the pdf document since we've built it
     pdfMake.createPdf(documentDefinition).download('election-result.pdf');
 }
 
