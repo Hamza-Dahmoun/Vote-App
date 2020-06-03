@@ -483,6 +483,10 @@ function buildPdf(electionInfo, results) {
     }
 
     var documentDefinition = {
+        pageMargins: [20, 60, 40, 60],
+        pageSize: 'A4',
+        
+        //the below represents the content of the document
         content:
             [
                 {
@@ -535,7 +539,7 @@ function buildPdf(electionInfo, results) {
                     style: "points"
                 },
             ],
-        //this is the styling area of the document, it is an object which its properties are objects too (like classes in CSS) which have properties
+        ////the below represents the styling area of the document, it is an object which its properties are objects too (like classes in CSS) which have properties
         //to express the styling
         styles:
         {
