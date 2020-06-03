@@ -244,7 +244,7 @@ function displayPreviousElections(previousElections) {
         resultsButton.style.color = "#3d7e9a";
         resultsButton.style.cursor = "pointer";
         resultsButton.setAttribute("title", "Show Details");
-        resultsButton.innerText = "Show Results";
+        resultsButton.innerText = "Results";
         resultsButton.classList.add("results-in-div-btn");
         resultsButton.addEventListener("click", getElectionResults);
         let tdResultsButton_andSpinner = document.createElement("td");
@@ -264,7 +264,10 @@ function displayPreviousElections(previousElections) {
         pdfButton.style.color = "#3d7e9a";
         pdfButton.style.cursor = "pointer";
         pdfButton.setAttribute("title", "Download PDF");
-        pdfButton.innerText = "Results as PDF";
+        //pdfButton.innerHTML = '<i class="fa fa-file-pdf-o" aria-hidden="true"></i>';
+        pdfButton.classList.add("fa");
+        pdfButton.classList.add("fa-file-pdf-o");
+        //pdfButton.innerText = "Download PDF";
         pdfButton.classList.add("results-in-pdf-btn");
         pdfButton.addEventListener("click", getElectionResults);
         let tdResultsPDF = document.createElement("td");
