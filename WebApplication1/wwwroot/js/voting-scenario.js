@@ -1,7 +1,12 @@
 ﻿//add click event listener to candidate-container divs
 var maxSelection = 5;
 var selectedIdArray = new Array();
-var neutralCandidateId = document.getElementById("neutral-candidate").querySelector(".hidden-candidateId").textContent /*"d3e32681-27af-4758-8bb7-5558bd2c7c55"*/;
+var neutralCandidate = document.getElementById("neutral-candidate");
+var neutralCandidateId = "";
+if (neutralCandidate != undefined && neutralCandidate != null) {
+    neutralCandidateId = neutralCandidate.querySelector(".hidden-candidateId").textContent /*"d3e32681-27af-4758-8bb7-5558bd2c7c55"*/;
+}
+    
 //alert(neutralCandidateId);
 var candidates = document.getElementsByClassName("candidate-container");
 for (let i = 0; i < candidates.length; i++) {
@@ -144,12 +149,14 @@ function removeAllSelections_selectNeutral(neutralArea) {
 }
 function unselectNeutral() {
     let neutralArea = document.querySelector("#neutral-candidate");
-    if (neutralArea.className.includes("selected-candidate")) {
-        neutralArea.className = "candidate-container";
-        neutralArea.querySelector(".fa-check-circle-o").style.display = "none";
-        selectedIdArray.pop();
-    }
-    console.log(selectedIdArray);
+    if (neutralArea != undefined && neutralArea!= null) {
+        if (neutralArea.className.includes("selected-candidate")) {
+            neutralArea.className = "candidate-container";
+            neutralArea.querySelector(".fa-check-circle-o").style.display = "none";
+            selectedIdArray.pop();
+        }
+        console.log(selectedIdArray);
+    }    
 }
 
 
