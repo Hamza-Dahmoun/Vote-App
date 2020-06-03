@@ -351,7 +351,13 @@ function getElectionResults(event) {
             let classes = event.target.className;
             if (classes.includes("results-in-pdf-btn")) {
                 //so it is the pdf button
-                buildPdf(response);
+                let electionInfo = {};//empty object
+                electionInfo.name = "Name";
+                electionInfo.candidatesCount = "number";
+                electionInfo.startDate = "01/01/2015";
+                electionInfo.period = "period";
+
+                buildPdf(electionInfo, response);
             }
             else {
                 //so it iif the sliding div button
@@ -439,145 +445,37 @@ function hideElectionResultsContainer() {
     //lets remove the click event off the document
     //document.removeEventListener("click", hideElectionResultsContainer);
 }
-/*
-function buildPdf() {
-        var doc = new jsPDF('p', 'pt', 'a4', true); //for portrait
-        //var doc = new jsPDF('l', 'pt', 'a4', true);//for landscape
-        var specialElementHandlers = {
-            '#editor': function (element, renderer) {
-                return true;
-            }
-    };
 
-        beforePageContent: {
-            doc.setFontSize(18);
-            doc.setFont("courier");
-            doc.text("Bilan Trimestriel de la Gestion des Réclamations", 20, 40);
+
+function buildPdf(electionInfo, results) {
+    console.log(results);
+
+    let electionName = electionInfo.name;
+    let candidatesCount = electionInfo.candidatesCount;
+    let electionPeriod = electionInfo.period;
+    let neutralVotes = 0;
+    let totalVotes = 0;
+    let myRows = [
+        [{ text: 'Rank', style: 'tableHeader' }, { text: 'Candidate', style: 'tableHeader' }, { text: 'Votes', style: 'tableHeader' }]
+    ];
+    for (let i = 0; i < results.length; i++) {
+        if (results[i].isNeutralOpinion == true) {
+            //lets assign the neutral votes number to a variable
+            neutralVotes = results[i].VotesCount;
         }
-    let strArr = doc.splitTextToSize("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", 50);
-    beforePageContent: {
-            doc.setFontSize(14);
-            doc.setFont("courier");
-        doc.text(strArr, 20, 100);
-    };
-
-    let electionName = "";
-    let startDate = "";
-    let endDate = "";
-    let candidatesCount = 5;
-
-    beforePageContent: {
-        doc.setFontSize(14);
-        doc.setFont("courier");
-        doc.text("- Election Name: " + electionName , 20, 140);
-    };
-    beforePageContent: {
-        doc.setFontSize(14);
-        doc.setFont("courier");
-        doc.text("- Period: " + startDate + " To " + endDate, 20, 160);
-    };
-    beforePageContent: {
-        doc.setFontSize(14);
-        doc.setFont("courier");
-        doc.text("- Number of Candidates: " + candidatesCount, 20, 180);
-    };
-
-    
-        doc.save("election-result.pdf");
-    
-
-}*/
-/*function buildPdf(response) {
-    //console.log(response);
-    
-    //alert("building pdf");
-    let reportContainer = document.createElement("div");
-    reportContainer.setAttribute("id", "reportContainer");
-    reportContainer.style.color = "#000000";
-    reportContainer.style.display = "none";
-    reportContainer.style.textAlign = "center";
-    //reportContainer.innerText = "hello pdf";
-
-    
-    let title = document.createElement("h1");
-    title.innerText = "Election Results";
-    title.style.textAlign = "center";
-    title.style.marginBottom = "10%";
-    reportContainer.appendChild(title);
-
-    let introP = document.createElement("p");
-    introP.innerText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
-    reportContainer.appendChild(introP);
-    
-    let listDiv = document.createElement("div");
-    listDiv.style.marginTop = "100px";
-    if (response == null || response.length == 0) {
-        //console.log("no candiodates");
-        //so the respponse is empty, lets just display a text  to tell user that this election has no candidates
-        let para = document.createElement("p");
-        para.innerText = "It seems this election had no Candidates!";
-        para.style.textAlign = "center";        
-        listDiv.appendChild(para);
-    }
-    else {
-        console.log(response.length + " candiodates");
-        for (let i = 0; i < response.length; i++) {
-            let one_result_container = document.createElement("div");
-            one_result_container.className = "one-result-container";
-
-            let rank_container = document.createElement("div");
-            rank_container.className = "rank-container";
-
-            if (i == 0) {
-                //so its the current winner candidate
-                let icon = document.createElement("i");
-                icon.className = "fa fa-trophy";
-                let span = document.createElement("span");
-                span.appendChild(icon);
-                rank_container.appendChild(span);
-            }
-            else {
-                let span = document.createElement("span");
-                span.innerText = i + 1;
-                rank_container.appendChild(span);
-            }
-            one_result_container.appendChild(rank_container);
-
-            let candidate_data_container = document.createElement("div");
-            candidate_data_container.className = "candidate-data-container";
-            let candidateName = document.createElement("p");
-            candidateName.innerText = response[i].FirstName + " " + response[i].LastName;
-            candidate_data_container.appendChild(candidateName);
-            let votesCount = document.createElement("p");
-            votesCount.innerText = response[i].VotesCount;
-            candidate_data_container.appendChild(votesCount);
-            one_result_container.appendChild(candidate_data_container);
-
-
-            listDiv.appendChild(one_result_container);
-
+        else {
+            //lets build the array which will be injected to the body of table in the document content below
+            //candidates are brought ordered from the server so just push the m to the array
+            myRows.push(
+                [
+                    { text: i+1 },
+                    { text: results[i].FirstName + " " + results[i].LastName },
+                    { text: results[i].VotesCount }
+                ]
+            );
         }
+        totalVotes = totalVotes + results[i].VotesCount; 
     }
-    reportContainer.appendChild(listDiv);
-    let g = document.getElementById("previous-elections-area");
-    g.appendChild(reportContainer);
-
-    
-    pdfForElement("reportContainer").download();
-
-
-
-
-    //lets remove the element now
-    document.getElementById("reportContainer").remove();
-}
-*/
-function buildPdf() {
-    let electionName = "name";
-    let candidatesCount = 3;
-    let electionPeriod = "period";
-    let neutralVotes = 12;
-    let totalVotes = 59;
 
     var documentDefinition = {
         content:
@@ -612,28 +510,7 @@ function buildPdf() {
                     {
                         headerRows: 1,
                         widths: ['*', '*', '*', '*'],
-                        body: [
-                            [
-                                { text: 'Rank', style: 'tableHeader' },
-                                { text: 'Candidate', style: 'tableHeader' },
-                                { text: 'Votes', style: 'tableHeader' }
-                            ],
-                            [
-                                { text: '1' },
-                                { text: 'Hamza Dahmoun' },
-                                { text: '20' }
-                            ],
-                            [
-                                { text: '2' },
-                                { text: 'Sidahmed Dahmoun' },
-                                { text: '15' }
-                            ],
-                            [
-                                { text: '3' },
-                                { text: 'Ikram Dahmoun' },
-                                { text: '12' }
-                            ]
-                        ]
+                        body: myRows
                     }
                 },
                 {
@@ -649,6 +526,8 @@ function buildPdf() {
                     style: "points"
                 },
             ],
+        //this is the styling area of the document, it is an object which its properties are objects too (like classes in CSS) which have properties
+        //to express the styling
         styles:
         {
             title:
