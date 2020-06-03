@@ -257,6 +257,10 @@ function displayPreviousElections(previousElections) {
 
         let pdfButton = document.createElement("a");
         pdfButton.setAttribute("electionId", previousElections[i].Id);
+        pdfButton.setAttribute("electionName", previousElections[i].Name);
+        pdfButton.setAttribute("electionCandidatesCount", previousElections[i].CandidatesCount);
+        pdfButton.setAttribute("electionStartDate", previousElections[i].StartDate);
+        pdfButton.setAttribute("electionDuration", previousElections[i].DurationInDays);
         pdfButton.style.color = "#3d7e9a";
         pdfButton.style.cursor = "pointer";
         pdfButton.setAttribute("title", "Download PDF");
@@ -352,10 +356,10 @@ function getElectionResults(event) {
             if (classes.includes("results-in-pdf-btn")) {
                 //so it is the pdf button
                 let electionInfo = {};//empty object
-                electionInfo.name = "Name";
-                electionInfo.candidatesCount = "number";
-                electionInfo.startDate = "01/01/2015";
-                electionInfo.period = "period";
+                electionInfo.name = event.target.getAttribute("electionName");
+                electionInfo.candidatesCount = event.target.getAttribute("electionCandidatesCount");
+                electionInfo.startDate = event.target.getAttribute("electionStartDate");
+                electionInfo.duration = event.target.getAttribute("electionDuration");
 
                 buildPdf(electionInfo, response);
             }
@@ -452,7 +456,8 @@ function buildPdf(electionInfo, results) {
 
     let electionName = electionInfo.name;
     let candidatesCount = electionInfo.candidatesCount;
-    let electionPeriod = electionInfo.period;
+    let electionStartDate = electionInfo.startDate;
+    let electionDuration = electionInfo.duration;
     let neutralVotes = 0;
     let totalVotes = 0;
     let myRows = [
@@ -494,7 +499,11 @@ function buildPdf(electionInfo, results) {
                     style: "points"
                 },
                 {
-                    text: "- Period: " + electionPeriod,
+                    text: "- Start Date: " + electionStartDate,
+                    style: "points"
+                },
+                {
+                    text: "- Duration: " + electionDuration,
                     style: "points"
                 },
                 {
