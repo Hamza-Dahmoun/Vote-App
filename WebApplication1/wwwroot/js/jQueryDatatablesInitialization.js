@@ -1,7 +1,7 @@
 ﻿
 function initializeDatatable(tableSelector, url, columnsArray, model) {
     //This function takes the parameters and initialize a jquuery dtatable
-    //columnsArray should be added one item which is the column of the action buttons (edit - delete - details)
+    //In addition to the columns in columnsArray, we should be added one item which is the column of the action buttons (edit - delete - details)
     columnsArray.push(
         {
             "data": null, "searchable": false, "sortable": false,
@@ -19,7 +19,7 @@ function initializeDatatable(tableSelector, url, columnsArray, model) {
         {
             "processing": true,//whether to show 'processing' indicator when waiting for a processing result or not
             "serverSide": true,//for server side processing
-            "filter": true,//this is for disable filter (search box)
+            "filter": true,//this is for enabling filter (search box)
             "ajax": {
                 "url": url,
                 "type": 'POST',
