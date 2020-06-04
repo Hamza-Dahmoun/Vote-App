@@ -1042,7 +1042,7 @@ namespace WebApplication1.Controllers
                     return Ok(json);
                 }
             }
-            catch
+            catch(Exception E)
             {
                 return BadRequest();
             }
