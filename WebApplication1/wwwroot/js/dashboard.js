@@ -11,11 +11,12 @@ function loadElectionsData() {
     loadComingElections();
 
 
-    //2- Load Previous Elections
-    let previousElectionsArea = document.getElementById("previous-elections-area");
-    displayElement(previousElectionsArea.querySelector(".spinner-border"));
-    hideElement(previousElectionsArea.querySelector(".table"));
-    loadPreviousElections();
+    //2- Load Previous Elections Datatable (the commented line were used before using jQuery Datatables)
+    //let previousElectionsArea = document.getElementById("previous-elections-area");
+    //displayElement(previousElectionsArea.querySelector(".spinner-border"));
+    //hideElement(previousElectionsArea.querySelector(".table"));
+    //loadPreviousElections();
+    loadPreviousElectionsDatatable();
 
 
     //3- Load Current Election
@@ -193,8 +194,7 @@ function displayCurrentElection(currentElection) {
 
 
 
-
-function loadPreviousElections() {
+function loadPreviousElectionsDatatable() {
     //now lets make it a jquery datatables server side processing
     //this function passes some parameters to initializeDatatable() to get jQueryDatatables running
     let tableSelector = "#previous-elections-table";
@@ -204,12 +204,12 @@ function loadPreviousElections() {
             { "data": "Id", "visible": false, "searchable": false },
             { "data": "Name", "title": "Name", "name": "Name", "visible": true, "searchable": true, "sortable": false },
             { "data": "StartDate", "title": "Start Date", "name": "Start Date", "visible": true, "searchable": true, "sortable": false },
-            { "data": "DurationInDays", "title": "Duration (days)", "name": "Duration (days)", "visible": true, "searchable": true, "sortable": false },
-            { "data": "CandidatesCount", "title": "N° Of Candidates", "name": "N° Of Candidates", "visible": true, "searchable": true, "sortable": false }
+            { "data": "DurationInDays", "title": "Duration (days)", "name": "Duration (days)", "visible": true, "searchable": true, "sortable": false }
+            //{ "data": "CandidatesCount", "title": "N° Of Candidates", "name": "N° Of Candidates", "visible": true, "searchable": true, "sortable": false }
         ]
         ;
     //initializeDatatable(tableSelector, url, columnsArray, "Voter");
-        //the above function exists in the file ~/js/jQueryDatatablesInitialization.js
+    //the above function exists in the file ~/js/jQueryDatatablesInitialization.js
 
     $(tableSelector).DataTable(
         {
@@ -227,9 +227,9 @@ function loadPreviousElections() {
             "columns": columnsArray
         }
     );
-
-
-    /*
+}
+function loadPreviousElections() {
+    
     //this function load a list of previous elections using jQuery ajax
     $.ajax({
         type: "POST",
@@ -249,7 +249,7 @@ function loadPreviousElections() {
             //window.location.href = "Home/Index";
         }
     });
-    */
+   
 }
 function displayPreviousElections(previousElections) {
     //console.log(previousElections);
