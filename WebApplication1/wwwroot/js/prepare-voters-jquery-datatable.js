@@ -17,5 +17,6 @@ function preparejQueryDatatable() {
         ]
         ;
     initializeDatatable(tableSelector, url, columnsArray, "Voter");
+    //the above function exists in the file ~/js/jQueryDatatablesInitialization.js
 }
 
