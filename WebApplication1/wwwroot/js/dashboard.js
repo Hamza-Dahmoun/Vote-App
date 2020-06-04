@@ -195,12 +195,46 @@ function displayCurrentElection(currentElection) {
 
 
 function loadPreviousElections() {
-    //this function load a list of previous elections using jQuery ajax
+    //now lets make it a jquery datatables server side processing
+    //this function passes some parameters to initializeDatatable() to get jQueryDatatables running
+    let tableSelector = "#previous-elections-table";
+    let url = '/Election/PreviousElectionsDataTable';
+    let columnsArray =
+        [//These are the columns to be displayed, and they are the fields of the voters objects brought from the server
+            { "data": "Id", "visible": false, "searchable": false },
+            { "data": "Name", "title": "Name", "name": "Name", "visible": true, "searchable": true, "sortable": false },
+            { "data": "StartDate", "title": "Start Date", "name": "Start Date", "visible": true, "searchable": true, "sortable": false },
+            { "data": "DurationInDays", "title": "Duration (days)", "name": "Duration (days)", "visible": true, "searchable": true, "sortable": false },
+            { "data": "CandidatesCount", "title": "N° Of Candidates", "name": "N° Of Candidates", "visible": true, "searchable": true, "sortable": false }
+        ]
+        ;
+    //initializeDatatable(tableSelector, url, columnsArray, "Voter");
+        //the above function exists in the file ~/js/jQueryDatatablesInitialization.js
 
+    $(tableSelector).DataTable(
+        {
+            "processing": true,//whether to show 'processing' indicator when waiting for a processing result or not
+            "serverSide": true,//for server side processing
+            "filter": true,//this is for enabling filter (search box)
+            "ajax": {
+                "url": url,
+                "type": 'POST',
+                "datatype": 'json'
+            },
+            "columnDefs": [
+                { "type": "numeric-comma", targets: "_all" }
+            ],
+            "columns": columnsArray
+        }
+    );
+
+
+    /*
+    //this function load a list of previous elections using jQuery ajax
     $.ajax({
         type: "POST",
         url: "/Election/GetPreviousElections",
-        /*data: JSON.stringify(document.getElementById("candidate-id-holder").value),*/
+        //data: JSON.stringify(document.getElementById("candidate-id-holder").value),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         error: function () {
@@ -215,7 +249,7 @@ function loadPreviousElections() {
             //window.location.href = "Home/Index";
         }
     });
-
+    */
 }
 function displayPreviousElections(previousElections) {
     //console.log(previousElections);
