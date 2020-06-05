@@ -197,6 +197,29 @@ function displayCurrentElection(currentElection) {
 function loadPreviousElectionsDatatable() {
     //now lets make it a jquery datatables server side processing
     //this function passes some parameters to initializeDatatable() to get jQueryDatatables running
+
+
+    //first of all lets make the table full width
+    document.getElementById("previous-elections-table").style.width = "100%";
+
+    /*
+    let resultsButton = document.createElement("a");
+    resultsButton.setAttribute("electionId", previousElections[i].Id);
+    resultsButton.style.color = "#3d7e9a";
+    resultsButton.style.cursor = "pointer";
+    resultsButton.setAttribute("title", "Show Details");
+    resultsButton.innerText = "Results";
+    resultsButton.classList.add("results-in-div-btn");
+    resultsButton.addEventListener("click", getElectionResults);
+    let tdResultsButton_andSpinner = document.createElement("td");
+    tdResultsButton_andSpinner.appendChild(resultsButton);
+    let resultsButtonSpinner = document.createElement("span");
+    resultsButtonSpinner.className = "spinner-border text-primary";
+    resultsButtonSpinner.style.display = "none";
+    tdResultsButton_andSpinner.appendChild(resultsButtonSpinner);
+    */
+
+
     let tableSelector = "#previous-elections-table";
     let url = '/Election/PreviousElectionsDataTable';
     let columnsArray =
@@ -204,8 +227,21 @@ function loadPreviousElectionsDatatable() {
             { "data": "Id", "visible": false, "searchable": false },
             { "data": "Name", "title": "Name", "name": "Name", "visible": true, "searchable": true, "sortable": false },
             { "data": "StartDate", "title": "Start Date", "name": "Start Date", "visible": true, "searchable": true, "sortable": false },
-            { "data": "DurationInDays", "title": "Duration (days)", "name": "Duration (days)", "visible": true, "searchable": true, "sortable": false }
+            { "data": "DurationInDays", "title": "Duration (days)", "name": "Duration (days)", "visible": true, "searchable": true, "sortable": false },
             //{ "data": "CandidatesCount", "title": "N° Of Candidates", "name": "N° Of Candidates", "visible": true, "searchable": true, "sortable": false }
+            {
+                "data": null, "searchable": false, "sortable": false,
+                "render": function (data, type, row, meta) {
+                    var buttons =
+                        "<a class=\"results-in-div-btn\" title=\"Show Results\" electionId='" + row.Id + "'>Results</a>"
+                        
+                        /*+
+                        "<a class='table-button button-details' title='Details' href=" + model + '/Details/' + row.Id + "><i class='fa fa-file-text'></i></a>" + " " +
+                        "<a class='table-button button-delete' title='Delete' href=" + model + '/Delete/' + row.Id + "><i class='fa fa-trash'></i></a>"
+                        */;
+                    return buttons;
+                }
+            }
         ]
         ;
     //initializeDatatable(tableSelector, url, columnsArray, "Voter");
@@ -224,9 +260,17 @@ function loadPreviousElectionsDatatable() {
             "columnDefs": [
                 { "type": "numeric-comma", targets: "_all" }
             ],
-            "columns": columnsArray
+            "columns": columnsArray,
+            }
         }
     );
+
+    /*$(tableSelector).on('click', 'a', function (event) {
+        //var data = $(tableSelector).row($(this).parents('tr')).data();
+        //alert(data[0] + "'s salary is: " + data[2]);
+    });*/
+    //the below line of code is special to jQuery, it adds a click event to an element which isn't drown in the dom yet
+    $(tableSelector).on('click', 'a', getElectionResults);
 }
 function loadPreviousElections() {
     
@@ -355,14 +399,17 @@ function hideElement(elt) {
 /*THE BELOW METHODS ARE ALWAYS USED TO GET THE RESULTS OF A GIVEN ELECTION AND WRITHE THEM AND DISPLAY THEM IN A SLIDING DIV
 THEY ARE USED WHEN LOADING: 1- CURRENT ELECTION RESULTS 2- PREVIOUS ELECTIONS RESULTS*/
 function getElectionResults(event) {
-    //console.log(event.target.getAttribute("electionId"));
-
     //lets hide the button and display the spinner
     //displayElement(document.getElementById("current-election-results-spinner"));
     //console.log(event);
     //console.log(event.target);
+    //console.log(event.target.getAttribute("electionid"));
+    
+
+    /*
     displayElement(event.target.parentElement.querySelector(".spinner-border"));
     hideElement(event.target);
+    */
     //this function load the current election results using jQuery ajax
     $.ajax({
         type: "POST",
@@ -379,8 +426,12 @@ function getElectionResults(event) {
             //console.log(response);
             //lets hide the spinner and display the button
             //hideElement(document.getElementById("current-election-results-spinner"));
+
+            /*
             hideElement(event.target.parentElement.querySelector(".spinner-border"));
             displayElement(event.target);
+            */
+
 
             //this function is released in two places:
             //1 - displaying the results of an election from the left side
