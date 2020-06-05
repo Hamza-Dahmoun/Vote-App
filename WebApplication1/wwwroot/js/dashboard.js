@@ -233,8 +233,9 @@ function loadPreviousElectionsDatatable() {
                 "data": null, "searchable": false, "sortable": false,
                 "render": function (data, type, row, meta) {
                     var buttons =
-                        "<a class=\"results-in-div-btn\" title=\"Show Results\" electionId='" + row.Id + "'>Results</a>"
-                        
+                        "<a class=\"results-in-div-btn text-primary\" title=\"Show Results\" electionId='" + row.Id + "'>Results</a>"
+                        + " "
+                        + "<span class='spinner-border text-primary' style='display:none'></span>"
                         /*+
                         "<a class='table-button button-details' title='Details' href=" + model + '/Details/' + row.Id + "><i class='fa fa-file-text'></i></a>" + " " +
                         "<a class='table-button button-delete' title='Delete' href=" + model + '/Delete/' + row.Id + "><i class='fa fa-trash'></i></a>"
@@ -244,8 +245,7 @@ function loadPreviousElectionsDatatable() {
             }
         ]
         ;
-    //initializeDatatable(tableSelector, url, columnsArray, "Voter");
-    //the above function exists in the file ~/js/jQueryDatatablesInitialization.js
+
 
     $(tableSelector).DataTable(
         {
@@ -261,8 +261,8 @@ function loadPreviousElectionsDatatable() {
                 { "type": "numeric-comma", targets: "_all" }
             ],
             "columns": columnsArray,
-            }
         }
+        
     );
 
     /*$(tableSelector).on('click', 'a', function (event) {
@@ -395,7 +395,6 @@ function hideElement(elt) {
 
 
 
-
 /*THE BELOW METHODS ARE ALWAYS USED TO GET THE RESULTS OF A GIVEN ELECTION AND WRITHE THEM AND DISPLAY THEM IN A SLIDING DIV
 THEY ARE USED WHEN LOADING: 1- CURRENT ELECTION RESULTS 2- PREVIOUS ELECTIONS RESULTS*/
 function getElectionResults(event) {
@@ -406,10 +405,10 @@ function getElectionResults(event) {
     //console.log(event.target.getAttribute("electionid"));
     
 
-    /*
+    
     displayElement(event.target.parentElement.querySelector(".spinner-border"));
     hideElement(event.target);
-    */
+    
     //this function load the current election results using jQuery ajax
     $.ajax({
         type: "POST",
@@ -427,10 +426,10 @@ function getElectionResults(event) {
             //lets hide the spinner and display the button
             //hideElement(document.getElementById("current-election-results-spinner"));
 
-            /*
+            
             hideElement(event.target.parentElement.querySelector(".spinner-border"));
             displayElement(event.target);
-            */
+            
 
 
             //this function is released in two places:
