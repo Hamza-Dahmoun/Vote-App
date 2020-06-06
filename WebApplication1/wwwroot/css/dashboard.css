@@ -186,8 +186,16 @@ hr {
 #previous-elections-table{
 width:100%;
 }
-
-
+.results-in-div-btn {
+    cursor: pointer;
+    margin-left: 4px;
+    margin-right: 4px;
+}
+.results-in-pdf-btn {
+    cursor: pointer;
+    margin-left: 4px;
+    margin-right: 4px;
+}
 
 /********************* RESULTS CONTAINER STYLING **************/
 #election-results-container-parent {

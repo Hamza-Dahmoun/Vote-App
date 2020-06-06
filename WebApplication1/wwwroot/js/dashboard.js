@@ -196,29 +196,15 @@ function displayCurrentElection(currentElection) {
 
 function loadPreviousElectionsDatatable() {
     //now lets make it a jquery datatables server side processing
-    //this function passes some parameters to initializeDatatable() to get jQueryDatatables running
+    //this function load previous elections and draw them in a datatable
+    //this function replaced the functions: loadPreviousElections() and displayPreviousElections() which were loading all previous elections
+    //rows at once and write them in an HTML table
 
 
     //first of all lets make the table full width
     document.getElementById("previous-elections-table").style.width = "100%";
 
-    /*
-    let resultsButton = document.createElement("a");
-    resultsButton.setAttribute("electionId", previousElections[i].Id);
-    resultsButton.style.color = "#3d7e9a";
-    resultsButton.style.cursor = "pointer";
-    resultsButton.setAttribute("title", "Show Details");
-    resultsButton.innerText = "Results";
-    resultsButton.classList.add("results-in-div-btn");
-    resultsButton.addEventListener("click", getElectionResults);
-    let tdResultsButton_andSpinner = document.createElement("td");
-    tdResultsButton_andSpinner.appendChild(resultsButton);
-    let resultsButtonSpinner = document.createElement("span");
-    resultsButtonSpinner.className = "spinner-border text-primary";
-    resultsButtonSpinner.style.display = "none";
-    tdResultsButton_andSpinner.appendChild(resultsButtonSpinner);
-    */
-
+    
 
     let tableSelector = "#previous-elections-table";
     let url = '/Election/PreviousElectionsDataTable';
@@ -236,6 +222,8 @@ function loadPreviousElectionsDatatable() {
                         "<a class=\"results-in-div-btn text-primary\" title=\"Show Results\" electionId='" + row.Id + "'>Results</a>"
                         + " "
                         + "<span class='spinner-border text-primary' style='display:none'></span>"
+                        + " "
+                        + "<a class=\"results-in-pdf-btn text-primary fa fa-file-pdf-o\" title=\"Download Report\" electionId='" + row.Id + "'></a>"
                         /*+
                         "<a class='table-button button-details' title='Details' href=" + model + '/Details/' + row.Id + "><i class='fa fa-file-text'></i></a>" + " " +
                         "<a class='table-button button-delete' title='Delete' href=" + model + '/Delete/' + row.Id + "><i class='fa fa-trash'></i></a>"
@@ -270,6 +258,7 @@ function loadPreviousElectionsDatatable() {
         //alert(data[0] + "'s salary is: " + data[2]);
     });*/
     //the below line of code is special to jQuery, it adds a click event to an element which isn't drown in the dom yet
+    //in our case it is adding the click event to two buttons in each row: 'Show Results button' and 'PDF button'
     $(tableSelector).on('click', 'a', getElectionResults);
 }
 function loadPreviousElections() {
