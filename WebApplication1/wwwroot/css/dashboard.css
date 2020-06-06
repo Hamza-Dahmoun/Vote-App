@@ -187,11 +187,13 @@ hr {
 width:100%;
 }
 .results-in-div-btn {
+    display:inline;
     cursor: pointer;
     margin-left: 4px;
     margin-right: 4px;
 }
 .results-in-pdf-btn {
+    display: inline;
     cursor: pointer;
     margin-left: 4px;
     margin-right: 4px;

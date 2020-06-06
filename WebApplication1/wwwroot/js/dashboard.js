@@ -417,8 +417,8 @@ function getElectionResults(event) {
 
             
             hideElement(event.target.parentElement.querySelector(".spinner-border"));
-            displayElement(event.target);
-            
+            //below we didnt use 'block' we used 'inline-block' so that two buttons will be displayed next to each other
+            event.target.style.display = "inline-block";
 
 
             //this function is released in two places:
@@ -426,7 +426,6 @@ function getElectionResults(event) {
             //2 - displaying the results of an election in a pdf file
             //so lets check which action to do based on which event.target launched this function
 
-            //displayElectionResults(response);
             
             let classes = event.target.className;
             if (classes.includes("results-in-pdf-btn")) {
