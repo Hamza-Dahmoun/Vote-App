@@ -1002,10 +1002,34 @@ namespace WebApplication1.Controllers
 
 
                     //lets get the list of elections filtered and paged
-                    PagedResult<Election> pagedResult = _electionRepository.GetAllFilteredPaged(expr, sortColumnName, sortColumnDirection, skip, pageSize);
+                    PagedResult<Election> pagedResult1 = _electionRepository.GetAllFilteredPaged(expr, sortColumnName, sortColumnDirection, skip, pageSize);
+
+                    //Now the pagedResult we've got has two properties: pagedResult.Items and pagedResult.TotalCount
+                    //the first one is a list of Elections with their Candidates icnluded. When I try to serialise it to json
+                    //I got the following error: 
+                    //Self referencing loop detected for property 'Election' with type 'WebApplication1.Models.Election'. Path 'data[1].Candidates[0]'.
+                    //so what we need is to create another PagedResult<Election> object 'pagedResult2' and fill it with data that we have in pagedResult1
+                    //but instead of filling the list o candidates for each Election we'll only fill the count of the candidates
+                    //which means we'll use a list of ElectionViewModels instead of Elections
+
+
+                    List<ElectionViewModel> electionViewModels = new List<ElectionViewModel>();
+                    foreach (var election in pagedResult1.Items)
+                    {
+                        ElectionViewModel e = new ElectionViewModel();
+                        e.Id = election.Id;
+                        e.Name = election.Name;
+                        e.StartDate = election.StartDate;
+                        e.DurationInDays = election.DurationInDays;
+                        e.HasNeutral = election.HasNeutral;
+                        e.NumberOfCandidates = election.Candidates.Count;
+                        electionViewModels.Add(e);
+                    }
+                    PagedResult<ElectionViewModel> pagedResult2 = new PagedResult<ElectionViewModel>(electionViewModels, pagedResult1.TotalCount);
+
 
                     //lets assign totalRecords the correct value
-                    totalRecords = pagedResult.TotalCount;
+                    totalRecords = pagedResult2.TotalCount;
 
                     //now lets return json data so that it is understandable by jQuery                
                     var json = JsonConvert.SerializeObject(new
@@ -1013,7 +1037,7 @@ namespace WebApplication1.Controllers
                         draw = draw,
                         recordsFiltered = totalRecords,
                         recordsTotal = totalRecords,
-                        data = pagedResult.Items
+                        data = pagedResult2.Items
                     });
                     return Ok(json);
 
@@ -1026,10 +1050,33 @@ namespace WebApplication1.Controllers
                     System.Linq.Expressions.Expression<Func<Election, bool>> expr = e => e.StartDate.AddDays(e.DurationInDays) < DateTime.Now;
 
                     //lets get the list of elections paged
-                    PagedResult<Election> pagedResult = _electionRepository.GetAllPaged(sortColumnName, sortColumnDirection, skip, pageSize);
+                    PagedResult<Election> pagedResult1 = _electionRepository.GetAllPaged(sortColumnName, sortColumnDirection, skip, pageSize);
+
+                    //Now the pagedResult we've got has two properties: pagedResult.Items and pagedResult.TotalCount
+                    //the first one is a list of Elections with their Candidates icnluded. When I try to serialise it to json
+                    //I got the following error: 
+                    //Self referencing loop detected for property 'Election' with type 'WebApplication1.Models.Election'. Path 'data[1].Candidates[0]'.
+                    //so what we need is to create another PagedResult<Election> object 'pagedResult2' and fill it with data that we have in pagedResult1
+                    //but instead of filling the list o candidates for each Election we'll only fill the count of the candidates
+                    //which means we'll use a list of ElectionViewModels instead of Elections
+
+
+                    List<ElectionViewModel> electionViewModels = new List<ElectionViewModel>();
+                    foreach (var election in pagedResult1.Items)
+                    {
+                        ElectionViewModel e = new ElectionViewModel();
+                        e.Id = election.Id;
+                        e.Name = election.Name;
+                        e.StartDate = election.StartDate;
+                        e.DurationInDays = election.DurationInDays;
+                        e.HasNeutral = election.HasNeutral;
+                        e.NumberOfCandidates = election.Candidates.Count;
+                        electionViewModels.Add(e);
+                    }
+                    PagedResult<ElectionViewModel> pagedResult2 = new PagedResult<ElectionViewModel>(electionViewModels, pagedResult1.TotalCount);
 
                     //lets assign totalRecords the correct value
-                    totalRecords = pagedResult.TotalCount;
+                    totalRecords = pagedResult2.TotalCount;
 
                     //now lets return json data so that it is understandable by jQuery                
                     var json = JsonConvert.SerializeObject(new
@@ -1037,7 +1084,7 @@ namespace WebApplication1.Controllers
                         draw = draw,
                         recordsFiltered = totalRecords,
                         recordsTotal = totalRecords,
-                        data = pagedResult.Items
+                        data = pagedResult2.Items
                     });
                     return Ok(json);
                 }
