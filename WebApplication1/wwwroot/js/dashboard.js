@@ -223,7 +223,13 @@ function loadPreviousElectionsDatatable() {
                         + " "
                         + "<span class='spinner-border text-primary' style='display:none'></span>"
                         + " "
-                        + "<a class=\"results-in-pdf-btn text-primary fa fa-file-pdf-o\" title=\"Download Report\" electionId='" + row.Id + "'></a>"
+                        + "<a class=\"results-in-pdf-btn text-primary fa fa-file-pdf-o\" title=\"Download Report\" electionId='" + row.Id
+                        + "' electionName='" + row.Name
+                        + "' electionCandidatesCount='" + row.CandidatesCount
+                        + "' electionStartDate='" + row.StartDate
+                        + "' electionDuration='" + row.DurationInDays + "'></a> "
+
+
                         /*+
                         "<a class='table-button button-details' title='Details' href=" + model + '/Details/' + row.Id + "><i class='fa fa-file-text'></i></a>" + " " +
                         "<a class='table-button button-delete' title='Delete' href=" + model + '/Delete/' + row.Id + "><i class='fa fa-trash'></i></a>"
@@ -388,21 +394,21 @@ function hideElement(elt) {
 THEY ARE USED WHEN LOADING: 1- CURRENT ELECTION RESULTS 2- PREVIOUS ELECTIONS RESULTS*/
 function getElectionResults(event) {
     //lets hide the button and display the spinner
-    //displayElement(document.getElementById("current-election-results-spinner"));
     //console.log(event);
     //console.log(event.target);
     //console.log(event.target.getAttribute("electionid"));
     
+    let clickedButton = event.target;
 
     
-    displayElement(event.target.parentElement.querySelector(".spinner-border"));
-    hideElement(event.target);
+    displayElement(clickedButton.parentElement.querySelector(".spinner-border"));
+    hideElement(clickedButton);
     
     //this function load the current election results using jQuery ajax
     $.ajax({
         type: "POST",
         url: "/Home/GetResultsOfElection",
-        data: JSON.stringify(event.target.getAttribute("electionId")),
+        data: JSON.stringify(clickedButton.getAttribute("electionId")),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         error: function () {
@@ -416,9 +422,9 @@ function getElectionResults(event) {
             //hideElement(document.getElementById("current-election-results-spinner"));
 
             
-            hideElement(event.target.parentElement.querySelector(".spinner-border"));
+            hideElement(clickedButton.parentElement.querySelector(".spinner-border"));
             //below we didnt use 'block' we used 'inline-block' so that two buttons will be displayed next to each other
-            event.target.style.display = "inline-block";
+            clickedButton.style.display = "inline-block";
 
 
             //this function is released in two places:
@@ -427,15 +433,15 @@ function getElectionResults(event) {
             //so lets check which action to do based on which event.target launched this function
 
             
-            let classes = event.target.className;
+            let classes = clickedButton.className;
             if (classes.includes("results-in-pdf-btn")) {
                 //so it is the pdf button
                 let electionInfo = {};//empty object
-                electionInfo.name = event.target.getAttribute("electionName");
-                electionInfo.candidatesCount = event.target.getAttribute("electionCandidatesCount");
-                electionInfo.startDate = event.target.getAttribute("electionStartDate");
-                electionInfo.duration = event.target.getAttribute("electionDuration");
-
+                electionInfo.name = clickedButton.getAttribute("electionName");
+                electionInfo.candidatesCount = clickedButton.getAttribute("electionCandidatesCount");
+                electionInfo.startDate = clickedButton.getAttribute("electionStartDate");
+                electionInfo.duration = clickedButton.getAttribute("electionDuration");
+                
                 buildPdf(electionInfo, response);
             }
             else {
