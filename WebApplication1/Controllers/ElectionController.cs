@@ -1071,6 +1071,7 @@ namespace WebApplication1.Controllers
                         e.DurationInDays = election.DurationInDays;
                         e.HasNeutral = election.HasNeutral;
                         e.NumberOfCandidates = election.Candidates.Count;
+                        e.NumberOfVotes = election.Votes.Count;
                         electionViewModels.Add(e);
                     }
                     PagedResult<ElectionViewModel> pagedResult2 = new PagedResult<ElectionViewModel>(electionViewModels, pagedResult1.TotalCount);

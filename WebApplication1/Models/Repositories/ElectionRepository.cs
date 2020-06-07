@@ -100,7 +100,7 @@ namespace WebApplication1.Models.Repositories
                 }*/
 
                 //in case there is no ordering requested
-                List<Election> elections = _dbSet.Where(predicate).Include(v => v.Candidates).ToList();
+                List<Election> elections = _dbSet.Where(predicate).Include(v => v.Candidates).Include(v => v.Votes).ToList();
                 int totalCount = elections.Count;
                 elections = elections.Skip(startRowIndex).Take(maxRows).ToList();
                 PagedResult<Election> p = new PagedResult<Election>(elections, totalCount);
@@ -146,7 +146,7 @@ namespace WebApplication1.Models.Repositories
                     return _dbSet.OrderByDescending(v => propertyName.GetValue(v)).Include(v => v.State).Skip(startRowIndex).Take(maxRows).ToList();
                 }*/
                 //in case there is no ordering requested
-                var elections = _dbSet.Include(e => e.Candidates).ToList();
+                var elections = _dbSet.Include(e => e.Candidates).Include(v => v.Votes).ToList();
                 int totalCount = elections.Count;
                 elections = elections.Skip(startRowIndex).Take(maxRows).ToList();
                 PagedResult<Election> p = new PagedResult<Election>(elections, totalCount);
