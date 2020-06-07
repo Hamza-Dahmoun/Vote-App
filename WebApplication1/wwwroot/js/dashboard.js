@@ -227,15 +227,11 @@ function loadPreviousElectionsDatatable() {
                         + " "
                         + "<a class=\"results-in-pdf-btn text-primary fa fa-file-pdf-o\" title=\"Download Report\" electionId='" + row.Id
                         + "' electionName='" + row.Name
-                        + "' electionCandidatesCount='" + row.CandidatesCount
+                        + "' electionCandidatesCount='" + row.NumberOfCandidates
                         + "' electionStartDate='" + row.StartDate
+                        + "' electionHasNeutral='" + row.HasNeutral                    
                         + "' electionDuration='" + row.DurationInDays + "'></a> "
-
-
-                        /*+
-                        "<a class='table-button button-details' title='Details' href=" + model + '/Details/' + row.Id + "><i class='fa fa-file-text'></i></a>" + " " +
-                        "<a class='table-button button-delete' title='Delete' href=" + model + '/Delete/' + row.Id + "><i class='fa fa-trash'></i></a>"
-                        */;
+                        ;
                     return buttons;
                 }
             }
@@ -443,7 +439,7 @@ function getElectionResults(event) {
                 electionInfo.candidatesCount = clickedButton.getAttribute("electionCandidatesCount");
                 electionInfo.startDate = clickedButton.getAttribute("electionStartDate");
                 electionInfo.duration = clickedButton.getAttribute("electionDuration");
-                
+                electionInfo.hasNeutral = clickedButton.getAttribute("electionHasNeutral");
                 buildPdf(electionInfo, response);
             }
             else {
@@ -541,27 +537,31 @@ function buildPdf(electionInfo, results) {
     let candidatesCount = electionInfo.candidatesCount;
     let electionStartDate = electionInfo.startDate;
     let electionDuration = electionInfo.duration;
+    let electionHasNeutral = electionInfo.hasNeutral
     let neutralVotes = 0;
     let totalVotes = 0;
     let myRows = [
         [{ text: 'Rank', style: 'tableHeader' }, { text: 'Candidate', style: 'tableHeader' }, { text: 'Votes', style: 'tableHeader' }]
     ];
+
     for (let i = 0; i < results.length; i++) {
-        if (results[i].isNeutralOpinion == true) {
-            //lets assign the neutral votes number to a variable
-            neutralVotes = results[i].VotesCount;
-        }
-        else {
-            //lets build the array which will be injected to the body of table in the document content below
-            //candidates are brought ordered from the server so just push the m to the array
-            myRows.push(
-                [
-                    { text: i+1 },
-                    { text: results[i].FirstName + " " + results[i].LastName },
-                    { text: results[i].VotesCount }
-                ]
-            );
-        }
+            if (results[i].isNeutralOpinion == true) {
+                //lets assign the neutral votes number to a variable
+                neutralVotes = results[i].VotesCount;
+            }
+            
+                //lets build the array which will be injected to the body of table in the document content below
+                //candidates are brought ordered from the server so just push the m to the array
+                myRows.push(
+                    [
+                        { text: i + 1 },
+                        { text: results[i].FirstName + " " + results[i].LastName },
+                        { text: results[i].VotesCount }
+                    ]
+                );
+            
+        
+        
         totalVotes = totalVotes + results[i].VotesCount; 
     }
 
