@@ -63,8 +63,20 @@ namespace WebApplication1.Controllers
             {
                 //the user has a voter Role, lets display the dashboard
                 var currentUser = await _userManager.GetUserAsync(HttpContext.User);
-                DashboardViewModel d = DashboardUtilities.getDashboard(_candidateRepository, _voterRepository, _voteRepository, _electionRepository, currentUser);
-                return View(d);
+
+
+                //Now lets Get a Cached Dashboard or Create it and Cached it
+                var cachedDashboard = _memoryCache.GetOrCreate(typeof(DashboardViewModel), d =>
+                    {
+                        d.AbsoluteExpiration = DateTime.Now.AddMinutes(3);
+                        return DashboardUtilities.getDashboard(_candidateRepository, _voterRepository, _voteRepository, _electionRepository, currentUser); ;
+                    });
+                //so the above GetOrCreate() method tries to get a cached dashboard from the memory, and if it doesn't find any it will create
+                //an instance of the dashboard and cach it in memory for Three minutes
+
+
+                //DashboardViewModel d = DashboardUtilities.getDashboard(_candidateRepository, _voterRepository, _voteRepository, _electionRepository, currentUser);
+                return View(cachedDashboard);
 
 
                 /*
