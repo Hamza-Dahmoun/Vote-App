@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Caching.Memory;
+
 
 namespace WebApplication1.Controllers
 {
@@ -24,6 +26,7 @@ namespace WebApplication1.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
+
         //the below are services we're going to use in this controller, they will be injected in the constructor
         public IRepository<Candidate> _candidateRepository { get; }
         public IRepository<Voter> _voterRepository { get; }
@@ -31,8 +34,12 @@ namespace WebApplication1.Controllers
         public IRepository<Election> _electionRepository { get; }
         //this is only used to get able to generate a 'code' needed to reset the password, and to get the currentUser ID
         private readonly UserManager<IdentityUser> _userManager;
+        //Creting  private readonly field of type IMemoryCach
+        private readonly IMemoryCache _memoryCache;
+
         //Lets inject the services using the constructor, this is called Constructor Dependency Injection
         public HomeController(
+            IMemoryCache memoryCache,
             ILogger<HomeController> logger,
             IRepository<Candidate> candidateRepository,
             IRepository<Voter> voterRepository,
@@ -46,6 +53,7 @@ namespace WebApplication1.Controllers
             _voteRepository = voteRepository;
             _electionRepository = electionRepository;
             _userManager = userManager;
+            _memoryCache = memoryCache;
         }
 
 
