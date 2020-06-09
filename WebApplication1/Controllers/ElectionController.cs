@@ -173,6 +173,13 @@ namespace WebApplication1.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    //first of all lets check if this election is in future, if it is not then we'll not edit it
+                    if (election.StartDate <= DateTime.Now)
+                    {
+                        //so it is not a future election
+                        return BadRequest();
+                    }
+
                     if (ElectionUtilities.getElectionsInSamePeriod(_electionRepository, election.StartDate, election.DurationInDays)>0)
                     {//so there is other existing elections which the period overlap with this new election's period
                         return BadRequest();
