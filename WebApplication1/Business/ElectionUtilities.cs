@@ -41,11 +41,12 @@ namespace WebApplication1.Business
 
 
         //Note that this method uses _electionRepository, so it depends to it, and we passed the repository object as a pramater. This is called Method Dependancy Injection
-        public static bool isThereElectionInSamePeriod(IRepository<Election> electionRepository, DateTime startDate, int durationInDays)
+        public static int getElectionsInSamePeriod(IRepository<Election> electionRepository, DateTime startDate, int durationInDays)
         {//this is using Method Dependancy Injection
-            
-            //this method checks if there is an existing election instance in the db in the same duration of a new election that is going to be added to 
-            //the db as well. If there is, the new election will not be inserted to the db
+
+            //this method returns elections from db that are happening in the period between 'startDate' and 'durationInDays'
+            //this method is used when adding a new Election, there should be no elections in the same period
+            //and used when editing an Election, there should be only one election in the same period in the db which is the election instance to edit
             _electionRepository = electionRepository;
 
             //to do so we have to check if one of these cases exist:
@@ -56,9 +57,11 @@ namespace WebApplication1.Business
             System.Linq.Expressions.Expression<Func<Election, bool>> expr = e => e.StartDate <= endDate && startDate <= e.StartDate.AddDays(e.DurationInDays);
             var elections = _electionRepository.GetAllFiltered(expr).ToList();
 
-            if (elections.Count > 0)
-                return true;
-            else return false;
+            return elections.Count;
+
+            //if (elections.Count > 0)
+            //    return true;
+            //else return false;
         }
 
 

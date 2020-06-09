@@ -173,7 +173,7 @@ namespace WebApplication1.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    if (ElectionUtilities.isThereElectionInSamePeriod(_electionRepository, election.StartDate, election.DurationInDays))
+                    if (ElectionUtilities.getElectionsInSamePeriod(_electionRepository, election.StartDate, election.DurationInDays)>0)
                     {//so there is other existing elections which the period overlap with this new election's period
                         return BadRequest();
                     }
@@ -636,6 +636,10 @@ namespace WebApplication1.Controllers
             if (DateTime.Parse(election.StartDate) <= DateTime.Now)
             {
                 //so it is not a future election
+                return BadRequest();
+            }
+            if (ElectionUtilities.getElectionsInSamePeriod(_electionRepository, DateTime.Parse( election.StartDate), int.Parse(election.DurationInDays))>1)
+            {//so in addtion to the election instance to edit, there are other elections in the db from the same period
                 return BadRequest();
             }
             try
