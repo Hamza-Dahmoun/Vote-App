@@ -8,9 +8,9 @@ namespace WebApplication1.Models
 {
     public class State
     {
-        [Required]
+        [Required(ErrorMessage = "Required")]
         public Guid Id { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Required")]
         public string Name { get; set; }
     }
 }
