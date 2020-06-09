@@ -10,6 +10,8 @@ namespace WebApplication1.Models
     {
         [Required(ErrorMessage = "Required")]
         public Guid Id { get; set; }
+        
+        [Display(Name = "Name")]
         [Required(ErrorMessage = "Required")]
         public string Name { get; set; }
     }
