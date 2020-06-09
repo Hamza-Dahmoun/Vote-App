@@ -53,5 +53,25 @@
     "minify": {
       "enabled": true
     }
+  },
+  //jQuery Validation
+  {
+    "outputFileName": "wwwroot/js/jquery-validate.min.js",
+    "inputFiles": [
+      "wwwroot/lib/jquery-validation/dist/jquery.validate.js"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  },
+  //jQuery Validation Unobtrusive
+  {
+    "outputFileName": "wwwroot/js/jquery-validate-unobtrusive.min.js",
+    "inputFiles": [
+      "wwwroot/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"
+    ],
+    "minify": {
+      "enabled": true
+    }
   }
 ]
