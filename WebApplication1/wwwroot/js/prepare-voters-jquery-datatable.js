@@ -11,7 +11,7 @@ function preparejQueryDatatable() {
     let columnsArray =
         [//These are the columns to be displayed, and they are the fields of the voters objects brought from the server
             { "data": "Id", "visible": false, "searchable": false },
-            { "data": "FirstName", "title": "FirstName", "name": "FirstName", "visible": true, "searchable": true, "sortable": false },
+            { "data": "FirstName", "title": "First Name", "name": "FirstName", "visible": true, "searchable": true, "sortable": false },
             { "data": "LastName", "title": "Last Name", "name": "LastName", "visible": true, "searchable": true, "sortable": false },
             { "data": "State.Name", "title": "State", "visible": true, "searchable": true, "sortable": false }
         ]
