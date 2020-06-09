@@ -31,7 +31,7 @@ namespace WebApplication1.Controllers
 
         public IActionResult Index()
         {
-            return View(Utilities.convertStateList_toStateViewModelList(_stateRepository.GetAll()).OrderBy(svm=>svm.LevelValue));
+            return View(Utilities.convertStateList_toStateViewModelList(_stateRepository.GetAll()));
         }
 
         public IActionResult Details(Guid id)
