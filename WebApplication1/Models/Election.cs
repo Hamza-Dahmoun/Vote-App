@@ -28,7 +28,7 @@ namespace WebApplication1.Models
         [Range(1, 5, ErrorMessage = "An Election must last at least one day and less than five days {1}")]
         public int DurationInDays { get; set; }
 
-        [Display(Name = "Does it have a Neutral Opinion?")]
+        [Display(Name = "Is Neutral Opinion?")]
         public bool HasNeutral { get; set; }
         /*public Guid NeutralCandidateID { get; set; }*/
     }
