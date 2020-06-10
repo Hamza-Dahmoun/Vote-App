@@ -28,45 +28,71 @@ function changeHasNautral() {
     }
 }
 
+
 //this function sends the new election object (without the list of the concerned voters & candidates) to the server to be stored in the db (step1)
 function sendElection() {
-    var newElection =
-    {
-        Name: document.getElementById("election-name").value,
-        StartDate: document.getElementById("start-date-election").value,
-        DurationInDays: parseInt(document.getElementById("duration-in-days").value),
-        HasNeutral: hasNeutral
-    };
-    //alert(JSON.stringify(newElection));
-    //lets hide the button and display the spinner next to it
-    document.getElementById("send-election-spinner").style.display = "block";
-    document.getElementById("send-election-button").style.display = "none";
-    //Send the JSON object Election to Controller using AJAX.
-    $.ajax({
-        type: "POST",
-        url: "/Election/ValidateElection",
-        data: JSON.stringify(newElection),
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        error: function () {
-            //alert("error");
-            document.getElementById("send-election-spinner").style.display = "none";
-            document.getElementById("send-election-button").style.display = "block";
-        },
-        success: function (response) {
-            //'response' represents the object returned from the api which is the Election object newly stored in the db
-            console.log(response);
-            //alert("success" + response);
-            //electionId = response.Election.Id;
-            electionId = response.ElectionId;
-            disableAllInputs();
-            changeBgColor();
+/*
+ HTML5 form validation won't work in our case because we are submitting data to the server using ajax, the browser displays the validation msgs but the ajax call is made anyway
+in our case becuz it supposed that since we're using js to call ajax then we are in charge of the form validation. What we need is: in js code before the ajax call we need to check if the form is valid using form.checkValidity() js function, if true we'll call server using ajax,
+else we'll do nothing because the browser will display validation msgs to the user.
+for more check this answer
+----- FROM SO:
+The HTML5 form validation process is limited to situations where the form is being submitted via a submit button. 
+The Form submission algorithm explicitly says that validation is not performed when the form is submitted via the submit() method. 
+Apparently, the idea is that if you submit a form via JavaScript, you are supposed to do validation.
+However, you can request (static) form validation against the constraints defined by HTML5 attributes, using the checkValidity() method. 
+If you would like to display the same error messages as the browser would do in HTML5 form validation, 
+I’m afraid you would need to check all the constrained fields, since the validityMessage property is a property of fields (controls), 
+not the form.
+ */
+    if (document.getElementById("step-one-form").checkValidity()) {
+        //form is valid based on HTML5 attributes
 
-            prepareVotersjQueryDatatable(response.ElectionId);
-            scrollDown();
-            //window.location.href = "Home/Index";
-        }
-    });
+        //lets prevent form from refreshing the page after ajax call, becuz all the work we're in charge of it using js
+        document.getElementById("step-one-form").addEventListener('submit', function (event) { event.preventDefault(); });
+
+
+        var newElection =
+        {
+            Name: document.getElementById("election-name").value,
+            StartDate: document.getElementById("start-date-election").value,
+            DurationInDays: parseInt(document.getElementById("duration-in-days").value),
+            HasNeutral: hasNeutral
+        };
+        //alert(JSON.stringify(newElection));
+        //lets hide the button and display the spinner next to it
+        document.getElementById("send-election-spinner").style.display = "block";
+        document.getElementById("send-election-button").style.display = "none";
+        //Send the JSON object Election to Controller using AJAX.
+        $.ajax({
+            type: "POST",
+            url: "/Election/ValidateElection",
+            data: JSON.stringify(newElection),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            error: function () {
+                //alert("error");
+                document.getElementById("send-election-spinner").style.display = "none";
+                document.getElementById("send-election-button").style.display = "block";
+            },
+            success: function (response) {
+                //'response' represents the object returned from the api which is the Election object newly stored in the db
+                console.log(response);
+                //alert("success" + response);
+                //electionId = response.Election.Id;
+                electionId = response.ElectionId;
+                disableAllInputs();
+                changeBgColor();
+
+                prepareVotersjQueryDatatable(response.ElectionId);
+                scrollDown();
+                //window.location.href = "Home/Index";
+            }
+        });
+    }
+    else {
+        //do nothing becauz the form is not valid and the browser will display the validation msgs to the user
+    }
 }
 //this function disable all the new Election inputs, and hide the submit button. It is called after storing this new Election successfully
 function disableAllInputs() {
