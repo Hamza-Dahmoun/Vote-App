@@ -1,4 +1,7 @@
-﻿#submit-updated-election {
+﻿#step-one-form {
+    width: 100%;
+}
+#submit-updated-election {
     display: none;
 }
 
