@@ -45,12 +45,18 @@ namespace WebApplication1.Controllers
 
         public IActionResult Index()
         {
-            //this action returns a view containing all candidates of the current election for the user to vote on five of them maximum
-
-            Election election = ElectionUtilities.getCurrentElection(_electionRepository);// _electionRepository.GetById(CurrentElectionId);
-            var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, election);            
-            //return View(Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, _candidateRepository.GetAll()));
-            return View(Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, candidates));
+            try
+            {
+                //this action returns a view containing all candidates of the current election for the user to vote on five of them maximum
+                Election election = ElectionUtilities.getCurrentElection(_electionRepository);// _electionRepository.GetById(CurrentElectionId);
+                var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, election);
+                //return View(Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, _candidateRepository.GetAll()));
+                return View(Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, candidates));
+            }
+            catch(Exception E)
+            {
+                return BadRequest(E.Message);
+            }            
         }
 
         [HttpPost]
@@ -105,7 +111,7 @@ namespace WebApplication1.Controllers
                 var json = JsonConvert.SerializeObject(candidatesViewModel.OrderByDescending(c => c.VotesCount));
                 return Ok(json);
             }
-            catch
+            catch(Exception E)
             {
                 return BadRequest();
             }            
