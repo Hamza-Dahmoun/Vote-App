@@ -23,14 +23,28 @@ namespace WebApplication1.Models.Repositories
 
         public void Add(Vote item)
         {
-            _dbContext.Add(item);
-            _dbContext.SaveChanges();
+            try
+            {
+                _dbContext.Add(item);
+                _dbContext.SaveChanges();
+            }
+            catch(Exception E)
+            {
+                throw E;
+            }            
         }
 
         public void Delete(Guid Id)
         {
-            _dbContext.Remove(this.GetById(Id));
-            _dbContext.SaveChanges();
+            try
+            {
+                _dbContext.Remove(this.GetById(Id));
+                _dbContext.SaveChanges();
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }            
         }
 
         public void Edit(Guid Id, Vote item)
@@ -40,8 +54,15 @@ namespace WebApplication1.Models.Repositories
 
         public IList<Vote> GetAll()
         {
-            //use eager loading to bring Candidate data too
-            return _dbSet.Include(v => v.Candidate).ToList();
+            try
+            {
+                //use eager loading to bring Candidate data too
+                return _dbSet.Include(v => v.Candidate).ToList();
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }            
         }
 
         public List<Vote> GetAllFiltered(Expression<Func<Vote, bool>> predicate)
@@ -70,13 +91,27 @@ namespace WebApplication1.Models.Repositories
 
         public Vote GetById(Guid Id)
         {
-            //use eager loading to bring Candidate data too
-            return _dbSet.Include(v => v.Candidate).SingleOrDefault(v=>v.Id == Id);
+            try
+            {
+                //use eager loading to bring Candidate data too
+                return _dbSet.Include(v => v.Candidate).SingleOrDefault(v => v.Id == Id);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }            
         }
 
         public Vote GetOneFiltered(Expression<Func<Vote, bool>> predicate)
         {
-            return _dbSet.Include(v => v.Candidate).SingleOrDefault(predicate);
+            try
+            {
+                return _dbSet.Include(v => v.Candidate).SingleOrDefault(predicate);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }            
         }
     }
 }
