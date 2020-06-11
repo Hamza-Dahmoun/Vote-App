@@ -639,71 +639,77 @@ namespace WebApplication1.Controllers
         [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
         public async Task<IActionResult> EditElection([FromBody] TemporaryElection election)
         {
-            //first of all lets check if this election is in future, if it is not then we'll not edit it
-            if (DateTime.Parse(election.StartDate) <= DateTime.Now)
-            {
-                //so it is not a future election
-                return BadRequest();
-            }
-            if (ElectionUtilities.getElectionsInSamePeriod(_electionRepository, DateTime.Parse( election.StartDate), int.Parse(election.DurationInDays))>1)
-            {//so in addtion to the election instance to edit, there are other elections in the db from the same period
-                return BadRequest();
-            }
             try
             {
-                //this variable is going to be used when checking if user updated hasNeutral opinion
-                bool oldHasNeutral = _electionRepository.GetById(Guid.Parse(election.Id)).HasNeutral;
-
-
-                Election myElection = new Election
+                if (ModelState.IsValid)
                 {
-                    Id = Guid.Parse(election.Id),
-                    Name = election.Name,
-                    StartDate = DateTime.Parse(election.StartDate),
-                    DurationInDays = int.Parse(election.DurationInDays),
-                    HasNeutral = bool.Parse(election.HasNeutral)
-                };
-
-                _electionRepository.Edit(myElection.Id, myElection);
-
-                //if hasNeutral field was updated then we should add/delete neutralCandidate from the db                
-                if(myElection.HasNeutral == oldHasNeutral)
-                {
-                    //user didn't update hasNeutral property, lets proceed editing the Election instance
-                    //so do nothing
-                }
-                else
-                {
-                    //user did updated hasNeutral property
-                    if (myElection.HasNeutral)
+                    //first of all lets check if this election is in future, if it is not then we'll not edit it
+                    if (DateTime.Parse(election.StartDate) <= DateTime.Now)
                     {
-                        //lets add a neutral candidate to the db related to this instance of Election
-                        Candidate neutralOpinion = new Candidate
-                        {
-                            Id = Guid.NewGuid(),
-                            isNeutralOpinion = true,
-                            Election = _electionRepository.GetById(myElection.Id)
-                        };
-                        _candidateRepository.Add(neutralOpinion);
+                        //so it is not a future election
+                        return BadRequest();
+                    }
+                    if (ElectionUtilities.getElectionsInSamePeriod(_electionRepository, DateTime.Parse(election.StartDate), int.Parse(election.DurationInDays)) > 1)
+                    {//so in addtion to the election instance to edit, there are other elections in the db from the same period
+                        return BadRequest();
+                    }
+
+                    //this variable is going to be used when checking if user updated hasNeutral opinion
+                    bool oldHasNeutral = _electionRepository.GetById(Guid.Parse(election.Id)).HasNeutral;
+
+
+                    Election myElection = new Election
+                    {
+                        Id = Guid.Parse(election.Id),
+                        Name = election.Name,
+                        StartDate = DateTime.Parse(election.StartDate),
+                        DurationInDays = int.Parse(election.DurationInDays),
+                        HasNeutral = bool.Parse(election.HasNeutral)
+                    };
+
+                    _electionRepository.Edit(myElection.Id, myElection);
+
+                    //if hasNeutral field was updated then we should add/delete neutralCandidate from the db                
+                    if (myElection.HasNeutral == oldHasNeutral)
+                    {
+                        //user didn't update hasNeutral property, lets proceed editing the Election instance
+                        //so do nothing
                     }
                     else
                     {
-                        //lets remove a neutral candidate instance from db which is related to this instance of Election
-                        System.Linq.Expressions.Expression<Func<Candidate, bool>> expr = e => e.Election.Id == myElection.Id && e.isNeutralOpinion == true;
-                        Candidate myNeutralCandidate = _candidateRepository.GetOneFiltered(expr);
-                        _candidateRepository.Delete(myNeutralCandidate.Id);
+                        //user did updated hasNeutral property
+                        if (myElection.HasNeutral)
+                        {
+                            //lets add a neutral candidate to the db related to this instance of Election
+                            Candidate neutralOpinion = new Candidate
+                            {
+                                Id = Guid.NewGuid(),
+                                isNeutralOpinion = true,
+                                Election = _electionRepository.GetById(myElection.Id)
+                            };
+                            _candidateRepository.Add(neutralOpinion);
+                        }
+                        else
+                        {
+                            //lets remove a neutral candidate instance from db which is related to this instance of Election
+                            System.Linq.Expressions.Expression<Func<Candidate, bool>> expr = e => e.Election.Id == myElection.Id && e.isNeutralOpinion == true;
+                            Candidate myNeutralCandidate = _candidateRepository.GetOneFiltered(expr);
+                            _candidateRepository.Delete(myNeutralCandidate.Id);
+                        }
                     }
+
+
+                    return Json(new { success = true });
                 }
-                
-
-                
-
-                return Json(new { success = true });
+                else
+                {
+                    return BadRequest();
+                }
             }
             catch(Exception E)
             {
                 return BadRequest();
-            }
+            }            
         }
 
         // GET: Election/Delete/5
