@@ -24,28 +24,56 @@ namespace WebApplication1.Models.Repositories
 
         public void Add(State item)
         {
-            _dbContext.Add(item);
-            _dbContext.SaveChanges();
+            try
+            {
+                _dbContext.Add(item);
+                _dbContext.SaveChanges();
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }            
         }
 
         public void Delete(Guid Id)
         {
-            var item = GetById(Id);
-            _dbContext.Remove(item);
-            _dbContext.SaveChanges();
+            try
+            {
+                var item = GetById(Id);
+                _dbContext.Remove(item);
+                _dbContext.SaveChanges();
+            }
+            catch(Exception E)
+            {
+                throw E;
+            }            
         }
 
         public void Edit(Guid Id, State item)
         {
-            var myState = GetById(Id);
-            myState.Name = item.Name;
-            _dbContext.SaveChanges();
+            try
+            {
+                var myState = GetById(Id);
+                myState.Name = item.Name;
+                _dbContext.SaveChanges();
+            }
+            catch(Exception E)
+            {
+                throw E;
+            }            
         }
 
         public IList<State> GetAll()
         {
-            return _dbSet.ToList();
-            //return _dbSet.ToList();
+            try
+            {
+                return _dbSet.ToList();
+                //return _dbSet.ToList();
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }            
         }
 
         public List<State> GetAllFiltered(Expression<Func<State, bool>> predicate)
@@ -74,13 +102,27 @@ namespace WebApplication1.Models.Repositories
 
         public State GetById(Guid Id)
         {
-            return _dbSet.SingleOrDefault(s=>s.Id == Id);
-            //return _dbSet.Find(Id);
+            try
+            {
+                return _dbSet.SingleOrDefault(s => s.Id == Id);
+                //return _dbSet.Find(Id);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }            
         }
 
         public State GetOneFiltered(Expression<Func<State, bool>> predicate)
         {
-            return _dbSet.SingleOrDefault(predicate);
+            try
+            {
+                return _dbSet.SingleOrDefault(predicate);
+            }
+            catch(Exception E)
+            {
+                throw E;
+            }            
         }
     }
 }
