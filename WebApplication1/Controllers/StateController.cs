@@ -31,12 +31,27 @@ namespace WebApplication1.Controllers
 
         public IActionResult Index()
         {
-            return View(Utilities.convertStateList_toStateViewModelList(_stateRepository.GetAll()));
+            try
+            {
+                return View(Utilities.convertStateList_toStateViewModelList(_stateRepository.GetAll()));
+            }
+            catch(Exception E)
+            {
+                //this is msg is going to be displayed as text in blank page
+                return BadRequest(E.Message);
+            }            
         }
 
         public IActionResult Details(Guid id)
         {
-            return View(Utilities.convertState_toStateViewModel(_stateRepository.GetById(id)));
+            try
+            {
+                return View(Utilities.convertState_toStateViewModel(_stateRepository.GetById(id)));
+            }
+            catch(Exception E)
+            {
+                return BadRequest(E.Message);
+            }            
         }
 
 
@@ -51,22 +66,38 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public IActionResult Create(State state)
         {
-            if (ModelState.IsValid)
+            try
             {
-                state.Id = Guid.NewGuid();
-                _stateRepository.Add(state);
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    state.Id = Guid.NewGuid();
+                    _stateRepository.Add(state);
+                    return RedirectToAction(nameof(Index));
+                }
+                //so the model isn't valid, lets keep the user in the same view so that he could read the validation msgs
+                return View(state);
             }
-            //so the model isn't valid, lets keep the user in the same view so that he could read the validation msgs
-            return View(state);
+            catch (Exception E)
+            {
+                //this is msg is going to be displayed as text in blank page
+                return BadRequest(E.Message);
+            }            
         }
 
 
 
         public IActionResult Delete(Guid id)
         {
-            var state = _stateRepository.GetById(id);
-            return View(state);
+            try
+            {
+                var state = _stateRepository.GetById(id);
+                return View(state);
+            }
+            catch (Exception E)
+            {
+                //this is msg is going to be displayed as text in blank page
+                return BadRequest(E.Message);
+            }            
         }
 
         [HttpPost]
@@ -77,11 +108,11 @@ namespace WebApplication1.Controllers
                 _stateRepository.Delete(id);
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception E)
             {
-                //if there is an error return the same delete view
-                return View();
-            }            
+                //this is msg is going to be displayed as text in blank page
+                return BadRequest(E.Message);
+            }         
         }
 
 
@@ -91,18 +122,34 @@ namespace WebApplication1.Controllers
 
         public IActionResult Edit(Guid id)
         {
-            var state = _stateRepository.GetById(id);
-            return View(state);
+            try
+            {
+                var state = _stateRepository.GetById(id);
+                return View(state);
+            }
+            catch (Exception E)
+            {
+                //this is msg is going to be displayed as text in blank page
+                return BadRequest(E.Message);
+            }            
         }
         [HttpPost]
         public IActionResult Edit(Guid id, State state)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _stateRepository.Edit(id, state);
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    _stateRepository.Edit(id, state);
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(state);
             }
-            return View(state);
+            catch (Exception E)
+            {
+                //this is msg is going to be displayed as text in blank page
+                return BadRequest(E.Message);
+            }            
         }
 
         
