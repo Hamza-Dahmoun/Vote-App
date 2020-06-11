@@ -23,14 +23,28 @@ namespace WebApplication1.Models.Repositories
 
         public void Add(Candidate item)
         {
-            _dBContext.Add(item);
-            _dBContext.SaveChanges();
+            try
+            {
+                _dBContext.Add(item);
+                _dBContext.SaveChanges();
+            }
+            catch(Exception E)
+            {
+                throw E;
+            }            
         }
 
         public void Delete(Guid Id)
         {
-            _dBContext.Remove(this.GetById(Id));
-            _dBContext.SaveChanges();
+            try
+            {
+                _dBContext.Remove(this.GetById(Id));
+                _dBContext.SaveChanges();
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }            
         }
 
         public void Edit(Guid Id, Candidate item)
@@ -79,14 +93,28 @@ namespace WebApplication1.Models.Repositories
 
         public Candidate GetById(Guid Id)
         {
-            //use eager loading to bring State data and Votes data and VoterBeing data too
-            return _dbSet.Include(c=>c.Election)/*.Include(c=>c.State)*/.Include(c=>c.Votes).Include(c => c.VoterBeing).SingleOrDefault(c=>c.Id == Id);
+            try
+            {
+                //use eager loading to bring State data and Votes data and VoterBeing data too
+                return _dbSet.Include(c => c.Election)/*.Include(c=>c.State)*/.Include(c => c.Votes).Include(c => c.VoterBeing).SingleOrDefault(c => c.Id == Id);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }            
         }
 
         public Candidate GetOneFiltered(Expression<Func<Candidate, bool>> predicate)
         {
-            //use eager loading to bring State data and Votes data and VoterBeing data too
-            return _dbSet.Include(c => c.Election)/*.Include(c=>c.State)*/.Include(c => c.Votes).Include(c => c.VoterBeing).SingleOrDefault(predicate);
+            try
+            {
+                //use eager loading to bring State data and Votes data and VoterBeing data too
+                return _dbSet.Include(c => c.Election)/*.Include(c=>c.State)*/.Include(c => c.Votes).Include(c => c.VoterBeing).SingleOrDefault(predicate);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }            
         }
 
         //public Candidate GetByVoterBeingId(Guid VoterBeingId)
