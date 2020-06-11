@@ -53,76 +53,108 @@ namespace WebApplication1.Controllers
                 //return View(_db.Voter.ToList());
                 return View(_voterRepository.GetAll());
             }
-            catch
+            catch(Exception E)
             {
-                return View();
+                //this is msg is going to be displayed as text in blank page
+                return BadRequest(E.Message);
             }
         }
 
         public IActionResult Details(Guid id)
         {
-            return View(Utilities.convertVoter_toPersonViewModel(_voterRepository.GetById(id)));
+            try
+            {
+                return View(Utilities.convertVoter_toPersonViewModel(_voterRepository.GetById(id)));
+            }
+            catch (Exception E)
+            {
+                //this is msg is going to be displayed as text in blank page
+                return BadRequest(E.Message);
+            }            
         }
 
   
         public IActionResult Create()
         {
-            //this method will return an empty VoterStateViewModel but with a list of all states, in a view
-            VoterStateViewModel vs = new VoterStateViewModel
+            try
             {
-                States = _stateRepository.GetAll()
-            };
-        return View(vs);
+                //this method will return an empty VoterStateViewModel but with a list of all states, in a view
+                VoterStateViewModel vs = new VoterStateViewModel
+                {
+                    States = _stateRepository.GetAll()
+                };
+                return View(vs);
+            }
+            catch (Exception E)
+            {
+                //this is msg is going to be displayed as text in blank page
+                return BadRequest(E.Message);
+            }            
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(VoterStateViewModel vs)
         {
-            if (ModelState.IsValid)
+            try
             {
-                //this method receives a VoterStateViewModel object, and based on it, it creates a voter object and stores it in the DB
-                Voter v = new Voter
+                if (ModelState.IsValid)
                 {
-                    Id = Guid.NewGuid(),
-                    FirstName = vs.FirstName,
-                    LastName = vs.LastName,
-                    State = _stateRepository.GetById(vs.StateID)
-                };
-
-                //now lets add this new voter as a new user to the IdentityDB using UserManager<IdentityUser> service
-                //we'll set its usernam/email, and set 'Pa$$w0rd' as the password
-                string username = v.FirstName.ToLower() +"."+ v.LastName.ToLower();
-                var user = new IdentityUser { UserName = username };
-                //CreateAsync() is an asynchronous method, we have to mark this method with 'async task'
-                var result = await _userManager.CreateAsync(user, "Pa$$w0rd");//this password will be automatically hashed
-                if (result.Succeeded)
-                {
-                    var result1 = await _userManager.AddToRoleAsync(user, "PreVoter");
-                    if (result1.Succeeded)
+                    //this method receives a VoterStateViewModel object, and based on it, it creates a voter object and stores it in the DB
+                    Voter v = new Voter
                     {
-                        //the user has been stored successully lets insert now the new voter
-                        v.UserId = Guid.Parse(user.Id);
-                        _voterRepository.Add(v);
-                        return RedirectToAction(nameof(Index));
+                        Id = Guid.NewGuid(),
+                        FirstName = vs.FirstName,
+                        LastName = vs.LastName,
+                        State = _stateRepository.GetById(vs.StateID)
+                    };
+
+                    //now lets add this new voter as a new user to the IdentityDB using UserManager<IdentityUser> service
+                    //we'll set its usernam/email, and set 'Pa$$w0rd' as the password
+                    string username = v.FirstName.ToLower() + "." + v.LastName.ToLower();
+                    var user = new IdentityUser { UserName = username };
+                    //CreateAsync() is an asynchronous method, we have to mark this method with 'async task'
+                    var result = await _userManager.CreateAsync(user, "Pa$$w0rd");//this password will be automatically hashed
+                    if (result.Succeeded)
+                    {
+                        var result1 = await _userManager.AddToRoleAsync(user, "PreVoter");
+                        if (result1.Succeeded)
+                        {
+                            //the user has been stored successully lets insert now the new voter
+                            v.UserId = Guid.Parse(user.Id);
+                            _voterRepository.Add(v);
+                            return RedirectToAction(nameof(Index));
+                        }
                     }
+
+                    //N.B: Is it possible to move the above block of code that is responsible of adding a user
+                    //to another file (e.g: UserRepository) so that we seperate concerns?
                 }
-                
-                //N.B: Is it possible to move the above block of code that is responsible of adding a user
-                //to another file (e.g: UserRepository) so that we seperate concerns?
+                return View();
             }
-            return View();
+            catch (Exception E)
+            {
+                //this is msg is going to be displayed as text in blank page
+                return BadRequest(E.Message);
+            }            
         }
 
 
         public IActionResult Delete(Guid id)
         {
-            var voter = _voterRepository.GetById(id);
-            return View(Utilities.convertVoter_toPersonViewModel(voter));
+            try
+            {
+                var voter = _voterRepository.GetById(id);
+                return View(Utilities.convertVoter_toPersonViewModel(voter));
+            }
+            catch (Exception E)
+            {
+                //this is msg is going to be displayed as text in blank page
+                return BadRequest(E.Message);
+            }            
         }
         [HttpPost]
         public async Task<IActionResult> DeleteVoter(Guid id)
-        {
-            //removing a voter means removing all his actions (votes  & identity account)
+        {//removing a voter means removing all his actions (votes  & identity account)
             try
             {
                 Voter voter = _voterRepository.GetById(id);
@@ -156,13 +188,13 @@ namespace WebApplication1.Controllers
                     _voterRepository.Delete(id);
                 }
 
-                
+
                 return RedirectToAction(nameof(Index));
             }
-            catch(Exception E)
+            catch (Exception E)
             {
-                //If there is an error return the same Delete view
-                return View();
+                //this is msg is going to be displayed as text in blank page
+                return BadRequest(E.Message);
             }
         }
 
@@ -170,46 +202,60 @@ namespace WebApplication1.Controllers
 
         public IActionResult Edit(Guid Id)
         {
-            //In here we are going to return a view where a voter is displayed with his state but the state is in
-            //a list of states
-            var voter = _voterRepository.GetById(Id);
-            VoterStateViewModel voterstate = new VoterStateViewModel
+            try
             {
-                Id = voter.Id,
-                FirstName = voter.FirstName,
-                LastName = voter.LastName,                
-                States = _stateRepository.GetAll()
-            };
-            /*just in case user wanted to edit info of Neutral vote which doesn't have a state*/
-            if (voter.State != null)
-            {
-                voterstate.StateID = voter.State.Id;
+                //In here we are going to return a view where a voter is displayed with his state but the state is in
+                //a list of states
+                var voter = _voterRepository.GetById(Id);
+                VoterStateViewModel voterstate = new VoterStateViewModel
+                {
+                    Id = voter.Id,
+                    FirstName = voter.FirstName,
+                    LastName = voter.LastName,
+                    States = _stateRepository.GetAll()
+                };
+                /*just in case user wanted to edit info of Neutral vote which doesn't have a state*/
+                if (voter.State != null)
+                {
+                    voterstate.StateID = voter.State.Id;
+                }
+                return View(voterstate);
             }
-            
-
-            return View(voterstate);
+            catch (Exception E)
+            {
+                //this is msg is going to be displayed as text in blank page
+                return BadRequest(E.Message);
+            }            
         }
         [HttpPost]
         public IActionResult Edit(VoterStateViewModel voterstate)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                if(voterstate.States == null)
+                if (!ModelState.IsValid)
                 {
-                    //in caase the object received doesn't have a list of states
-                    voterstate.States = _stateRepository.GetAll();
+                    if (voterstate.States == null)
+                    {
+                        //in caase the object received doesn't have a list of states
+                        voterstate.States = _stateRepository.GetAll();
+                    }
+                    return View(voterstate);
                 }
-                return View(voterstate);
+                Voter v = new Voter
+                {
+                    Id = voterstate.Id,
+                    FirstName = voterstate.FirstName,
+                    LastName = voterstate.LastName,
+                    State = _stateRepository.GetById(voterstate.StateID)
+                };
+                _voterRepository.Edit(voterstate.Id, v);
+                return RedirectToAction(nameof(Index));
             }
-            Voter v = new Voter
+            catch (Exception E)
             {
-                Id = voterstate.Id,
-                FirstName = voterstate.FirstName,
-                LastName = voterstate.LastName,
-                State = _stateRepository.GetById(voterstate.StateID)
-            };
-            _voterRepository.Edit(voterstate.Id, v);
-            return RedirectToAction(nameof(Index));
+                //this is msg is going to be displayed as text in blank page
+                return BadRequest(E.Message);
+            }            
         }
 
 
