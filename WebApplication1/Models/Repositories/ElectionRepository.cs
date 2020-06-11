@@ -22,30 +22,58 @@ namespace WebApplication1.Models.Repositories
         }
         public void Add(Election item)
         {
-            _dBContext.Add(item);
-            _dBContext.SaveChanges();
+            try
+            {
+                _dBContext.Add(item);
+                _dBContext.SaveChanges();
+            }
+            catch(Exception E)
+            {
+                throw E;
+            }            
         }
 
         public void Delete(Guid Id)
         {
-            _dBContext.Remove(GetById(Id));
-            _dBContext.SaveChanges();
+            try
+            {
+                _dBContext.Remove(GetById(Id));
+                _dBContext.SaveChanges();
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }            
         }
 
         public void Edit(Guid Id, Election item)
         {
-            var myElection = GetById(Id);
-            myElection.Name = item.Name;
-            myElection.StartDate = item.StartDate;
-            myElection.HasNeutral = item.HasNeutral;
-            myElection.DurationInDays = item.DurationInDays;
-            _dBContext.SaveChanges();
+            try
+            {
+                var myElection = GetById(Id);
+                myElection.Name = item.Name;
+                myElection.StartDate = item.StartDate;
+                myElection.HasNeutral = item.HasNeutral;
+                myElection.DurationInDays = item.DurationInDays;
+                _dBContext.SaveChanges();
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }            
         }
 
         public IList<Election> GetAll()
         {
-            //use eager loading to bring Candidaates data too
-            return _dbSet.Include(e => e.Candidates).Include(e => e.Votes).ToList();
+            try
+            {
+                //use eager loading to bring Candidaates data too
+                return _dbSet.Include(e => e.Candidates).Include(e => e.Votes).ToList();
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }            
         }
 
         public List<Election> GetAllFiltered(Expression<Func<Election, bool>> predicate)
@@ -160,12 +188,26 @@ namespace WebApplication1.Models.Repositories
 
         public Election GetById(Guid Id)
         {
-            return _dbSet.Include(e=>e.Candidates).Include(e => e.Votes).SingleOrDefault(e=>e.Id == Id);
+            try
+            {
+                return _dbSet.Include(e => e.Candidates).Include(e => e.Votes).SingleOrDefault(e => e.Id == Id);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }            
         }
 
         public Election GetOneFiltered(Expression<Func<Election, bool>> predicate)
         {
-            return _dbSet.Include(e => e.Candidates).Include(e => e.Votes).SingleOrDefault(predicate); 
+            try
+            {
+                return _dbSet.Include(e => e.Candidates).Include(e => e.Votes).SingleOrDefault(predicate);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }             
         }
     }
 }
