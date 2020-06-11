@@ -25,29 +25,57 @@ namespace WebApplication1.Models.Repositories
 
         public void Add(Voter item)
         {
-            _dbContext.Add(item);
-            _dbContext.SaveChanges();
+            try
+            {
+                _dbContext.Add(item);
+                _dbContext.SaveChanges();
+            }
+            catch(Exception E)
+            {
+                throw E;
+            }            
         }
 
         public void Delete(Guid Id)
         {
-            _dbContext.Remove(this.GetById(Id));
-            _dbContext.SaveChanges();
+            try
+            {
+                _dbContext.Remove(this.GetById(Id));
+                _dbContext.SaveChanges();
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }            
         }
 
         public void Edit(Guid Id, Voter item)
         {
-            var myVoter = GetById(Id);
-            myVoter.FirstName = item.FirstName;
-            myVoter.LastName = item.LastName;
-            myVoter.State = item.State;
-            _dbContext.SaveChanges();
+            try
+            {
+                var myVoter = GetById(Id);
+                myVoter.FirstName = item.FirstName;
+                myVoter.LastName = item.LastName;
+                myVoter.State = item.State;
+                _dbContext.SaveChanges();
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }            
         }
 
         public IList<Voter> GetAll()
         {
-            //use eager loading to bring State data too
-            return _dbSet.Include(v=>v.State).ToList();
+            try
+            {
+                //use eager loading to bring State data too
+                return _dbSet.Include(v => v.State).ToList();
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }            
         }
 
         public List<Voter> GetAllFiltered(Expression<Func<Voter, bool>> predicate)
@@ -163,13 +191,27 @@ namespace WebApplication1.Models.Repositories
 
         public Voter GetById(Guid Id)
         {
-            //use eager loading to bring State data 
-            return _dbSet.Include(v => v.State).SingleOrDefault(v=>v.Id == Id);
+            try
+            {
+                //use eager loading to bring State data 
+                return _dbSet.Include(v => v.State).SingleOrDefault(v => v.Id == Id);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }            
         }
 
         public Voter GetOneFiltered(Expression<Func<Voter, bool>> predicate)
         {
-            return _dbSet.Include(v => v.State).SingleOrDefault(predicate);
+            try
+            {
+                return _dbSet.Include(v => v.State).SingleOrDefault(predicate);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }            
         }
     }
 }
