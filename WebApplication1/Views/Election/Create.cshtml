@@ -37,7 +37,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="DurationInDays" class="control-label"></label>
-                <input type="number" asp-for="DurationInDays" class="form-control" id="duration-in-days" required min="1" />
+                <input type="number" asp-for="DurationInDays" class="form-control" id="duration-in-days" required min="1" max="5"/>
                 @*NO NEED FOR THE BELOW TAG BECAUSE THE ACTION IS INVOKED USING AJAX... WE USED HTML ATTRIBUTES INSTEAD
                 <span asp-validation-for="DurationInDays" class="text-danger"></span>*@
             </div>
