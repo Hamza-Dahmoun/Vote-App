@@ -23,17 +23,23 @@ namespace WebApplication1.Business
         //Note that this method uses _candidateRepository, so it depends to it, and we passed the repository object as a pramater. This is called Method Dependancy Injection
         public static bool IsCandidate(Voter voter, IRepository<Candidate> candidateRepository)
         {
-            _candidateRepository = candidateRepository;
+            try
+            {
+                _candidateRepository = candidateRepository;
 
-            //declaring an expression that is special to Candidate objects
-            System.Linq.Expressions.Expression<Func<Candidate, bool>> expr = c => c.VoterBeing == voter;
+                //declaring an expression that is special to Candidate objects
+                System.Linq.Expressions.Expression<Func<Candidate, bool>> expr = c => c.VoterBeing == voter;
 
-            Candidate candidate = _candidateRepository.GetOneFiltered(expr);
+                Candidate candidate = _candidateRepository.GetOneFiltered(expr);
 
-            if (candidate != null)
-                return true;
-            else return false;
-
+                if (candidate != null)
+                    return true;
+                else return false;
+            }
+            catch(Exception E)
+            {
+                throw E;
+            }            
         }
 
 
