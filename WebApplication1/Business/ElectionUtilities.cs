@@ -44,24 +44,31 @@ namespace WebApplication1.Business
         public static int getElectionsInSamePeriod(IRepository<Election> electionRepository, DateTime startDate, int durationInDays)
         {//this is using Method Dependancy Injection
 
-            //this method returns elections from db that are happening in the period between 'startDate' and 'durationInDays'
-            //this method is used when adding a new Election, there should be no elections in the same period
-            //and used when editing an Election, there should be only one election in the same period in the db which is the election instance to edit
-            _electionRepository = electionRepository;
+            try
+            {
+                //this method returns elections from db that are happening in the period between 'startDate' and 'durationInDays'
+                //this method is used when adding a new Election, there should be no elections in the same period
+                //and used when editing an Election, there should be only one election in the same period in the db which is the election instance to edit
+                _electionRepository = electionRepository;
 
-            //to do so we have to check if one of these cases exist:
-            //(https://stackoverflow.com/questions/13513932/algorithm-to-detect-overlapping-periods)
-            //(tired to think of my own solution right now, lets just use this, it works)
-            DateTime endDate = startDate.AddDays(durationInDays);
-            //declaring an expression that is special to Election objects
-            System.Linq.Expressions.Expression<Func<Election, bool>> expr = e => e.StartDate <= endDate && startDate <= e.StartDate.AddDays(e.DurationInDays);
-            var elections = _electionRepository.GetAllFiltered(expr).ToList();
+                //to do so we have to check if one of these cases exist:
+                //(https://stackoverflow.com/questions/13513932/algorithm-to-detect-overlapping-periods)
+                //(tired to think of my own solution right now, lets just use this, it works)
+                DateTime endDate = startDate.AddDays(durationInDays);
+                //declaring an expression that is special to Election objects
+                System.Linq.Expressions.Expression<Func<Election, bool>> expr = e => e.StartDate <= endDate && startDate <= e.StartDate.AddDays(e.DurationInDays);
+                var elections = _electionRepository.GetAllFiltered(expr).ToList();
 
-            return elections.Count;
+                return elections.Count;
 
-            //if (elections.Count > 0)
-            //    return true;
-            //else return false;
+                //if (elections.Count > 0)
+                //    return true;
+                //else return false;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
         }
 
 
