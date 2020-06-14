@@ -37,32 +37,38 @@ namespace WebApplication1.Business
             //this function returns a dashboard object filled with data
             //it is asynchronous becuz it uses another method which uses an asynchronous method GetUserAsync()
 
-
-            _candidateRepository = candidateRepository;
-            _voterRepository = voterRepository;
-            _voteRepository = voteRepository;
-            _electionRepository = electionRepository;
-
-            List<CandidateViewModel> candidates = Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, _candidateRepository.GetAll().ToList());
-
-            int NbElections = _electionRepository.GetAll().Count;
-            int NbCandidates = candidates.Count;
-            int NbVoters = _voterRepository.GetAll().Count;
-            int NbVotes = _voteRepository.GetAll().Count;
-            //int votersWithVote = VoterUtilities.getNumberOfVoterWithVote(_voterRepository);
-            //Now lets get the currentUser to check if he has voted or not yet
-            var currentUser = user;
-            //bool userHasVoted = VoterUtilities.getVoterByUserId(Guid.Parse(currentUser.Id), _voterRepository).hasVoted();
-            DashboardViewModel d = new DashboardViewModel
+            try
             {
-                NbElections = NbElections,
-                NbCandidates = NbCandidates,
-                NbVoters = NbVoters,
-                NbVotes = NbVotes,
-                //ParticipationRate = (double)votersWithVote / (double)NbVoters,
-                Candidates = candidates
-            };
-            return d;
+                _candidateRepository = candidateRepository;
+                _voterRepository = voterRepository;
+                _voteRepository = voteRepository;
+                _electionRepository = electionRepository;
+
+                List<CandidateViewModel> candidates = Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, _candidateRepository.GetAll().ToList());
+
+                int NbElections = _electionRepository.GetAll().Count;
+                int NbCandidates = candidates.Count;
+                int NbVoters = _voterRepository.GetAll().Count;
+                int NbVotes = _voteRepository.GetAll().Count;
+                //int votersWithVote = VoterUtilities.getNumberOfVoterWithVote(_voterRepository);
+                //Now lets get the currentUser to check if he has voted or not yet
+                var currentUser = user;
+                //bool userHasVoted = VoterUtilities.getVoterByUserId(Guid.Parse(currentUser.Id), _voterRepository).hasVoted();
+                DashboardViewModel d = new DashboardViewModel
+                {
+                    NbElections = NbElections,
+                    NbCandidates = NbCandidates,
+                    NbVoters = NbVoters,
+                    NbVotes = NbVotes,
+                    //ParticipationRate = (double)votersWithVote / (double)NbVoters,
+                    Candidates = candidates
+                };
+                return d;
+            }
+            catch(Exception E)
+            {
+                throw E;
+            }            
         }
     }
 }
