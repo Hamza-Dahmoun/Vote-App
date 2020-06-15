@@ -27,7 +27,7 @@ function loadElectionsData() {
 
 
 
-
+//Coming Elections are Datatables frontend only
 function loadComingElections() {
     //this function load a list of coming elections using jQuery ajax
 
@@ -37,8 +37,13 @@ function loadComingElections() {
         /*data: JSON.stringify(document.getElementById("candidate-id-holder").value),*/
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        error: function () {
+        error: function (err) {
+            //in here 'response' represents the following object {success: false, message ='...text here...'}.. see the Catch block of code in 
+            //the backend
             alert("error");
+            console.log(err);
+            //console.log(responseText);
+            console.log(err.responseJSON.message);
         },
         success: function (response) {
             //'response' represents the object returned from the api which is a list of future elections

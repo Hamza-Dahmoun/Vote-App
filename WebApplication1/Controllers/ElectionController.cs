@@ -796,12 +796,17 @@ namespace WebApplication1.Controllers
 
                 var futureElections = _electionRepository.GetAllFiltered(expr).Select(e => new { e.Name, e.StartDate, e.DurationInDays, e.Candidates.Count});
                 var json = JsonConvert.SerializeObject(futureElections);
+                int g = 0;
+                int i = 5 / g;
+                //return Json(new { Success = false, Message = "error testing" });
                 return Ok(json);
 
             }
             catch (Exception E)
             {
-                return BadRequest();
+                HttpContext.Response.StatusCode = 500;
+                ///return BadRequest();
+                return Json(new { Success = false, Message = E.Message });
             }
         }
 
