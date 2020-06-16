@@ -796,8 +796,7 @@ namespace WebApplication1.Controllers
 
                 var futureElections = _electionRepository.GetAllFiltered(expr).Select(e => new { e.Name, e.StartDate, e.DurationInDays, e.Candidates.Count});
                 var json = JsonConvert.SerializeObject(futureElections);
-                int g = 0;
-                int i = 5 / g;
+
                 //return Json(new { Success = false, Message = "error testing" });
                 return Ok(json);
 
@@ -928,13 +927,16 @@ namespace WebApplication1.Controllers
                 {
                     //so there is no election currently, lets return null as a response
                     var json = JsonConvert.SerializeObject(null);
+
                     return Ok(json);
                 }
 
             }
             catch (Exception E)
             {
-                return BadRequest();
+                HttpContext.Response.StatusCode = 500;
+                return Json(new { Message = E.Message });
+                //In above code I created an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
             }
         }
 

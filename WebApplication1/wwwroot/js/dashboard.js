@@ -113,8 +113,18 @@ function loadCurrentElection() {
         url: "/Election/GetCurrentElection",
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        error: function () {
-            alert("error");
+        error: function (response) {
+            //to know why I used 'response.responseJSON.message' to get the error text just log the response object and check its properties
+
+            //so there is a server error, lets display the error msg
+            let errorParag = document.createElement("p");
+            let responseMsg = document.createElement("div");
+            responseMsg.className = "alert alert-danger";
+            errorParag.innerHTML = "<strong>Error!</strong> " + response.responseJSON.message;
+            responseMsg.appendChild(errorParag);
+            document.getElementById("current-election-area").appendChild(responseMsg);
+            //now lets hide the spinner
+            hideElement(document.getElementById("current-election-area").querySelector(".spinner-border"));
         },
         success: function (response) {
             //'response' represents the object returned from the api which is the current election
@@ -280,7 +290,7 @@ function loadPreviousElectionsDatatable() {
     //in our case it is adding the click event to two buttons in each row: 'Show Results button' and 'PDF button'
     $(tableSelector).on('click', 'a', getElectionResults);
 }
-function loadPreviousElections() {
+/*function loadPreviousElections() {
     
     //this function load a list of previous elections using jQuery ajax
     $.ajax({
@@ -383,7 +393,7 @@ function displayPreviousElections(previousElections) {
     //now lets make it a jquery datatables
     $('#previous-elections-table').DataTable();
 }
-
+*/
 
 
 
