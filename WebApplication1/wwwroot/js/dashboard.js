@@ -264,7 +264,10 @@ function loadPreviousElectionsDatatable() {
         ;
 
 
-    $(tableSelector).DataTable(
+    $(tableSelector)/*.on('error.dt', function (e, settings, techNote, message) {
+        console.log('An error has been reported by DataTables: ');
+        console.log(message);
+    })*/.DataTable(
         {
             "processing": true,//whether to show 'processing' indicator when waiting for a processing result or not
             "serverSide": true,//for server side processing
@@ -272,12 +275,25 @@ function loadPreviousElectionsDatatable() {
             "ajax": {
                 "url": url,
                 "type": 'POST',
-                "datatype": 'json'
+                "datatype": 'json',
+                "error": function (reason) {
+                    //to know why I used 'response.responseJSON.message' to get the error text just log the response object and check its properties
+
+                    //so there is a server error, lets display the error msg
+                    let errorParag = document.createElement("p");
+                    let responseMsg = document.createElement("div");
+                    responseMsg.className = "alert alert-danger";
+                    errorParag.innerHTML = "<strong>Error!</strong> " + reason.responseJSON.message;
+                    responseMsg.appendChild(errorParag);
+                    document.getElementById("previous-elections-area").appendChild(responseMsg);
+                    //now lets hide the datatable wrapper (a div created by jquery which surrounds the table)
+                    hideElement(document.getElementById("previous-elections-area").querySelector(".dataTables_wrapper"));
+                }
             },
             "columnDefs": [
                 { "type": "numeric-comma", targets: "_all" }
             ],
-            "columns": columnsArray,
+            "columns": columnsArray, 
         }
         
     );
@@ -394,7 +410,6 @@ function displayPreviousElections(previousElections) {
     $('#previous-elections-table').DataTable();
 }
 */
-
 
 
 

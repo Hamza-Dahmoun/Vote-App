@@ -1111,12 +1111,15 @@ namespace WebApplication1.Controllers
                         recordsTotal = totalRecords,
                         data = pagedResult2.Items
                     });
+
                     return Ok(json);
                 }
             }
             catch(Exception E)
             {
-                return BadRequest();
+                HttpContext.Response.StatusCode = 500;
+                return Json(new { Message = E.Message });
+                //In above code I created an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
             }
         }
 
