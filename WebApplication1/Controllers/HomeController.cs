@@ -101,12 +101,17 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public async Task<IActionResult> GetResultsOfElection([FromBody] Guid electionId)
         {
-            if (electionId == null || electionId == Guid.Empty)
-            {
-                return BadRequest();
-            }
+            
             try
             {
+                int j = 0;
+                int i = j / 0;
+                if (electionId == null || electionId == Guid.Empty)
+                {
+                    HttpContext.Response.StatusCode = 500;
+                    return Json(new { Message = "Election ID is null." });
+                    //In above code I created an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.;
+                }
 
                 //this method returns a list of candidates (of an election) ordered by their number of votes
                 var election = _electionRepository.GetById(electionId);
@@ -116,9 +121,11 @@ namespace WebApplication1.Controllers
                 var json = JsonConvert.SerializeObject(candidatesViewModel.OrderByDescending(c => c.VotesCount));
                 return Ok(json);
             }
-            catch
+            catch(Exception E)
             {
-                return BadRequest();
+                HttpContext.Response.StatusCode = 500;
+                return Json(new { Message = E.Message });
+                //In above code I created an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
             }            
         }
 
