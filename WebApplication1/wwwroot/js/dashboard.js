@@ -37,13 +37,23 @@ function loadComingElections() {
         /*data: JSON.stringify(document.getElementById("candidate-id-holder").value),*/
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        error: function (err) {
-            //in here 'response' represents the following object {success: false, message ='...text here...'}.. see the Catch block of code in 
-            //the backend
-            alert("error");
-            console.log(err);
-            //console.log(responseText);
-            console.log(err.responseJSON.message);
+        error: function (response) {
+            //in here 'response' represents the following object {success: false, message ='...text here...'}
+            //which I sent after creating an Error HttpContext.Response.StatusCode = 500 ...see the Catch block of code in the backend
+            //alert("error");
+            //console.log(response);
+            //console.log(response.responseJSON.message);
+            //to know why I used 'response.responseJSON.message' to get the error text just log the response object and check its properties
+
+            //so there is a server error, lets display the error msg
+            let errorParag = document.createElement("p");
+            let responseMsg = document.createElement("div");
+            responseMsg.className = "alert alert-danger";
+            errorParag.innerHTML = "<strong>Error!</strong> " + response.responseJSON.message;
+            responseMsg.appendChild(errorParag);
+            document.getElementById("coming-elections-area").appendChild(responseMsg);
+            //now lets hide the spinner
+            hideElement(document.getElementById("coming-elections-area").querySelector(".spinner-border"));
         },
         success: function (response) {
             //'response' represents the object returned from the api which is a list of future elections

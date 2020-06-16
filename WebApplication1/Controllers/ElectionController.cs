@@ -806,7 +806,7 @@ namespace WebApplication1.Controllers
             {
                 HttpContext.Response.StatusCode = 500;
                 ///return BadRequest();
-                return Json(new { Success = false, Message = E.Message });
+                return Json(new { Message = E.Message });
             }
         }
 
