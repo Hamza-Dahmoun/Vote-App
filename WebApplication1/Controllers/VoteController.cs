@@ -61,11 +61,17 @@ namespace WebApplication1.Controllers
 
         [HttpPost]
         public async Task<IActionResult> ValidateVote([FromBody] List<string> candidateIdList)
-        {//this action get the list of the candidates ids that the user voted on, and add them to the db as vote objects, 
+        {//this action gets the list of the candidates ids that the user voted on, and add them to the db as vote objects, 
             //and return a list of candidates ordered by number of votes
 
+            //it can return two sort of Exception, one when voting, the second when retrieving results of the election
+
+
+            int exceptionDifferentiator = 0;
             try
             {
+                int i = 0;
+                int j = 5 / i;
                 if (candidateIdList == null || candidateIdList.Count <= 0)
                 {
                     return BadRequest();
@@ -95,6 +101,8 @@ namespace WebApplication1.Controllers
                     _voteRepository.Add(v);
                 }
 
+                exceptionDifferentiator = 1;
+
                 //-------IMPORTANT: THIS ACTION IS ACCESSIBLE USING AN AJAX CALL, IN THIS CASE, TRYING TO REDIRECTTOACTION FROM
                 //C# CODE WILL EXECUTED THE ACTION BUT THE BROWSER WILL IGNORE REDIRECTING, USER WILL STAY IN THE SAME PAGE
                 //BROWSERS IGNORE THE REDIRECT BECUZ IT ASSUME JS CODE WHICH DID THE AJAX CALL WILL BE IN CHARGE OF THE SUCCESS
@@ -104,6 +112,7 @@ namespace WebApplication1.Controllers
                 {
                     success = true
                 });*/
+
                 //everything is okey, lets return a list of candidates with votes counter ordered so that the winner is the first
                 var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, election);
                 List<CandidateViewModel> candidatesViewModel = Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, candidates);
@@ -113,8 +122,22 @@ namespace WebApplication1.Controllers
             }
             catch(Exception E)
             {
-                return BadRequest();
-            }            
+                //there are two reasons for possible exceptions: one when voting, the second when retrieving results of the election
+                if(exceptionDifferentiator == 0)
+                {
+                    //so the exception happened when trying to validate the votes
+                    HttpContext.Response.StatusCode = 500;
+                    return Json(new { Message = "Error When Validating Votes! " +  E.Message });
+                    //In above code I created an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
+                }
+                else
+                {
+                    //so the exception happened when trying to get the results of the election
+                    HttpContext.Response.StatusCode = 500;
+                    return Json(new { Message = "Error When Trying to Get The Results! " + E.Message });
+                    //In above code I created an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
+                }
+            }
         }
 
         
