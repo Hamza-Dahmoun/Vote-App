@@ -154,6 +154,20 @@ function prepareVotersjQueryDatatable(electionId) {
                  or
                  "data": electionId,
                  */
+                
+                "error": function (reason) {
+                    //to know why I used 'response.responseJSON.message' to get the error text just log the response object and check its properties
+
+                    //so there is a server error, lets display the error msg
+                    let errorParag = document.createElement("p");
+                    let responseMsg = document.createElement("div");
+                    responseMsg.className = "alert alert-danger";
+                    errorParag.innerHTML = "<strong>Error when retrieving Candidates!</strong> " + reason.responseJSON.message;
+                    responseMsg.appendChild(errorParag);
+                    document.getElementById("step-two").appendChild(responseMsg);
+                    //now lets hide the datatable wrapper (a div created by jquery which surrounds the table)
+                    document.getElementById("step-two").querySelector(".dataTables_wrapper").style.display = "none";
+                }
             },
             "columnDefs": [
                 { "type": "numeric-comma", targets: "_all" }

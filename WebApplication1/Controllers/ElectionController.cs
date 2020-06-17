@@ -323,8 +323,7 @@ namespace WebApplication1.Controllers
                 //totalRecords too inform user
                 int totalRecords = 0;
 
-
-
+                
                 //lets first get the list of voterswho are already candidates of this election
                 Election election = _electionRepository.GetById(electionId);
                 List<Voter> alreadyCandidates = CandidateUtilities.GetVoterBeing_ofCandidatesList_byElection(_candidateRepository, election);
@@ -372,7 +371,10 @@ namespace WebApplication1.Controllers
             }
             catch(Exception E)
             {
-                return BadRequest();
+
+                //lets create and return an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
+                HttpContext.Response.StatusCode = 500;
+                return Json(new { Message = E.Message});
             }
         }
 
