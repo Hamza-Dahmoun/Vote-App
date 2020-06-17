@@ -74,6 +74,15 @@ not the form.
                 //alert("error");
                 document.getElementById("send-election-spinner").style.display = "none";
                 document.getElementById("send-election-button").style.display = "block";
+                //in here 'response' represents the following object {success: false, message ='...text here...'}
+                //which I sent after creating an Error HttpContext.Response.StatusCode = 500 ...see the Catch block of code in the backend
+                //to know why I used 'response.responseJSON.message' to get the error text just log the response object and check its properties
+
+                //so there is a server error, lets display the error msg
+
+                document.getElementById("redModal").querySelector("h4").innerText = "Error!";
+                document.getElementById("redModal").querySelector("p").innerText = response.responseJSON.message;
+                $('#redModal').modal('show');
             },
             success: function (response) {
                 //'response' represents the object returned from the api which is the Election object newly stored in the db

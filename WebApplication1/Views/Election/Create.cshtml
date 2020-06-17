@@ -27,19 +27,19 @@
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" id="election-name" required />
                 @*NO NEED FOR THE BELOW TAG BECAUSE THE ACTION IS INVOKED USING AJAX... WE USED HTML ATTRIBUTES INSTEAD
-                <span asp-validation-for="Name" class="text-danger"></span>*@
+                    <span asp-validation-for="Name" class="text-danger"></span>*@
             </div>
             <div class="form-group">
                 <label asp-for="StartDate" class="control-label"></label>
                 <input type="date" asp-for="StartDate" class="form-control" id="start-date-election" required />
                 @*NO NEED FOR THE BELOW TAG BECAUSE THE ACTION IS INVOKED USING AJAX... WE USED HTML ATTRIBUTES INSTEAD
-                <span asp-validation-for="StartDate" class="text-danger"></span>*@
+                    <span asp-validation-for="StartDate" class="text-danger"></span>*@
             </div>
             <div class="form-group">
                 <label asp-for="DurationInDays" class="control-label"></label>
-                <input type="number" asp-for="DurationInDays" class="form-control" id="duration-in-days" required min="1" max="5"/>
+                <input type="number" asp-for="DurationInDays" class="form-control" id="duration-in-days" required min="1" max="5" />
                 @*NO NEED FOR THE BELOW TAG BECAUSE THE ACTION IS INVOKED USING AJAX... WE USED HTML ATTRIBUTES INSTEAD
-                <span asp-validation-for="DurationInDays" class="text-danger"></span>*@
+                    <span asp-validation-for="DurationInDays" class="text-danger"></span>*@
             </div>
             <div class="form-group">
                 <label asp-for="HasNeutral" class="control-label"></label>
@@ -74,9 +74,12 @@
     </div>
     <table class="table" id="voters-table">
     </table>
-    
+
 </div>
 <partial name="_jQuery" />
 @*<partial name="_jQueryValidationScripts"/>*@
 <partial name="_datatablesScript" />
 <partial name="_createElectionScript" />
+
+<partial name="_redModalStyle" />
+<partial name="_redModal" />
