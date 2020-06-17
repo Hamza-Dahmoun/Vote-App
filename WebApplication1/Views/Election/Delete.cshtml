@@ -39,32 +39,38 @@
     <partial name="_jQuery" />
     <form asp-action="DeleteElection">
         <input type="hidden" asp-for="Id" />
-        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal">
+        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#redModal">
             Delete
         </button>
-        @*<input type="submit" value="Delete" class="btn btn-danger" />*@ |
+        |
         <a asp-action="Index">Back to List</a>
 
-        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
+
+        <partial name="_redModalStyle" />
+
+        <div class="modal fade text-danger" id="redModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-confirm" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">Warning!</h5>
+                        <div class="icon-box">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </div>
+
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        Removing an Election from the system will remove all its Votes and Candidates as well!
+                        <h4 class="modal-title" id="exampleModalLongTitle">Warning!</h4>
+                        <p>Removing an Election from the system will remove all its Votes and Candidates as well!</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         <button type="submit" value="Delete" class="btn btn-danger">Delete Election</button>
                     </div>
                 </div>
             </div>
         </div>
     </form>
+
+    
 </div>
-
-
