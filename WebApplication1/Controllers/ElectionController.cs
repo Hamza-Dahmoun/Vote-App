@@ -177,12 +177,17 @@ namespace WebApplication1.Controllers
                     if (election.StartDate <= DateTime.Now)
                     {
                         //so it is not a future election
-                        return BadRequest();
+                        //lets I create an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
+                        HttpContext.Response.StatusCode = 500;
+                        return Json(new { Message = "A New Election should take place in a future date." });                        
                     }
 
                     if (ElectionUtilities.getElectionsInSamePeriod(_electionRepository, election.StartDate, election.DurationInDays)>0)
                     {//so there is other existing elections which the period overlap with this new election's period
-                        return BadRequest();
+
+                        //lets I create an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
+                        HttpContext.Response.StatusCode = 500;
+                        return Json(new { Message = "There is an existing Election during the same period." });
                     }
 
 
@@ -225,8 +230,11 @@ namespace WebApplication1.Controllers
                 }
                 else
                 {
-                    return BadRequest();
-                    //return Json(new { ErrorMessage = "Error" });
+                    //Model is not valid
+
+                    //lets I create an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
+                    HttpContext.Response.StatusCode = 500;
+                    return Json(new { Message = "Data not valid, please check again." });
                 }
                 
             }
