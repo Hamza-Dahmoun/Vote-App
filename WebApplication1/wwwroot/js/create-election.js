@@ -201,14 +201,16 @@ function prepareVotersjQueryDatatable(electionId) {
 function selectNewCandidate() {
     //this function add the selected voter from jquery datatable to the db as a candidate related to the new election, and then reload the voters datatable
 
+    let clickedButton = event.target; 
+
     //first of all lets display the spinner and hide the button    
-    event.target.style.display = "none";
-    event.target.parentElement.querySelector(".spinner-border").style.display = "block";
+    clickedButton.style.display = "none";
+    clickedButton.parentElement.querySelector(".spinner-border").style.display = "block";
 
     //now lets store full name of the selected candidate in a variable, we'll use it if the voter has been added to candidate in db successfully
-    let candidateFullName = event.target.getAttribute("voterfullname");
+    let candidateFullName = clickedButton.getAttribute("voterfullname");
 
-    let voterid = event.target.getAttribute("voterid"); 
+    let voterid = clickedButton.getAttribute("voterid"); 
 
     //Send the JSON data of voterId and electionId to Controller using AJAX.
     $.ajax({
@@ -217,8 +219,16 @@ function selectNewCandidate() {
         data: JSON.stringify({ electionId: electionId, voterId: voterid }),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        error: function () {
-            //alert("error");
+        error: function (response) {
+            //which I sent after creating an Error HttpContext.Response.StatusCode = 500 ...see the Catch block of code in the backend
+            //to know why I used 'response.responseJSON.message' to get the error text just log the response object and check its properties
+
+            //so there is a server error, lets display the error msg
+            clickedButton.parentElement.querySelector(".spinner-border").style.display = "none";
+            clickedButton.style.display = "block";
+            document.getElementById("redModal").querySelector("h4").innerText = "Error!";
+            document.getElementById("redModal").querySelector("p").innerText = response.responseJSON.message;
+            $('#redModal').modal('show');
 
         },
         success: function (response) {

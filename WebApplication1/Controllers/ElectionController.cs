@@ -391,8 +391,6 @@ namespace WebApplication1.Controllers
         {
             try
             {
-                int i = 0;
-                int j = 5 / i;
                 if (mydata.electionId==null || mydata.voterId==null)
                 {
                     return BadRequest();
