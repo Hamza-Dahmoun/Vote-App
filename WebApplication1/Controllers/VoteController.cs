@@ -70,8 +70,6 @@ namespace WebApplication1.Controllers
             int exceptionDifferentiator = 0;
             try
             {
-                int i = 0;
-                int j = 5 / i;
                 if (candidateIdList == null || candidateIdList.Count <= 0)
                 {
                     return BadRequest();
@@ -102,7 +100,7 @@ namespace WebApplication1.Controllers
                 }
 
                 exceptionDifferentiator = 1;
-
+                
                 //-------IMPORTANT: THIS ACTION IS ACCESSIBLE USING AN AJAX CALL, IN THIS CASE, TRYING TO REDIRECTTOACTION FROM
                 //C# CODE WILL EXECUTED THE ACTION BUT THE BROWSER WILL IGNORE REDIRECTING, USER WILL STAY IN THE SAME PAGE
                 //BROWSERS IGNORE THE REDIRECT BECUZ IT ASSUME JS CODE WHICH DID THE AJAX CALL WILL BE IN CHARGE OF THE SUCCESS

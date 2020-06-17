@@ -123,8 +123,10 @@ function sendCandidates() {
         data: JSON.stringify(selectedIdArray),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        error: function () {
-            console.log("error");
+        error: function (response) {
+            document.getElementById("redModal").querySelector("h4").innerText = "Error!";
+            document.getElementById("redModal").querySelector("p").innerText = response.responseJSON.message;
+            $('#redModal').modal('show');
         },
         success: function (response) {
             console.log(response);
