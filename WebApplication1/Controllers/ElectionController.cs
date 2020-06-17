@@ -458,6 +458,8 @@ namespace WebApplication1.Controllers
             //this function removes a candidate from the db using its electionID and its voterBeing ID
             try
             {
+                int i = 0;
+                int j = 5 / i;
                 if (mydata.electionId == null || mydata.voterId == null)
                 {
                     return BadRequest();
@@ -471,7 +473,9 @@ namespace WebApplication1.Controllers
             }
             catch(Exception E)
             {
-                return BadRequest();
+                //lets create and return an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
+                HttpContext.Response.StatusCode = 500;
+                return Json(new { Message = E.Message });
             }
         }
 
