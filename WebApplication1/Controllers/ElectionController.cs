@@ -232,11 +232,12 @@ namespace WebApplication1.Controllers
             }
             catch(Exception E)
             {
-                return BadRequest();
-                //return Json(new { ErrorMessage = "Error" });
+                HttpContext.Response.StatusCode = 500;
+                return Json(new { Message = E.Message });
+                //In above code I created an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
             }
 
-            
+
         }
         [HttpPost]
         //If I leave [FromBody] next to the parameter the request will not even access this method, bcuz jquery already has passed parameters

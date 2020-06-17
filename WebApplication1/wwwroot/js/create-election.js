@@ -70,7 +70,7 @@ not the form.
             data: JSON.stringify(newElection),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            error: function () {
+            error: function (response) {
                 //alert("error");
                 document.getElementById("send-election-spinner").style.display = "none";
                 document.getElementById("send-election-button").style.display = "block";
