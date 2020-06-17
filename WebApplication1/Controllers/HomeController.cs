@@ -104,8 +104,6 @@ namespace WebApplication1.Controllers
             
             try
             {
-                int j = 0;
-                int i = j / 0;
                 if (electionId == null || electionId == Guid.Empty)
                 {
                     HttpContext.Response.StatusCode = 500;

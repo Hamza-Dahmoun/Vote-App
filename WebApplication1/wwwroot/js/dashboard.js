@@ -453,15 +453,11 @@ function getElectionResults(event) {
             //to know why I used 'response.responseJSON.message' to get the error text just log the response object and check its properties
 
             //so there is a server error, lets display the error msg
-            /*
-            let errorParag = document.createElement("p");
-            let responseMsg = document.createElement("div");
-            responseMsg.className = "alert alert-danger";
-            errorParag.innerHTML = "<strong>Error!</strong> " + response.responseJSON.message;
-            responseMsg.appendChild(errorParag);
-            document.getElementById("current-election-area").appendChild(responseMsg);
-            */
-            alert("Error! " + response.responseJSON.message);
+            
+            //alert("Error! " + response.responseJSON.message);
+            document.getElementById("redModal").querySelector("h4").innerText = "Error!";
+            document.getElementById("redModal").querySelector("p").innerText = response.responseJSON.message;
+            $('#redModal').modal('show');
             //now lets hide the spinner
             hideElement(clickedButton.parentElement.querySelector(".spinner-border"));
             displayElement(clickedButton);
