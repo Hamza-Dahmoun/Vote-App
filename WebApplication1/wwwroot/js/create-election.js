@@ -274,10 +274,10 @@ function displayAddedCandidate(candidateFullName, voterid) {
 }
 function removeCandidateFromElection() {
     //this function removes a candidate from the newly created election (from db and from ui)
-
+    let clickedButton = event.target;
     //first of all lets display the spinner and hide the button    
-    event.target.style.display = "none";
-    event.target.parentElement.querySelector(".spinner-border").style.display = "block";
+    clickedButton.style.display = "none";
+    clickedButton.parentElement.querySelector(".spinner-border").style.display = "block";
 
     //console.log("I'm going to remove the candiate from the election");
     let removeButton = event.target;
@@ -291,8 +291,16 @@ function removeCandidateFromElection() {
         data: JSON.stringify({ electionId: electionId, voterId: voterid }),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        error: function () {
-            //alert("error");
+        error: function (response) {
+            //which I sent after creating an Error HttpContext.Response.StatusCode = 500 ...see the Catch block of code in the backend
+            //to know why I used 'response.responseJSON.message' to get the error text just log the response object and check its properties
+
+            //so there is a server error, lets display the error msg
+            clickedButton.parentElement.querySelector(".spinner-border").style.display = "none";
+            clickedButton.style.display = "block";
+            document.getElementById("redModal").querySelector("h4").innerText = "Error!";
+            document.getElementById("redModal").querySelector("p").innerText = response.responseJSON.message;
+            $('#redModal').modal('show');
         },
         success: function (response) {
             //console.log(response);
