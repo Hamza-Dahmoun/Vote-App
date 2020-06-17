@@ -391,6 +391,8 @@ namespace WebApplication1.Controllers
         {
             try
             {
+                int i = 0;
+                int j = 5 / i;
                 if (mydata.electionId==null || mydata.voterId==null)
                 {
                     return BadRequest();
@@ -411,7 +413,9 @@ namespace WebApplication1.Controllers
             }
             catch (Exception E)
             {
-                return BadRequest();
+                //lets create and return an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
+                HttpContext.Response.StatusCode = 500;
+                return Json(new { Message = E.Message });
             }
         }
         //this is a web api called when user selects candidates from voters list to the election he created or he is editing
