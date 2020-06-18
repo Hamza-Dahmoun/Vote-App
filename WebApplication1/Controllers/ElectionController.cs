@@ -265,6 +265,7 @@ namespace WebApplication1.Controllers
 
             try
             {
+
                 //lets first get the variables of the request (of the form), and then build the linq query accordingly
                 //above each variable I wrote the official doc of jQuery
 
