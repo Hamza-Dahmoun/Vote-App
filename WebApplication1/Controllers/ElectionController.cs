@@ -433,7 +433,9 @@ namespace WebApplication1.Controllers
             {
                 if (mydata.electionId == null || mydata.voterId == null)
                 {
-                    return BadRequest();
+                    //lets create and return an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
+                    HttpContext.Response.StatusCode = 500;
+                    return Json(new { Message = "Election or Voter not found." });
                 }
                 Voter voter = _voterRepository.GetById(mydata.voterId);
                 Candidate newCandidate = new Candidate
@@ -453,7 +455,9 @@ namespace WebApplication1.Controllers
             }
             catch (Exception E)
             {
-                return BadRequest();
+                //lets create and return an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
+                HttpContext.Response.StatusCode = 500;
+                return Json(new { Message = E.Message });
             }
         }
 
