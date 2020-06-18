@@ -189,7 +189,13 @@ namespace WebApplication1.Controllers
                         HttpContext.Response.StatusCode = 500;
                         return Json(new { Message = "There is an existing Election during the same period." });
                     }
-
+                    if (election.DurationInDays < 0 || election.DurationInDays > 5)
+                    {
+                        //so the number of days is invalid
+                        //lets create an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
+                        HttpContext.Response.StatusCode = 500;
+                        return Json(new { Message = "The duration of the Election should one to five days." });
+                    }
 
                     election.Id = Guid.NewGuid();
                     //if election has a neutral opinion then we should add it to the db
