@@ -664,11 +664,16 @@ namespace WebApplication1.Controllers
                     if (DateTime.Parse(election.StartDate) <= DateTime.Now)
                     {
                         //so it is not a future election
-                        return BadRequest();
+                        //lets I create an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
+                        HttpContext.Response.StatusCode = 500;
+                        return Json(new { Message = "A New Election should take place in a future date." });
                     }
                     if (ElectionUtilities.getElectionsInSamePeriod(_electionRepository, DateTime.Parse(election.StartDate), int.Parse(election.DurationInDays)) > 1)
                     {//so in addtion to the election instance to edit, there are other elections in the db from the same period
-                        return BadRequest();
+
+                        //lets I create an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
+                        HttpContext.Response.StatusCode = 500;
+                        return Json(new { Message = "There is an existing Election during the same period." });
                     }
 
                     //this variable is going to be used when checking if user updated hasNeutral opinion
@@ -720,13 +725,19 @@ namespace WebApplication1.Controllers
                 }
                 else
                 {
-                    return BadRequest();
+                    //Model is not valid
+
+                    //lets I create an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
+                    HttpContext.Response.StatusCode = 500;
+                    return Json(new { Message = "Data not valid, please check again." });
                 }
             }
             catch(Exception E)
             {
-                return BadRequest();
-            }            
+                HttpContext.Response.StatusCode = 500;
+                return Json(new { Message = E.Message });
+                //In above code I created an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
+            }
         }
 
         // GET: Election/Delete/5
