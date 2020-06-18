@@ -272,8 +272,17 @@ function removeCandidateFromElection() {
         data: JSON.stringify(candidateId),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        error: function () {
-            alert("error");
+        error: function (response) {
+            //which I sent after creating an Error HttpContext.Response.StatusCode = 500 ...see the Catch block of code in the backend
+            //to know why I used 'response.responseJSON.message' to get the error text just log the response object and check its properties
+
+            //so there is a server error, lets display the error msg
+            removeButton.parentElement.querySelector(".spinner-border").style.display = "none";
+            removeButton.style.display = "block";
+            document.getElementById("redModal").querySelector("h4").innerText = "Error!";
+            document.getElementById("redModal").querySelector("p").innerText = response.responseJSON.message;
+            $('#redModal').modal('show');
+
         },
         success: function (response) {
             //'response' represents the object returned from the api
