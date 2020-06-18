@@ -320,8 +320,17 @@ function selectNewCandidate() {
         data: JSON.stringify({ electionId: electionId, voterId: voterId }),//JSON.stringify(newElection),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        error: function () {
-            //alert("error");
+        error: function (response) {
+            //which I sent after creating an Error HttpContext.Response.StatusCode = 500 ...see the Catch block of code in the backend
+            //to know why I used 'response.responseJSON.message' to get the error text just log the response object and check its properties
+
+            //so there is a server error, lets display the error msg
+            selectCandidateButton.parentElement.querySelector(".spinner-border").style.display = "none";
+            selectCandidateButton.style.display = "block";
+            document.getElementById("redModal").querySelector("h4").innerText = "Error!";
+            document.getElementById("redModal").querySelector("p").innerText = response.responseJSON.message;
+            $('#redModal').modal('show');
+
         },
         success: function (response) {
             //In here the response is the new candidate id
