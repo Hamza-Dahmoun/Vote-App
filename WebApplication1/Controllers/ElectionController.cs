@@ -675,7 +675,13 @@ namespace WebApplication1.Controllers
                         HttpContext.Response.StatusCode = 500;
                         return Json(new { Message = "There is an existing Election during the same period." });
                     }
-
+                    if (int.Parse(election.DurationInDays) <0 || int.Parse(election.DurationInDays) > 5)
+                    {
+                        //so the number of days is invalid
+                        //lets create an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
+                        HttpContext.Response.StatusCode = 500;
+                        return Json(new { Message = "The duration of the Election should one to five days." });
+                    }
                     //this variable is going to be used when checking if user updated hasNeutral opinion
                     bool oldHasNeutral = _electionRepository.GetById(Guid.Parse(election.Id)).HasNeutral;
 

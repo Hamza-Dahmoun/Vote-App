@@ -55,10 +55,22 @@ not the form.
             data: JSON.stringify({ Id: electionId, Name: electionName, StartDate: electionStartDate, DurationInDays: electionDuration, HasNeutral: electionHasNeutral }),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            error: function () {
-                console.log("error");
+            error: function (response) {
+                //console.log("error");
+                //document.getElementById("send-election-spinner").style.display = "none";
+                //document.getElementById("send-election-button").style.display = "block";
+                //in here 'response' represents the following object {success: false, message ='...text here...'}
+                //which I sent after creating an Error HttpContext.Response.StatusCode = 500 ...see the Catch block of code in the backend
+                //to know why I used 'response.responseJSON.message' to get the error text just log the response object and check its properties
+
+                //so there is a server error, lets display the error msg
+
+                document.getElementById("redModal").querySelector("h4").innerText = "Error!";
+                document.getElementById("redModal").querySelector("p").innerText = response.responseJSON.message;
+                $('#redModal').modal('show');
+
                 hideSpinner();
-                displayResponseMsg(false);
+                //displayResponseMsg(false);
             },
             success: function (response) {
                 console.log("success");

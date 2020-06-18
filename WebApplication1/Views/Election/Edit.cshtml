@@ -15,42 +15,42 @@
 <div class="row">
     <div class="col-md-4">
         <form id="step-one-form">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <!--THIS IS NOT GONNA BE DISPLAYED FOR USER BUT IS MANDATORY IN THE FORM SO THAT THE OBJECT SENT INTO "EDITVOTER" ACTION OF VOTERCONTROLLER WILL HOLD CORRECT DATA-->
-        <input asp-for="Id" type="hidden" id="election-holder-id" />
-        <div class="form-group">
-            <label asp-for="Name" class="control-label"></label>
-            <input asp-for="Name" class="form-control changeable" id="election-name" required/>
-            @*NO NEED FOR THE BELOW TAG BECAUSE THE ACTION IS INVOKED USING AJAX... WE USED HTML ATTRIBUTES INSTEAD
-            <span asp-validation-for="Name" class="text-danger"></span>*@
-        </div>
-        <div class="form-group">
-            <label asp-for="StartDate" class="control-label"></label>
-            <input type="date" asp-for="StartDate" class="form-control changeable" id="start-date-election" required/>
-            @*NO NEED FOR THE BELOW TAG BECAUSE THE ACTION IS INVOKED USING AJAX... WE USED HTML ATTRIBUTES INSTEAD
-            <span asp-validation-for="StartDate" class="text-danger"></span>*@
-        </div>
-        <div class="form-group">
-            <label asp-for="DurationInDays" class="control-label"></label>
-            <input type="number" asp-for="DurationInDays" class="form-control changeable" id="duration-in-days" min="1" max="5" required/>
-            @*NO NEED FOR THE BELOW TAG BECAUSE THE ACTION IS INVOKED USING AJAX... WE USED HTML ATTRIBUTES INSTEAD
-            <span asp-validation-for="DurationInDays" class="text-danger"></span>*@
-        </div>
-        <div class="form-group">
-            <label asp-for="HasNeutral" class="control-label"></label>
-            <input type="checkbox" asp-for="HasNeutral" class="form-control changeable" id="has-neutral" />
-            @*NO NEED FOR THE BELOW TAG BECAUSE THE ACTION IS INVOKED USING AJAX... WE USED HTML ATTRIBUTES INSTEAD
-            <span asp-validation-for="HasNeutral" class="text-danger"></span>*@
-        </div>
-        <div class="form-group">
-            <input type="submit" value="Save" class="btn btn-primary" id="submit-updated-election" />
-        </div>
-        <div class="spinner-border text-primary" id="update-candidate-spinner">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <!--THIS IS NOT GONNA BE DISPLAYED FOR USER BUT IS MANDATORY IN THE FORM SO THAT THE OBJECT SENT INTO "EDITVOTER" ACTION OF VOTERCONTROLLER WILL HOLD CORRECT DATA-->
+            <input asp-for="Id" type="hidden" id="election-holder-id" />
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control changeable" id="election-name" required />
+                @*NO NEED FOR THE BELOW TAG BECAUSE THE ACTION IS INVOKED USING AJAX... WE USED HTML ATTRIBUTES INSTEAD
+                    <span asp-validation-for="Name" class="text-danger"></span>*@
+            </div>
+            <div class="form-group">
+                <label asp-for="StartDate" class="control-label"></label>
+                <input type="date" asp-for="StartDate" class="form-control changeable" id="start-date-election" required />
+                @*NO NEED FOR THE BELOW TAG BECAUSE THE ACTION IS INVOKED USING AJAX... WE USED HTML ATTRIBUTES INSTEAD
+                    <span asp-validation-for="StartDate" class="text-danger"></span>*@
+            </div>
+            <div class="form-group">
+                <label asp-for="DurationInDays" class="control-label"></label>
+                <input type="number" asp-for="DurationInDays" class="form-control changeable" id="duration-in-days" min="1" max="5" required />
+                @*NO NEED FOR THE BELOW TAG BECAUSE THE ACTION IS INVOKED USING AJAX... WE USED HTML ATTRIBUTES INSTEAD
+                    <span asp-validation-for="DurationInDays" class="text-danger"></span>*@
+            </div>
+            <div class="form-group">
+                <label asp-for="HasNeutral" class="control-label"></label>
+                <input type="checkbox" asp-for="HasNeutral" class="form-control changeable" id="has-neutral" />
+                @*NO NEED FOR THE BELOW TAG BECAUSE THE ACTION IS INVOKED USING AJAX... WE USED HTML ATTRIBUTES INSTEAD
+                    <span asp-validation-for="HasNeutral" class="text-danger"></span>*@
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" id="submit-updated-election" />
+            </div>
+            <div class="spinner-border text-primary" id="update-candidate-spinner">
 
-        </div>
-        <div id="response-msg">
-            <p></p>
-        </div>
+            </div>
+            <div id="response-msg">
+                <p></p>
+            </div>
         </form>
     </div>
 </div>
@@ -65,15 +65,18 @@
     <p id="selected-candidates-title">Selected Candidates</p>
     <div id="candidates-container">
         <div class="spinner-border text-danger" id="candidates-spinner"></div>
-        
+
     </div>
 </div>
 
-        <table class="table" id="voters-table">
-        </table>
+<table class="table" id="voters-table">
+</table>
 
 
 
 <partial name="_jQuery" />
 <partial name="_datatablesScript" />
 <partial name="_editElectionScript" />
+
+<partial name="_redModalStyle" />
+<partial name="_redModal" />
