@@ -500,7 +500,9 @@ namespace WebApplication1.Controllers
             {
                 if (String.IsNullOrEmpty(candidateId))
                 {
-                    return BadRequest();
+                    //lets create and return an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
+                    HttpContext.Response.StatusCode = 500;
+                    return Json(new { Message = "Candidate Id cannot be Null." });
                 }
                 Candidate myCandidate = _candidateRepository.GetById(Guid.Parse(candidateId)) ;
                 _candidateRepository.Delete(myCandidate.Id);
@@ -508,7 +510,9 @@ namespace WebApplication1.Controllers
             }
             catch (Exception E)
             {
-                return BadRequest();
+                //lets create and return an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
+                HttpContext.Response.StatusCode = 500;
+                return Json(new { Message = E.Message });
             }
         }
 
