@@ -100,8 +100,7 @@ namespace WebApplication1
         {
             if (env.IsDevelopment())
             {
-                app.UseExceptionHandler("/Home/Error");
-                //app.UseDeveloperExceptionPage();
+                app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
             }
             else

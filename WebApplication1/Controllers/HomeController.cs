@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Caching.Memory;
-
+using Microsoft.AspNetCore.Diagnostics;
 
 namespace WebApplication1.Controllers
 {
@@ -135,7 +135,15 @@ namespace WebApplication1.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            //create the ErrorViewModel instance
+            ErrorViewModel error = new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier };
+            //get the current Exception
+            var exception = HttpContext.Features.Get<IExceptionHandlerFeature>();
+            //fill the exception msg into the errorText field of ErrorViewModel
+            error.ErrorText = exception.Error.Message;
+            //return the errorViewModel instance to Error.cshtml view
+            return View(error);
+
         }
 
 
