@@ -98,8 +98,15 @@ namespace WebApplication1
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            //the below middleware redirect the user to the welcome page whatever the action he's trying to do
+            //the below middleware is one of the diagnosis middlewares and it redirect the user to the welcome page whatever
+            //the action he's trying to do
             //app.UseWelcomePage();
+
+
+            //the below middleware is one of the diagnosis middlewares and it displays the below text with the http response code as a plain text            
+            app.UseStatusCodePages("text/plain", "Status Code Page, status code:{0}");
+            //the placeholder {0} reresents the http response status code
+
             
             if (env.IsDevelopment())
             {
