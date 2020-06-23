@@ -18,6 +18,12 @@ namespace WebApplication1
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+            //now lets configure logging by clearing providers and add Console
+            .ConfigureLogging(o =>
+            {
+                o.ClearProviders();
+                o.AddConsole();
+            })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
