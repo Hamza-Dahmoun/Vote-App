@@ -49,16 +49,23 @@ namespace WebApplication1.Controllers
 
         public IActionResult Index()
         {
+            _logger.LogInformation("VoteController/Index() action is called");
             try
             {
+                _logger.LogInformation("Calling ElectionUtilities.getCurrentElection() method");
                 //this action returns a view containing all candidates of the current election for the user to vote on five of them maximum
                 Election election = ElectionUtilities.getCurrentElection(_electionRepository);// _electionRepository.GetById(CurrentElectionId);
+                _logger.LogInformation("Calling CandidateUtilities.GetCandidate_byElection() method");
                 var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, election);
                 //return View(Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, _candidateRepository.GetAll()));
-                return View(Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, candidates));
+                _logger.LogInformation("Calling Utilities.convertCandidateList_toCandidateViewModelList() method");
+                List<CandidateViewModel> cvmList = Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, candidates);
+                _logger.LogInformation("Returning a list of CandidateViewModel to Index view");
+                return View(cvmList);
             }
             catch(Exception E)
             {
+                _logger.LogError("Exception, " + E.Message);
                 return BadRequest(E.Message);
             }            
         }
@@ -70,12 +77,14 @@ namespace WebApplication1.Controllers
 
             //it can return two sort of Exception, one when voting, the second when retrieving results of the election
 
+            _logger.LogInformation("VoteController/ValidateVote() method is called");
 
             int exceptionDifferentiator = 0;
             try
             {
                 if (candidateIdList == null || candidateIdList.Count <= 0)
                 {
+                    _logger.LogError("Cannot validate for empty list of candidates");
                     return BadRequest();
                 }
                 //lets first get the concerned election
@@ -83,14 +92,16 @@ namespace WebApplication1.Controllers
                 Election election = _electionRepository.GetById(firstOne.Election.Id);
                 if (election == null)
                 {
+                    _logger.LogError("Cannot validate for null election");
                     return BadRequest();
                 }
 
                 //lets get the voter instance of the current user, so that we use its id with his votes
                 var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+                _logger.LogInformation("Calling VoterUtilities.getVoterByUserId() method");
                 Voter currentVoter = VoterUtilities.getVoterByUserId(Guid.Parse(currentUser.Id), _voterRepository);
 
-
+                _logger.LogInformation("Going to add Vote instance to the DB foreach Candidate");
                 Vote v = new Vote();
                 //lets add 'Vote' objects to the db
                 foreach (var candidateId in candidateIdList)
@@ -102,9 +113,9 @@ namespace WebApplication1.Controllers
                     v.Election = election;
                     _voteRepository.Add(v);
                 }
-
+                _logger.LogInformation("Added Vote instance to the DB foreach Candidate");
                 exceptionDifferentiator = 1;
-                
+
                 //-------IMPORTANT: THIS ACTION IS ACCESSIBLE USING AN AJAX CALL, IN THIS CASE, TRYING TO REDIRECTTOACTION FROM
                 //C# CODE WILL EXECUTED THE ACTION BUT THE BROWSER WILL IGNORE REDIRECTING, USER WILL STAY IN THE SAME PAGE
                 //BROWSERS IGNORE THE REDIRECT BECUZ IT ASSUME JS CODE WHICH DID THE AJAX CALL WILL BE IN CHARGE OF THE SUCCESS
@@ -116,10 +127,14 @@ namespace WebApplication1.Controllers
                 });*/
 
                 //everything is okey, lets return a list of candidates with votes counter ordered so that the winner is the first
+                _logger.LogInformation("Calling CandidateUtilities.GetCandidate_byElection() method");
                 var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, election);
+                _logger.LogInformation("Calling Utilities.convertCandidateList_toCandidateViewModelList() method");
                 List<CandidateViewModel> candidatesViewModel = Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, candidates);
                 //lets serialize the list of candidatesviewmodel as json object
+                _logger.LogInformation("Going to serialise the list of CandidateViewModels");
                 var json = JsonConvert.SerializeObject(candidatesViewModel.OrderByDescending(c => c.VotesCount));
+                _logger.LogInformation("Returning the list of CadidateViewModel as a json");
                 return Ok(json);
             }
             catch(Exception E)
@@ -128,6 +143,7 @@ namespace WebApplication1.Controllers
                 if(exceptionDifferentiator == 0)
                 {
                     //so the exception happened when trying to validate the votes
+                    _logger.LogError("Exception When Validating Votes! " + E.Message);
                     HttpContext.Response.StatusCode = 500;
                     return Json(new { Message = "Error When Validating Votes! " +  E.Message });
                     //In above code I created an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
@@ -135,6 +151,7 @@ namespace WebApplication1.Controllers
                 else
                 {
                     //so the exception happened when trying to get the results of the election
+                    _logger.LogError("Exception When Trying to Get The Results! " + E.Message);
                     HttpContext.Response.StatusCode = 500;
                     return Json(new { Message = "Error When Trying to Get The Results! " + E.Message });
                     //In above code I created an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
