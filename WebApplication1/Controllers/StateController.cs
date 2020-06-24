@@ -95,6 +95,7 @@ namespace WebApplication1.Controllers
                     return RedirectToAction(nameof(Index));
                 }
                 //so the model isn't valid, lets keep the user in the same view so that he could read the validation msgs
+                _logger.LogInformation("Model is not valid");
                 return View(state);
             }
             catch (Exception E)

@@ -52,13 +52,18 @@ namespace WebApplication1.Controllers
         
         public IActionResult Index()
         {
+            _logger.LogInformation("Voter/Index() action is called");
             try
             {
+                _logger.LogInformation("Calling VoterRepository.GetAll() method");
+                List<Voter> voters = _voterRepository.GetAll().ToList();
                 //return View(_db.Voter.ToList());
-                return View(_voterRepository.GetAll());
+                _logger.LogInformation("Returning a list of voters to Index view");
+                return View(voters);
             }
             catch(Exception E)
             {
+                _logger.LogError("Exception, " + E.Message);
                 //this is msg is going to be displayed as text in blank page
                 return BadRequest(E.Message);
             }
@@ -66,12 +71,19 @@ namespace WebApplication1.Controllers
 
         public IActionResult Details(Guid id)
         {
+            _logger.LogInformation("Voter/Details() action is called");
             try
             {
-                return View(Utilities.convertVoter_toPersonViewModel(_voterRepository.GetById(id)));
+                _logger.LogInformation("Calling VoterRepository.GetById() method");
+                Voter v = _voterRepository.GetById(id);
+                _logger.LogInformation("Calling Utilities.convertVoter_toPersonViewModel() method");
+                PersonViewModel p = Utilities.convertVoter_toPersonViewModel(v);
+                _logger.LogInformation("Returning a PersonViewModel to the Details view");
+                return View(p);
             }
             catch (Exception E)
             {
+                _logger.LogError("Exception, " + E.Message);
                 //this is msg is going to be displayed as text in blank page
                 return BadRequest(E.Message);
             }            
@@ -99,11 +111,14 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(VoterStateViewModel vs)
         {
+            _logger.LogInformation("Voter/Create() action is called");
             try
             {
                 if (ModelState.IsValid)
                 {
+                    _logger.LogInformation("Model is valid");
                     //this method receives a VoterStateViewModel object, and based on it, it creates a voter object and stores it in the DB
+                    _logger.LogInformation("Creating a new Voter instance");
                     Voter v = new Voter
                     {
                         Id = Guid.NewGuid(),
@@ -115,17 +130,29 @@ namespace WebApplication1.Controllers
                     //now lets add this new voter as a new user to the IdentityDB using UserManager<IdentityUser> service
                     //we'll set its usernam/email, and set 'Pa$$w0rd' as the password
                     string username = v.FirstName.ToLower() + "." + v.LastName.ToLower();
+                    _logger.LogInformation("Creating a new IdentityUser instance");
                     var user = new IdentityUser { UserName = username };
                     //CreateAsync() is an asynchronous method, we have to mark this method with 'async task'
+                    _logger.LogInformation("Storing the new IdentityUser instance in IdentityDB");
                     var result = await _userManager.CreateAsync(user, "Pa$$w0rd");//this password will be automatically hashed
+                    
                     if (result.Succeeded)
                     {
+                        _logger.LogInformation("The new IdentityUser instance stored successfully in IdentityDB");
+
+                        _logger.LogInformation("Adding 'PreVoter' role to the new IdentityUser");
                         var result1 = await _userManager.AddToRoleAsync(user, "PreVoter");
+                        
                         if (result1.Succeeded)
                         {
+                            _logger.LogInformation("'PreVoter' role to the new IdentityUser is added successfully");
+
                             //the user has been stored successully lets insert now the new voter
                             v.UserId = Guid.Parse(user.Id);
+                            _logger.LogInformation("Adding the new voter to the DB");
                             _voterRepository.Add(v);
+                            _logger.LogInformation("The new voter is added to the DB successfully");
+                            _logger.LogInformation("Redirecting to the Voter Index view");
                             return RedirectToAction(nameof(Index));
                         }
                     }
@@ -133,10 +160,12 @@ namespace WebApplication1.Controllers
                     //N.B: Is it possible to move the above block of code that is responsible of adding a user
                     //to another file (e.g: UserRepository) so that we seperate concerns?
                 }
+                _logger.LogInformation("Model is not valid");
                 return View();
             }
             catch (Exception E)
             {
+                _logger.LogError("Exception, " + E.Message);
                 //this is msg is going to be displayed as text in blank page
                 return BadRequest(E.Message);
             }            
@@ -145,13 +174,19 @@ namespace WebApplication1.Controllers
 
         public IActionResult Delete(Guid id)
         {
+            _logger.LogInformation("Voter/Delete() action is called");
             try
             {
-                var voter = _voterRepository.GetById(id);
-                return View(Utilities.convertVoter_toPersonViewModel(voter));
+                _logger.LogInformation("Calling VoterRepository.GetById() method");
+                var voter = _voterRepository.GetById(id);                
+                _logger.LogInformation("Calling Utilities.convertVoter_toPersonViewModel() method");
+                PersonViewModel p = Utilities.convertVoter_toPersonViewModel(voter);
+                _logger.LogInformation("Returning PersonViewModel to the view");
+                return View();
             }
             catch (Exception E)
             {
+                _logger.LogError("Exception, " + E.Message);
                 //this is msg is going to be displayed as text in blank page
                 return BadRequest(E.Message);
             }            
@@ -159,44 +194,63 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteVoter(Guid id)
         {//removing a voter means removing all his actions (votes  & identity account)
+            _logger.LogInformation("Voter/DeleteVoter() action is called");
             try
             {
+                _logger.LogInformation("Calling VoterRepository.Delete() method");
                 Voter voter = _voterRepository.GetById(id);
 
                 //1- Remove all this voter's votes
                 //declaring an expression that is special to Vote objects
                 System.Linq.Expressions.Expression<Func<Vote, bool>> expr1 = e => e.Voter == voter;
+                _logger.LogInformation("Calling VoteRepository.GetAllFiltered() method");
                 List<Vote> votesList = _voteRepository.GetAllFiltered(expr1);
+
+                _logger.LogInformation("Going to delete all Vote instances of a Voter");
                 foreach (var vote in votesList)
                 {
                     _voteRepository.Delete(vote.Id);
                 }
+                _logger.LogInformation("Done deleting to delete all Vote instances of a Voter");
 
                 //2- Remove corresponding Candidates objects
                 //declaring an expression that is special to Vote objects
                 System.Linq.Expressions.Expression<Func<Candidate, bool>> expr2 = e => e.VoterBeing == voter;
+                _logger.LogInformation("Going to get all Candidates instances of the Voter");
                 List<Candidate> candidatesList = _candidateRepository.GetAllFiltered(expr2);
+
+                _logger.LogInformation("Going to delete all Candidates instances of the Voter");
                 foreach (var candidate in candidatesList)
                 {
                     _candidateRepository.Delete(candidate.Id);
                 }
+                _logger.LogInformation("Done deleting all Candidates instances of the Voter");
 
                 //3- Delete this voter's account from the Identity Db
                 //lets get the User by his ID
+
+                _logger.LogInformation("Going to get the corresponding IdentityUser of the Voter instance");
                 var voterUserAccount = await _userManager.FindByIdAsync(_voterRepository.GetById(id).UserId.ToString());
+                
                 //DeleteAsync() is an asynchronous method, we have to mark this method with 'async task'
+                _logger.LogInformation("Going to delete the corresponding IdentityUser of the Voter instance");
                 var result = await _userManager.DeleteAsync(voterUserAccount);
                 if (result.Succeeded)
                 {
+                    _logger.LogInformation("done deleting the corresponding IdentityUser of the Voter instance");
+
                     //4- Remove the Voter
+                    _logger.LogInformation("Going to delete the Voter instance");
                     _voterRepository.Delete(id);
+                    _logger.LogInformation("Done deleting the Voter instance");
                 }
 
-
+                _logger.LogInformation("Redirecting to Index view");
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception E)
             {
+                _logger.LogError("Exception, " + E.Message);
                 //this is msg is going to be displayed as text in blank page
                 return BadRequest(E.Message);
             }
@@ -206,11 +260,15 @@ namespace WebApplication1.Controllers
 
         public IActionResult Edit(Guid Id)
         {
+            _logger.LogInformation("Voter/Edit() action is called");
             try
             {
                 //In here we are going to return a view where a voter is displayed with his state but the state is in
                 //a list of states
+                _logger.LogInformation("Calling VoterRepository.GetById() method");
                 var voter = _voterRepository.GetById(Id);
+
+                _logger.LogInformation("Creating a VoterStateViewModel for the Voter instance");
                 VoterStateViewModel voterstate = new VoterStateViewModel
                 {
                     Id = voter.Id,
@@ -223,10 +281,13 @@ namespace WebApplication1.Controllers
                 {
                     voterstate.StateID = voter.State.Id;
                 }
+
+                _logger.LogInformation("Returning VoterStateViewModel to the View");
                 return View(voterstate);
             }
             catch (Exception E)
             {
+                _logger.LogError("Exception, " + E.Message);
                 //this is msg is going to be displayed as text in blank page
                 return BadRequest(E.Message);
             }            
@@ -234,15 +295,18 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public IActionResult Edit(VoterStateViewModel voterstate)
         {
+            _logger.LogInformation("Voter/Edit() action is called");
             try
             {
                 if (!ModelState.IsValid)
                 {
+                    _logger.LogError("Model is not valid");
                     if (voterstate.States == null)
                     {
                         //in caase the object received doesn't have a list of states
                         voterstate.States = _stateRepository.GetAll();
                     }
+                    _logger.LogInformation("Returning to the view to display validation messages");
                     return View(voterstate);
                 }
                 Voter v = new Voter
@@ -252,11 +316,16 @@ namespace WebApplication1.Controllers
                     LastName = voterstate.LastName,
                     State = _stateRepository.GetById(voterstate.StateID)
                 };
+
+                _logger.LogInformation("Calling VoterRepository.Edit() method");
                 _voterRepository.Edit(voterstate.Id, v);
+
+                _logger.LogInformation("Redirecting to Index action");
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception E)
             {
+                _logger.LogError("Exception, " + E.Message);
                 //this is msg is going to be displayed as text in blank page
                 return BadRequest(E.Message);
             }            
@@ -274,7 +343,7 @@ namespace WebApplication1.Controllers
             //First, we'll try to read the variables sent from the jQuery request, and then, based on these variables' values we'll query
             //the db
 
-
+            _logger.LogInformation("Voter/Datatable() method is called");
             try
             {
                 //lets first get the variables of the request (of the form), and then build the linq query accordingly
@@ -347,6 +416,7 @@ namespace WebApplication1.Controllers
                 //now lets look for a value in FirstName/LastName/StateName if user asked to
                 if (!string.IsNullOrEmpty(searchValue))
                 {
+                    _logger.LogInformation("Going to query the DB based on 'searchValue' in VoterRepository.GetAllFilteredPaged()");
                     //declaring an expression that is special to Voter objects
                     System.Linq.Expressions.Expression<Func<Voter, bool>> expr =
                         v => v.FirstName.Contains(searchValue) ||
@@ -356,10 +426,13 @@ namespace WebApplication1.Controllers
                     //lets get the list of voters filtered and paged
                     PagedResult<Voter> pagedResult = _voterRepository.GetAllFilteredPaged(expr, sortColumnName, sortColumnDirection, skip, pageSize);
 
+                    _logger.LogInformation("pagedResult filled by data from DB GetAllFilteredPaged()");
+
                     //lets assign totalRecords the correct value
                     totalRecords = pagedResult.TotalCount;
 
-                    //now lets return json data so that it is understandable by jQuery                
+                    //now lets return json data so that it is understandable by jQuery   
+                    _logger.LogInformation("Going to serialize the response");
                     var json = JsonConvert.SerializeObject(new
                     {
                         draw = draw,
@@ -367,6 +440,7 @@ namespace WebApplication1.Controllers
                         recordsTotal = totalRecords,
                         data = pagedResult.Items
                     });
+                    _logger.LogInformation("Return the response as JSON");
                     return Ok(json);
 
                 }
@@ -375,12 +449,14 @@ namespace WebApplication1.Controllers
                     //so user didn't ask for filtering, he only asked for paging
 
                     //lets get the list of voters paged
+                    _logger.LogInformation("Calling VoterRepository.GetAllPaged() method");
                     PagedResult<Voter> pagedResult = _voterRepository.GetAllPaged(sortColumnName, sortColumnDirection, skip, pageSize);
 
                     //lets assign totalRecords the correct value
                     totalRecords = pagedResult.TotalCount;
 
                     //now lets return json data so that it is understandable by jQuery                
+                    _logger.LogInformation("Going to serialize the response");
                     var json = JsonConvert.SerializeObject(new
                     {
                         draw = draw,
@@ -388,11 +464,13 @@ namespace WebApplication1.Controllers
                         recordsTotal = totalRecords,
                         data = pagedResult.Items
                     });
+                    _logger.LogInformation("Return the response as JSON");
                     return Ok(json);
                 }
             }
-            catch
+            catch(Exception E)
             {
+                _logger.LogError("Exception, " + E.Message);
                 return BadRequest();
             }
         }
@@ -543,26 +621,35 @@ namespace WebApplication1.Controllers
         [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
         public async Task<IActionResult> States(string q)
         {
+            _logger.LogInformation("Voter/States() is called");
             try
             {
                 if (String.IsNullOrEmpty(q))
                 {
+                    _logger.LogError("Parameter is null");
                     return BadRequest();
                 }
 
                 //declaring an expression that is special to State objects according to the search value
                 System.Linq.Expressions.Expression<Func<State, bool>> expr;
                 expr = s => s.Name.StartsWith(q);
+
+                _logger.LogInformation("Calling StateRepository.GetAllFiltered() method");
                 var states = _stateRepository.GetAllFiltered(expr).Select(s => new { text = s.Name, id = s.Id});
                 //now lets return json data
+
+                _logger.LogInformation("Going to  serialize the list of states");
                 var json = JsonConvert.SerializeObject(new
                 {
                     states
                 });
+
+                _logger.LogInformation("Returning list of states as json");
                 return Ok(json);
             }
             catch (Exception E)
             {
+                _logger.LogError("Exception, " + E.Message);
                 return BadRequest();
             }
         }
