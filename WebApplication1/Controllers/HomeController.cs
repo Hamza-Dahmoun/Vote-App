@@ -58,13 +58,15 @@ namespace WebApplication1.Controllers
 
 
         public async Task<IActionResult> Index()
-        {
+        {            
             if (User.IsInRole("Voter") || User.IsInRole("Administrator"))
             {
+                _logger.LogInformation("Going to load the Dashbord");
                 //the user has a voter Role, lets display the dashboard
                 var currentUser = await _userManager.GetUserAsync(HttpContext.User);
 
 
+                _logger.LogInformation("Calling DashboardUtilities.getDashboard() method");
                 //Now lets Get a Cached Dashboard or Create it and Cached it
                 var cachedDashboard = _memoryCache.GetOrCreate(typeof(DashboardViewModel), d =>
                     {
@@ -74,7 +76,7 @@ namespace WebApplication1.Controllers
                 //so the above GetOrCreate() method tries to get a cached dashboard from the memory, and if it doesn't find any it will create
                 //an instance of the dashboard and cach it in memory for Three minutes
 
-
+                _logger.LogInformation("Returning dashboard instance to the view");
                 //DashboardViewModel d = DashboardUtilities.getDashboard(_candidateRepository, _voterRepository, _voteRepository, _electionRepository, currentUser);
                 return View(cachedDashboard);
 
@@ -92,6 +94,7 @@ namespace WebApplication1.Controllers
                 //    He should be redirected to ResetPassword view.
                 //    Once he change his password he will be provided the role 'Voter' 
 
+                _logger.LogInformation("Redirecting User to reset his password before using the application");
                 var user = await _userManager.GetUserAsync(HttpContext.User);
                 var code = await _userManager.GeneratePasswordResetTokenAsync(user);
                 code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
@@ -101,19 +104,22 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public async Task<IActionResult> GetResultsOfElection([FromBody] Guid electionId)
         {
-            
+            _logger.LogInformation("Method Home/GetResultsOfElection() is called");
             try
             {
                 if (electionId == null || electionId == Guid.Empty)
                 {
                     HttpContext.Response.StatusCode = 500;
+                    _logger.LogWarning("Error, electionId is null");
                     return Json(new { Message = "Election ID is null." });
                     //In above code I created an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.;
                 }
 
                 //this method returns a list of candidates (of an election) ordered by their number of votes
                 var election = _electionRepository.GetById(electionId);
+                _logger.LogInformation("Calling method CandidateUtilities.GetCandidate_byElection()");
                 var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, election);
+                _logger.LogInformation("Calling Utilities.convertCandidateList_toCandidateViewModelList() method");
                 List<CandidateViewModel> candidatesViewModel = Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, candidates);
                 //lets serialize the list of candidatesviewmodel as json object
                 var json = JsonConvert.SerializeObject(candidatesViewModel.OrderByDescending(c => c.VotesCount));
@@ -121,7 +127,10 @@ namespace WebApplication1.Controllers
             }
             catch(Exception E)
             {
+                //lets create an internal server error so that jquery ajax understand that there was an error
                 HttpContext.Response.StatusCode = 500;
+                //leets log the exception msg to the console window
+                _logger.LogError("Exception, " + E.Message);
                 return Json(new { Message = E.Message });
                 //In above code I created an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
             }            
