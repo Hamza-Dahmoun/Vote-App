@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using WebApplication1.Business;
 using WebApplication1.Models;
 using WebApplication1.Models.Repositories;
@@ -20,10 +21,12 @@ namespace WebApplication1.Controllers
     public class StateController : Controller
     {
         //the below are services we're going to use in this controller, they will be injected in the constructor
+        private readonly ILogger<StateController> _logger;
         public IRepository<State> _stateRepository { get; }
         //Lets inject the services using the constructor, this is called Constructor Dependency Injection
-        public StateController(IRepository<State> stateRepository)
+        public StateController(IRepository<State> stateRepository, ILogger<StateController> logger)
         {
+            _logger = logger;
             _stateRepository = stateRepository;
         }
 
@@ -37,7 +40,7 @@ namespace WebApplication1.Controllers
             }
             catch(Exception E)
             {
-                //this is msg is going to be displayed as text in blank page
+                
                 return BadRequest(E.Message);
             }            
         }
