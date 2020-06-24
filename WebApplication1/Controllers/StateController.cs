@@ -34,25 +34,38 @@ namespace WebApplication1.Controllers
 
         public IActionResult Index()
         {
+            _logger.LogInformation("State/Index() action is called");
             try
             {
-                return View(Utilities.convertStateList_toStateViewModelList(_stateRepository.GetAll()));
+                _logger.LogInformation("Calling StateRepository.GetAll() method");
+                List<State> states = _stateRepository.GetAll().ToList();
+                _logger.LogInformation("Calling Utilities.convertStateList_toStateViewModelList() method");
+                List<StateViewModel> svmList = Utilities.convertStateList_toStateViewModelList(states);
+                _logger.LogInformation("Returning a list of StateViewModels to the Index view");
+                return View(svmList);
             }
             catch(Exception E)
             {
-                
+                _logger.LogError("Exception, " + E.Message);
                 return BadRequest(E.Message);
             }            
         }
 
         public IActionResult Details(Guid id)
         {
+            _logger.LogInformation("State/Details() action is called");
             try
             {
-                return View(Utilities.convertState_toStateViewModel(_stateRepository.GetById(id)));
+                _logger.LogInformation("Calling StateRepository.GetById() method");
+                State s = _stateRepository.GetById(id);
+                _logger.LogInformation("Calling Utilities.convertState_toStateViewModel() method");
+                StateViewModel svm = Utilities.convertState_toStateViewModel(s);
+                _logger.LogInformation("Returning a StateViewModel to the Details view");
+                return View(svm);
             }
             catch(Exception E)
             {
+                _logger.LogError("Exception, " + E.Message);
                 return BadRequest(E.Message);
             }            
         }
@@ -69,12 +82,16 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public IActionResult Create(State state)
         {
+            _logger.LogInformation("State/Create() action is called");
             try
             {
                 if (ModelState.IsValid)
                 {
+                    _logger.LogInformation("Model is valid");
                     state.Id = Guid.NewGuid();
+                    _logger.LogInformation("Calling StateRepository.Add() to add state instance to the DB");
                     _stateRepository.Add(state);
+                    _logger.LogInformation("Stated added successfully, redirection to Index");
                     return RedirectToAction(nameof(Index));
                 }
                 //so the model isn't valid, lets keep the user in the same view so that he could read the validation msgs
@@ -82,7 +99,7 @@ namespace WebApplication1.Controllers
             }
             catch (Exception E)
             {
-                //this is msg is going to be displayed as text in blank page
+                _logger.LogError("Exception, " + E.Message);
                 return BadRequest(E.Message);
             }            
         }
@@ -91,14 +108,17 @@ namespace WebApplication1.Controllers
 
         public IActionResult Delete(Guid id)
         {
+            _logger.LogInformation("State/Delete() action is called");
             try
             {
+                _logger.LogInformation("Calling StateRepository.GetById() method");
                 var state = _stateRepository.GetById(id);
+                _logger.LogInformation("Returning State instance to the view");
                 return View(state);
             }
             catch (Exception E)
             {
-                //this is msg is going to be displayed as text in blank page
+                _logger.LogError("Exception, " + E.Message);
                 return BadRequest(E.Message);
             }            
         }
@@ -106,14 +126,17 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public IActionResult DeleteState(Guid id)
         {
+            _logger.LogInformation("State/DeleteState() action is called");
             try
             {
-                _stateRepository.Delete(id);
+                _logger.LogInformation("Calling StateRepository.Delete() method");
+                _stateRepository.Delete(id);                
+                _logger.LogInformation("Redirecting to Index view");
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception E)
             {
-                //this is msg is going to be displayed as text in blank page
+                _logger.LogError("Exception, " + E.Message);
                 return BadRequest(E.Message);
             }         
         }
@@ -125,32 +148,38 @@ namespace WebApplication1.Controllers
 
         public IActionResult Edit(Guid id)
         {
+            _logger.LogInformation("State/Edit() action is called");
             try
             {
+                _logger.LogInformation("Calling StateRepository.GetById() method");
                 var state = _stateRepository.GetById(id);
+                _logger.LogInformation("Returning State instance to the view");
                 return View(state);
             }
             catch (Exception E)
             {
-                //this is msg is going to be displayed as text in blank page
+                _logger.LogError("Exception, " + E.Message);
                 return BadRequest(E.Message);
             }            
         }
         [HttpPost]
         public IActionResult Edit(Guid id, State state)
         {
+            _logger.LogInformation("State/Edit() action is called");
             try
             {
                 if (ModelState.IsValid)
                 {
+                    _logger.LogInformation("Calling StateRepository.Edit() method");
                     _stateRepository.Edit(id, state);
+                    _logger.LogInformation("Redirecting to Index view");
                     return RedirectToAction(nameof(Index));
                 }
                 return View(state);
             }
             catch (Exception E)
             {
-                //this is msg is going to be displayed as text in blank page
+                _logger.LogError("Exception, " + E.Message);
                 return BadRequest(E.Message);
             }            
         }
