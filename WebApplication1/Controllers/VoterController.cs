@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using WebApplication1.Business;
 using WebApplication1.Models;
@@ -27,6 +28,7 @@ namespace WebApplication1.Controllers
 
         //the below service is used to store a new user for each new voter
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly ILogger<VoterController> _logger;
         public IRepository<Voter> _voterRepository { get; }
         public IRepository<State> _stateRepository { get; }
         public IRepository<Vote> _voteRepository { get; }
@@ -37,13 +39,15 @@ namespace WebApplication1.Controllers
             IRepository<State> stateRepository,
             IRepository<Vote> voteRepository,
             IRepository<Candidate> candidateRepository,
-            UserManager<IdentityUser> userManager)
+            UserManager<IdentityUser> userManager,
+            ILogger<VoterController> logger)
         {
             _voterRepository = voterRepository;
             _voteRepository = voteRepository;
             _stateRepository = stateRepository;
             _candidateRepository = candidateRepository;
             _userManager = userManager;
+            _logger = logger;
         }
         
         public IActionResult Index()
