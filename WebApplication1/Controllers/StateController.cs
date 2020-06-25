@@ -9,6 +9,8 @@ using WebApplication1.Business;
 using WebApplication1.Models;
 using WebApplication1.Models.Repositories;
 using WebApplication1.Models.ViewModels;
+using System.Net;
+using Microsoft.AspNetCore.Http;
 
 namespace WebApplication1.Controllers
 {
@@ -34,6 +36,7 @@ namespace WebApplication1.Controllers
 
         public IActionResult Index()
         {
+
             _logger.LogInformation("State/Index() action is called");
             try
             {
@@ -44,11 +47,14 @@ namespace WebApplication1.Controllers
                 _logger.LogInformation("Returning a list of StateViewModels to the Index view");
                 return View(svmList);
             }
-            catch(Exception E)
+            catch (Exception E)
             {
                 _logger.LogError("Exception, " + E.Message);
-                return BadRequest(E.Message);
-            }            
+
+                //return BadRequest(E.Message);
+                throw E;
+                //return RedirectToAction("Error", "Home", E.Message);
+            }
         }
 
         public IActionResult Details(Guid id)
@@ -85,6 +91,14 @@ namespace WebApplication1.Controllers
             _logger.LogInformation("State/Create() action is called");
             try
             {
+                bool businessRuleMet = false;
+                if (!businessRuleMet)
+                {
+                    //so there is a business rule not met, lets throw a businessException and catch it
+                    throw new BusinessException("businessRuleMet Message Here");
+
+                }
+
                 if (ModelState.IsValid)
                 {
                     _logger.LogInformation("Model is valid");
@@ -98,10 +112,21 @@ namespace WebApplication1.Controllers
                 _logger.LogInformation("Model is not valid");
                 return View(state);
             }
+            catch(BusinessException BE)
+            {
+                _logger.LogInformation("business rule not met");
+                //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
+                //by whatever we want
+                string msg = "Business Rule Not Met";
+                ViewBag.BusinessMsgType = "Error";
+                ViewBag.BusinessMsgText = msg;
+                return View(state);
+            }
             catch (Exception E)
             {
+                //so something went wrong, lets log it and inform the user thru Error.cshtml to call the system admin
                 _logger.LogError("Exception, " + E.Message);
-                return BadRequest(E.Message);
+                throw E;
             }            
         }
 

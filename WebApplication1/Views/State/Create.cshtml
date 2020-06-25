@@ -2,6 +2,8 @@
 
 @{
     ViewData["Title"] = "Create";
+    var BusinessMsgType = ViewBag.BusinessMsgType;
+    var BusinessMsgText = ViewBag.BusinessMsgText;
 }
 @*IN THIS VOEW WE'ARE GOING TO DISPLAY FEW INPUTS RELATED TO STATE *@
 <h1>Create</h1>
@@ -22,6 +24,23 @@
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
+    </div>
+    <div class="col-md-12">
+        @if (BusinessMsgType != null)
+        {
+            @if (BusinessMsgType == "Error")
+            {
+                <p class="text-danger">@BusinessMsgText</p>
+            }
+            else if (BusinessMsgType == "Warning")
+            {
+                <p class="text-warning">@BusinessMsgText</p>
+            }
+            else if (BusinessMsgType == "Success")
+            {
+                <p class="text-success">@BusinessMsgText</p>
+            }
+        }
     </div>
 </div>
 
