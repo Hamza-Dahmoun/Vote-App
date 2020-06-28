@@ -2,8 +2,7 @@
 
 @{
     ViewData["Title"] = "Create";
-    var BusinessMsgType = ViewBag.BusinessMsgType;
-    var BusinessMsgText = ViewBag.BusinessMsgText;
+    var BusinessMessage = (WebApplication1.Business.BusinessMessage)ViewBag.BusinessMessage;
 }
 @*IN THIS VOEW WE'ARE GOING TO DISPLAY FEW INPUTS RELATED TO STATE *@
 <h1>Create</h1>
@@ -26,19 +25,19 @@
         </form>
     </div>
     <div class="col-md-12">
-        @if (BusinessMsgType != null)
+        @if (BusinessMessage != null)
         {
-            @if (BusinessMsgType == "Error")
+            @if (BusinessMessage.Type == "Error")
             {
-                <p class="text-danger">@BusinessMsgText</p>
+                <p class="text-danger">@BusinessMessage.Text</p>
             }
-            else if (BusinessMsgType == "Warning")
+            else if (BusinessMessage.Type == "Warning")
             {
-                <p class="text-warning">@BusinessMsgText</p>
+                <p class="text-warning">@BusinessMessage.Text</p>
             }
-            else if (BusinessMsgType == "Success")
+            else if (BusinessMessage.Type == "Success")
             {
-                <p class="text-success">@BusinessMsgText</p>
+                <p class="text-success">@BusinessMessage.Text</p>
             }
         }
     </div>

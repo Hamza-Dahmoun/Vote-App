@@ -91,14 +91,6 @@ namespace WebApplication1.Controllers
             _logger.LogInformation("State/Create() action is called");
             try
             {
-                bool businessRuleMet = false;
-                if (!businessRuleMet)
-                {
-                    //so there is a business rule not met, lets throw a businessException and catch it
-                    throw new BusinessException("businessRuleMet Message Here");
-
-                }
-
                 if (ModelState.IsValid)
                 {
                     _logger.LogInformation("Model is valid");
@@ -110,16 +102,17 @@ namespace WebApplication1.Controllers
                 }
                 //so the model isn't valid, lets keep the user in the same view so that he could read the validation msgs
                 _logger.LogInformation("Model is not valid");
-                return View(state);
+                //so there is a business rule not met, lets throw a businessException and catch it
+                throw new BusinessException("Information provided not valid");
+                //return View(state);
             }
-            catch(BusinessException BE)
+            catch(BusinessException be)
             {
-                _logger.LogInformation("business rule not met");
+                _logger.LogInformation(be.Message);
                 //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
                 //by whatever we want
-                string msg = "Business Rule Not Met";
-                ViewBag.BusinessMsgType = "Error";
-                ViewBag.BusinessMsgText = msg;
+                BusinessMessage bm = new BusinessMessage("Error", be.Message);
+                ViewBag.BusinessMessage = bm;
                 return View(state);
             }
             catch (Exception E)
