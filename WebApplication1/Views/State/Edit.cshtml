@@ -1,35 +1,56 @@
 ﻿@model WebApplication1.Models.State
 @{
     ViewData["Title"] = "Edit";
+    var BusinessMessage = (WebApplication1.Business.BusinessMessage)ViewBag.BusinessMessage;
 }
 
 
 <h1>Edit</h1>
-
-<h4>State</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <!--THIS IS NOT GONNA BE DISPLAYED FOR USER BUT IS MANDATORY IN THE FORM SO THAT THE OBJECT SENT INTO "EDITSTATE" ACTION OF STATECONTROLLER WILL HOLD CORRECT DATA-->
-            <input asp-for="Id" type="hidden" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+@if (BusinessMessage != null)
+{
+    <div class="col-md-12">
+        @if (BusinessMessage.Type == "Error")
+        {
+            <p class="text-danger">@BusinessMessage.Text</p>
+        }
+        else if (BusinessMessage.Type == "Warning")
+        {
+            <p class="text-warning">@BusinessMessage.Text</p>
+        }
+        else if (BusinessMessage.Type == "Success")
+        {
+            <p class="text-success">@BusinessMessage.Text</p>
+        }
     </div>
-</div>
+}
+else
+{
+    <h4>State</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <!--THIS IS NOT GONNA BE DISPLAYED FOR USER BUT IS MANDATORY IN THE FORM SO THAT THE OBJECT SENT INTO "EDITSTATE" ACTION OF STATECONTROLLER WILL HOLD CORRECT DATA-->
+                <input asp-for="Id" type="hidden" />
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <partial name="_jQuery" />
+    <partial name="_jQueryValidationScripts" />
+}
 
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
 
-<partial name="_jQuery" />
-<partial name="_jQueryValidationScripts" />
 
