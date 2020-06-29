@@ -182,7 +182,17 @@ namespace WebApplication1.Controllers
                     //to another file (e.g: UserRepository) so that we seperate concerns?
                 }
                 _logger.LogInformation("Model is not valid");
-                return View();
+                //so there is a business rule not met, lets throw a businessException and catch it
+                throw new BusinessException("Information provided not valid");
+            }
+            catch (BusinessException be)
+            {
+                _logger.LogError(be.Message);
+                //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
+                //by whatever we want
+                BusinessMessage bm = new BusinessMessage("Error", be.Message);
+                ViewBag.BusinessMessage = bm;
+                return View(vs);
             }
             catch (Exception E)
             {
