@@ -74,12 +74,33 @@ namespace WebApplication1.Controllers
             _logger.LogInformation("Voter/Details() action is called");
             try
             {
+                if (id == null)
+                {
+                    _logger.LogError("Passed parameter 'id' is null");
+                    throw new BusinessException("Passed parameter 'id' can not be null");
+                }
+
                 _logger.LogInformation("Calling VoterRepository.GetById() method");
                 Voter v = _voterRepository.GetById(id);
+                if (v == null)
+                {
+                    _logger.LogError("Voter not found");
+                    throw new BusinessException("Voter not found");
+                }
+
                 _logger.LogInformation("Calling Utilities.convertVoter_toPersonViewModel() method");
                 PersonViewModel p = Utilities.convertVoter_toPersonViewModel(v);
                 _logger.LogInformation("Returning a PersonViewModel to the Details view");
                 return View(p);
+            }
+            catch (BusinessException be)
+            {
+                _logger.LogError(be.Message);
+                //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
+                //by whatever we want
+                BusinessMessage bm = new BusinessMessage("Error", be.Message);
+                ViewBag.BusinessMessage = bm;
+                return View();
             }
             catch (Exception E)
             {
