@@ -262,7 +262,7 @@ namespace WebApplication1.Controllers
         {
             _logger.LogInformation("State/Edit() action is called");
             try
-            {
+            {                
                 if (ModelState.IsValid)
                 {
                     _logger.LogInformation("Calling StateRepository.Edit() method");
@@ -270,6 +270,16 @@ namespace WebApplication1.Controllers
                     _logger.LogInformation("Redirecting to Index view");
                     return RedirectToAction(nameof(Index));
                 }
+                //so there is a business rule not met, lets throw a businessException and catch it
+                throw new BusinessException("Information provided not valid");
+            }
+            catch (BusinessException be)
+            {
+                _logger.LogError(be.Message);
+                //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
+                //by whatever we want
+                BusinessMessage bm = new BusinessMessage("Error", be.Message);
+                ViewBag.BusinessMessage = bm;
                 return View(state);
             }
             catch (Exception E)
