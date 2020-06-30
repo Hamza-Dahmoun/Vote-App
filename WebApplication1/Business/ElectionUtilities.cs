@@ -29,7 +29,8 @@ namespace WebApplication1.Business
                 //declaring an expression that is special to Election objects
                 //a current Election is the one that 'Date.Now' is between the startDate and the endDate(endDate = startDate + duration in days)
                 System.Linq.Expressions.Expression<Func<Election, bool>> expr = e => DateTime.Now.Date >= e.StartDate && DateTime.Now.Date.AddDays(-e.DurationInDays) <= e.StartDate;
-                Election currentElection = _electionRepository.GetOneFiltered(expr);
+                //Election currentElection = _electionRepository.GetOneFiltered(expr);
+                Election currentElection = _electionRepository.GetAllFiltered(expr).FirstOrDefault();
                 return currentElection;
             }
             catch (Exception E)
