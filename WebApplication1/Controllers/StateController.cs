@@ -262,7 +262,7 @@ namespace WebApplication1.Controllers
         {
             _logger.LogInformation("State/Edit() action is called");
             try
-            {                
+            {
                 if (ModelState.IsValid)
                 {
                     _logger.LogInformation("Calling StateRepository.Edit() method");
@@ -285,7 +285,7 @@ namespace WebApplication1.Controllers
             catch (Exception E)
             {
                 _logger.LogError("Exception, " + E.Message);
-                return BadRequest(E.Message);
+                throw E;
             }            
         }
 
