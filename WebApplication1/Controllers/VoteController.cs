@@ -82,11 +82,12 @@ namespace WebApplication1.Controllers
             int exceptionDifferentiator = 0;
             try
             {
+                throw new BusinessException("bla bla");
                 if (candidateIdList == null || candidateIdList.Count <= 0)
                 {
                     _logger.LogError("Cannot validate for empty list of candidates");
                     //return BadRequest();
-                    throw new Exception("Cannot validate for empty list of candidates");
+                    throw new BusinessException("Cannot validate for empty list of candidates");
                 }
                 //lets first get the concerned election
                 Candidate firstOne = _candidateRepository.GetById(Guid.Parse(candidateIdList.FirstOrDefault()));
@@ -95,13 +96,19 @@ namespace WebApplication1.Controllers
                 {
                     _logger.LogError("Cannot validate for null election");
                     //return BadRequest();
-                    throw new Exception("Cannot validate for null election");
+                    throw new BusinessException("Cannot validate for null election");
                 }
 
                 //lets get the voter instance of the current user, so that we use its id with his votes
                 var currentUser = await _userManager.GetUserAsync(HttpContext.User);
                 _logger.LogInformation("Calling VoterUtilities.getVoterByUserId() method");
                 Voter currentVoter = VoterUtilities.getVoterByUserId(Guid.Parse(currentUser.Id), _voterRepository);
+                if(currentVoter == null)
+                {
+                    _logger.LogError("Voter instance was not found for current user");
+                    throw new BusinessException("Voter instance was not found for current user");
+                }
+
 
                 _logger.LogInformation("Going to add Vote instance to the DB foreach Candidate");
                 Vote v = new Vote();
@@ -109,8 +116,14 @@ namespace WebApplication1.Controllers
                 foreach (var candidateId in candidateIdList)
                 {
                     v.Id = Guid.NewGuid();
-                    v.Candidate = _candidateRepository.GetById(Guid.Parse(candidateId));
-                    v.Voter = currentVoter; // _voterRepository.GetById(Guid.Parse("3fae2a0e-21fe-40d4-a731-6b92bb4fea71"));
+                    Candidate candidate = _candidateRepository.GetById(Guid.Parse(candidateId));
+                    if (candidate == null)
+                    {
+                        _logger.LogError("Candidate instance was not found for " + candidateId);
+                        throw new BusinessException("Candidate instance was not found for " + candidateId);
+                    }
+                    v.Candidate = candidate;
+                    v.Voter = currentVoter; 
                     v.Datetime = DateTime.Now;
                     v.Election = election;
                     _voteRepository.Add(v);
@@ -139,7 +152,13 @@ namespace WebApplication1.Controllers
                 _logger.LogInformation("Returning the list of CadidateViewModel as a json");
                 return Ok(json);
             }
-            catch(Exception E)
+            catch (BusinessException be)
+            {
+                _logger.LogError(be.Message);
+                HttpContext.Response.StatusCode = 500;
+                return Json(new { Message = "Error When Validating Votes! " + be.Message });
+            }
+            catch (Exception E)
             {
                 //there are two reasons for possible exceptions: one when voting, the second when retrieving results of the election
                 if(exceptionDifferentiator == 0)
