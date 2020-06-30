@@ -1,12 +1,33 @@
 ﻿@model IList<WebApplication1.Models.ViewModels.CandidateViewModel>
 @{
     ViewData["Title"] = "Index";
+    var BusinessMessage = (WebApplication1.Business.BusinessMessage)ViewBag.BusinessMessage;
 }
 
 
 <partial name="_votingScenarioStyle" />
 <h1 class="text-center" id="voting-title">Select your choice wisely</h1>
 <br />
+
+@if (BusinessMessage != null)
+{
+    <div>
+        @if (BusinessMessage.Type == "Error")
+        {
+            <p class="text-danger text-center">@BusinessMessage.Text</p>
+        }
+        else if (BusinessMessage.Type == "Warning")
+        {
+            <p class="text-warning text-center"">@BusinessMessage.Text</p>
+        }
+        else if (BusinessMessage.Type == "Success")
+        {
+            <p class="text-success text-center"">@BusinessMessage.Text</p>
+        }
+    </div>
+}
+@if(Model != null)
+{
 <div class="voting-container">
 
     @{
@@ -29,6 +50,7 @@
         <i class="fa fa-rocket" aria-hidden="true"></i>
     </button>
 </div>
+}
 <partial name="_jQuery" />
 <partial name="_votingScenarioScript" />
 

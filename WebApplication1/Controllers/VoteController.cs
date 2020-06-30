@@ -54,16 +54,36 @@ namespace WebApplication1.Controllers
             {
                 _logger.LogInformation("Calling ElectionUtilities.getCurrentElection() method");
                 //this action returns a view containing all candidates of the current election for the user to vote on five of them maximum
-                Election election = ElectionUtilities.getCurrentElection(_electionRepository);// _electionRepository.GetById(CurrentElectionId);
+                Election election = ElectionUtilities.getCurrentElection(_electionRepository);
+                if (election == null)
+                {
+                    _logger.LogError("Current election not found");
+                    throw new BusinessException("Current election not found");
+                }
+
                 _logger.LogInformation("Calling CandidateUtilities.GetCandidate_byElection() method");
                 var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, election);
-                //return View(Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, _candidateRepository.GetAll()));
+                if (candidates == null || candidates.Count == 0)
+                {
+                    _logger.LogError("No candidates found for this election");
+                    throw new BusinessException("No candidates found for this election");
+                }
+
                 _logger.LogInformation("Calling Utilities.convertCandidateList_toCandidateViewModelList() method");
                 List<CandidateViewModel> cvmList = Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, candidates);
                 _logger.LogInformation("Returning a list of CandidateViewModel to Index view");
                 return View(cvmList);
             }
-            catch(Exception E)
+            catch (BusinessException be)
+            {
+                _logger.LogError(be.Message);
+                //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
+                //by whatever we want
+                BusinessMessage bm = new BusinessMessage("Error", be.Message);
+                ViewBag.BusinessMessage = bm;
+                return View();
+            }
+            catch (Exception E)
             {
                 _logger.LogError("Exception, " + E.Message);
                 throw E;
@@ -82,7 +102,6 @@ namespace WebApplication1.Controllers
             int exceptionDifferentiator = 0;
             try
             {
-                throw new BusinessException("bla bla");
                 if (candidateIdList == null || candidateIdList.Count <= 0)
                 {
                     _logger.LogError("Cannot validate for empty list of candidates");
