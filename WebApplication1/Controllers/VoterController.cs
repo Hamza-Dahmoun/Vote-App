@@ -337,8 +337,20 @@ namespace WebApplication1.Controllers
             {
                 //In here we are going to return a view where a voter is displayed with his state but the state is in
                 //a list of states
+
+                if (Id == null)
+                {
+                    _logger.LogError("Passed parameter 'id' is null");
+                    throw new BusinessException("Passed parameter 'id' can not be null");
+                }
+
                 _logger.LogInformation("Calling VoterRepository.GetById() method");
                 var voter = _voterRepository.GetById(Id);
+                if (voter == null)
+                {
+                    _logger.LogError("Voter not found");
+                    throw new BusinessException("Voter not found");
+                }
 
                 _logger.LogInformation("Creating a VoterStateViewModel for the Voter instance");
                 VoterStateViewModel voterstate = new VoterStateViewModel
@@ -357,11 +369,20 @@ namespace WebApplication1.Controllers
                 _logger.LogInformation("Returning VoterStateViewModel to the View");
                 return View(voterstate);
             }
+            catch (BusinessException be)
+            {
+                _logger.LogError(be.Message);
+                //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
+                //by whatever we want
+                BusinessMessage bm = new BusinessMessage("Error", be.Message);
+                ViewBag.BusinessMessage = bm;
+                return View();
+            }
             catch (Exception E)
             {
                 _logger.LogError("Exception, " + E.Message);
                 //this is msg is going to be displayed as text in blank page
-                return BadRequest(E.Message);
+                throw E;
             }            
         }
         [HttpPost]
@@ -379,7 +400,8 @@ namespace WebApplication1.Controllers
                         voterstate.States = _stateRepository.GetAll();
                     }
                     _logger.LogInformation("Returning to the view to display validation messages");
-                    return View(voterstate);
+                    //so there is a business rule not met, lets throw a businessException and catch it
+                    throw new BusinessException("Information provided not valid");
                 }
                 Voter v = new Voter
                 {
@@ -395,11 +417,22 @@ namespace WebApplication1.Controllers
                 _logger.LogInformation("Redirecting to Index action");
                 return RedirectToAction(nameof(Index));
             }
+            catch (BusinessException be)
+            {
+                _logger.LogError(be.Message);
+                //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
+                //by whatever we want
+                BusinessMessage bm = new BusinessMessage("Error", be.Message);
+                ViewBag.BusinessMessage = bm;
+                //lets refill States list
+                voterstate.States = _stateRepository.GetAll();
+                return View(voterstate);
+            }
             catch (Exception E)
             {
                 _logger.LogError("Exception, " + E.Message);
                 //this is msg is going to be displayed as text in blank page
-                return BadRequest(E.Message);
+                throw E;
             }            
         }
 
