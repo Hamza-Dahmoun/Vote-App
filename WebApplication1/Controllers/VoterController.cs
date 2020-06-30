@@ -65,7 +65,7 @@ namespace WebApplication1.Controllers
             {
                 _logger.LogError("Exception, " + E.Message);
                 //this is msg is going to be displayed as text in blank page
-                return BadRequest(E.Message);
+                throw E;
             }
         }
 
@@ -106,7 +106,7 @@ namespace WebApplication1.Controllers
             {
                 _logger.LogError("Exception, " + E.Message);
                 //this is msg is going to be displayed as text in blank page
-                return BadRequest(E.Message);
+                throw E;
             }            
         }
 
@@ -125,7 +125,7 @@ namespace WebApplication1.Controllers
             catch (Exception E)
             {
                 //this is msg is going to be displayed as text in blank page
-                return BadRequest(E.Message);
+                throw E;
             }            
         }
 
@@ -198,7 +198,7 @@ namespace WebApplication1.Controllers
             {
                 _logger.LogError("Exception, " + E.Message);
                 //this is msg is going to be displayed as text in blank page
-                return BadRequest(E.Message);
+                throw E; 
             }            
         }
 
