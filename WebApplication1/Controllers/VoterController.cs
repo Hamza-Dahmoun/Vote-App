@@ -208,18 +208,39 @@ namespace WebApplication1.Controllers
             _logger.LogInformation("Voter/Delete() action is called");
             try
             {
+                if (id == null)
+                {
+                    _logger.LogError("Passed parameter 'id' is null");
+                    throw new BusinessException("Passed parameter 'id' can not be null");
+                }
+
                 _logger.LogInformation("Calling VoterRepository.GetById() method");
-                var voter = _voterRepository.GetById(id);                
+                var voter = _voterRepository.GetById(id);
+                if (voter == null)
+                {
+                    _logger.LogError("Voter not found");
+                    throw new BusinessException("Voter not found");
+                }
+
                 _logger.LogInformation("Calling Utilities.convertVoter_toPersonViewModel() method");
                 PersonViewModel p = Utilities.convertVoter_toPersonViewModel(voter);
                 _logger.LogInformation("Returning PersonViewModel to the view");
+                return View();
+            }
+            catch (BusinessException be)
+            {
+                _logger.LogError(be.Message);
+                //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
+                //by whatever we want
+                BusinessMessage bm = new BusinessMessage("Error", be.Message);
+                ViewBag.BusinessMessage = bm;
                 return View();
             }
             catch (Exception E)
             {
                 _logger.LogError("Exception, " + E.Message);
                 //this is msg is going to be displayed as text in blank page
-                return BadRequest(E.Message);
+                throw E;
             }            
         }
         [HttpPost]
@@ -228,8 +249,19 @@ namespace WebApplication1.Controllers
             _logger.LogInformation("Voter/DeleteVoter() action is called");
             try
             {
-                _logger.LogInformation("Calling VoterRepository.Delete() method");
+                if (id == null)
+                {
+                    _logger.LogError("Passed parameter 'id' is null");
+                    throw new BusinessException("Passed parameter 'id' can not be null");
+                }
+
+                _logger.LogInformation("Calling VoterRepository.GetById() method");
                 Voter voter = _voterRepository.GetById(id);
+                if (voter == null)
+                {
+                    _logger.LogError("Voter not found");
+                    throw new BusinessException("Voter not found");
+                }
 
                 //1- Remove all this voter's votes
                 //declaring an expression that is special to Vote objects
@@ -279,11 +311,20 @@ namespace WebApplication1.Controllers
                 _logger.LogInformation("Redirecting to Index view");
                 return RedirectToAction(nameof(Index));
             }
+            catch (BusinessException be)
+            {
+                _logger.LogError(be.Message);
+                //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
+                //by whatever we want
+                BusinessMessage bm = new BusinessMessage("Error", be.Message);
+                ViewBag.BusinessMessage = bm;
+                return View(nameof(Delete));
+            }
             catch (Exception E)
             {
                 _logger.LogError("Exception, " + E.Message);
                 //this is msg is going to be displayed as text in blank page
-                return BadRequest(E.Message);
+                throw E; 
             }
         }
 

@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Delete";
+    var BusinessMessage = (WebApplication1.Business.BusinessMessage)ViewBag.BusinessMessage;
 }
 
 <h1>Delete</h1>
@@ -73,4 +74,20 @@
     </form>
 </div>
 
-
+@if (BusinessMessage != null)
+{
+    <div class="col-md-12">
+        @if (BusinessMessage.Type == "Error")
+        {
+            <p class="text-danger">@BusinessMessage.Text</p>
+        }
+        else if (BusinessMessage.Type == "Warning")
+        {
+            <p class="text-warning">@BusinessMessage.Text</p>
+        }
+        else if (BusinessMessage.Type == "Success")
+        {
+            <p class="text-success">@BusinessMessage.Text</p>
+        }
+    </div>
+}
