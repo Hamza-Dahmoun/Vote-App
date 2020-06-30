@@ -6,28 +6,29 @@
 }
 
 <h1>Details</h1>
-@if (BusinessMessage != null)
-{
-    <div class="col-md-12">
-        @if (BusinessMessage.Type == "Error")
-        {
-            <p class="text-danger">@BusinessMessage.Text</p>
-        }
-        else if (BusinessMessage.Type == "Warning")
-        {
-            <p class="text-warning">@BusinessMessage.Text</p>
-        }
-        else if (BusinessMessage.Type == "Success")
-        {
-            <p class="text-success">@BusinessMessage.Text</p>
-        }
-    </div>
-}
-else
-{
-    <div>
-        <h4>PersonViewModel</h4>
-        <hr />
+
+<div>
+    <h4>Voter</h4>
+    <hr />
+    @if (BusinessMessage != null)
+    {
+        <div class="col-md-12">
+            @if (BusinessMessage.Type == "Error")
+            {
+                <p class="text-danger">@BusinessMessage.Text</p>
+            }
+            else if (BusinessMessage.Type == "Warning")
+            {
+                <p class="text-warning">@BusinessMessage.Text</p>
+            }
+            else if (BusinessMessage.Type == "Success")
+            {
+                <p class="text-success">@BusinessMessage.Text</p>
+            }
+        </div>
+    }
+    @if (Model != null)
+    {
         <dl class="row">
             <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => model.FirstName)
@@ -54,8 +55,10 @@ else
                 @Html.DisplayFor(model => model.hasVoted)
             </dd>
         </dl>
-    </div>
-}
+    }
+
+</div>
+
 
 <div>
     @*<a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |*@
