@@ -29,6 +29,10 @@ namespace WebApplication1.Controllers
             _voterRepository = voterRepository;
         }
 
+        /*
+        
+        OLD USELESS CODE
+        
         public IActionResult Index()
         {
 
@@ -59,7 +63,7 @@ namespace WebApplication1.Controllers
                 return View();
             }
         }
-
+        
 
 
         public IActionResult GoToVotersList()
@@ -76,10 +80,7 @@ namespace WebApplication1.Controllers
                     new Candidate
                     {
                         Id = Guid.NewGuid(),
-                        /*FirstName = voter.FirstName,
-                        LastName = voter.LastName,*/
                         VoterBeing = voter
-                        /*State = voter.State*/
                     }
                     );
                 return RedirectToAction(nameof(GoToVotersList));
@@ -90,7 +91,7 @@ namespace WebApplication1.Controllers
             }
             
         }
-
+        */
 
 
    
