@@ -66,7 +66,7 @@ namespace WebApplication1.Controllers
             catch(Exception E)
             {
                 _logger.LogError("Exception, " + E.Message);
-                return BadRequest(E.Message);
+                throw E;
             }            
         }
 
