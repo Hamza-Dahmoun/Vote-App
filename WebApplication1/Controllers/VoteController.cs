@@ -85,7 +85,8 @@ namespace WebApplication1.Controllers
                 if (candidateIdList == null || candidateIdList.Count <= 0)
                 {
                     _logger.LogError("Cannot validate for empty list of candidates");
-                    return BadRequest();
+                    //return BadRequest();
+                    throw new Exception("Cannot validate for empty list of candidates");
                 }
                 //lets first get the concerned election
                 Candidate firstOne = _candidateRepository.GetById(Guid.Parse(candidateIdList.FirstOrDefault()));
@@ -93,7 +94,8 @@ namespace WebApplication1.Controllers
                 if (election == null)
                 {
                     _logger.LogError("Cannot validate for null election");
-                    return BadRequest();
+                    //return BadRequest();
+                    throw new Exception("Cannot validate for null election");
                 }
 
                 //lets get the voter instance of the current user, so that we use its id with his votes
