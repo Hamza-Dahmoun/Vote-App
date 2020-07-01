@@ -1,6 +1,7 @@
 ﻿@model WebApplication1.Models.Election
 @{
     ViewData["Title"] = "Edit";
+    var BusinessMessage = (WebApplication1.Business.BusinessMessage)ViewBag.BusinessMessage;
 }
 
 <partial name="_editElectionStyle" />
@@ -12,73 +13,95 @@
 </div>
 
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form id="step-one-form">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <!--THIS IS NOT GONNA BE DISPLAYED FOR USER BUT IS MANDATORY IN THE FORM SO THAT THE OBJECT SENT INTO "EDITVOTER" ACTION OF VOTERCONTROLLER WILL HOLD CORRECT DATA-->
-            <input asp-for="Id" type="hidden" id="election-holder-id" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control changeable" id="election-name" required />
-                @*NO NEED FOR THE BELOW TAG BECAUSE THE ACTION IS INVOKED USING AJAX... WE USED HTML ATTRIBUTES INSTEAD
-                    <span asp-validation-for="Name" class="text-danger"></span>*@
-            </div>
-            <div class="form-group">
-                <label asp-for="StartDate" class="control-label"></label>
-                <input type="date" asp-for="StartDate" class="form-control changeable" id="start-date-election" required />
-                @*NO NEED FOR THE BELOW TAG BECAUSE THE ACTION IS INVOKED USING AJAX... WE USED HTML ATTRIBUTES INSTEAD
-                    <span asp-validation-for="StartDate" class="text-danger"></span>*@
-            </div>
-            <div class="form-group">
-                <label asp-for="DurationInDays" class="control-label"></label>
-                <input type="number" asp-for="DurationInDays" class="form-control changeable" id="duration-in-days" min="1" max="5" required />
-                @*NO NEED FOR THE BELOW TAG BECAUSE THE ACTION IS INVOKED USING AJAX... WE USED HTML ATTRIBUTES INSTEAD
-                    <span asp-validation-for="DurationInDays" class="text-danger"></span>*@
-            </div>
-            <div class="form-group">
-                <label asp-for="HasNeutral" class="control-label"></label>
-                <input type="checkbox" asp-for="HasNeutral" class="form-control changeable" id="has-neutral" />
-                @*NO NEED FOR THE BELOW TAG BECAUSE THE ACTION IS INVOKED USING AJAX... WE USED HTML ATTRIBUTES INSTEAD
-                    <span asp-validation-for="HasNeutral" class="text-danger"></span>*@
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" id="submit-updated-election" />
-            </div>
-            <div class="spinner-border text-primary" id="update-candidate-spinner">
 
-            </div>
-            <div id="response-msg">
-                <p></p>
-            </div>
-        </form>
+@if (BusinessMessage != null)
+{
+    <div>
+        @if (BusinessMessage.Type == "Error")
+        {
+            <p class="text-danger">@BusinessMessage.Text</p>
+        }
+        else if (BusinessMessage.Type == "Warning")
+        {
+            <p class="text-warning">@BusinessMessage.Text</p>
+        }
+        else if (BusinessMessage.Type == "Success")
+        {
+            <p class="text-success">@BusinessMessage.Text</p>
+        }
     </div>
-</div>
+}
 
+@if (Model != null)
+{
+    <div class="row">
+        <div class="col-md-4">
+            <form id="step-one-form">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <!--THIS IS NOT GONNA BE DISPLAYED FOR USER BUT IS MANDATORY IN THE FORM SO THAT THE OBJECT SENT INTO "EDITVOTER" ACTION OF VOTERCONTROLLER WILL HOLD CORRECT DATA-->
+                <input asp-for="Id" type="hidden" id="election-holder-id" />
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control changeable" id="election-name" required />
+                    @*NO NEED FOR THE BELOW TAG BECAUSE THE ACTION IS INVOKED USING AJAX... WE USED HTML ATTRIBUTES INSTEAD
+                        <span asp-validation-for="Name" class="text-danger"></span>*@
+                </div>
+                <div class="form-group">
+                    <label asp-for="StartDate" class="control-label"></label>
+                    <input type="date" asp-for="StartDate" class="form-control changeable" id="start-date-election" required />
+                    @*NO NEED FOR THE BELOW TAG BECAUSE THE ACTION IS INVOKED USING AJAX... WE USED HTML ATTRIBUTES INSTEAD
+                        <span asp-validation-for="StartDate" class="text-danger"></span>*@
+                </div>
+                <div class="form-group">
+                    <label asp-for="DurationInDays" class="control-label"></label>
+                    <input type="number" asp-for="DurationInDays" class="form-control changeable" id="duration-in-days" min="1" max="5" required />
+                    @*NO NEED FOR THE BELOW TAG BECAUSE THE ACTION IS INVOKED USING AJAX... WE USED HTML ATTRIBUTES INSTEAD
+                        <span asp-validation-for="DurationInDays" class="text-danger"></span>*@
+                </div>
+                <div class="form-group">
+                    <label asp-for="HasNeutral" class="control-label"></label>
+                    <input type="checkbox" asp-for="HasNeutral" class="form-control changeable" id="has-neutral" />
+                    @*NO NEED FOR THE BELOW TAG BECAUSE THE ACTION IS INVOKED USING AJAX... WE USED HTML ATTRIBUTES INSTEAD
+                        <span asp-validation-for="HasNeutral" class="text-danger"></span>*@
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" id="submit-updated-election" />
+                </div>
+                <div class="spinner-border text-primary" id="update-candidate-spinner">
 
-
-<br />
-<hr />
-<br />
-
-<div id="selected-candidates-area">
-    <p id="selected-candidates-title">Selected Candidates</p>
-    <div id="candidates-container">
-        <div class="spinner-border text-danger" id="candidates-spinner"></div>
-
+                </div>
+                <div id="response-msg">
+                    <p></p>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
 
-<div id="step-two">
-    <table class="table" id="voters-table">
-    </table>
-</div>
+
+    <br />
+    <hr />
+    <br />
+
+    <div id="selected-candidates-area">
+        <p id="selected-candidates-title">Selected Candidates</p>
+        <div id="candidates-container">
+            <div class="spinner-border text-danger" id="candidates-spinner"></div>
+
+        </div>
+    </div>
 
 
-<partial name="_jQuery" />
-<partial name="_datatablesScript" />
-<partial name="_editElectionScript" />
+    <div id="step-two">
+        <table class="table" id="voters-table">
+        </table>
+    </div>
 
-<partial name="_redModalStyle" />
-<partial name="_redModal" />
+
+    <partial name="_jQuery" />
+    <partial name="_datatablesScript" />
+    <partial name="_editElectionScript" />
+
+    <partial name="_redModalStyle" />
+    <partial name="_redModal" />
+}
