@@ -11,6 +11,7 @@ using WebApplication1.Models.Repositories;
 using WebApplication1.Models.ViewModels;
 using System.Net;
 using Microsoft.AspNetCore.Http;
+using OfficeOpenXml;
 
 namespace WebApplication1.Controllers
 {
@@ -289,6 +290,41 @@ namespace WebApplication1.Controllers
             }            
         }
 
-        
+
+
+
+        public async Task<IActionResult> ExportToExcel()
+        {
+            //This function dowload list of all States as excel file
+
+            var stream = new System.IO.MemoryStream();
+            using (ExcelPackage package = new ExcelPackage(stream))
+            {
+                //var subscribers = await _context.Subscribers.ToListAsync();
+                var states = _stateRepository.GetAll();
+                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("States");
+
+                worksheet.Cells[1, 1].Value = "Name";
+                worksheet.Row(1).Style.Font.Bold = true;
+
+                //worksheet.Cells[1, 1].Value = "Name";
+                //worksheet.Cells[1, 2].Value = "Email";
+                //worksheet.Cells[1, 3].Value = "Date Subscribed";
+                //worksheet.Row(1).Style.Font.Bold = true;
+
+                for (int c = 2; c < states.Count + 2; c++)
+                {
+                    worksheet.Cells[c, 1].Value = states[c - 2].Name;
+                }
+
+                package.Save();
+            }
+
+            string fileName = "Subscribers.xlsx";
+            string fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            stream.Position = 0;
+            return File(stream, fileType, fileName);
+        }
+
     }
 }
