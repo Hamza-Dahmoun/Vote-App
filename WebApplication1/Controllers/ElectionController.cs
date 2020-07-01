@@ -194,10 +194,10 @@ namespace WebApplication1.Controllers
         {
             //this method is called using ajax calls
             //so if a business rule is not met we'll throw a businessException and catch it to create and internal server error and return its msg
-
-
-
             //as json
+
+
+
             //Step(1): Adding info of the election(name, duration,,,) and send them to backend using api method in inside the controller,
             //then send back the response to javascript to redirect to step2
 
@@ -302,7 +302,8 @@ namespace WebApplication1.Controllers
         [HttpPost]
         //If I leave [FromBody] next to the parameter the request will not even access this method, bcuz jquery already has passed parameters
         public async Task<IActionResult> VotersDataTable(Guid electionId)
-        {//returns a list of voters 
+        {
+            //returns a list of voters 
 
             //This method is called by jQuery datatables to get paged data
             //First, we'll try to read the variables sent from the jQuery request, and then, based on these variables' values we'll query
@@ -442,11 +443,17 @@ namespace WebApplication1.Controllers
         [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
         public async Task<IActionResult> AddCandidates([FromBody] CandidateElectionRelation mydata)
         {
+
+            //this method is called using ajax calls
+            //so if a business rule is not met we'll throw a businessException and catch it to create and internal server error and return its msg
+            //as json
+
             try
             {
                 if (mydata.electionId==null || mydata.voterId==null)
                 {
-                    return BadRequest();
+                    //so it is not a future election
+                    throw new BusinessException("Properties voterId and electionId can not be null.");
                 }
                 Voter voter = _voterRepository.GetById(mydata.voterId);
                 _candidateRepository.Add(
@@ -462,6 +469,12 @@ namespace WebApplication1.Controllers
                     );
                 return Json(new { success = true }); ;
             }
+            catch (BusinessException be)
+            {
+                //lets create an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
+                HttpContext.Response.StatusCode = 500;
+                return Json(new { Message = be.Message });
+            }
             catch (Exception E)
             {
                 //lets create and return an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
@@ -474,16 +487,25 @@ namespace WebApplication1.Controllers
         [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
         public async Task<IActionResult> AddCandidate([FromBody] CandidateElectionRelation mydata)
         {
+            //this method is called using ajax calls
+            //so if a business rule is not met we'll throw a businessException and catch it to create and internal server error and return its msg
+            //as json
+
+
             //difference from above is that it returns the new candidate ID ... it is used when editing an election (after using jquey datatables)
             try
             {
                 if (mydata.electionId == null || mydata.voterId == null)
                 {
-                    //lets create and return an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
-                    HttpContext.Response.StatusCode = 500;
-                    return Json(new { Message = "Election or Voter not found." });
+                    throw new BusinessException("Properties voterId and electionId can not be null.");
                 }
+
                 Voter voter = _voterRepository.GetById(mydata.voterId);
+                if (voter == null)
+                {
+                    throw new BusinessException("Voter not found.");
+                }
+
                 Candidate newCandidate = new Candidate
                 {
                     Id = Guid.NewGuid(),
@@ -498,6 +520,12 @@ namespace WebApplication1.Controllers
                 }) ;
                 return Ok(json);
                 //return Json(new { success = true }); ;
+            }
+            catch (BusinessException be)
+            {
+                //lets create an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
+                HttpContext.Response.StatusCode = 500;
+                return Json(new { Message = be.Message });
             }
             catch (Exception E)
             {
