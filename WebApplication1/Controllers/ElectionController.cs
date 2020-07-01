@@ -749,13 +749,25 @@ namespace WebApplication1.Controllers
         [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
         public async Task<IActionResult> GetCandidatesList_andVotersList_byElectionId([FromBody] string electionId)
         {
+            //this method is called using ajax calls
+            //so if a business rule is not met we'll throw a businessException and catch it to create and internal server error and return its msg
+            //as json
+
+
+
             try
             {
                 if (String.IsNullOrEmpty(electionId))
                 {
-                    return BadRequest();
+                    throw new BusinessException("electionId can not be null.");
                 }
+                
                 Election election = _electionRepository.GetById(Guid.Parse(electionId));
+                if (election == null)
+                {
+                    throw new BusinessException("election not found.");
+                }
+
                 //lets serialize the list of candidates of the election we've got and send it back as a reponse
                 //note that I didn't retrieve candidates as they are, I selected only needed attributes bcuz when i tried serializing
                 //candidates objects as they are I got this error "self referencing loop detected with type" it means json tried to serialize the candidate object
@@ -764,6 +776,11 @@ namespace WebApplication1.Controllers
 
 
                 var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, election);
+                if (candidates == null)
+                {
+                    throw new BusinessException("Candidates List not found.");
+                }
+
                 List<VoterCandidateEntityViewModel> entityList = new List<VoterCandidateEntityViewModel>();
                 entityList = Utilities.convertCandidateList_toVoterCandidateEntityViewModelList(_voterRepository, entityList, candidates);
                 /*foreach (var candidate in candidates)
@@ -795,9 +812,17 @@ namespace WebApplication1.Controllers
                 return Ok(json);
 
             }
+            catch (BusinessException be)
+            {
+                //lets create an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
+                HttpContext.Response.StatusCode = 500;
+                return Json(new { Message = be.Message });
+            }
             catch (Exception E)
             {
-                return BadRequest();
+                //lets create an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
+                HttpContext.Response.StatusCode = 500;
+                return Json(new { Message = E.Message });
             }
         }
 
