@@ -722,6 +722,9 @@ namespace WebApplication1.Controllers
         [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
         public async Task<IActionResult> EditElection([FromBody] TemporaryElection election)
         {
+            //this method is called using ajax calls
+            //so if a business rule is not met we'll throw a businessException and catch it to create and internal server error and return its msg
+            //as json
             try
             {
                 if (ModelState.IsValid)
@@ -730,23 +733,20 @@ namespace WebApplication1.Controllers
                     if (DateTime.Parse(election.StartDate) <= DateTime.Now)
                     {
                         //so it is not a future election
-                        //lets I create an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
-                        HttpContext.Response.StatusCode = 500;
-                        return Json(new { Message = "A New Election should take place in a future date." });
+                        //so there is a business rule not met, lets throw a businessException and catch it
+                        throw new BusinessException("A New Election should take place in a future date.");
                     }
                     if (ElectionUtilities.getElectionsInSamePeriod(_electionRepository, DateTime.Parse(election.StartDate), int.Parse(election.DurationInDays)) > 1)
-                    {//so in addtion to the election instance to edit, there are other elections in the db from the same period
-
-                        //lets I create an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
-                        HttpContext.Response.StatusCode = 500;
-                        return Json(new { Message = "There is an existing Election during the same period." });
+                    {
+                        //so in addtion to the election instance to edit, there are other elections in the db from the same period
+                        //so there is a business rule not met, lets throw a businessException and catch it
+                        throw new BusinessException("There is an existing Election during the same period.");
                     }
                     if (int.Parse(election.DurationInDays) <0 || int.Parse(election.DurationInDays) > 5)
                     {
                         //so the number of days is invalid
-                        //lets create an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
-                        HttpContext.Response.StatusCode = 500;
-                        return Json(new { Message = "The duration of the Election should one to five days." });
+                        //so there is a business rule not met, lets throw a businessException and catch it
+                        throw new BusinessException("The duration of the Election should one to five days.");
                     }
                     //this variable is going to be used when checking if user updated hasNeutral opinion
                     bool oldHasNeutral = _electionRepository.GetById(Guid.Parse(election.Id)).HasNeutral;
@@ -799,12 +799,17 @@ namespace WebApplication1.Controllers
                 {
                     //Model is not valid
 
-                    //lets I create an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
-                    HttpContext.Response.StatusCode = 500;
-                    return Json(new { Message = "Data not valid, please check again." });
+                    //so there is a business rule not met, lets throw a businessException and catch it
+                    throw new BusinessException("Data not valid, please check again.");                    
                 }
             }
-            catch(Exception E)
+            catch (BusinessException be)
+            {
+                //lets create an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
+                HttpContext.Response.StatusCode = 500;
+                return Json(new { Message = be.Message });
+            }
+            catch (Exception E)
             {
                 HttpContext.Response.StatusCode = 500;
                 return Json(new { Message = E.Message });
