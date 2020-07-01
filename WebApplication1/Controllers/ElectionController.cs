@@ -540,23 +540,46 @@ namespace WebApplication1.Controllers
         [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
         public async Task<IActionResult> RemoveCandidate([FromBody] CandidateElectionRelation mydata)
         {
+            //this method is called using ajax calls
+            //so if a business rule is not met we'll throw a businessException and catch it to create and internal server error and return its msg
+            //as json
+
+
+
             //this function removes a candidate from the db using its electionID and its voterBeing ID
             try
             {
                 if (mydata.electionId == null || mydata.voterId == null)
                 {
-                    //lets create and return an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
-                    HttpContext.Response.StatusCode = 500;
-                    return Json(new { Message = "Election Id and Voter Id cannot be Null." });
+                    throw new BusinessException("Properties voterId and electionId can not be null.");
                 }
+
+                Voter voter = _voterRepository.GetById(mydata.voterId);
+                if (voter == null)
+                {
+                    throw new BusinessException("Corresponding Voter instance not found.");
+                }
+
+                Election election = _electionRepository.GetById(mydata.electionId);
+                if (election == null)
+                {
+                    throw new BusinessException("Election instance not found.");
+                }
+
                 Candidate myCandidate = CandidateUtilities.GetCandidate_byVoter_byElection(
                     _candidateRepository, 
-                    _voterRepository.GetById(mydata.voterId), 
-                    _electionRepository.GetById(mydata.electionId));
+                    voter, 
+                    election);
                 _candidateRepository.Delete(myCandidate.Id);
                 return Json(new { success = true});
             }
-            catch(Exception E)
+            catch (BusinessException be)
+            {
+                //lets create an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
+                HttpContext.Response.StatusCode = 500;
+                return Json(new { Message = be.Message });
+            }
+            catch (Exception E)
             {
                 //lets create and return an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
                 HttpContext.Response.StatusCode = 500;
@@ -569,18 +592,34 @@ namespace WebApplication1.Controllers
         [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
         public async Task<IActionResult> RemoveCandidate_byID([FromBody] string candidateId)
         {
+            //this method is called using ajax calls
+            //so if a business rule is not met we'll throw a businessException and catch it to create and internal server error and return its msg
+            //as json
+
+
+
             //this function removes a candidate from the db using its ID
             try
             {
                 if (String.IsNullOrEmpty(candidateId))
                 {
-                    //lets create and return an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
-                    HttpContext.Response.StatusCode = 500;
-                    return Json(new { Message = "Candidate Id cannot be Null." });
+                    throw new BusinessException("candidateId cannot be null.");
                 }
+                
                 Candidate myCandidate = _candidateRepository.GetById(Guid.Parse(candidateId)) ;
+                if (myCandidate == null)
+                {
+                    throw new BusinessException("Candidate not found.");
+                }
+
                 _candidateRepository.Delete(myCandidate.Id);
                 return Json(new { success = true });
+            }
+            catch (BusinessException be)
+            {
+                //lets create an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
+                HttpContext.Response.StatusCode = 500;
+                return Json(new { Message = be.Message });
             }
             catch (Exception E)
             {
