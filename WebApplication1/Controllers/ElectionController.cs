@@ -71,9 +71,9 @@ namespace WebApplication1.Controllers
                     Candidates = e.Candidates.Where(c => c.isNeutralOpinion != true).ToList()
                 }));
             }
-            catch
+            catch(Exception E)
             {
-                return View();
+                throw E;
             }
         }
 
@@ -81,7 +81,33 @@ namespace WebApplication1.Controllers
         [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
         public ActionResult Details(Guid id)
         {
-            return View(Utilities.convertElection_toElectionViewModel(_electionRepository.GetById(id)));
+            try
+            {
+                if (id == null)
+                {
+                    throw new BusinessException("Passed parameter 'id' can not be null");
+                }
+
+                Election e = _electionRepository.GetById(id);
+                if (e == null)
+                {
+                    throw new BusinessException("Election not found");
+                }
+
+                return View(Utilities.convertElection_toElectionViewModel(e));
+            }
+            catch (BusinessException be)
+            {
+                //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
+                //by whatever we want
+                BusinessMessage bm = new BusinessMessage("Error", be.Message);
+                ViewBag.BusinessMessage = bm;
+                return View();
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }            
         }
 
         // GET: Election/Create

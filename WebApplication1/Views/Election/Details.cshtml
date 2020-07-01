@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Details";
+    var BusinessMessage = (WebApplication1.Business.BusinessMessage)ViewBag.BusinessMessage;
 }
 
 <partial name="_detailsElectionStyle" />
@@ -9,77 +10,97 @@
 <h1>Details</h1>
 <h4>Election</h4>
 <hr />
-<div>
-    <input id="candidate-id-holder" type="hidden" asp-for="Id" />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.StartDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.StartDate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.DurationInDays)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.DurationInDays)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.NumberOfCandidates)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.NumberOfCandidates)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.HasNeutral)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.HasNeutral)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.NumberOfVotes)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.NumberOfVotes)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
-<br />
-<div class="col-12"> <h4>List of Candidates</h4></div>
-<br />
-<div class="spinner-border text-primary" id="candidates-table-spinner"></div>
-<div>
+@if (BusinessMessage != null)
+{
+    <div>
+        @if (BusinessMessage.Type == "Error")
+        {
+            <p class="text-danger">@BusinessMessage.Text</p>
+        }
+        else if (BusinessMessage.Type == "Warning")
+        {
+            <p class="text-warning">@BusinessMessage.Text</p>
+        }
+        else if (BusinessMessage.Type == "Success")
+        {
+            <p class="text-success">@BusinessMessage.Text</p>
+        }
+    </div>
+}
+@if (Model != null)
+{
+    <div>
+        <input id="candidate-id-holder" type="hidden" asp-for="Id" />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.StartDate)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.StartDate)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.DurationInDays)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.DurationInDays)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.NumberOfCandidates)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.NumberOfCandidates)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.HasNeutral)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.HasNeutral)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.NumberOfVotes)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.NumberOfVotes)
+            </dd>
+        </dl>
+    </div>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+        <a asp-action="Index">Back to List</a>
+    </div>
+    <br />
+    <div class="row"> <h4>List of Candidates</h4></div>
+    <br />
+    <div class="spinner-border text-primary" id="candidates-table-spinner"></div>
+    <div>
 
-    <table id="candidates-table" class="table">
-        <thead>
-            <tr>
-                <th>
-                    FirstName
-                </th>
-                <th>
-                    LastName
-                </th>
-                <th>
-                    StateName
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
+        <table id="candidates-table" class="table">
+            <thead>
+                <tr>
+                    <th>
+                        FirstName
+                    </th>
+                    <th>
+                        LastName
+                    </th>
+                    <th>
+                        StateName
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
 
-</div>
+    </div>
 
-<partial name="_jQuery" />
-<partial name="_detailsElectionScript" />
+    <partial name="_jQuery" />
+    <partial name="_detailsElectionScript" />
+}
