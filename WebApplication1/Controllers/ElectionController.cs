@@ -859,6 +859,12 @@ namespace WebApplication1.Controllers
             //removing an election means removing all votes and candidates of it
             try
             {
+                
+                if (id == null)
+                {
+                    throw new BusinessException("Passed parameter 'id' can not be null");
+                }
+
                 //1- Remove all Votes related to this Election
                 //declaring an expression that is special to Vote objects
                 System.Linq.Expressions.Expression<Func<Vote, bool>> expr1 = e => e.Election.Id == id;
@@ -883,7 +889,15 @@ namespace WebApplication1.Controllers
                 _electionRepository.Delete(id);
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (BusinessException be)
+            {
+                //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
+                //by whatever we want
+                BusinessMessage bm = new BusinessMessage("Error", be.Message);
+                ViewBag.BusinessMessage = bm;
+                return View(nameof(Delete));
+            }
+            catch(Exception E)
             {
                 return View();
             }
