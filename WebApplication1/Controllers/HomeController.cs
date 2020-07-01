@@ -58,48 +58,69 @@ namespace WebApplication1.Controllers
 
 
         public async Task<IActionResult> Index()
-        {            
-            if (User.IsInRole("Voter") || User.IsInRole("Administrator"))
+        {
+            try
             {
-                _logger.LogInformation("Going to load the Dashbord");
-                //the user has a voter Role, lets display the dashboard
-                var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+                if (User.IsInRole("Voter") || User.IsInRole("Administrator"))
+                {
+                    _logger.LogInformation("Going to load the Dashbord");
+                    //the user has a voter Role, lets display the dashboard
+                    var currentUser = await _userManager.GetUserAsync(HttpContext.User);
 
 
-                _logger.LogInformation("Calling DashboardUtilities.getDashboard() method");
-                //Now lets Get a Cached Dashboard or Create it and Cached it
-                var cachedDashboard = _memoryCache.GetOrCreate(typeof(DashboardViewModel), d =>
+                    _logger.LogInformation("Calling DashboardUtilities.getDashboard() method");
+                    //Now lets Get a Cached Dashboard or Create it and Cached it
+                    var cachedDashboard = _memoryCache.GetOrCreate(typeof(DashboardViewModel), d =>
                     {
                         d.AbsoluteExpiration = DateTime.Now.AddMinutes(3);
                         return DashboardUtilities.getDashboard(_candidateRepository, _voterRepository, _voteRepository, _electionRepository, currentUser); ;
                     });
-                //so the above GetOrCreate() method tries to get a cached dashboard from the memory, and if it doesn't find any it will create
-                //an instance of the dashboard and cach it in memory for Three minutes
+                    if(cachedDashboard == null)
+                    {
+                        throw new BusinessException("Dashboard is null! Please contact your administrator.");
+                    }
+                    //so the above GetOrCreate() method tries to get a cached dashboard from the memory, and if it doesn't find any it will create
+                    //an instance of the dashboard and cach it in memory for Three minutes
 
-                _logger.LogInformation("Returning dashboard instance to the view");
-                //DashboardViewModel d = DashboardUtilities.getDashboard(_candidateRepository, _voterRepository, _voteRepository, _electionRepository, currentUser);
-                return View(cachedDashboard);
+                    _logger.LogInformation("Returning dashboard instance to the view");
+                    //DashboardViewModel d = DashboardUtilities.getDashboard(_candidateRepository, _voterRepository, _voteRepository, _electionRepository, currentUser);
+                    return View(cachedDashboard);
 
 
-                /*
-                THIS IS HOW I USED TO LOAD THE OLD DASHBOARD BEFORE INTRODUCING THE ELECTION NOTION 
-                */
-                //we load an empty view, then it'll be filled using jQuery Ajax
-                //return View();
+                    /*
+                    THIS IS HOW I USED TO LOAD THE OLD DASHBOARD BEFORE INTRODUCING THE ELECTION NOTION 
+                    */
+                    //we load an empty view, then it'll be filled using jQuery Ajax
+                    //return View();
 
+                }
+                else
+                {
+                    //so this user has 'PreVoter', this happened in only one case: this is a new user who didn't change his password.
+                    //    He should be redirected to ResetPassword view.
+                    //    Once he change his password he will be provided the role 'Voter' 
+
+                    _logger.LogInformation("Redirecting User to reset his password before using the application");
+                    var user = await _userManager.GetUserAsync(HttpContext.User);
+                    var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                    return RedirectToPage("/Account/ResetPassword", new { area = "Identity", code }); //this returns 'code must be supplied o reset password'
+                }
             }
-            else
+            catch(BusinessException be)
             {
-                //so this user has 'PreVoter', this happened in only one case: this is a new user who didn't change his password.
-                //    He should be redirected to ResetPassword view.
-                //    Once he change his password he will be provided the role 'Voter' 
-
-                _logger.LogInformation("Redirecting User to reset his password before using the application");
-                var user = await _userManager.GetUserAsync(HttpContext.User);
-                var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                return RedirectToPage("/Account/ResetPassword", new { area = "Identity", code }); //this returns 'code must be supplied o reset password'
+                _logger.LogError(be.Message);
+                //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
+                //by whatever we want
+                BusinessMessage bm = new BusinessMessage("Error", be.Message);
+                ViewBag.BusinessMessage = bm;
+                return View();
             }
+            catch(Exception E)
+            {
+                _logger.LogError("Exception, " + E.Message);
+                throw E;
+            }            
         }
         [HttpPost]
         public async Task<IActionResult> GetResultsOfElection([FromBody] Guid electionId)

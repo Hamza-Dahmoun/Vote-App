@@ -2,7 +2,8 @@
 @model WebApplication1.Models.ViewModels.DashboardViewModel
 
 @{ 
-    ViewData["Title"] = "Home";
+    ViewData["Title"] = "Home";    
+    var BusinessMessage = (WebApplication1.Business.BusinessMessage)ViewBag.BusinessMessage;
 }
 
 <partial name="_dashboardStyle" />
@@ -58,22 +59,43 @@
     <div class="dashboard-right-side">
         <h2 class="text-center">Statistics</h2>
         <hr />
-        <div class="dashboard-item-container">
-            <i class="fa fa-university" aria-hidden="true"></i>
-            <p>@Model.NbElections Elections</p>
-        </div>
-        <div class="dashboard-item-container">
-            <i class="fa fa-id-card-o" aria-hidden="true"></i>
-            <p>@Model.NbCandidates Candidates</p>
-        </div>
-        <div class="dashboard-item-container">
-            <i class="fa fa-users" aria-hidden="true"></i>
-            <p>@Model.NbVoters Voters</p>
-        </div>
-        <div class="dashboard-item-container">
-            <i class="fa fa-envelope" aria-hidden="true"></i>
-            <p>@Model.NbVotes Votes</p>
-        </div>
+        @if (BusinessMessage != null)
+        {
+    <div class="text-center">
+        @if (BusinessMessage.Type == "Error")
+        {
+            <p class="text-danger">@BusinessMessage.Text</p>
+        }
+        else if (BusinessMessage.Type == "Warning")
+        {
+            <p class="text-warning">@BusinessMessage.Text</p>
+        }
+        else if (BusinessMessage.Type == "Success")
+        {
+            <p class="text-success">@BusinessMessage.Text</p>
+        }
+    </div>
+        }
+        else
+        {
+            <div class="dashboard-item-container">
+                <i class="fa fa-university" aria-hidden="true"></i>
+                <p>@Model.NbElections Elections</p>
+            </div>
+            <div class="dashboard-item-container">
+                <i class="fa fa-id-card-o" aria-hidden="true"></i>
+                <p>@Model.NbCandidates Candidates</p>
+            </div>
+            <div class="dashboard-item-container">
+                <i class="fa fa-users" aria-hidden="true"></i>
+                <p>@Model.NbVoters Voters</p>
+            </div>
+            <div class="dashboard-item-container">
+                <i class="fa fa-envelope" aria-hidden="true"></i>
+                <p>@Model.NbVotes Votes</p>
+            </div>
+        }
+
     </div>
 </div>
 <br />
