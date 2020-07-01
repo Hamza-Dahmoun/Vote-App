@@ -1081,6 +1081,11 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public async Task<IActionResult> GetComingElections()
         {
+            //this method is called using ajax calls
+            //so if a business rule is not met we'll throw a businessException and catch it to create and internal server error and return its msg
+            //as json
+
+
             try
             {
                 //lets serialize the list of elections we've got and send it back as a reponse
@@ -1093,6 +1098,8 @@ namespace WebApplication1.Controllers
                 System.Linq.Expressions.Expression<Func<Election, bool>> expr = e => e.StartDate > DateTime.Now;
 
                 var futureElections = _electionRepository.GetAllFiltered(expr).Select(e => new { e.Name, e.StartDate, e.DurationInDays, e.Candidates.Count});
+                
+                
                 var json = JsonConvert.SerializeObject(futureElections);
 
                 //return Json(new { Success = false, Message = "error testing" });
@@ -1151,7 +1158,9 @@ namespace WebApplication1.Controllers
             }
             catch (Exception E)
             {
-                return BadRequest();
+                //lets create an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
+                HttpContext.Response.StatusCode = 500;
+                return Json(new { Message = E.Message });
             }
         }
 
