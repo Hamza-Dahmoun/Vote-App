@@ -125,19 +125,26 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public async Task<IActionResult> GetResultsOfElection([FromBody] Guid electionId)
         {
+            //this method is called using ajax calls
+            //so if a business rule is not met we'll throw a businessException and catch it to create and internal server error and return its msg
+            //as json
+
+
             _logger.LogInformation("Method Home/GetResultsOfElection() is called");
             try
             {
                 if (electionId == null || electionId == Guid.Empty)
                 {
-                    HttpContext.Response.StatusCode = 500;
-                    _logger.LogWarning("Error, electionId is null");
-                    return Json(new { Message = "Election ID is null." });
-                    //In above code I created an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.;
+                    throw new BusinessException("electionId can not be null.");
                 }
 
                 //this method returns a list of candidates (of an election) ordered by their number of votes
                 var election = _electionRepository.GetById(electionId);
+                if (election == null)
+                {
+                    throw new BusinessException("Election is not found.");
+                }
+
                 _logger.LogInformation("Calling method CandidateUtilities.GetCandidate_byElection()");
                 var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, election);
                 _logger.LogInformation("Calling Utilities.convertCandidateList_toCandidateViewModelList() method");
@@ -146,7 +153,13 @@ namespace WebApplication1.Controllers
                 var json = JsonConvert.SerializeObject(candidatesViewModel.OrderByDescending(c => c.VotesCount));
                 return Ok(json);
             }
-            catch(Exception E)
+            catch (BusinessException be)
+            {
+                //lets create an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
+                HttpContext.Response.StatusCode = 500;
+                return Json(new { Message = be.Message });
+            }
+            catch (Exception E)
             {
                 //lets create an internal server error so that jquery ajax understand that there was an error
                 HttpContext.Response.StatusCode = 500;
