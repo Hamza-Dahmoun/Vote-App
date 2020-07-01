@@ -637,27 +637,52 @@ namespace WebApplication1.Controllers
         [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
         public async Task<IActionResult> GetCandidatesList_byElectionId([FromBody] string electionId)
         {
+            //this method is called using ajax calls
+            //so if a business rule is not met we'll throw a businessException and catch it to create and internal server error and return its msg
+            //as json
+
+
+
             try
             {
                 if (String.IsNullOrEmpty(electionId))
                 {
-                    return BadRequest();
+                    throw new BusinessException("electionId cannot be null.");
                 }
                 Election e = _electionRepository.GetById(Guid.Parse(electionId));
+                if (e == null)
+                {
+                    throw new BusinessException("Election not found.");
+                }
+
                 //lets serialize the list of candidates of the election we've got and send it back as a reponse
                 //note that I didn't retrieve candidates as they are, I selected only needed attributes bcuz when i tried serializing
                 //candidates objects as they are I got this error "self referencing loop detected with type" it means json tried to serialize the candidate object
                 //but it found that each candidate has an Election object, and this election object has a list of candidates and so on, so i excluded election
                 //from the selection to avoid the infinite loop
                 //var candidates = e.Candidates/*.Select(p => new { p.FirstName, p.LastName, p.State})*/.ToList();
+                
                 var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, e);
+                if (candidates == null)
+                {
+                    throw new BusinessException("Candidates List not found.");
+                }
+
                 var json = JsonConvert.SerializeObject(Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, candidates));
                 return Ok(json);
                 
             }
-            catch(Exception E)
+            catch (BusinessException be)
             {
-                return BadRequest();
+                //lets create an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
+                HttpContext.Response.StatusCode = 500;
+                return Json(new { Message = be.Message });
+            }
+            catch (Exception E)
+            {
+                //lets create an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
+                HttpContext.Response.StatusCode = 500;
+                return Json(new { Message = E.Message });
             }
         }
 
@@ -668,11 +693,16 @@ namespace WebApplication1.Controllers
         [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
         public async Task<IActionResult> GetCandidatesList_byElectionId_ExcepNeutralOpinion([FromBody] string electionId)
         {
+            //this method is called using ajax calls
+            //so if a business rule is not met we'll throw a businessException and catch it to create and internal server error and return its msg
+            //as json
+
+
             try
             {
                 if (String.IsNullOrEmpty(electionId))
                 {
-                    return BadRequest();
+                    throw new BusinessException("electionId can not be null.");
                 }
                 Election e = _electionRepository.GetById(Guid.Parse(electionId));
                 //lets serialize the list of candidates of the election we've got and send it back as a reponse
@@ -686,15 +716,27 @@ namespace WebApplication1.Controllers
                 System.Linq.Expressions.Expression<Func<Candidate, bool>> expr = e => e.Election.Id == Guid.Parse(electionId) && e.isNeutralOpinion !=true;
 
                 var candidates = _candidateRepository.GetAllFiltered(expr);
+                if (candidates == null)
+                {
+                    throw new BusinessException("Candidates List not found.");
+                }
 
                 //var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, e);
                 var json = JsonConvert.SerializeObject(Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, candidates));
                 return Ok(json);
 
             }
+            catch (BusinessException be)
+            {
+                //lets create an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
+                HttpContext.Response.StatusCode = 500;
+                return Json(new { Message = be.Message });
+            }
             catch (Exception E)
             {
-                return BadRequest();
+                //lets create an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
+                HttpContext.Response.StatusCode = 500;
+                return Json(new { Message = E.Message });
             }
         }
 
