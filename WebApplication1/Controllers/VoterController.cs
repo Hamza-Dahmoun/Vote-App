@@ -58,6 +58,7 @@ namespace WebApplication1.Controllers
             {
                 _logger.LogInformation("Calling VoterRepository.GetAll() method");
                 List<Voter> voters = _voterRepository.GetAll().ToList();
+                ViewBag.votersCount = voters.Count;
                 //return View(_db.Voter.ToList());
                 _logger.LogInformation("Returning a list of voters to Index view");
                 return View(voters);
@@ -784,7 +785,7 @@ namespace WebApplication1.Controllers
                 {
                     worksheet.Cells[c, 1].Value = voters[c - 2].FirstName;
                     worksheet.Cells[c, 2].Value = voters[c - 2].LastName;
-                    worksheet.Cells[c, 3].Value = voters[c - 2].State;
+                    worksheet.Cells[c, 3].Value = voters[c - 2].State.Name;
                 }
 
                 package.Save();

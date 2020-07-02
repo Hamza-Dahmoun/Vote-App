@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "List of Voters";
+    int votersCount = ViewBag.votersCount;
 }
 <partial name="_datatablesStyle" />
 <partial name="_tablesButtonsStyling" />
@@ -10,8 +11,16 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+<partial name="_downloadExcelStyle" />
+<form class="excel-downlod-container" asp-action="ExportToExcel">
+    <button type="submit" title="Download Excel File">
+        <i class="fa fa-file-excel-o" aria-hidden="true"></i> @votersCount rows
+    </button>
+</form>
+
+
 <table class="table" id="voters-table">
-   
 </table>
 
 <partial name="_jQuery" />
