@@ -768,33 +768,39 @@ namespace WebApplication1.Controllers
         public IActionResult ExportToExcel()
         {
             //This function download list of all Voters as excel file
-
-            var stream = new System.IO.MemoryStream();
-            using (ExcelPackage package = new ExcelPackage(stream))
+            try
             {
-                var voters = _voterRepository.GetAll();
-                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Voters");
-
-                worksheet.Cells[1, 1].Value = "First Name";
-                worksheet.Cells[1, 2].Value = "Last Name";
-                worksheet.Cells[1, 3].Value = "State";
-                worksheet.Row(1).Style.Font.Bold = true;
-
-
-                for (int c = 2; c < voters.Count + 2; c++)
+                var stream = new System.IO.MemoryStream();
+                using (ExcelPackage package = new ExcelPackage(stream))
                 {
-                    worksheet.Cells[c, 1].Value = voters[c - 2].FirstName;
-                    worksheet.Cells[c, 2].Value = voters[c - 2].LastName;
-                    worksheet.Cells[c, 3].Value = voters[c - 2].State.Name;
+                    var voters = _voterRepository.GetAll();
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Voters");
+
+                    worksheet.Cells[1, 1].Value = "First Name";
+                    worksheet.Cells[1, 2].Value = "Last Name";
+                    worksheet.Cells[1, 3].Value = "State";
+                    worksheet.Row(1).Style.Font.Bold = true;
+
+
+                    for (int c = 2; c < voters.Count + 2; c++)
+                    {
+                        worksheet.Cells[c, 1].Value = voters[c - 2].FirstName;
+                        worksheet.Cells[c, 2].Value = voters[c - 2].LastName;
+                        worksheet.Cells[c, 3].Value = voters[c - 2].State.Name;
+                    }
+
+                    package.Save();
                 }
 
-                package.Save();
+                string fileName = "Voters.xlsx";
+                string fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                stream.Position = 0;
+                return File(stream, fileType, fileName);
             }
-
-            string fileName = "Voters.xlsx";
-            string fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            stream.Position = 0;
-            return File(stream, fileType, fileName);
+            catch(Exception E)
+            {
+                throw E;
+            }            
         }
 
     }

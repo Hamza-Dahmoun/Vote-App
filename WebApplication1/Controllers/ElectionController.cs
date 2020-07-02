@@ -1440,44 +1440,50 @@ namespace WebApplication1.Controllers
         public IActionResult ExportToExcel()
         {
             //This function download list of all Elections as excel file
-
-            var stream = new System.IO.MemoryStream();
-            using (ExcelPackage package = new ExcelPackage(stream))
+            try
             {
-                var elections = _electionRepository.GetAll();
-                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Elections");
-
-                worksheet.Cells[1, 1].Value = "Name";
-                worksheet.Cells[1, 2].Value = "Start Date";
-                worksheet.Cells[1, 3].Value = "Duration (d)";
-                worksheet.Cells[1, 4].Value = "Neutral Candidate (Y/N)";
-                worksheet.Cells[1, 5].Value = "Candidates";
-                worksheet.Row(1).Style.Font.Bold = true;
-
-
-                for (int c = 2; c < elections.Count + 2; c++)
+                var stream = new System.IO.MemoryStream();
+                using (ExcelPackage package = new ExcelPackage(stream))
                 {
-                    worksheet.Cells[c, 1].Value = elections[c - 2].Name;
-                    worksheet.Cells[c, 2].Value = elections[c - 2].StartDate.ToShortDateString();
-                    worksheet.Cells[c, 3].Value = elections[c - 2].DurationInDays;
-                    if (elections[c - 2].HasNeutral)
+                    var elections = _electionRepository.GetAll();
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Elections");
+
+                    worksheet.Cells[1, 1].Value = "Name";
+                    worksheet.Cells[1, 2].Value = "Start Date";
+                    worksheet.Cells[1, 3].Value = "Duration (d)";
+                    worksheet.Cells[1, 4].Value = "Neutral Candidate (Y/N)";
+                    worksheet.Cells[1, 5].Value = "Candidates";
+                    worksheet.Row(1).Style.Font.Bold = true;
+
+
+                    for (int c = 2; c < elections.Count + 2; c++)
                     {
-                        worksheet.Cells[c, 4].Value = "Y";
+                        worksheet.Cells[c, 1].Value = elections[c - 2].Name;
+                        worksheet.Cells[c, 2].Value = elections[c - 2].StartDate.ToShortDateString();
+                        worksheet.Cells[c, 3].Value = elections[c - 2].DurationInDays;
+                        if (elections[c - 2].HasNeutral)
+                        {
+                            worksheet.Cells[c, 4].Value = "Y";
+                        }
+                        else
+                        {
+                            worksheet.Cells[c, 4].Value = "N";
+                        }
+                        worksheet.Cells[c, 3].Value = elections[c - 2].Candidates.Count;
                     }
-                    else
-                    {
-                        worksheet.Cells[c, 4].Value = "N";
-                    }
-                    worksheet.Cells[c, 3].Value = elections[c - 2].Candidates.Count;
+
+                    package.Save();
                 }
 
-                package.Save();
+                string fileName = "Elections.xlsx";
+                string fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                stream.Position = 0;
+                return File(stream, fileType, fileName);
             }
-
-            string fileName = "Elections.xlsx";
-            string fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            stream.Position = 0;
-            return File(stream, fileType, fileName);
+            catch(Exception E)
+            {
+                throw E;
+            }            
         }
     }
 }
