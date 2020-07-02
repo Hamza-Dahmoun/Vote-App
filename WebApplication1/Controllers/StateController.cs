@@ -292,10 +292,10 @@ namespace WebApplication1.Controllers
 
 
 
-
-        public async Task<IActionResult> ExportToExcel()
+        [HttpPost]
+        public IActionResult ExportToExcel()
         {
-            //This function dowload list of all States as excel file
+            //This function download list of all States as excel file
 
             var stream = new System.IO.MemoryStream();
             using (ExcelPackage package = new ExcelPackage(stream))
@@ -320,7 +320,7 @@ namespace WebApplication1.Controllers
                 package.Save();
             }
 
-            string fileName = "Subscribers.xlsx";
+            string fileName = "States.xlsx";
             string fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
             stream.Position = 0;
             return File(stream, fileType, fileName);
