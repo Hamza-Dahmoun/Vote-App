@@ -18,6 +18,7 @@ namespace WebApplication1.Models.Repositories
         void Delete(Guid Id);
         List<T> GetAllFiltered(Expression<Func<T, bool>> predicate);
         T GetOneFiltered(Expression<Func<T, bool>> predicate);
+        int CountAll();
 
         //for jQuery datatables
         PagedResult<T> GetAllPaged(string orderBy, string orderDirection, int startRowIndex = 0, int maxRows = 10);

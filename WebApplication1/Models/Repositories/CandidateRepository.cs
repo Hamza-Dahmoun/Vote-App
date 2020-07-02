@@ -116,6 +116,12 @@ namespace WebApplication1.Models.Repositories
                 throw E;
             }            
         }
+        public int CountAll()
+        {
+            int count = 0;
+            count = _dbSet.Count();
+            return count;
+        }
 
         //public Candidate GetByVoterBeingId(Guid VoterBeingId)
         //{
