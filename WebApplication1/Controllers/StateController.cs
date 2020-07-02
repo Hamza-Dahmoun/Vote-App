@@ -43,6 +43,8 @@ namespace WebApplication1.Controllers
             {
                 _logger.LogInformation("Calling StateRepository.GetAll() method");
                 List<State> states = _stateRepository.GetAll().ToList();
+                ViewBag.statesCount = states.Count;
+
                 _logger.LogInformation("Calling Utilities.convertStateList_toStateViewModelList() method");
                 List<StateViewModel> svmList = Utilities.convertStateList_toStateViewModelList(states);
                 _logger.LogInformation("Returning a list of StateViewModels to the Index view");

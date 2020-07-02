@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Index";
+    int statesCount = ViewBag.statesCount;
 }
 <partial name="_datatablesStyle" />
 <partial name="_tablesButtonsStyling" />
@@ -12,6 +13,22 @@
         display: block;
         width: 100%;
         text-align: right;
+        margin-bottom:1%;
+        margin-top:1%;
+    }
+    .excel-downlod-container button{
+        cursor:pointer;
+        background-color:transparent;
+        border:none;
+        color: #145a32;
+        transition-duration:0.6s;
+        height:35px;
+        border-radius:4px;
+    }
+    .excel-downlod-container button:hover{
+        transition-duration:0.6s;
+        background-color: #145a32;
+        color: #eafaf1 ;
     }
 </style>
 
@@ -19,7 +36,9 @@
     <a asp-action="Create">Create New</a>
 </p>
 <form class="excel-downlod-container" asp-action="ExportToExcel">
-    <button type="submit" class="btn btn-info" title="Download Excel File">Excel</button>
+    <button type="submit" title="Download Excel File">
+        <i class="fa fa-file-excel-o" aria-hidden="true"></i> @statesCount rows
+    </button>
 </form>
 <table class="table" id="states-table">
     <thead>
