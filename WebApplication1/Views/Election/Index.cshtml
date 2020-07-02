@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<WebApplication1.Models.Election>
 @{
     ViewData["Title"] = "Index";
+    int electionsCount = ViewBag.electionsCount;
 }
 <partial name="_datatablesStyle" />
 <partial name="_tablesButtonsStyling" />
@@ -9,6 +10,13 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+<partial name="_downloadExcelStyle" />
+<form class="excel-downlod-container" asp-action="ExportToExcel">
+    <button type="submit" title="Download Excel File">
+        <i class="fa fa-file-excel-o" aria-hidden="true"></i> @electionsCount rows
+    </button>
+</form>
 <table class="table" id="elections-table">
     <thead>
         <tr>
@@ -53,10 +61,10 @@
                     @*display Edit button only when this Election is in future*@
                     @if (item.StartDate > DateTime.Now)
                     {
-                        <a class='table-button button-edit' title='Edit' asp-action="Edit" asp-route-id="@item.Id"><i class='fa fa-pencil'></i></a>                                             
-                        }
+                        <a class='table-button button-edit' title='Edit' asp-action="Edit" asp-route-id="@item.Id"><i class='fa fa-pencil'></i></a>
+                    }
                     <a class='table-button button-details' title='Details' asp-action="Details" asp-route-id="@item.Id"><i class='fa fa-file-text'></i></a>
-                    
+
                     <a class='table-button button-delete' title='Delete' asp-action="Delete" asp-route-id="@item.Id"><i class='fa fa-trash'></i></a>
                 </td>
             </tr>

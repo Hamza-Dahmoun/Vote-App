@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using OfficeOpenXml;
 using WebApplication1.Business;
 using WebApplication1.Models;
 using WebApplication1.Models.Helpers;
@@ -58,6 +59,7 @@ namespace WebApplication1.Controllers
         {
             try
             {
+                ViewBag.electionsCount = _electionRepository.CountAll();
                 //returning a list of Elections but without their neutral candidate
                 
                 return View(_electionRepository.GetAll().OrderByDescending(d => d.StartDate).
@@ -1432,5 +1434,50 @@ namespace WebApplication1.Controllers
 
 
         #endregion
+
+
+        [HttpPost]
+        public IActionResult ExportToExcel()
+        {
+            //This function download list of all Elections as excel file
+
+            var stream = new System.IO.MemoryStream();
+            using (ExcelPackage package = new ExcelPackage(stream))
+            {
+                var elections = _electionRepository.GetAll();
+                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Elections");
+
+                worksheet.Cells[1, 1].Value = "Name";
+                worksheet.Cells[1, 2].Value = "Start Date";
+                worksheet.Cells[1, 3].Value = "Duration (d)";
+                worksheet.Cells[1, 4].Value = "Neutral Candidate (Y/N)";
+                worksheet.Cells[1, 5].Value = "Candidates";
+                worksheet.Row(1).Style.Font.Bold = true;
+
+
+                for (int c = 2; c < elections.Count + 2; c++)
+                {
+                    worksheet.Cells[c, 1].Value = elections[c - 2].Name;
+                    worksheet.Cells[c, 2].Value = elections[c - 2].StartDate.ToShortDateString();
+                    worksheet.Cells[c, 3].Value = elections[c - 2].DurationInDays;
+                    if (elections[c - 2].HasNeutral)
+                    {
+                        worksheet.Cells[c, 4].Value = "Y";
+                    }
+                    else
+                    {
+                        worksheet.Cells[c, 4].Value = "N";
+                    }
+                    worksheet.Cells[c, 3].Value = elections[c - 2].Candidates.Count;
+                }
+
+                package.Save();
+            }
+
+            string fileName = "Elections.xlsx";
+            string fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            stream.Position = 0;
+            return File(stream, fileType, fileName);
+        }
     }
 }
