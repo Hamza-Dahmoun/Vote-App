@@ -5,6 +5,7 @@
     ViewData["Title"] = "Home";    
     var BusinessMessage = (WebApplication1.Business.BusinessMessage)ViewBag.BusinessMessage;    
     int futureElectionsCount = ViewBag.futureElectionsCount;
+    int previousElectionsCount = ViewBag.previousElectionsCount;
 }
 
 <partial name="_dashboardStyle" />
@@ -58,6 +59,11 @@
 
         <div class="margined-area" id="previous-elections-area">
             <h3>Previous Elections</h3>
+            <form class="excel-downlod-container" asp-action="futureElections_ExportToExcel">
+                <button type="submit" title="Download Excel File">
+                    <i class="fa fa-file-excel-o" aria-hidden="true"></i> @previousElectionsCount rows
+                </button>
+            </form>
             <table class="table" id="previous-elections-table">
             </table>
         </div>
