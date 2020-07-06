@@ -86,7 +86,7 @@ namespace WebApplication1.Controllers
 
                     //Now lets count futureElections and previousElections and store them in a ViewBag to be displayed inside Excel Download buttons
                     ViewBag.futureElectionsCount = countFutureElections();
-
+                    ViewBag.previousElectionsCount = countPreviousElections();
 
 
                     _logger.LogInformation("Returning dashboard instance to the view");
@@ -203,7 +203,7 @@ namespace WebApplication1.Controllers
 
 
 
-        #region ExcelExport
+        #region futureElectionsExcelExport
         [HttpPost]
         public IActionResult futureElections_ExportToExcel()
         {
@@ -270,6 +270,24 @@ namespace WebApplication1.Controllers
             int count = _electionRepository.GetAllFiltered(expr).Count();
             return count;
         }
+        #endregion
+
+        #region previousElectionsExcelExport
+        public List<Election> previousElections()
+        {
+            //declaring an expression that is special to Election objects
+            System.Linq.Expressions.Expression<Func<Election, bool>> expr = e => e.StartDate.AddDays(e.DurationInDays) < DateTime.Now;
+            var previousElections = _electionRepository.GetAllFiltered(expr).ToList();
+            return previousElections;
+        }
+        public int countPreviousElections()
+        {
+            //declaring an expression that is special to Election objects
+            System.Linq.Expressions.Expression<Func<Election, bool>> expr = e => e.StartDate.AddDays(e.DurationInDays) < DateTime.Now;
+            int count = _electionRepository.GetAllFiltered(expr).Count();
+            return count;
+        }
+
         #endregion
     }
 }
