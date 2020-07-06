@@ -3,7 +3,8 @@
 
 @{ 
     ViewData["Title"] = "Home";    
-    var BusinessMessage = (WebApplication1.Business.BusinessMessage)ViewBag.BusinessMessage;
+    var BusinessMessage = (WebApplication1.Business.BusinessMessage)ViewBag.BusinessMessage;    
+    int futureElectionsCount = ViewBag.futureElectionsCount;
 }
 
 <partial name="_dashboardStyle" />
@@ -24,6 +25,12 @@
 
         <div class="margined-area" id="coming-elections-area">
             <h3>Future Elections</h3>
+            <partial name="_downloadExcelStyle" />
+            <form class="excel-downlod-container" asp-action="ExportToExcel">
+                <button type="submit" title="Download Excel File">
+                    <i class="fa fa-file-excel-o" aria-hidden="true"></i> @futureElectionsCount rows
+                </button>
+            </form>
             <div class="spinner-border text-primary">
 
             </div>
