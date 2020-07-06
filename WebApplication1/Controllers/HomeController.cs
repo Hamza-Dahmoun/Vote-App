@@ -16,6 +16,7 @@ using System.Text;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.AspNetCore.Diagnostics;
+using OfficeOpenXml;
 
 namespace WebApplication1.Controllers
 {
@@ -81,6 +82,12 @@ namespace WebApplication1.Controllers
                     }
                     //so the above GetOrCreate() method tries to get a cached dashboard from the memory, and if it doesn't find any it will create
                     //an instance of the dashboard and cach it in memory for Three minutes
+
+
+                    //Now lets count futureElections and previousElections and store them in a ViewBag to be displayed inside Excel Download buttons
+                    ViewBag.futureElectionsCount = countFutureElections();
+
+
 
                     _logger.LogInformation("Returning dashboard instance to the view");
                     //DashboardViewModel d = DashboardUtilities.getDashboard(_candidateRepository, _voterRepository, _voteRepository, _electionRepository, currentUser);
@@ -188,11 +195,81 @@ namespace WebApplication1.Controllers
             return View(error);
 
         }
-        
 
 
 
 
 
+
+
+
+        #region ExcelExport
+        [HttpPost]
+        public IActionResult futureElections_ExportToExcel()
+        {
+            //This function download list of all Future Elections as excel file
+            try
+            {
+                var stream = new System.IO.MemoryStream();
+                using (ExcelPackage package = new ExcelPackage(stream))
+                {
+                    var elections = futureElections();
+
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Elections");
+
+                    worksheet.Cells[1, 1].Value = "Name";
+                    worksheet.Cells[1, 2].Value = "Start Date";
+                    worksheet.Cells[1, 3].Value = "Duration (d)";
+                    worksheet.Cells[1, 4].Value = "Neutral Candidate (Y/N)";
+                    worksheet.Cells[1, 5].Value = "Candidates";
+                    worksheet.Row(1).Style.Font.Bold = true;
+
+
+                    for (int c = 2; c < elections.Count + 2; c++)
+                    {
+                        worksheet.Cells[c, 1].Value = elections[c - 2].Name;
+                        worksheet.Cells[c, 2].Value = elections[c - 2].StartDate.ToShortDateString();
+                        worksheet.Cells[c, 3].Value = elections[c - 2].DurationInDays;
+                        if (elections[c - 2].HasNeutral)
+                        {
+                            worksheet.Cells[c, 4].Value = "Y";
+                        }
+                        else
+                        {
+                            worksheet.Cells[c, 4].Value = "N";
+                        }
+                        worksheet.Cells[c, 5].Value = elections[c - 2].Candidates.Count().ToString();
+                    }
+
+                    package.Save();
+                }
+
+                string fileName = "Elections.xlsx";
+                string fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                stream.Position = 0;
+                return File(stream, fileType, fileName);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
+
+        public List<Election> futureElections()
+        {
+            //declaring an expression that is special to Election objects
+            System.Linq.Expressions.Expression<Func<Election, bool>> expr = e => e.StartDate > DateTime.Now;
+            var futureElections = _electionRepository.GetAllFiltered(expr).ToList();
+            return futureElections;
+        }
+        public int countFutureElections()
+        {
+            //declaring an expression that is special to Election objects
+            System.Linq.Expressions.Expression<Func<Election, bool>> expr = e => e.StartDate > DateTime.Now;
+            int count = _electionRepository.GetAllFiltered(expr).Count();
+            return count;
+        }
+        #endregion
     }
 }
