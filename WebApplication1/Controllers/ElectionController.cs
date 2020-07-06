@@ -1469,7 +1469,7 @@ namespace WebApplication1.Controllers
                         {
                             worksheet.Cells[c, 4].Value = "N";
                         }
-                        worksheet.Cells[c, 3].Value = elections[c - 2].Candidates.Count;
+                        worksheet.Cells[c, 5].Value = elections[c - 2].Candidates.Count.ToString();
                     }
 
                     package.Save();
