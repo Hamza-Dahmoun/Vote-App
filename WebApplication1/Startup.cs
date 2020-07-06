@@ -16,6 +16,11 @@ using WebApplication1.Models;
 using WebApplication1.Models.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.Extensions.Localization;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
+
+
 
 namespace WebApplication1
 {
@@ -93,6 +98,28 @@ namespace WebApplication1
                         );
                 }
                 );
+
+
+            //Configure LocalizationOptions to use RessourcesPath "Ressourses" in the project
+            services.Configure<LocalizationOptions>(options => options.ResourcesPath = "Ressources");
+
+            //Configureing RequestLocalizationOptions
+            var cultures = new List<CultureInfo>
+            {
+                new CultureInfo("en"),
+                new CultureInfo("fr")
+            };
+            services.Configure<RequestLocalizationOptions>(options =>
+            {
+                //set the supported cultures list
+                options.SupportedCultures = cultures;
+
+                //set the SupportedUICultures list
+                options.SupportedUICultures = cultures;
+
+                //define DefaultRequestCulture to be en-EN
+                options.DefaultRequestCulture = new RequestCulture("en-EN");
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -101,6 +128,11 @@ namespace WebApplication1
             //the below middleware is one of the diagnosis middlewares and it redirect the user to the welcome page whatever
             //the action he's trying to do
             //app.UseWelcomePage();
+
+
+            //add RequestLocalization middleware
+            app.UseRequestLocalization();
+
 
 
             //the below middleware is one of the diagnosis middlewares and it displays the below text with the http response code as a plain text            
