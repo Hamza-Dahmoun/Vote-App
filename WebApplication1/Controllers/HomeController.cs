@@ -244,7 +244,7 @@ namespace WebApplication1.Controllers
                     package.Save();
                 }
 
-                string fileName = "Elections.xlsx";
+                string fileName = "futureElections.xlsx";
                 string fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                 stream.Position = 0;
                 return File(stream, fileType, fileName);
@@ -273,6 +273,57 @@ namespace WebApplication1.Controllers
         #endregion
 
         #region previousElectionsExcelExport
+        [HttpPost]
+        public IActionResult previousElections_ExportToExcel()
+        {
+            //This function download list of all Future Elections as excel file
+            try
+            {
+                var stream = new System.IO.MemoryStream();
+                using (ExcelPackage package = new ExcelPackage(stream))
+                {
+                    var elections = previousElections();
+
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Elections");
+
+                    worksheet.Cells[1, 1].Value = "Name";
+                    worksheet.Cells[1, 2].Value = "Start Date";
+                    worksheet.Cells[1, 3].Value = "Duration (d)";
+                    worksheet.Cells[1, 4].Value = "Neutral Candidate (Y/N)";
+                    worksheet.Cells[1, 5].Value = "Candidates";
+                    worksheet.Row(1).Style.Font.Bold = true;
+
+
+                    for (int c = 2; c < elections.Count + 2; c++)
+                    {
+                        worksheet.Cells[c, 1].Value = elections[c - 2].Name;
+                        worksheet.Cells[c, 2].Value = elections[c - 2].StartDate.ToShortDateString();
+                        worksheet.Cells[c, 3].Value = elections[c - 2].DurationInDays;
+                        if (elections[c - 2].HasNeutral)
+                        {
+                            worksheet.Cells[c, 4].Value = "Y";
+                        }
+                        else
+                        {
+                            worksheet.Cells[c, 4].Value = "N";
+                        }
+                        worksheet.Cells[c, 5].Value = elections[c - 2].Candidates.Count().ToString();
+                    }
+
+                    package.Save();
+                }
+
+                string fileName = "previousElections.xlsx";
+                string fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                stream.Position = 0;
+                return File(stream, fileType, fileName);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
         public List<Election> previousElections()
         {
             //declaring an expression that is special to Election objects
