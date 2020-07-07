@@ -67,7 +67,8 @@ namespace WebApplication1
                     //adding the created policy as a filter
                     o.Filters.Add(new AuthorizeFilter(mySinglePolicy));
                 }
-                ).AddViewLocalization(options => { options.ResourcesPath = "Ressources"; }).AddDataAnnotationsLocalization(); ;
+                //adding localization options for Views and DataAnnotation
+                ).AddViewLocalization(options => { options.ResourcesPath = "Resources"; }).AddDataAnnotationsLocalization(); ;
             services.AddRazorPages();
 
             services.AddAuthorization(
@@ -101,7 +102,7 @@ namespace WebApplication1
 
 
             //Configure LocalizationOptions to use RessourcesPath "Ressourses" in the project
-            services.Configure<LocalizationOptions>(options => options.ResourcesPath = "Ressources");
+            services.Configure<LocalizationOptions>(options => options.ResourcesPath = "Resources");
 
             //Configureing RequestLocalizationOptions
             var cultures = new List<CultureInfo>

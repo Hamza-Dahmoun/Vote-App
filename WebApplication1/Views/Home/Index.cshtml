@@ -1,9 +1,9 @@
 ﻿@*WE LOAD AN EMPTY VIEW THEN IT GETS FILLED USING JQUERY AJAX*@
 @model WebApplication1.Models.ViewModels.DashboardViewModel
 
-@{ 
-    ViewData["Title"] = "Home";    
-    var BusinessMessage = (WebApplication1.Business.BusinessMessage)ViewBag.BusinessMessage;    
+@{
+    ViewData["Title"] = "Home";
+    var BusinessMessage = (WebApplication1.Business.BusinessMessage)ViewBag.BusinessMessage;
     int futureElectionsCount = ViewBag.futureElectionsCount;
     int previousElectionsCount = ViewBag.previousElectionsCount;
 }
@@ -67,27 +67,27 @@
             <table class="table" id="previous-elections-table">
             </table>
         </div>
-        
+
     </div>
     <div class="dashboard-right-side">
         <h2 class="text-center">Statistics</h2>
         <hr />
         @if (BusinessMessage != null)
         {
-    <div class="text-center">
-        @if (BusinessMessage.Type == "Error")
-        {
-            <p class="text-danger">@BusinessMessage.Text</p>
-        }
-        else if (BusinessMessage.Type == "Warning")
-        {
-            <p class="text-warning">@BusinessMessage.Text</p>
-        }
-        else if (BusinessMessage.Type == "Success")
-        {
-            <p class="text-success">@BusinessMessage.Text</p>
-        }
-    </div>
+            <div class="text-center">
+                @if (BusinessMessage.Type == "Error")
+                {
+                    <p class="text-danger">@BusinessMessage.Text</p>
+                }
+                else if (BusinessMessage.Type == "Warning")
+                {
+                    <p class="text-warning">@BusinessMessage.Text</p>
+                }
+                else if (BusinessMessage.Type == "Success")
+                {
+                    <p class="text-success">@BusinessMessage.Text</p>
+                }
+            </div>
         }
         else
         {
