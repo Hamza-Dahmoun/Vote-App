@@ -67,7 +67,7 @@ namespace WebApplication1
                     //adding the created policy as a filter
                     o.Filters.Add(new AuthorizeFilter(mySinglePolicy));
                 }
-                );
+                ).AddViewLocalization(options => { options.ResourcesPath = "Ressources"; }).AddDataAnnotationsLocalization(); ;
             services.AddRazorPages();
 
             services.AddAuthorization(
