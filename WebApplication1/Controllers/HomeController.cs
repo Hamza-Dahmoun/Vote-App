@@ -17,6 +17,7 @@ using Newtonsoft.Json;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.AspNetCore.Diagnostics;
 using OfficeOpenXml;
+using Microsoft.Extensions.Localization;
 
 namespace WebApplication1.Controllers
 {
@@ -27,6 +28,7 @@ namespace WebApplication1.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
+        private readonly IStringLocalizer<HomeController> _localizer;
 
         //the below are services we're going to use in this controller, they will be injected in the constructor
         public IRepository<Candidate> _candidateRepository { get; }
@@ -46,7 +48,8 @@ namespace WebApplication1.Controllers
             IRepository<Voter> voterRepository,
             IRepository<Vote> voteRepository,
             IRepository<Election> electionRepository,
-            UserManager<IdentityUser> userManager)
+            UserManager<IdentityUser> userManager,
+            IStringLocalizer<HomeController> localizer)
         {
             _logger = logger;
             _candidateRepository = candidateRepository;
@@ -55,6 +58,7 @@ namespace WebApplication1.Controllers
             _electionRepository = electionRepository;
             _userManager = userManager;
             _memoryCache = memoryCache;
+            _localizer = localizer;
         }
 
 
@@ -64,6 +68,7 @@ namespace WebApplication1.Controllers
             {
                 if (User.IsInRole("Voter") || User.IsInRole("Administrator"))
                 {
+                    ViewBag.futureElectionText = _localizer["Future Elections"];
                     _logger.LogInformation("Going to load the Dashbord");
                     //the user has a voter Role, lets display the dashboard
                     var currentUser = await _userManager.GetUserAsync(HttpContext.User);

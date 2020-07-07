@@ -120,6 +120,9 @@
   <data name="Current Election" xml:space="preserve">
     <value>Current Election</value>
   </data>
+  <data name="Future Elections" xml:space="preserve">
+    <value>Future Election</value>
+  </data>
   <data name="Home" xml:space="preserve">
     <value>Home</value>
   </data>
