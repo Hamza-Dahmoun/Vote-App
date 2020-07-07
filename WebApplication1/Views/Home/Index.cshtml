@@ -39,8 +39,7 @@
         </div>
 
         <div class="margined-area" id="coming-elections-area">
-            @*<h3>Future Elections</h3>*@
-            <h3>@ViewBag.futureElectionText</h3>
+            <h3>Future Elections</h3>
             <partial name="_downloadExcelStyle" />
             <form class="excel-downlod-container" asp-action="futureElections_ExportToExcel">
                 <button type="submit" title="Download Excel File">
