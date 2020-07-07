@@ -8,6 +8,20 @@
     int previousElectionsCount = ViewBag.previousElectionsCount;
 }
 
+
+@{ /*Importing namespace Microsoft.Extensions.Localization; */}
+@using Microsoft.Extensions.Localization;
+
+@{ /*Importing namespace Microsoft.AspNetCore.Mvc.Localization; */}
+@using Microsoft.AspNetCore.Mvc.Localization;
+
+@*Importing Controllers*@
+@using WebApplication1.Controllers
+
+@{/*TODO: Inject IHtmlLocalizer for Menu shared resource in variable named menuLocalizer */}
+@inject IStringLocalizer<HomeController> localizer
+
+
 <partial name="_dashboardStyle" />
 <partial name="_datatablesStyle" />
 
@@ -18,7 +32,7 @@
 <div class="dashboard-holder">
     <div class="dashboard-left-side">
         <div id="current-election-area">
-            <h3>Current Election</h3>
+            <h3>@localizer["Current Election"]</h3>
             <div class="spinner-border text-primary">
 
             </div>
