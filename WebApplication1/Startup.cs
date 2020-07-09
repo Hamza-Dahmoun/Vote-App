@@ -35,7 +35,7 @@ namespace WebApplication1
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
+        {            
             //Lets register the Voter Repository so that it could be used in VoterController
             services.AddTransient<IRepository<Voter>, VoterRepository>();
             //Lets register the State Repository so that it could be used in StateController
@@ -59,6 +59,8 @@ namespace WebApplication1
 
             services.AddDbContext<VoteDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("VoteDBConnection")));
 
+            services.AddLocalization(options => { options.ResourcesPath = "Resources"; });
+
             services.AddControllersWithViews(
                 o =>
                 {
@@ -67,8 +69,9 @@ namespace WebApplication1
                     //adding the created policy as a filter
                     o.Filters.Add(new AuthorizeFilter(mySinglePolicy));
                 }
+                )
                 //adding localization options for Views and DataAnnotation
-                ).AddViewLocalization(options => { options.ResourcesPath = "Resources"; }).AddDataAnnotationsLocalization(); ;
+                .AddViewLocalization(options => { options.ResourcesPath = "Resources"; }).AddDataAnnotationsLocalization();
             services.AddRazorPages();
 
             services.AddAuthorization(
