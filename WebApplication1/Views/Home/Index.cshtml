@@ -38,11 +38,11 @@
         </div>
 
         <div class="margined-area" id="coming-elections-area">
-            <h3>Future Elections</h3>
+            <h3>@labelsLocalizer["Future Elections"]</h3>
             <partial name="_downloadExcelStyle" />
             <form class="excel-downlod-container" asp-action="futureElections_ExportToExcel">
-                <button type="submit" title="Download Excel File">
-                    <i class="fa fa-file-excel-o" aria-hidden="true"></i> @futureElectionsCount rows
+                <button type="submit" title=@labelsLocalizer["Download Excel File"]>
+                    <i class="fa fa-file-excel-o" aria-hidden="true"></i> @futureElectionsCount @labelsLocalizer["rows"]
                 </button>
             </form>
             <div class="spinner-border text-primary">
@@ -52,16 +52,16 @@
                 <thead>
                     <tr>
                         <th>
-                            Name
+                            @labelsLocalizer["Name"]
                         </th>
                         <th>
-                            StartDate
+                            @labelsLocalizer["StartDate"]
                         </th>
                         <th>
-                            Duration (days)
+                            @labelsLocalizer["Duration (days)"]
                         </th>
                         <th>
-                            Number of Candidates
+                            @labelsLocalizer["Number of Candidates"]
                         </th>
                     </tr>
                 </thead>
@@ -73,8 +73,8 @@
         <div class="margined-area" id="previous-elections-area">
             <h3>Previous Elections</h3>
             <form class="excel-downlod-container" asp-action="previousElections_ExportToExcel">
-                <button type="submit" title="Download Excel File">
-                    <i class="fa fa-file-excel-o" aria-hidden="true"></i> @previousElectionsCount rows
+                <button type="submit" title=@labelsLocalizer["Download Excel File"]>
+                    <i class="fa fa-file-excel-o" aria-hidden="true"></i> @previousElectionsCount @labelsLocalizer["rows"]
                 </button>
             </form>
             <table class="table" id="previous-elections-table">
@@ -83,7 +83,7 @@
 
     </div>
     <div class="dashboard-right-side">
-        <h2 class="text-center">Statistics</h2>
+        <h2 class="text-center">@labelsLocalizer["Statistics"]</h2>
         <hr />
         @if (BusinessMessage != null)
         {
@@ -106,19 +106,19 @@
         {
             <div class="dashboard-item-container">
                 <i class="fa fa-university" aria-hidden="true"></i>
-                <p>@Model.NbElections Elections</p>
+                <p>@Model.NbElections @labelsLocalizer["Elections"]</p>
             </div>
             <div class="dashboard-item-container">
                 <i class="fa fa-id-card-o" aria-hidden="true"></i>
-                <p>@Model.NbCandidates Candidates</p>
+                <p>@Model.NbCandidates @labelsLocalizer["Candidates"]</p>
             </div>
             <div class="dashboard-item-container">
                 <i class="fa fa-users" aria-hidden="true"></i>
-                <p>@Model.NbVoters Voters</p>
+                <p>@Model.NbVoters @labelsLocalizer["Voters"]</p>
             </div>
             <div class="dashboard-item-container">
                 <i class="fa fa-envelope" aria-hidden="true"></i>
-                <p>@Model.NbVotes Votes</p>
+                <p>@Model.NbVotes @labelsLocalizer["Votes"]</p>
             </div>
         }
 
@@ -132,9 +132,10 @@
             <i class="fa fa-times" aria-hidden="true"></i>
         </span>
     </div>
-    <p id="title">Results of the Election</p>
+    <p id="title">
+        @labelsLocalizer["Results of the Election"]</p>
 
-    <div id="election-results-container"></div>
+        <div id="election-results-container"></div>
 </div>
 
 

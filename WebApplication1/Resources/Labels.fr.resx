@@ -117,8 +117,50 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Candidates" xml:space="preserve">
+    <value>Candidats</value>
+  </data>
   <data name="Current Election" xml:space="preserve">
     <value>Election Courante</value>
+  </data>
+  <data name="Download Excel File" xml:space="preserve">
+    <value>Télécharger Fichier Excel</value>
+  </data>
+  <data name="Duration (days)" xml:space="preserve">
+    <value>Durée (jours)</value>
+  </data>
+  <data name="Elections" xml:space="preserve">
+    <value>Elections</value>
+  </data>
+  <data name="Future Elections" xml:space="preserve">
+    <value>Prochaines Elections</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Nom</value>
+  </data>
+  <data name="Number of Candidates" xml:space="preserve">
+    <value>Nombre de Candidats</value>
+  </data>
+  <data name="Previous Elections" xml:space="preserve">
+    <value>Elections Précédantes</value>
+  </data>
+  <data name="Results of the Election" xml:space="preserve">
+    <value>Résultas de l'Election</value>
+  </data>
+  <data name="rows" xml:space="preserve">
+    <value>lignes</value>
+  </data>
+  <data name="StartDate" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="Statistics" xml:space="preserve">
+    <value>Statistiques</value>
+  </data>
+  <data name="Voters" xml:space="preserve">
+    <value>Voteurs</value>
+  </data>
+  <data name="Votes" xml:space="preserve">
+    <value>Votes</value>
   </data>
   <data name="Welcome to weVote" xml:space="preserve">
     <value>Bienvenue dans WeVote</value>
