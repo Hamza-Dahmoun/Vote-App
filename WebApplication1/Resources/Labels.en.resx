@@ -132,6 +132,9 @@
   <data name="Current Election" xml:space="preserve">
     <value>Current Election</value>
   </data>
+  <data name="Details" xml:space="preserve">
+    <value>Details</value>
+  </data>
   <data name="Download Excel File" xml:space="preserve">
     <value>Download Excel File</value>
   </data>
