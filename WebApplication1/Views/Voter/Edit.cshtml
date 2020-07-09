@@ -4,11 +4,18 @@
     var BusinessMessage = (WebApplication1.Business.BusinessMessage)ViewBag.BusinessMessage;
 }
 
+@{ /*Importing namespace Microsoft.Extensions.Localization; */}
+@using Microsoft.Extensions.Localization;
+
+@{/*Injecting IStringLocalizer for Labelsc.s shared resource in variable named labelsLocalizer */}
+@inject IStringLocalizer<Labels> labelsLocalizer
+
+
 <partial name="_select2Style" />
 
-<h1>Edit</h1>
+<h1>@labelsLocalizer["Edit"]</h1>
 
-<h4>Voter</h4>
+<h4>@labelsLocalizer["Voter"]</h4>
 <hr />
 <div class="row">
     @if (BusinessMessage != null)
@@ -28,10 +35,10 @@
             }
         </div>
     }
-    
+
     @*THE BELOW CONDITION IS NECESSARY BECAUSE THERE IS ONE CASE WHEN I RETURNED THE VIEW WITH A NULL MODEL WHICH IS WHEN I THREW A BUSINESSEXCEPTION
-    BECAUSE THE PASSED PARAMTER 'ID' WAS NULL OR THE VOTER WAS NOT FOUND*@
-   @if(Model!=null)
+        BECAUSE THE PASSED PARAMTER 'ID' WAS NULL OR THE VOTER WAS NOT FOUND*@
+    @if (Model != null)
     {
         <div class="col-md-4">
             <form asp-action="Edit">
@@ -62,7 +69,7 @@
                     <span asp-validation-for="StateID" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <input type="submit" value=@labelsLocalizer["Save"] class="btn btn-primary" />
                 </div>
             </form>
         </div>
@@ -71,7 +78,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">@labelsLocalizer["Back to List"]</a>
 </div>
 
 <partial name="_jQuery" />
