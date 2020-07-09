@@ -120,6 +120,9 @@
   <data name="Candidates" xml:space="preserve">
     <value>Candidats</value>
   </data>
+  <data name="Create New" xml:space="preserve">
+    <value>Créer</value>
+  </data>
   <data name="Current Election" xml:space="preserve">
     <value>Election Courante</value>
   </data>
@@ -134,6 +137,9 @@
   </data>
   <data name="Future Elections" xml:space="preserve">
     <value>Prochaines Elections</value>
+  </data>
+  <data name="List of Voters" xml:space="preserve">
+    <value>Liste des Voteurs</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Nom</value>
