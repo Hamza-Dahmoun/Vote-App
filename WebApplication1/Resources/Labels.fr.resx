@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Are you sure you want to delete this?" xml:space="preserve">
+    <value>Etes vous sure de supprimer cette élément?</value>
+  </data>
   <data name="Back to List" xml:space="preserve">
     <value>Retour à la liste</value>
   </data>
@@ -131,6 +134,15 @@
   </data>
   <data name="Current Election" xml:space="preserve">
     <value>Election Courante</value>
+  </data>
+  <data name="Delete Voter" xml:space="preserve">
+    <value>Supprimer le Voteur</value>
+  </data>
+  <data name="DeleteButton" xml:space="preserve">
+    <value>Supprimer</value>
+  </data>
+  <data name="DeleteTitle" xml:space="preserve">
+    <value>Suppression</value>
   </data>
   <data name="Details" xml:space="preserve">
     <value>Détails</value>
@@ -162,6 +174,9 @@
   <data name="Previous Elections" xml:space="preserve">
     <value>Elections Précédantes</value>
   </data>
+  <data name="RemoveVoterWarning" xml:space="preserve">
+    <value>La suppression d'un voteur supprimer également ses Votes, ses Candidatures et son compte</value>
+  </data>
   <data name="Results of the Election" xml:space="preserve">
     <value>Résultas de l'Election</value>
   </data>
@@ -188,6 +203,9 @@
   </data>
   <data name="Votes" xml:space="preserve">
     <value>Votes</value>
+  </data>
+  <data name="Warning!" xml:space="preserve">
+    <value>Caution!</value>
   </data>
   <data name="Welcome to weVote" xml:space="preserve">
     <value>Bienvenue dans WeVote</value>
