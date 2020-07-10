@@ -159,6 +159,9 @@
   <data name="Edit" xml:space="preserve">
     <value>Edit</value>
   </data>
+  <data name="EditVoterTitle" xml:space="preserve">
+    <value>Edit a Voter</value>
+  </data>
   <data name="Elections" xml:space="preserve">
     <value>Elections</value>
   </data>
