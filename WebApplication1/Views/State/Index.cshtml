@@ -1,23 +1,29 @@
 ﻿@model IEnumerable<WebApplication1.Models.ViewModels.StateViewModel>
 
+@{ /*Importing namespace Microsoft.Extensions.Localization; */}
+@using Microsoft.Extensions.Localization;
+
+@{/*Injecting IStringLocalizer for Labelsc.s shared resource in variable named labelsLocalizer */}
+@inject IStringLocalizer<Labels> labelsLocalizer
+
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = labelsLocalizer["List of States"];
     int statesCount = ViewBag.statesCount;
 }
 <partial name="_datatablesStyle" />
 <partial name="_tablesButtonsStyling" />
-<h1>List of Sites</h1>
+<h1>@labelsLocalizer["List of States"]</h1>
 
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">@labelsLocalizer["Create New"]</a>
 </p>
 
 
-<partial name="_downloadExcelStyle"/>
+<partial name="_downloadExcelStyle" />
 <form class="excel-downlod-container" asp-action="ExportToExcel">
-    <button type="submit" title="Download Excel File">
-        <i class="fa fa-file-excel-o" aria-hidden="true"></i> @statesCount rows
+    <button type="submit" title=@labelsLocalizer["Download Excel File"]>
+        <i class="fa fa-file-excel-o" aria-hidden="true"></i> @statesCount @labelsLocalizer["rows"]
     </button>
 </form>
 
@@ -49,7 +55,7 @@
 </table>
 <partial name="_jQuery" />
 <partial name="_datatablesScript" />
- 
+
 
 
 
@@ -72,6 +78,6 @@
             'pdfHtml5'
     ]
     }*/
-    )
+        )
     });
 </script>

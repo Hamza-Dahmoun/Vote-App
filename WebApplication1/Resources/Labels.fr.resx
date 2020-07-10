@@ -171,6 +171,9 @@
   <data name="Future Elections" xml:space="preserve">
     <value>Prochaines Elections</value>
   </data>
+  <data name="List of States" xml:space="preserve">
+    <value>Listes des Etats</value>
+  </data>
   <data name="List of Voters" xml:space="preserve">
     <value>Liste des Voteurs</value>
   </data>
