@@ -132,6 +132,9 @@
   <data name="Create New" xml:space="preserve">
     <value>Créer</value>
   </data>
+  <data name="CreateVoterTitle" xml:space="preserve">
+    <value>Création d'un Voteur</value>
+  </data>
   <data name="Current Election" xml:space="preserve">
     <value>Election Courante</value>
   </data>
