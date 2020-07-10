@@ -132,6 +132,9 @@
   <data name="Create New" xml:space="preserve">
     <value>Create New</value>
   </data>
+  <data name="CreateStateTitle" xml:space="preserve">
+    <value>Créer une Etat</value>
+  </data>
   <data name="CreateVoterTitle" xml:space="preserve">
     <value>Create a Voter</value>
   </data>
