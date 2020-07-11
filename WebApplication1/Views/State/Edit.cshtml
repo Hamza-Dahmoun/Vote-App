@@ -1,12 +1,19 @@
 ﻿@model WebApplication1.Models.State
+
+@{ /*Importing namespace Microsoft.Extensions.Localization; */}
+@using Microsoft.Extensions.Localization;
+
+@{/*Injecting IStringLocalizer for Labelsc.s shared resource in variable named labelsLocalizer */}
+@inject IStringLocalizer<Labels> labelsLocalizer
+
 @{
     ViewData["Title"] = "Edit";
     var BusinessMessage = (WebApplication1.Business.BusinessMessage)ViewBag.BusinessMessage;
 }
 
 
-<h1>Edit</h1>
-<h4>State</h4>
+    <h1>@labelsLocalizer["Edit"]</h1>
+    <h4>@labelsLocalizer["State"]</h4>
 <hr />
 <div class="row">
     @if (BusinessMessage != null)
@@ -38,18 +45,18 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value=@labelsLocalizer["Save"] class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
-    <partial name="_jQuery" />
-    <partial name="_jQueryValidationScripts" />
+<partial name="_jQuery" />
+<partial name="_jQueryValidationScripts" />
 
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">@labelsLocalizer["Back to List"]</a>
 </div>
 
 
