@@ -201,6 +201,9 @@
   <data name="Save" xml:space="preserve">
     <value>Save</value>
   </data>
+  <data name="Select your choice wisely" xml:space="preserve">
+    <value>Select your choice wisely</value>
+  </data>
   <data name="StartDate" xml:space="preserve">
     <value>Date</value>
   </data>
@@ -209,6 +212,12 @@
   </data>
   <data name="Statistics" xml:space="preserve">
     <value>Statistics</value>
+  </data>
+  <data name="Validate Vote" xml:space="preserve">
+    <value>Validate Vote</value>
+  </data>
+  <data name="VotePageTitle" xml:space="preserve">
+    <value>Vote</value>
   </data>
   <data name="Voter" xml:space="preserve">
     <value>Voter</value>

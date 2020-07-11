@@ -1,12 +1,19 @@
 ﻿@model IList<WebApplication1.Models.ViewModels.CandidateViewModel>
+
+@{ /*Importing namespace Microsoft.Extensions.Localization; */}
+@using Microsoft.Extensions.Localization;
+
+@{/*Injecting IStringLocalizer for Labelsc.s shared resource in variable named labelsLocalizer */}
+@inject IStringLocalizer<Labels> labelsLocalizer
+
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = labelsLocalizer["VotePageTitle"];
     var BusinessMessage = (WebApplication1.Business.BusinessMessage)ViewBag.BusinessMessage;
 }
 
 
 <partial name="_votingScenarioStyle" />
-<h1 class="text-center" id="voting-title">Select your choice wisely</h1>
+<h1 class="text-center" id="voting-title">@labelsLocalizer["Select your choice wisely"]</h1>
 <br />
 
 @if (BusinessMessage != null)
@@ -18,38 +25,38 @@
         }
         else if (BusinessMessage.Type == "Warning")
         {
-            <p class="text-warning text-center"">@BusinessMessage.Text</p>
+            <p class="text-warning text-center">@BusinessMessage.Text</p>
         }
         else if (BusinessMessage.Type == "Success")
-        {
-            <p class="text-success text-center"">@BusinessMessage.Text</p>
+               {
+            <p class="text-success text-center">@BusinessMessage.Text</p>
         }
     </div>
 }
-@if(Model != null)
+@if (Model != null)
 {
-<div class="voting-container">
+    <div class="voting-container">
 
-    @{
-        string id = "";
-    }
-    @foreach (var candidate in Model)
-    {
-        @if (candidate.isNeutralOpinion == true)
-        {
-            id = "neutral-candidate";
+        @{
+            string id = "";
         }
-        <div class="candidate-container" id="@id">
-            <p class="hidden-candidateId" hidden>@candidate.Id</p>
-            <p class="candidate-name"><i class="fa fa-check-circle-o" aria-hidden="true"></i> @candidate.FirstName @candidate.LastName</p>
-            <p>@candidate.StateName</p>
-        </div>
-    }
+        @foreach (var candidate in Model)
+        {
+            @if (candidate.isNeutralOpinion == true)
+            {
+                id = "neutral-candidate";
+            }
+            <div class="candidate-container" id="@id">
+                <p class="hidden-candidateId" hidden>@candidate.Id</p>
+                <p class="candidate-name"><i class="fa fa-check-circle-o" aria-hidden="true"></i> @candidate.FirstName @candidate.LastName</p>
+                <p>@candidate.StateName</p>
+            </div>
+        }
 
-    <button type="button" id="vote-button" title="Validate Vote">
-        <i class="fa fa-rocket" aria-hidden="true"></i>
-    </button>
-</div>
+        <button type="button" id="vote-button" title="Validate Vote">
+            <i class="fa fa-rocket" aria-hidden="true"></i>
+        </button>
+    </div>
 }
 <partial name="_jQuery" />
 <partial name="_votingScenarioScript" />
