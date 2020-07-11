@@ -1,11 +1,18 @@
 ﻿@model WebApplication1.Models.ViewModels.StateViewModel
 
+@{ /*Importing namespace Microsoft.Extensions.Localization; */}
+@using Microsoft.Extensions.Localization;
+
+@{/*Injecting IStringLocalizer for Labelsc.s shared resource in variable named labelsLocalizer */}
+@inject IStringLocalizer<Labels> labelsLocalizer
+
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = labelsLocalizer["Details"];
     var BusinessMessage = (WebApplication1.Business.BusinessMessage)ViewBag.BusinessMessage;
 }
 
-<h1>Details</h1>
+<h1>@labelsLocalizer["Details"]</h1>
+
 @if (BusinessMessage != null)
 {
     <div>
@@ -40,5 +47,5 @@ else
 }
 <div>
     @*<a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |*@
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">@labelsLocalizer["Back to List"]</a>
 </div>
