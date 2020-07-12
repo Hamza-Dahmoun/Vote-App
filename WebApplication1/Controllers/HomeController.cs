@@ -28,7 +28,8 @@ namespace WebApplication1.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        
+        //Lets create a private readonly field IStringLocalizer<Messages> so that we can use Localization service, we'll inject it inside the constructor
+        private readonly IStringLocalizer<Messages> _messagesLoclizer;
 
         //the below are services we're going to use in this controller, they will be injected in the constructor
         public IRepository<Candidate> _candidateRepository { get; }
@@ -48,7 +49,8 @@ namespace WebApplication1.Controllers
             IRepository<Voter> voterRepository,
             IRepository<Vote> voteRepository,
             IRepository<Election> electionRepository,
-            UserManager<IdentityUser> userManager)
+            UserManager<IdentityUser> userManager,
+            IStringLocalizer<Messages> messagesLoclizer)
         {
             _logger = logger;
             _candidateRepository = candidateRepository;
@@ -57,6 +59,7 @@ namespace WebApplication1.Controllers
             _electionRepository = electionRepository;
             _userManager = userManager;
             _memoryCache = memoryCache;
+            _messagesLoclizer = messagesLoclizer;
         }
 
 
