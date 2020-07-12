@@ -129,8 +129,14 @@
   <data name="Create" xml:space="preserve">
     <value>Create</value>
   </data>
+  <data name="Create Election" xml:space="preserve">
+    <value>Create Election</value>
+  </data>
   <data name="Create New" xml:space="preserve">
     <value>Create New</value>
+  </data>
+  <data name="CreateElectionTitle" xml:space="preserve">
+    <value>Create an Election</value>
   </data>
   <data name="CreateStateTitle" xml:space="preserve">
     <value>Créer une Etat</value>
@@ -210,8 +216,14 @@
   <data name="Name" xml:space="preserve">
     <value>Name</value>
   </data>
+  <data name="No Candidates Selected" xml:space="preserve">
+    <value>No Candidates Selected</value>
+  </data>
   <data name="Number of Candidates" xml:space="preserve">
     <value>Number of Candidates</value>
+  </data>
+  <data name="Please Select Candidates concerned by this Election" xml:space="preserve">
+    <value>Please Select Candidates concerned by this Election</value>
   </data>
   <data name="Previous Elections" xml:space="preserve">
     <value>Previous Elections</value>
@@ -248,6 +260,15 @@
   </data>
   <data name="Statistics" xml:space="preserve">
     <value>Statistics</value>
+  </data>
+  <data name="Step 1" xml:space="preserve">
+    <value>Step1</value>
+  </data>
+  <data name="Step 2" xml:space="preserve">
+    <value>Step 2</value>
+  </data>
+  <data name="Validate Election" xml:space="preserve">
+    <value>Validate Election</value>
   </data>
   <data name="Validate Vote" xml:space="preserve">
     <value>Validate Vote</value>

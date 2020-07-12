@@ -1,15 +1,22 @@
 ﻿@model WebApplication1.Models.Election
 
+@{ /*Importing namespace Microsoft.Extensions.Localization; */}
+@using Microsoft.Extensions.Localization;
+
+@{/*Injecting IStringLocalizer for Labelsc.s shared resource in variable named labelsLocalizer */}
+@inject IStringLocalizer<Labels> labelsLocalizer
+
+
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = labelsLocalizer["CreateElectionTitle"];
 }
 
 <!--LETS LOAD THE CSS OF THIS VIEW-->
 <partial name="_createElectionStyle" />
 
-<h1>Create Election</h1>
+<h1>@labelsLocalizer["Create Election"]</h1>
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">@labelsLocalizer["Back to List"]</a>
 </div>
 
 
@@ -18,7 +25,7 @@
 
 <hr />
 <div class="row" id="step-one">
-    <div class="col-12"> <h2>Step 1</h2></div>
+    <div class="col-12"> <h2>@labelsLocalizer["Step 1"]</h2></div>
     <form id="step-one-form">
         <div class="col-md-6" id="election-input-container">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -46,8 +53,8 @@
                 <input type="checkbox" asp-for="HasNeutral" class="form-control" id="has-neutral" />
                 <span asp-validation-for="HasNeutral" class="text-danger"></span>
             </div>
-            <button class="btn btn-secondary" id="send-election-button" title="Validate Election">
-                <i class="fa fa-rocket" aria-hidden="true"></i> Save
+            <button class="btn btn-secondary" id="send-election-button" title=@labelsLocalizer["Validate Election"]>
+                <i class="fa fa-rocket" aria-hidden="true"></i> @labelsLocalizer["Save"]
             </button>
             <div class="spinner-border text-primary" id="send-election-spinner">
 
@@ -61,14 +68,14 @@
 <br />
 
 <div id="step-two">
-    <div class="col-12"> <h2>Step 2</h2></div>
-    <div class="col-12"> <p id="candidates-title-text">Please Select Candidates concerned by this Election</p></div>
+    <div class="col-12"> <h2>@labelsLocalizer["Step 2"]</h2></div>
+    <div class="col-12"> <p id="candidates-title-text">@labelsLocalizer["Please Select Candidates concerned by this Election"]</p></div>
 
     <div id="selected-candidates-area">
-        <p id="selected-candidates-title">Selected Candidates</p>
+        <p id="selected-candidates-title">@labelsLocalizer["Selected Candidates"]</p>
         <div id="candidates-container">
             <div class="one-container transparent-candidate">
-                <p>No Candidates Selected</p>
+                <p>@labelsLocalizer["No Candidates Selected"]</p>
             </div>
         </div>
     </div>
