@@ -1,14 +1,21 @@
 ﻿@model WebApplication1.Models.ViewModels.ElectionViewModel
 
+@{ /*Importing namespace Microsoft.Extensions.Localization; */}
+@using Microsoft.Extensions.Localization;
+
+@{/*Injecting IStringLocalizer for Labelsc.s shared resource in variable named labelsLocalizer */}
+@inject IStringLocalizer<Labels> labelsLocalizer
+
+
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = labelsLocalizer["Details"];
     var BusinessMessage = (WebApplication1.Business.BusinessMessage)ViewBag.BusinessMessage;
 }
 
 <partial name="_detailsElectionStyle" />
 
-<h1>Details</h1>
-<h4>Election</h4>
+<h1>@labelsLocalizer["Details"]</h1>
+<h4>@labelsLocalizer["Election"]</h4>
 <hr />
 @if (BusinessMessage != null)
 {
@@ -71,11 +78,11 @@
         </dl>
     </div>
     <div>
-        <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-        <a asp-action="Index">Back to List</a>
+        <a asp-action="Edit" asp-route-id="@Model.Id">@labelsLocalizer["Edit"]</a> |
+        <a asp-action="Index">@labelsLocalizer["Back to List"]</a>
     </div>
     <br />
-    <div class="row"> <h4>List of Candidates</h4></div>
+    <div class="row"> <h4>@labelsLocalizer["List of Candidates"]</h4></div>
     <br />
     <div class="spinner-border text-primary" id="candidates-table-spinner"></div>
     <div>
@@ -84,13 +91,13 @@
             <thead>
                 <tr>
                     <th>
-                        FirstName
+                        @labelsLocalizer["FirstName"]
                     </th>
                     <th>
-                        LastName
+                        @labelsLocalizer["LastName"]
                     </th>
                     <th>
-                        StateName
+                        @labelsLocalizer["StateName"]
                     </th>
                     <th></th>
                 </tr>

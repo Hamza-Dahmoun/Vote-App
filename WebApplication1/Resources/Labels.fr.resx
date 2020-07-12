@@ -171,11 +171,23 @@
   <data name="EditVoterTitle" xml:space="preserve">
     <value>Editer un Voteur</value>
   </data>
+  <data name="Election" xml:space="preserve">
+    <value>Election</value>
+  </data>
   <data name="Elections" xml:space="preserve">
     <value>Elections</value>
   </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>Prénom</value>
+  </data>
   <data name="Future Elections" xml:space="preserve">
     <value>Prochaines Elections</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Nom</value>
+  </data>
+  <data name="List of Candidates" xml:space="preserve">
+    <value>Liste des Candidats</value>
   </data>
   <data name="List of Elections" xml:space="preserve">
     <value>Liste des Elections</value>
@@ -214,6 +226,9 @@
     <value>Date</value>
   </data>
   <data name="State" xml:space="preserve">
+    <value>Etat</value>
+  </data>
+  <data name="StateName" xml:space="preserve">
     <value>Etat</value>
   </data>
   <data name="Statistics" xml:space="preserve">
