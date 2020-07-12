@@ -141,6 +141,9 @@
   <data name="Current Election" xml:space="preserve">
     <value>Election Courante</value>
   </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Supprimer</value>
+  </data>
   <data name="Delete Voter" xml:space="preserve">
     <value>Supprimer le Voteur</value>
   </data>
@@ -173,6 +176,9 @@
   </data>
   <data name="Future Elections" xml:space="preserve">
     <value>Prochaines Elections</value>
+  </data>
+  <data name="List of Elections" xml:space="preserve">
+    <value>Liste des Elections</value>
   </data>
   <data name="List of States" xml:space="preserve">
     <value>Listes des Etats</value>
