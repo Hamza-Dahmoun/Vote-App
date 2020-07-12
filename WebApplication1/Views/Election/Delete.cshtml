@@ -1,11 +1,17 @@
 ﻿@model WebApplication1.Models.ViewModels.ElectionViewModel
 
+@{ /*Importing namespace Microsoft.Extensions.Localization; */}
+@using Microsoft.Extensions.Localization;
+
+@{/*Injecting IStringLocalizer for Labelsc.s shared resource in variable named labelsLocalizer */}
+@inject IStringLocalizer<Labels> labelsLocalizer
+
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = labelsLocalizer["DeleteTitle"];
     var BusinessMessage = (WebApplication1.Business.BusinessMessage)ViewBag.BusinessMessage;
 }
 
-<h1>Delete</h1>
+    <h1>@labelsLocalizer["DeleteTitle"]</h1>
 @if (BusinessMessage != null)
 {
     <div>
@@ -25,9 +31,9 @@
 }
 @if (Model != null)
 {
-    <h3>Are you sure you want to delete this?</h3>
+<h3>@labelsLocalizer["Are you sure you want to delete this?"]</h3>
     <div>
-        <h4>Election</h4>
+        <h4>@labelsLocalizer["Election"]</h4>
         <hr />
         <dl class="row">
             <dt class="col-sm-2">
@@ -59,10 +65,10 @@
         <form asp-action="DeleteElection">
             <input type="hidden" asp-for="Id" />
             <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#redModal">
-                Delete
+                @labelsLocalizer["Delete"]
             </button>
             |
-            <a asp-action="Index">Back to List</a>
+            <a asp-action="Index">@labelsLocalizer["Back to List"]</a>
 
 
             <partial name="_redModalStyle" />
@@ -80,11 +86,11 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <h4 class="modal-title" id="exampleModalLongTitle">Warning!</h4>
-                            <p>Removing an Election from the system will remove all its Votes and Candidates as well!</p>
+                            <h4 class="modal-title" id="exampleModalLongTitle">@labelsLocalizer["Warning!"]</h4>
+                            <p>@labelsLocalizer["Removing an Election from the system will remove all its Votes and Candidates as well!"]</p>
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" value="Delete" class="btn btn-danger">Delete Election</button>
+                            <button type="submit" value="Delete" class="btn btn-danger">@labelsLocalizer["Delete Election"]</button>
                         </div>
                     </div>
                 </div>

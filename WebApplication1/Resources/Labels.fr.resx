@@ -144,6 +144,9 @@
   <data name="Delete" xml:space="preserve">
     <value>Supprimer</value>
   </data>
+  <data name="Delete Election" xml:space="preserve">
+    <value>Supprimer l' election</value>
+  </data>
   <data name="Delete Voter" xml:space="preserve">
     <value>Supprimer le Voteur</value>
   </data>
@@ -208,7 +211,10 @@
     <value>Elections Précédantes</value>
   </data>
   <data name="RemoveVoterWarning" xml:space="preserve">
-    <value>La suppression d'un voteur supprimer également ses Votes, ses Candidatures et son compte</value>
+    <value>La suppression d'un voteur supprimer également ses Votes, ses Candidatures et son compte!</value>
+  </data>
+  <data name="Removing an Election from the system will remove all its Votes and Candidates as well!" xml:space="preserve">
+    <value>La suppression d'une élection supprime également ses Votes et ses Candidatures!</value>
   </data>
   <data name="Results of the Election" xml:space="preserve">
     <value>Résultas de l'Election</value>

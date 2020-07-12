@@ -144,6 +144,9 @@
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
   </data>
+  <data name="Delete Election" xml:space="preserve">
+    <value>Delete Election</value>
+  </data>
   <data name="Delete Voter" xml:space="preserve">
     <value>Delete Voter</value>
   </data>
@@ -209,6 +212,9 @@
   </data>
   <data name="RemoveVoterWarning" xml:space="preserve">
     <value>Removing a Voter from the system will remove all his Votes, Candidates and his account to access the system as well!</value>
+  </data>
+  <data name="Removing an Election from the system will remove all its Votes and Candidates as well!" xml:space="preserve">
+    <value>Removing an Election from the system will remove all its Votes and Candidates as well!</value>
   </data>
   <data name="Results of the Election" xml:space="preserve">
     <value>Results of the Election</value>
