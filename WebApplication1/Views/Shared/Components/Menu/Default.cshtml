@@ -1,12 +1,18 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@*THIS PARTIAL VIEW WILL BE DISPLAYED THRU MenuViewComponent.cs*@
 
-@*THIS PARTIAL VIEW WILL BE DISPLAYED THRU MenuViewComponent.cs*@
+
+
+@{ /*Importing namespace Microsoft.Extensions.Localization; */}
+@using Microsoft.Extensions.Localization;
+
+@{/*Injecting IStringLocalizer for Labelsc.s shared resource in variable named labelsLocalizer */}
+@inject IStringLocalizer<Menu> menuLocalizer
+
+
 
 <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
     <div class="container">
-        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">WeVote</a>
+        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">@menuLocalizer["WeVote"]</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                 aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -15,19 +21,19 @@
             <partial name="_LoginPartial" />
             <ul class="navbar-nav flex-grow-1">
                 <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">@menuLocalizer["Home"]</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Election" asp-action="Index">Elections</a>
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Election" asp-action="Index">@menuLocalizer["Elections"]</a>
                 </li>
                 @*<li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Candidate" asp-action="Index">Candidates</a>
-                </li>*@
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Candidate" asp-action="Index">Candidates</a>
+                    </li>*@
                 <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Voter" asp-action="Index">Voters</a>
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Voter" asp-action="Index">@menuLocalizer["Voters"]</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="State" asp-action="Index">States</a>
+                    <a class="nav-link text-dark" asp-area="" asp-controller="State" asp-action="Index">@menuLocalizer["States"]</a>
                 </li>
             </ul>
         </div>

@@ -1,10 +1,25 @@
 ﻿@*THIS IS A VIEWCOMPONENT THAT WILL BE RENDERED IN THE TOP OF THE PAGE IF THE USER IS NOT AUTHENTICATED.
     I DID THIS TO AVOID SHOWING THE MENU LINKS FOR NOT-AUTHENTICATED USERS*@
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-        <div class="container">
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">WeVote</a>
-        </div>
-        <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-            <partial name="_LoginPartial" />
-        </div>
-    </nav>
+
+
+
+
+
+@{ /*Importing namespace Microsoft.Extensions.Localization; */}
+@using Microsoft.Extensions.Localization;
+
+@{/*Injecting IStringLocalizer for Labelsc.s shared resource in variable named labelsLocalizer */}
+@inject IStringLocalizer<Menu> menuLocalizer
+
+
+
+
+
+<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <div class="container">
+        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">@menuLocalizer["WeVote"]</a>
+    </div>
+    <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+        <partial name="_LoginPartial" />
+    </div>
+</nav>
