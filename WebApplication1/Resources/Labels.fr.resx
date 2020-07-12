@@ -168,6 +168,12 @@
   <data name="Edit" xml:space="preserve">
     <value>Editer</value>
   </data>
+  <data name="Edit an Election" xml:space="preserve">
+    <value>Editer une Election</value>
+  </data>
+  <data name="EditElectionTitle" xml:space="preserve">
+    <value>Editer une Election</value>
+  </data>
   <data name="EditStateTitle" xml:space="preserve">
     <value>Editer un Etat</value>
   </data>
@@ -227,6 +233,9 @@
   </data>
   <data name="Select your choice wisely" xml:space="preserve">
     <value>Choisir judicieusement</value>
+  </data>
+  <data name="Selected Candidates" xml:space="preserve">
+    <value>Candidats Sélectionnés</value>
   </data>
   <data name="StartDate" xml:space="preserve">
     <value>Date</value>

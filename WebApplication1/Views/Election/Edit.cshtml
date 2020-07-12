@@ -1,15 +1,23 @@
 ﻿@model WebApplication1.Models.Election
+
+@{ /*Importing namespace Microsoft.Extensions.Localization; */}
+@using Microsoft.Extensions.Localization;
+
+@{/*Injecting IStringLocalizer for Labelsc.s shared resource in variable named labelsLocalizer */}
+@inject IStringLocalizer<Labels> labelsLocalizer
+
+
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = labelsLocalizer["EditElectionTitle"];
     var BusinessMessage = (WebApplication1.Business.BusinessMessage)ViewBag.BusinessMessage;
 }
 
 <partial name="_editElectionStyle" />
 <partial name="_datatablesStyle" />
-<h1>Edit an Election</h1>
+<h1>@labelsLocalizer["Edit an Election"]</h1>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">@labelsLocalizer["Back to List"]</a>
 </div>
 
 <hr />
@@ -65,7 +73,7 @@
                         <span asp-validation-for="HasNeutral" class="text-danger"></span>*@
                 </div>
                 <div class="form-group">
-                    <input type="submit" value="Save" class="btn btn-primary" id="submit-updated-election" />
+                    <input type="submit" value=@labelsLocalizer["Save"] class="btn btn-primary" id="submit-updated-election" />
                 </div>
                 <div class="spinner-border text-primary" id="update-candidate-spinner">
 
@@ -84,7 +92,7 @@
     <br />
 
     <div id="selected-candidates-area">
-        <p id="selected-candidates-title">Selected Candidates</p>
+        <p id="selected-candidates-title">@labelsLocalizer["Selected Candidates"]</p>
         <div id="candidates-container">
             <div class="spinner-border text-danger" id="candidates-spinner"></div>
 
