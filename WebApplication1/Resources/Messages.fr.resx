@@ -117,8 +117,20 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Candidate instance was not found for" xml:space="preserve">
+    <value>Candidat n'est pas trouvé pour</value>
+  </data>
   <data name="Candidates" xml:space="preserve">
     <value>Candidats</value>
+  </data>
+  <data name="Cannot validate vote of null election" xml:space="preserve">
+    <value>Le vote d'une élection null ne peut pas etre validé</value>
+  </data>
+  <data name="Cannot validate votes of empty list of candidates" xml:space="preserve">
+    <value>Le vote d'une liste vide de candidats ne peut pas etre validé</value>
+  </data>
+  <data name="Current election not found" xml:space="preserve">
+    <value>l'Election courante n'est pas trouvée</value>
   </data>
   <data name="Dashboard is null! Please contact your administrator." xml:space="preserve">
     <value>Le tableau de bord est null! Veuillez contacter l'administrateur du système.</value>
@@ -135,6 +147,12 @@
   <data name="Error" xml:space="preserve">
     <value>Erreur</value>
   </data>
+  <data name="Error When Trying to Get The Results!" xml:space="preserve">
+    <value>Erreur lors la récupération des résultats!</value>
+  </data>
+  <data name="Error When Validating Votes!" xml:space="preserve">
+    <value>Erreur lors la validation des votes!</value>
+  </data>
   <data name="futureElections.xlsx" xml:space="preserve">
     <value>prochaineElections.xlsx</value>
   </data>
@@ -150,6 +168,9 @@
   <data name="Neutral Candidate (Y/N)" xml:space="preserve">
     <value>Candidat Neutre (O/N)</value>
   </data>
+  <data name="No candidates found for this election" xml:space="preserve">
+    <value>Aucun candidat n'a été trouvé pour cette éléction</value>
+  </data>
   <data name="Passed parameter 'id' can not be null" xml:space="preserve">
     <value>Le paramètre 'id' ne peut pas etre null</value>
   </data>
@@ -164,6 +185,9 @@
   </data>
   <data name="States" xml:space="preserve">
     <value>Etats</value>
+  </data>
+  <data name="Voter instance was not found for current user" xml:space="preserve">
+    <value>Voteur de l'utilisateur courant n'est ppas trouvé</value>
   </data>
   <data name="Y" xml:space="preserve">
     <value>O</value>

@@ -63,7 +63,7 @@ namespace WebApplication1.Controllers
                 if (election == null)
                 {
                     _logger.LogError("Current election not found");
-                    throw new BusinessException("Current election not found");
+                    throw new BusinessException(_messagesLoclizer["Current election not found"]);
                 }
 
                 _logger.LogInformation("Calling CandidateUtilities.GetCandidate_byElection() method");
@@ -71,7 +71,7 @@ namespace WebApplication1.Controllers
                 if (candidates == null || candidates.Count == 0)
                 {
                     _logger.LogError("No candidates found for this election");
-                    throw new BusinessException("No candidates found for this election");
+                    throw new BusinessException(_messagesLoclizer["No candidates found for this election"]);
                 }
 
                 _logger.LogInformation("Calling Utilities.convertCandidateList_toCandidateViewModelList() method");
@@ -84,7 +84,7 @@ namespace WebApplication1.Controllers
                 _logger.LogError(be.Message);
                 //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
                 //by whatever we want
-                BusinessMessage bm = new BusinessMessage("Error", be.Message);
+                BusinessMessage bm = new BusinessMessage(_messagesLoclizer["Error"], be.Message);
                 ViewBag.BusinessMessage = bm;
                 return View();
             }
@@ -109,9 +109,9 @@ namespace WebApplication1.Controllers
             {
                 if (candidateIdList == null || candidateIdList.Count <= 0)
                 {
-                    _logger.LogError("Cannot validate for empty list of candidates");
+                    _logger.LogError("Cannot validate votes of empty list of candidates");
                     //return BadRequest();
-                    throw new BusinessException("Cannot validate for empty list of candidates");
+                    throw new BusinessException(_messagesLoclizer["Cannot validate votes of empty list of candidates"]);
                 }
                 //lets first get the concerned election
                 Candidate firstOne = _candidateRepository.GetById(Guid.Parse(candidateIdList.FirstOrDefault()));
@@ -120,7 +120,7 @@ namespace WebApplication1.Controllers
                 {
                     _logger.LogError("Cannot validate for null election");
                     //return BadRequest();
-                    throw new BusinessException("Cannot validate for null election");
+                    throw new BusinessException(_messagesLoclizer["Cannot validate vote of null election"]);
                 }
 
                 //lets get the voter instance of the current user, so that we use its id with his votes
@@ -130,7 +130,7 @@ namespace WebApplication1.Controllers
                 if(currentVoter == null)
                 {
                     _logger.LogError("Voter instance was not found for current user");
-                    throw new BusinessException("Voter instance was not found for current user");
+                    throw new BusinessException(_messagesLoclizer["Voter instance was not found for current user"]);
                 }
 
 
@@ -144,7 +144,7 @@ namespace WebApplication1.Controllers
                     if (candidate == null)
                     {
                         _logger.LogError("Candidate instance was not found for " + candidateId);
-                        throw new BusinessException("Candidate instance was not found for " + candidateId);
+                        throw new BusinessException(_messagesLoclizer["Candidate instance was not found for"] + " " + candidateId);
                     }
                     v.Candidate = candidate;
                     v.Voter = currentVoter; 
@@ -180,7 +180,7 @@ namespace WebApplication1.Controllers
             {
                 _logger.LogError(be.Message);
                 HttpContext.Response.StatusCode = 500;
-                return Json(new { Message = "Error When Validating Votes! " + be.Message });
+                return Json(new { Message = _messagesLoclizer["Error When Validating Votes!"] + " " + be.Message });
             }
             catch (Exception E)
             {
@@ -190,7 +190,7 @@ namespace WebApplication1.Controllers
                     //so the exception happened when trying to validate the votes
                     _logger.LogError("Exception When Validating Votes! " + E.Message);
                     HttpContext.Response.StatusCode = 500;
-                    return Json(new { Message = "Error When Validating Votes! " +  E.Message });
+                    return Json(new { Message = _messagesLoclizer["Error When Validating Votes!"] + " " +  E.Message });
                     //In above code I created an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
                 }
                 else
@@ -198,7 +198,7 @@ namespace WebApplication1.Controllers
                     //so the exception happened when trying to get the results of the election
                     _logger.LogError("Exception When Trying to Get The Results! " + E.Message);
                     HttpContext.Response.StatusCode = 500;
-                    return Json(new { Message = "Error When Trying to Get The Results! " + E.Message });
+                    return Json(new { Message = _messagesLoclizer["Error When Trying to Get The Results!"] + " " + E.Message });
                     //In above code I created an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
                 }
             }
