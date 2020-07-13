@@ -12,6 +12,7 @@ using WebApplication1.Models.ViewModels;
 using System.Net;
 using Microsoft.AspNetCore.Http;
 using OfficeOpenXml;
+using Microsoft.Extensions.Localization;
 
 namespace WebApplication1.Controllers
 {
@@ -25,12 +26,17 @@ namespace WebApplication1.Controllers
     {
         //the below are services we're going to use in this controller, they will be injected in the constructor
         private readonly ILogger<StateController> _logger;
+
+        //Lets create a private readonly field IStringLocalizer<Messages> so that we can use Localization service, we'll inject it inside the constructor
+        private readonly IStringLocalizer<Messages> _messagesLoclizer;
+
         public IRepository<State> _stateRepository { get; }
         //Lets inject the services using the constructor, this is called Constructor Dependency Injection
-        public StateController(IRepository<State> stateRepository, ILogger<StateController> logger)
+        public StateController(IRepository<State> stateRepository, ILogger<StateController> logger, IStringLocalizer<Messages> messagesLoclizer)
         {
             _logger = logger;
             _stateRepository = stateRepository;
+            _messagesLoclizer = messagesLoclizer;
         }
 
 
