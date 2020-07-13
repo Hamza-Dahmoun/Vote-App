@@ -153,11 +153,17 @@
   <data name="Error When Validating Votes!" xml:space="preserve">
     <value>Erreur lors la validation des votes!</value>
   </data>
+  <data name="First Name" xml:space="preserve">
+    <value>Prénom</value>
+  </data>
   <data name="futureElections.xlsx" xml:space="preserve">
     <value>prochaineElections.xlsx</value>
   </data>
   <data name="Information provided not valid" xml:space="preserve">
     <value>Informations fournis ne sont pas valid</value>
+  </data>
+  <data name="Last Name" xml:space="preserve">
+    <value>Nom</value>
   </data>
   <data name="N" xml:space="preserve">
     <value>N</value>
@@ -180,6 +186,9 @@
   <data name="Start Date" xml:space="preserve">
     <value>Date Début</value>
   </data>
+  <data name="State" xml:space="preserve">
+    <value>Etat</value>
+  </data>
   <data name="State not found" xml:space="preserve">
     <value>Etat n'est pas trouvée</value>
   </data>
@@ -188,6 +197,12 @@
   </data>
   <data name="Voter instance was not found for current user" xml:space="preserve">
     <value>Voteur de l'utilisateur courant n'est ppas trouvé</value>
+  </data>
+  <data name="Voter not found" xml:space="preserve">
+    <value>Voteur n'est pas trouvé</value>
+  </data>
+  <data name="Voters" xml:space="preserve">
+    <value>Voteurs</value>
   </data>
   <data name="Y" xml:space="preserve">
     <value>O</value>

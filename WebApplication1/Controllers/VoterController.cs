@@ -85,7 +85,7 @@ namespace WebApplication1.Controllers
                 if (id == null)
                 {
                     _logger.LogError("Passed parameter 'id' is null");
-                    throw new BusinessException("Passed parameter 'id' can not be null");
+                    throw new BusinessException(_messagesLoclizer["Passed parameter 'id' can not be null"]);
                 }
 
                 _logger.LogInformation("Calling VoterRepository.GetById() method");
@@ -93,7 +93,7 @@ namespace WebApplication1.Controllers
                 if (v == null)
                 {
                     _logger.LogError("Voter not found");
-                    throw new BusinessException("Voter not found");
+                    throw new BusinessException(_messagesLoclizer["Voter not found"]);
                 }
 
                 _logger.LogInformation("Calling Utilities.convertVoter_toPersonViewModel() method");
@@ -106,7 +106,7 @@ namespace WebApplication1.Controllers
                 _logger.LogError(be.Message);
                 //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
                 //by whatever we want
-                BusinessMessage bm = new BusinessMessage("Error", be.Message);
+                BusinessMessage bm = new BusinessMessage(_messagesLoclizer["Error"], be.Message);
                 ViewBag.BusinessMessage = bm;
                 return View();
             }
@@ -189,14 +189,14 @@ namespace WebApplication1.Controllers
                 }
                 _logger.LogInformation("Model is not valid");
                 //so there is a business rule not met, lets throw a businessException and catch it
-                throw new BusinessException("Information provided not valid");
+                throw new BusinessException(_messagesLoclizer["Information provided not valid"]);
             }
             catch (BusinessException be)
             {
                 _logger.LogError(be.Message);
                 //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
                 //by whatever we want
-                BusinessMessage bm = new BusinessMessage("Error", be.Message);
+                BusinessMessage bm = new BusinessMessage(_messagesLoclizer["Error"], be.Message);
                 ViewBag.BusinessMessage = bm;
                 return View(vs);
             }
@@ -216,7 +216,7 @@ namespace WebApplication1.Controllers
                 if (id == null)
                 {
                     _logger.LogError("Passed parameter 'id' is null");
-                    throw new BusinessException("Passed parameter 'id' can not be null");
+                    throw new BusinessException(_messagesLoclizer["Passed parameter 'id' can not be null"]);
                 }
 
                 _logger.LogInformation("Calling VoterRepository.GetById() method");
@@ -224,7 +224,7 @@ namespace WebApplication1.Controllers
                 if (voter == null)
                 {
                     _logger.LogError("Voter not found");
-                    throw new BusinessException("Voter not found");
+                    throw new BusinessException(_messagesLoclizer["Voter not found"]);
                 }
 
                 _logger.LogInformation("Calling Utilities.convertVoter_toPersonViewModel() method");
@@ -237,7 +237,7 @@ namespace WebApplication1.Controllers
                 _logger.LogError(be.Message);
                 //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
                 //by whatever we want
-                BusinessMessage bm = new BusinessMessage("Error", be.Message);
+                BusinessMessage bm = new BusinessMessage(_messagesLoclizer["Error"], be.Message);
                 ViewBag.BusinessMessage = bm;
                 return View();
             }
@@ -256,7 +256,7 @@ namespace WebApplication1.Controllers
                 if (id == null)
                 {
                     _logger.LogError("Passed parameter 'id' is null");
-                    throw new BusinessException("Passed parameter 'id' can not be null");
+                    throw new BusinessException(_messagesLoclizer["Passed parameter 'id' can not be null"]);
                 }
 
                 _logger.LogInformation("Calling VoterRepository.GetById() method");
@@ -264,7 +264,7 @@ namespace WebApplication1.Controllers
                 if (voter == null)
                 {
                     _logger.LogError("Voter not found");
-                    throw new BusinessException("Voter not found");
+                    throw new BusinessException(_messagesLoclizer["Voter not found"]);
                 }
 
                 //1- Remove all this voter's votes
@@ -320,7 +320,7 @@ namespace WebApplication1.Controllers
                 _logger.LogError(be.Message);
                 //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
                 //by whatever we want
-                BusinessMessage bm = new BusinessMessage("Error", be.Message);
+                BusinessMessage bm = new BusinessMessage(_messagesLoclizer["Error"], be.Message);
                 ViewBag.BusinessMessage = bm;
                 return View(nameof(Delete));
             }
@@ -344,7 +344,7 @@ namespace WebApplication1.Controllers
                 if (Id == null)
                 {
                     _logger.LogError("Passed parameter 'id' is null");
-                    throw new BusinessException("Passed parameter 'id' can not be null");
+                    throw new BusinessException(_messagesLoclizer["Passed parameter 'id' can not be null"]);
                 }
 
                 _logger.LogInformation("Calling VoterRepository.GetById() method");
@@ -352,7 +352,7 @@ namespace WebApplication1.Controllers
                 if (voter == null)
                 {
                     _logger.LogError("Voter not found");
-                    throw new BusinessException("Voter not found");
+                    throw new BusinessException(_messagesLoclizer["Voter not found"]);
                 }
 
                 _logger.LogInformation("Creating a VoterStateViewModel for the Voter instance");
@@ -377,7 +377,7 @@ namespace WebApplication1.Controllers
                 _logger.LogError(be.Message);
                 //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
                 //by whatever we want
-                BusinessMessage bm = new BusinessMessage("Error", be.Message);
+                BusinessMessage bm = new BusinessMessage(_messagesLoclizer["Error"], be.Message);
                 ViewBag.BusinessMessage = bm;
                 return View();
             }
@@ -403,7 +403,7 @@ namespace WebApplication1.Controllers
                     }
                     _logger.LogInformation("Returning to the view to display validation messages");
                     //so there is a business rule not met, lets throw a businessException and catch it
-                    throw new BusinessException("Information provided not valid");
+                    throw new BusinessException(_messagesLoclizer["Information provided not valid"]);
                 }
                 Voter v = new Voter
                 {
@@ -424,7 +424,7 @@ namespace WebApplication1.Controllers
                 _logger.LogError(be.Message);
                 //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
                 //by whatever we want
-                BusinessMessage bm = new BusinessMessage("Error", be.Message);
+                BusinessMessage bm = new BusinessMessage(_messagesLoclizer["Error"], be.Message);
                 ViewBag.BusinessMessage = bm;
                 //lets refill States list
                 voterstate.States = _stateRepository.GetAll();
@@ -773,11 +773,11 @@ namespace WebApplication1.Controllers
                 using (ExcelPackage package = new ExcelPackage(stream))
                 {
                     var voters = _voterRepository.GetAll();
-                    ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Voters");
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets.Add(_messagesLoclizer["Voters"]);
 
-                    worksheet.Cells[1, 1].Value = "First Name";
-                    worksheet.Cells[1, 2].Value = "Last Name";
-                    worksheet.Cells[1, 3].Value = "State";
+                    worksheet.Cells[1, 1].Value = _messagesLoclizer["First Name"];
+                    worksheet.Cells[1, 2].Value = _messagesLoclizer["Last Name"];
+                    worksheet.Cells[1, 3].Value = _messagesLoclizer["State"];
                     worksheet.Row(1).Style.Font.Bold = true;
 
 
@@ -791,7 +791,7 @@ namespace WebApplication1.Controllers
                     package.Save();
                 }
 
-                string fileName = "Voters.xlsx";
+                string fileName = _messagesLoclizer["Voters"]+".xlsx";
                 string fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                 stream.Position = 0;
                 return File(stream, fileType, fileName);
