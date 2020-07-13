@@ -13,6 +13,7 @@ using WebApplication1.Models;
 using WebApplication1.Models.Helpers;
 using WebApplication1.Models.Repositories;
 using WebApplication1.Models.ViewModels;
+using Microsoft.Extensions.Localization;
 
 namespace WebApplication1.Controllers
 {
@@ -34,6 +35,10 @@ namespace WebApplication1.Controllers
         public IRepository<State> _stateRepository { get; }
         public IRepository<Vote> _voteRepository { get; }
         public IRepository<Candidate> _candidateRepository { get; }
+
+        //Lets create a private readonly field IStringLocalizer<Messages> so that we can use Localization service, we'll inject it inside the constructor
+        private readonly IStringLocalizer<Messages> _messagesLoclizer;
+
         //Lets inject the services using the constructor, this is called Constructor Dependency Injection
         public VoterController(
             IRepository<Voter> voterRepository,
@@ -41,7 +46,8 @@ namespace WebApplication1.Controllers
             IRepository<Vote> voteRepository,
             IRepository<Candidate> candidateRepository,
             UserManager<IdentityUser> userManager,
-            ILogger<VoterController> logger)
+            ILogger<VoterController> logger,
+            IStringLocalizer<Messages> messagesLoclizer)
         {
             _voterRepository = voterRepository;
             _voteRepository = voteRepository;
@@ -49,6 +55,7 @@ namespace WebApplication1.Controllers
             _candidateRepository = candidateRepository;
             _userManager = userManager;
             _logger = logger;
+            _messagesLoclizer = messagesLoclizer;
         }
         
         public IActionResult Index()
