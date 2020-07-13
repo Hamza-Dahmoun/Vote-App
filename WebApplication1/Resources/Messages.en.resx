@@ -138,6 +138,9 @@
   <data name="futureElections.xlsx" xml:space="preserve">
     <value>futureElections.xlsx</value>
   </data>
+  <data name="Information provided not valid" xml:space="preserve">
+    <value>Information provided not valid</value>
+  </data>
   <data name="N" xml:space="preserve">
     <value>N</value>
   </data>
@@ -147,11 +150,20 @@
   <data name="Neutral Candidate (Y/N)" xml:space="preserve">
     <value>Neutral Candidate (Y/N)</value>
   </data>
+  <data name="Passed parameter 'id' can not be null" xml:space="preserve">
+    <value>Passed parameter 'id' can not be null</value>
+  </data>
   <data name="previousElections.xlsx" xml:space="preserve">
     <value>previousElections.xlsx</value>
   </data>
   <data name="Start Date" xml:space="preserve">
     <value>Start Date</value>
+  </data>
+  <data name="State not found" xml:space="preserve">
+    <value>State not found</value>
+  </data>
+  <data name="States" xml:space="preserve">
+    <value>States</value>
   </data>
   <data name="Y" xml:space="preserve">
     <value>Y</value>

@@ -71,7 +71,7 @@ namespace WebApplication1.Controllers
                 if (id == null)
                 {
                     _logger.LogError("Passed parameter 'id' is null");
-                    throw new BusinessException("Passed parameter 'id' can not be null");
+                    throw new BusinessException(_messagesLoclizer["Passed parameter 'id' can not be null"]);
                 }
 
                 _logger.LogInformation("Calling StateRepository.GetById() method");
@@ -80,7 +80,7 @@ namespace WebApplication1.Controllers
                 if (s == null)
                 {
                     _logger.LogError("State not found");
-                    throw new BusinessException("State not found");
+                    throw new BusinessException(_messagesLoclizer["State not found"]);
                 }
 
                 _logger.LogInformation("Calling Utilities.convertState_toStateViewModel() method");
@@ -94,7 +94,7 @@ namespace WebApplication1.Controllers
                 _logger.LogError(be.Message);
                 //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
                 //by whatever we want
-                BusinessMessage bm = new BusinessMessage("Error", be.Message);
+                BusinessMessage bm = new BusinessMessage(_messagesLoclizer["Error"], be.Message);
                 ViewBag.BusinessMessage = bm;
                 return View();
             }
@@ -132,7 +132,7 @@ namespace WebApplication1.Controllers
                 //so the model isn't valid, lets keep the user in the same view so that he could read the validation msgs
                 _logger.LogInformation("Model is not valid");
                 //so there is a business rule not met, lets throw a businessException and catch it
-                throw new BusinessException("Information provided not valid");
+                throw new BusinessException(_messagesLoclizer["Information provided not valid"]);
                 //return View(state);
             }
             catch(BusinessException be)
@@ -140,7 +140,7 @@ namespace WebApplication1.Controllers
                 _logger.LogError(be.Message);
                 //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
                 //by whatever we want
-                BusinessMessage bm = new BusinessMessage("Error", be.Message);
+                BusinessMessage bm = new BusinessMessage(_messagesLoclizer["Error"], be.Message);
                 ViewBag.BusinessMessage = bm;
                 return View(state);
             }
@@ -162,7 +162,7 @@ namespace WebApplication1.Controllers
                 if(id == null)
                 {
                     _logger.LogError("Passed parameter 'id' is null");
-                    throw new BusinessException("Passed parameter 'id' can not be null");
+                    throw new BusinessException(_messagesLoclizer["Passed parameter 'id' can not be null"]);
                 }
                 
                 _logger.LogInformation("Calling StateRepository.GetById() method");
@@ -170,7 +170,7 @@ namespace WebApplication1.Controllers
                 if(state == null)
                 {
                     _logger.LogError("State not found");
-                    throw new BusinessException("State not found");
+                    throw new BusinessException(_messagesLoclizer["State not found"]);
                 }
 
                 _logger.LogInformation("Returning State instance to the view");
@@ -181,7 +181,7 @@ namespace WebApplication1.Controllers
                 _logger.LogError(be.Message);
                 //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
                 //by whatever we want
-                BusinessMessage bm = new BusinessMessage("Error", be.Message);
+                BusinessMessage bm = new BusinessMessage(_messagesLoclizer["Error"], be.Message);
                 ViewBag.BusinessMessage = bm;
                 return View();
             }
@@ -201,7 +201,7 @@ namespace WebApplication1.Controllers
                 if (id == null)
                 {
                     _logger.LogError("Passed parameter 'id' is null");
-                    throw new BusinessException("Passed parameter 'id' can not be null");
+                    throw new BusinessException(_messagesLoclizer["Passed parameter 'id' can not be null"]);
                 }
                 _logger.LogInformation("Calling StateRepository.Delete() method");
                 _stateRepository.Delete(id);                
@@ -213,7 +213,7 @@ namespace WebApplication1.Controllers
                 _logger.LogError(be.Message);
                 //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
                 //by whatever we want
-                BusinessMessage bm = new BusinessMessage("Error", be.Message);
+                BusinessMessage bm = new BusinessMessage(_messagesLoclizer["Error"], be.Message);
                 ViewBag.BusinessMessage = bm;
                 return View();
             }
@@ -237,7 +237,7 @@ namespace WebApplication1.Controllers
                 if (id == null)
                 {
                     _logger.LogError("Passed parameter 'id' is null");
-                    throw new BusinessException("Passed parameter 'id' can not be null");
+                    throw new BusinessException(_messagesLoclizer["Passed parameter 'id' can not be null"]);
                 }
 
                 _logger.LogInformation("Calling StateRepository.GetById() method");
@@ -245,7 +245,7 @@ namespace WebApplication1.Controllers
                 if (state == null)
                 {
                     _logger.LogError("State not found");
-                    throw new BusinessException("State not found");
+                    throw new BusinessException(_messagesLoclizer["State not found"]);
                 }
 
                 _logger.LogInformation("Returning State instance to the view");
@@ -256,7 +256,7 @@ namespace WebApplication1.Controllers
                 _logger.LogError(be.Message);
                 //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
                 //by whatever we want
-                BusinessMessage bm = new BusinessMessage("Error", be.Message);
+                BusinessMessage bm = new BusinessMessage(_messagesLoclizer["Error"], be.Message);
                 ViewBag.BusinessMessage = bm;
                 return View();
             }
@@ -280,14 +280,14 @@ namespace WebApplication1.Controllers
                     return RedirectToAction(nameof(Index));
                 }
                 //so there is a business rule not met, lets throw a businessException and catch it
-                throw new BusinessException("Information provided not valid");
+                throw new BusinessException(_messagesLoclizer["Information provided not valid"]);
             }
             catch (BusinessException be)
             {
                 _logger.LogError(be.Message);
                 //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
                 //by whatever we want
-                BusinessMessage bm = new BusinessMessage("Error", be.Message);
+                BusinessMessage bm = new BusinessMessage(_messagesLoclizer["Error"], be.Message);
                 ViewBag.BusinessMessage = bm;
                 return View(state);
             }
@@ -311,9 +311,9 @@ namespace WebApplication1.Controllers
                 {
                     //var subscribers = await _context.Subscribers.ToListAsync();
                     var states = _stateRepository.GetAll();
-                    ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("States");
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets.Add(_messagesLoclizer["States"]);
 
-                    worksheet.Cells[1, 1].Value = "Name";
+                    worksheet.Cells[1, 1].Value = _messagesLoclizer["Name"];
                     worksheet.Row(1).Style.Font.Bold = true;
 
                     //worksheet.Cells[1, 1].Value = "Name";
@@ -329,7 +329,7 @@ namespace WebApplication1.Controllers
                     package.Save();
                 }
 
-                string fileName = "States.xlsx";
+                string fileName = _messagesLoclizer["States"] + ".xlsx";
                 string fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                 stream.Position = 0;
                 return File(stream, fileType, fileName);
