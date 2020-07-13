@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using WebApplication1.Business;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Localization;
 
 namespace WebApplication1.Controllers
 {
@@ -29,6 +30,8 @@ namespace WebApplication1.Controllers
         //this is only used to get able to generate a 'code' needed to reset the password, and to get the currentUser ID
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<VoteController> _logger;
+        //Lets create a private readonly field IStringLocalizer<Messages> so that we can use Localization service, we'll inject it inside the constructor
+        private readonly IStringLocalizer<Messages> _messagesLoclizer;
         //Lets inject the services using the constructor, this is called Constructor Dependency Injection
         public VoteController(
             IRepository<Candidate> candidateRepository, 
@@ -36,7 +39,8 @@ namespace WebApplication1.Controllers
             IRepository<Voter> voterRepository,
             IRepository<Election> electionRepository,
             UserManager<IdentityUser> userManager,
-            ILogger<VoteController> logger)
+            ILogger<VoteController> logger,
+            IStringLocalizer<Messages> messagesLoclizer)
         {
             _candidateRepository = candidateRepository;
             _voteRepository = voteRepository;
@@ -44,6 +48,7 @@ namespace WebApplication1.Controllers
             _electionRepository = electionRepository;
             _userManager = userManager;
             _logger = logger;
+            _messagesLoclizer = messagesLoclizer;
         }
 
 
