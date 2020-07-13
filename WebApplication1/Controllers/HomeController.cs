@@ -83,7 +83,7 @@ namespace WebApplication1.Controllers
                     });
                     if(cachedDashboard == null)
                     {
-                        throw new BusinessException("Dashboard is null! Please contact your administrator.");
+                        throw new BusinessException(_messagesLoclizer["Dashboard is null! Please contact your administrator."]);
                     }
                     //so the above GetOrCreate() method tries to get a cached dashboard from the memory, and if it doesn't find any it will create
                     //an instance of the dashboard and cach it in memory for Three minutes
@@ -147,14 +147,14 @@ namespace WebApplication1.Controllers
             {
                 if (electionId == null || electionId == Guid.Empty)
                 {
-                    throw new BusinessException("electionId can not be null.");
+                    throw new BusinessException(_messagesLoclizer["electionId can not be null."]);
                 }
 
                 //this method returns a list of candidates (of an election) ordered by their number of votes
                 var election = _electionRepository.GetById(electionId);
                 if (election == null)
                 {
-                    throw new BusinessException("Election is not found.");
+                    throw new BusinessException(_messagesLoclizer["Election is not found."]);
                 }
 
                 _logger.LogInformation("Calling method CandidateUtilities.GetCandidate_byElection()");
@@ -222,11 +222,11 @@ namespace WebApplication1.Controllers
 
                     ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Elections");
 
-                    worksheet.Cells[1, 1].Value = "Name";
-                    worksheet.Cells[1, 2].Value = "Start Date";
-                    worksheet.Cells[1, 3].Value = "Duration (d)";
-                    worksheet.Cells[1, 4].Value = "Neutral Candidate (Y/N)";
-                    worksheet.Cells[1, 5].Value = "Candidates";
+                    worksheet.Cells[1, 1].Value = _messagesLoclizer["Name"];
+                    worksheet.Cells[1, 2].Value = _messagesLoclizer["Start Date"];
+                    worksheet.Cells[1, 3].Value = _messagesLoclizer["Duration (d)"];
+                    worksheet.Cells[1, 4].Value = _messagesLoclizer["Neutral Candidate (Y/N)"];
+                    worksheet.Cells[1, 5].Value = _messagesLoclizer["Candidates"];
                     worksheet.Row(1).Style.Font.Bold = true;
 
 
@@ -237,11 +237,11 @@ namespace WebApplication1.Controllers
                         worksheet.Cells[c, 3].Value = elections[c - 2].DurationInDays;
                         if (elections[c - 2].HasNeutral)
                         {
-                            worksheet.Cells[c, 4].Value = "Y";
+                            worksheet.Cells[c, 4].Value = _messagesLoclizer["Y"];
                         }
                         else
                         {
-                            worksheet.Cells[c, 4].Value = "N";
+                            worksheet.Cells[c, 4].Value = _messagesLoclizer["N"];
                         }
                         worksheet.Cells[c, 5].Value = elections[c - 2].Candidates.Count().ToString();
                     }
@@ -249,7 +249,7 @@ namespace WebApplication1.Controllers
                     package.Save();
                 }
 
-                string fileName = "futureElections.xlsx";
+                string fileName = _messagesLoclizer["futureElections.xlsx"];
                 string fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                 stream.Position = 0;
                 return File(stream, fileType, fileName);
@@ -291,11 +291,11 @@ namespace WebApplication1.Controllers
 
                     ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Elections");
 
-                    worksheet.Cells[1, 1].Value = "Name";
-                    worksheet.Cells[1, 2].Value = "Start Date";
-                    worksheet.Cells[1, 3].Value = "Duration (d)";
-                    worksheet.Cells[1, 4].Value = "Neutral Candidate (Y/N)";
-                    worksheet.Cells[1, 5].Value = "Candidates";
+                    worksheet.Cells[1, 1].Value = _messagesLoclizer["Name"];
+                    worksheet.Cells[1, 2].Value = _messagesLoclizer["Start Date"];
+                    worksheet.Cells[1, 3].Value = _messagesLoclizer["Duration (d)"];
+                    worksheet.Cells[1, 4].Value = _messagesLoclizer["Neutral Candidate (Y/N)"];
+                    worksheet.Cells[1, 5].Value = _messagesLoclizer["Candidates"];
                     worksheet.Row(1).Style.Font.Bold = true;
 
 
@@ -306,11 +306,11 @@ namespace WebApplication1.Controllers
                         worksheet.Cells[c, 3].Value = elections[c - 2].DurationInDays;
                         if (elections[c - 2].HasNeutral)
                         {
-                            worksheet.Cells[c, 4].Value = "Y";
+                            worksheet.Cells[c, 4].Value = _messagesLoclizer["Y"];
                         }
                         else
                         {
-                            worksheet.Cells[c, 4].Value = "N";
+                            worksheet.Cells[c, 4].Value = _messagesLoclizer["N"];
                         }
                         worksheet.Cells[c, 5].Value = elections[c - 2].Candidates.Count().ToString();
                     }
@@ -318,7 +318,7 @@ namespace WebApplication1.Controllers
                     package.Save();
                 }
 
-                string fileName = "previousElections.xlsx";
+                string fileName = _messagesLoclizer["previousElections.xlsx"];
                 string fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                 stream.Position = 0;
                 return File(stream, fileType, fileName);
