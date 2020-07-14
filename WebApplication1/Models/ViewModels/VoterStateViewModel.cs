@@ -12,10 +12,10 @@ namespace WebApplication1.Models.ViewModels
     {
         public Guid Id { get; set; }
         [Required]
-        [Display(Name = "First Name")]
+        [Display(Name = "FirstName")]
         public string FirstName { get; set; }
         [Required]
-        [Display(Name = "Last Name")]
+        [Display(Name = "LastName")]
         public string LastName { get; set; }
         public Guid StateID { get; set; }
 

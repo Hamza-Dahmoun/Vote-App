@@ -13,11 +13,11 @@ namespace WebApplication1.Models.ViewModels
         public Guid Id { get; set; }
         [Display(Name = "Name")]
         public string Name { get; set; }
-        [Display(Name = "Start Date")]
+        [Display(Name = "StartDate")]
         public DateTime StartDate { get; set; }
         [Display(Name = "Duration (days)")]
         public int DurationInDays { get; set; }
-        [Display(Name = "Is Neutral Opinion?")]
+        [Display(Name = "Has Neutral Opinion?")]
         public bool HasNeutral { get; set; }
         [Display(Name = "Candidates")]
         public int NumberOfCandidates { get; set; }

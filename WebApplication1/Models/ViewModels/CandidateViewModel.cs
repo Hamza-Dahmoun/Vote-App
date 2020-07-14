@@ -13,9 +13,9 @@ namespace WebApplication1.Models.ViewModels
         public Guid Id { get; set; }
         [Display(Name = "Is Neutral Opinion?")]
         public bool isNeutralOpinion { get; set; }
-        [Display(Name = "First Name")]
+        [Display(Name = "FirstName")]
         public string FirstName { get; set; }
-        [Display(Name = "Last Name")]
+        [Display(Name = "LastName")]
         public string LastName { get; set; }
         [Display(Name = "State")]
         public string StateName { get; set; }

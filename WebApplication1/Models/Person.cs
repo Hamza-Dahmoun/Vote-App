@@ -10,11 +10,11 @@ namespace WebApplication1.Models
     {//a person is related to one 
 
         public Guid Id { get; set; }
-        [Display(Name = "First Name")]
+        [Display(Name = "FirstName")]
         [Required(ErrorMessage = "Required")]
         
         public string FirstName { get; set; }
-        [Display(Name = "Last Name")]
+        [Display(Name = "LastName")]
         [Required(ErrorMessage = "Required")]
         
         public string LastName { get; set; }

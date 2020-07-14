@@ -15,9 +15,9 @@ namespace WebApplication1.Models.ViewModels
         //remove candidates and select new candodates
 
         public string VoterId { get; set; }
-        [Display(Name = "First Name")]
+        [Display(Name = "FirstName")]
         public string FirstName { get; set; }
-        [Display(Name = "Last Name")]
+        [Display(Name = "LastName")]
         public string LastName { get; set; }
         [Display(Name = "State")]
         public string StateName { get; set; }

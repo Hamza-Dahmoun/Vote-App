@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="An Election must last at least one day and less than five days" xml:space="preserve">
+    <value>An Election must last at least one day and less than five days</value>
+  </data>
   <data name="Are you sure you want to delete this?" xml:space="preserve">
     <value>Are you sure you want to delete this?</value>
   </data>
@@ -198,6 +201,15 @@
   <data name="Future Elections" xml:space="preserve">
     <value>Future Elections</value>
   </data>
+  <data name="Has Neutral Opinion?" xml:space="preserve">
+    <value>Has Neutral Opinion?</value>
+  </data>
+  <data name="Has Voted?" xml:space="preserve">
+    <value>Has Voted?</value>
+  </data>
+  <data name="Is Candidate" xml:space="preserve">
+    <value>Is Candidate</value>
+  </data>
   <data name="LastName" xml:space="preserve">
     <value>Last Name</value>
   </data>
@@ -233,6 +245,9 @@
   </data>
   <data name="Removing an Election from the system will remove all its Votes and Candidates as well!" xml:space="preserve">
     <value>Removing an Election from the system will remove all its Votes and Candidates as well!</value>
+  </data>
+  <data name="Required" xml:space="preserve">
+    <value>Required</value>
   </data>
   <data name="Results of the Election" xml:space="preserve">
     <value>Results of the Election</value>
@@ -290,5 +305,8 @@
   </data>
   <data name="Welcome to weVote" xml:space="preserve">
     <value>Welcome to WeVote</value>
+  </data>
+  <data name="Winner" xml:space="preserve">
+    <value>Winner</value>
   </data>
 </root>
