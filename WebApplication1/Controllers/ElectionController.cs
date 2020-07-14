@@ -92,13 +92,13 @@ namespace WebApplication1.Controllers
             {
                 if (id == null)
                 {
-                    throw new BusinessException("Passed parameter 'id' can not be null");
+                    throw new BusinessException(_messagesLoclizer["Passed parameter 'id' can not be null"]);
                 }
 
                 Election e = _electionRepository.GetById(id);
                 if (e == null)
                 {
-                    throw new BusinessException("Election not found");
+                    throw new BusinessException(_messagesLoclizer["Election not found"]);
                 }
 
                 return View(Utilities.convertElection_toElectionViewModel(e));
@@ -107,7 +107,7 @@ namespace WebApplication1.Controllers
             {
                 //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
                 //by whatever we want
-                BusinessMessage bm = new BusinessMessage("Error", be.Message);
+                BusinessMessage bm = new BusinessMessage(_messagesLoclizer["Error"], be.Message);
                 ViewBag.BusinessMessage = bm;
                 return View();
             }
@@ -216,7 +216,7 @@ namespace WebApplication1.Controllers
                     if (election.StartDate <= DateTime.Now)
                     {
                         //so it is not a future election
-                        throw new BusinessException("A New Election should take place in a future date.");
+                        throw new BusinessException(_messagesLoclizer["A New Election should take place in a future date."]);
                         
                         //lets I create an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
                         //HttpContext.Response.StatusCode = 500;
@@ -226,7 +226,7 @@ namespace WebApplication1.Controllers
                     if (ElectionUtilities.getElectionsInSamePeriod(_electionRepository, election.StartDate, election.DurationInDays)>0)
                     {
                         //so there is other existing elections which the period overlap with this new election's period
-                        throw new BusinessException("There is an existing Election during the same period.");
+                        throw new BusinessException(_messagesLoclizer["There is an existing Election during the same period."]);
 
                         //lets I create an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
                         //HttpContext.Response.StatusCode = 500;
@@ -236,7 +236,7 @@ namespace WebApplication1.Controllers
                     {
                         //so the number of days is invalid
 
-                        throw new BusinessException("The duration of the Election should one to five days.");
+                        throw new BusinessException(_messagesLoclizer["The duration of the Election should be from one to five days."]);
 
                         //lets create an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
                         //HttpContext.Response.StatusCode = 500;
@@ -283,7 +283,7 @@ namespace WebApplication1.Controllers
                 else
                 {
                     //Model is not valid
-                    throw new BusinessException("Data not valid, please check again.");
+                    throw new BusinessException(_messagesLoclizer["Data not valid, please check again."]);
 
                     //lets I create an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
                     //HttpContext.Response.StatusCode = 500;
@@ -460,7 +460,7 @@ namespace WebApplication1.Controllers
                 if (mydata.electionId==null || mydata.voterId==null)
                 {
                     //so it is not a future election
-                    throw new BusinessException("Properties voterId and electionId can not be null.");
+                    throw new BusinessException(_messagesLoclizer["Properties voterId and electionId can not be null."]);
                 }
                 Voter voter = _voterRepository.GetById(mydata.voterId);
                 _candidateRepository.Add(
@@ -504,13 +504,13 @@ namespace WebApplication1.Controllers
             {
                 if (mydata.electionId == null || mydata.voterId == null)
                 {
-                    throw new BusinessException("Properties voterId and electionId can not be null.");
+                    throw new BusinessException(_messagesLoclizer["Properties voterId and electionId can not be null."]);
                 }
 
                 Voter voter = _voterRepository.GetById(mydata.voterId);
                 if (voter == null)
                 {
-                    throw new BusinessException("Voter not found.");
+                    throw new BusinessException(_messagesLoclizer["Voter not found"] + ".");
                 }
 
                 Candidate newCandidate = new Candidate
@@ -558,19 +558,19 @@ namespace WebApplication1.Controllers
             {
                 if (mydata.electionId == null || mydata.voterId == null)
                 {
-                    throw new BusinessException("Properties voterId and electionId can not be null.");
+                    throw new BusinessException(_messagesLoclizer["Properties voterId and electionId can not be null."]);
                 }
 
                 Voter voter = _voterRepository.GetById(mydata.voterId);
                 if (voter == null)
                 {
-                    throw new BusinessException("Corresponding Voter instance not found.");
+                    throw new BusinessException(_messagesLoclizer["Corresponding Voter instance not found."]);
                 }
 
                 Election election = _electionRepository.GetById(mydata.electionId);
                 if (election == null)
                 {
-                    throw new BusinessException("Election instance not found.");
+                    throw new BusinessException(_messagesLoclizer["Election instance not found."]);
                 }
 
                 Candidate myCandidate = CandidateUtilities.GetCandidate_byVoter_byElection(
@@ -610,13 +610,13 @@ namespace WebApplication1.Controllers
             {
                 if (String.IsNullOrEmpty(candidateId))
                 {
-                    throw new BusinessException("candidateId cannot be null.");
+                    throw new BusinessException(_messagesLoclizer["candidateId cannot be null."]);
                 }
                 
                 Candidate myCandidate = _candidateRepository.GetById(Guid.Parse(candidateId)) ;
                 if (myCandidate == null)
                 {
-                    throw new BusinessException("Candidate not found.");
+                    throw new BusinessException(_messagesLoclizer["Candidate not found."]);
                 }
 
                 _candidateRepository.Delete(myCandidate.Id);
@@ -654,12 +654,12 @@ namespace WebApplication1.Controllers
             {
                 if (String.IsNullOrEmpty(electionId))
                 {
-                    throw new BusinessException("electionId cannot be null.");
+                    throw new BusinessException(_messagesLoclizer["electionId cannot be null."]);
                 }
                 Election e = _electionRepository.GetById(Guid.Parse(electionId));
                 if (e == null)
                 {
-                    throw new BusinessException("Election not found.");
+                    throw new BusinessException(_messagesLoclizer["Election is not found."]);
                 }
 
                 //lets serialize the list of candidates of the election we've got and send it back as a reponse
@@ -672,7 +672,7 @@ namespace WebApplication1.Controllers
                 var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, e);
                 if (candidates == null)
                 {
-                    throw new BusinessException("Candidates List not found.");
+                    throw new BusinessException(_messagesLoclizer["Candidates List not found."]);
                 }
 
                 var json = JsonConvert.SerializeObject(Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, candidates));
@@ -709,7 +709,7 @@ namespace WebApplication1.Controllers
             {
                 if (String.IsNullOrEmpty(electionId))
                 {
-                    throw new BusinessException("electionId can not be null.");
+                    throw new BusinessException(_messagesLoclizer["electionId cannot be null."]);
                 }
                 Election e = _electionRepository.GetById(Guid.Parse(electionId));
                 //lets serialize the list of candidates of the election we've got and send it back as a reponse
@@ -725,7 +725,7 @@ namespace WebApplication1.Controllers
                 var candidates = _candidateRepository.GetAllFiltered(expr);
                 if (candidates == null)
                 {
-                    throw new BusinessException("Candidates List not found.");
+                    throw new BusinessException(_messagesLoclizer["Candidates List not found."]);
                 }
 
                 //var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, e);
@@ -766,13 +766,13 @@ namespace WebApplication1.Controllers
             {
                 if (String.IsNullOrEmpty(electionId))
                 {
-                    throw new BusinessException("electionId can not be null.");
+                    throw new BusinessException(_messagesLoclizer["electionId cannot be null."]);
                 }
                 
                 Election election = _electionRepository.GetById(Guid.Parse(electionId));
                 if (election == null)
                 {
-                    throw new BusinessException("election not found.");
+                    throw new BusinessException(_messagesLoclizer["Election not found"] + ".");
                 }
 
                 //lets serialize the list of candidates of the election we've got and send it back as a reponse
@@ -785,7 +785,7 @@ namespace WebApplication1.Controllers
                 var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, election);
                 if (candidates == null)
                 {
-                    throw new BusinessException("Candidates List not found.");
+                    throw new BusinessException(_messagesLoclizer["Candidates List not found."]);
                 }
 
                 List<VoterCandidateEntityViewModel> entityList = new List<VoterCandidateEntityViewModel>();
@@ -844,13 +844,13 @@ namespace WebApplication1.Controllers
             {
                 if (id == null)
                 {
-                    throw new BusinessException("Passed parameter 'id' can not be null");
+                    throw new BusinessException(_messagesLoclizer["Passed parameter 'id' can not be null"]);
                 }
 
                 Election election = _electionRepository.GetById(id);
                 if (election == null)
                 {
-                    throw new BusinessException("State not found");
+                    throw new BusinessException(_messagesLoclizer["State not found"]);
                 }
 
                 return View(election);
@@ -859,7 +859,7 @@ namespace WebApplication1.Controllers
             {
                 //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
                 //by whatever we want
-                BusinessMessage bm = new BusinessMessage("Error", be.Message);
+                BusinessMessage bm = new BusinessMessage(_messagesLoclizer["Error"], be.Message);
                 ViewBag.BusinessMessage = bm;
                 return View();
             }
@@ -895,19 +895,19 @@ namespace WebApplication1.Controllers
                     {
                         //so it is not a future election
                         //so there is a business rule not met, lets throw a businessException and catch it
-                        throw new BusinessException("A New Election should take place in a future date.");
+                        throw new BusinessException(_messagesLoclizer["A New Election should take place in a future date."]);
                     }
                     if (ElectionUtilities.getElectionsInSamePeriod(_electionRepository, DateTime.Parse(election.StartDate), int.Parse(election.DurationInDays)) > 1)
                     {
                         //so in addtion to the election instance to edit, there are other elections in the db from the same period
                         //so there is a business rule not met, lets throw a businessException and catch it
-                        throw new BusinessException("There is an existing Election during the same period.");
+                        throw new BusinessException(_messagesLoclizer["There is an existing Election during the same period."]);
                     }
                     if (int.Parse(election.DurationInDays) <0 || int.Parse(election.DurationInDays) > 5)
                     {
                         //so the number of days is invalid
                         //so there is a business rule not met, lets throw a businessException and catch it
-                        throw new BusinessException("The duration of the Election should one to five days.");
+                        throw new BusinessException(_messagesLoclizer["The duration of the Election should be from one to five days."]);
                     }
                     //this variable is going to be used when checking if user updated hasNeutral opinion
                     bool oldHasNeutral = _electionRepository.GetById(Guid.Parse(election.Id)).HasNeutral;
@@ -961,7 +961,7 @@ namespace WebApplication1.Controllers
                     //Model is not valid
 
                     //so there is a business rule not met, lets throw a businessException and catch it
-                    throw new BusinessException("Data not valid, please check again.");                    
+                    throw new BusinessException(_messagesLoclizer["Data not valid, please check again."]);                    
                 }
             }
             catch (BusinessException be)
@@ -986,13 +986,13 @@ namespace WebApplication1.Controllers
             {
                 if (id == null)
                 {
-                    throw new BusinessException("Passed parameter 'id' can not be null");
+                    throw new BusinessException(_messagesLoclizer["Passed parameter 'id' can not be null"]);
                 }
 
                 var election = _electionRepository.GetById(id);
                 if (election == null)
                 {
-                    throw new BusinessException("Election not found");
+                    throw new BusinessException(_messagesLoclizer["Election not found"]);
                 }
 
                 return View(Utilities.convertElection_toElectionViewModel(election));
@@ -1001,7 +1001,7 @@ namespace WebApplication1.Controllers
             {
                 //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
                 //by whatever we want
-                BusinessMessage bm = new BusinessMessage("Error", be.Message);
+                BusinessMessage bm = new BusinessMessage(_messagesLoclizer["Error"], be.Message);
                 ViewBag.BusinessMessage = bm;
                 return View();
             }
@@ -1023,7 +1023,7 @@ namespace WebApplication1.Controllers
                 
                 if (id == null)
                 {
-                    throw new BusinessException("Passed parameter 'id' can not be null");
+                    throw new BusinessException(_messagesLoclizer["Passed parameter 'id' can not be null"]);
                 }
 
                 //1- Remove all Votes related to this Election
@@ -1054,7 +1054,7 @@ namespace WebApplication1.Controllers
             {
                 //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
                 //by whatever we want
-                BusinessMessage bm = new BusinessMessage("Error", be.Message);
+                BusinessMessage bm = new BusinessMessage(_messagesLoclizer["Error"], be.Message);
                 ViewBag.BusinessMessage = bm;
                 return View(nameof(Delete));
             }
@@ -1407,13 +1407,13 @@ namespace WebApplication1.Controllers
                 using (ExcelPackage package = new ExcelPackage(stream))
                 {
                     var elections = _electionRepository.GetAll();
-                    ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Elections");
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets.Add(_messagesLoclizer["Elections"]);
 
-                    worksheet.Cells[1, 1].Value = "Name";
-                    worksheet.Cells[1, 2].Value = "Start Date";
-                    worksheet.Cells[1, 3].Value = "Duration (d)";
-                    worksheet.Cells[1, 4].Value = "Neutral Candidate (Y/N)";
-                    worksheet.Cells[1, 5].Value = "Candidates";
+                    worksheet.Cells[1, 1].Value = _messagesLoclizer["Name"];
+                    worksheet.Cells[1, 2].Value = _messagesLoclizer["Start Date"];
+                    worksheet.Cells[1, 3].Value = _messagesLoclizer["Duration (d)"];
+                    worksheet.Cells[1, 4].Value = _messagesLoclizer["Neutral Candidate (Y/N)"];
+                    worksheet.Cells[1, 5].Value = _messagesLoclizer["Candidates"];
                     worksheet.Row(1).Style.Font.Bold = true;
 
 
@@ -1424,11 +1424,11 @@ namespace WebApplication1.Controllers
                         worksheet.Cells[c, 3].Value = elections[c - 2].DurationInDays;
                         if (elections[c - 2].HasNeutral)
                         {
-                            worksheet.Cells[c, 4].Value = "Y";
+                            worksheet.Cells[c, 4].Value = _messagesLoclizer["Y"];
                         }
                         else
                         {
-                            worksheet.Cells[c, 4].Value = "N";
+                            worksheet.Cells[c, 4].Value = _messagesLoclizer["N"];
                         }
                         worksheet.Cells[c, 5].Value = elections[c - 2].Candidates.Count.ToString();
                     }
@@ -1436,7 +1436,7 @@ namespace WebApplication1.Controllers
                     package.Save();
                 }
 
-                string fileName = "Elections.xlsx";
+                string fileName = _messagesLoclizer["Elections"]+".xlsx";
                 string fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                 stream.Position = 0;
                 return File(stream, fileType, fileName);
