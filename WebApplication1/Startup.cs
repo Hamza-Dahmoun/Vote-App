@@ -70,8 +70,16 @@ namespace WebApplication1
                     o.Filters.Add(new AuthorizeFilter(mySinglePolicy));
                 }
                 )
-                //adding localization options for Views and DataAnnotation
-                .AddViewLocalization(options => { options.ResourcesPath = "Resources"; }).AddDataAnnotationsLocalization();
+                //adding localization options for Views
+                .AddViewLocalization(options => { options.ResourcesPath = "Resources"; })
+                //registering DataAnnotationLocalization
+                .AddDataAnnotationsLocalization
+                (
+                o => o.DataAnnotationLocalizerProvider = (type, factory) =>
+                {
+                    return factory.Create(typeof(Labels));
+                }
+                );
             services.AddRazorPages();
 
             services.AddAuthorization(
