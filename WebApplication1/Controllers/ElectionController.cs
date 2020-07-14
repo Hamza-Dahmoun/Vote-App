@@ -13,6 +13,7 @@ using WebApplication1.Models;
 using WebApplication1.Models.Helpers;
 using WebApplication1.Models.Repositories;
 using WebApplication1.Models.ViewModels;
+using Microsoft.Extensions.Localization;
 
 namespace WebApplication1.Controllers
 {
@@ -33,13 +34,16 @@ namespace WebApplication1.Controllers
         public IRepository<Candidate> _candidateRepository { get; }
         //this is only used to get the currentUser so that we check whether he voted or not in order to generate the dashboard
         private readonly UserManager<IdentityUser> _userManager;
+        //Lets create a private readonly field IStringLocalizer<Messages> so that we can use Localization service, we'll inject it inside the constructor
+        private readonly IStringLocalizer<Messages> _messagesLoclizer;
         //Lets inject the services using the constructor, this is called Constructor Dependency Injection
         public ElectionController(
             IRepository<Vote> voteRepository,
             IRepository<Voter> voterRepository,
             IRepository<Candidate> candidateRepository,
             IRepository<Election> electionRepository,
-            UserManager<IdentityUser> userManager
+            UserManager<IdentityUser> userManager,
+            IStringLocalizer<Messages> messagesLoclizer
             //IRepository<ElectionVoter> electionVoterRepository
             /*, IRepository<ElectionCandidate> electionCandidateRepository*/)
         {
@@ -48,6 +52,7 @@ namespace WebApplication1.Controllers
             _candidateRepository = candidateRepository;
             _electionRepository = electionRepository;
             _userManager = userManager;
+            _messagesLoclizer = messagesLoclizer;
             //_electionVoterRepository = electionVoterRepository;
             //_electionCandidateRepository = electionCandidateRepository;
         }
