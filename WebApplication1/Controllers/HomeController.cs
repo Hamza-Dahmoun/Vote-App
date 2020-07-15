@@ -18,6 +18,8 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.AspNetCore.Diagnostics;
 using OfficeOpenXml;
 using Microsoft.Extensions.Localization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Localization;
 
 namespace WebApplication1.Controllers
 {
@@ -201,7 +203,20 @@ namespace WebApplication1.Controllers
 
         }
 
+        [HttpPost]
+        public IActionResult SetLanguage(string culture, string returnUrl)
+        {
+            //this action is invoked by the selectLanguageDropdownList
+            //This action will override a key/value to the localization cookie provider (CookieRequestCultureProvider)
+            //with a period of life of one year
+            Response.Cookies.Append(
+                CookieRequestCultureProvider.DefaultCookieName,
+                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
+                new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
+            );
 
+            return LocalRedirect(returnUrl);
+        }
 
 
 
