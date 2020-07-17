@@ -2,6 +2,16 @@
 //METHODS THAT GET THE ASPNETCORE.CULTURE COOKIE IN ORDER TO SEE WHICH LANGUAGE IS USED SO (CHOSEN BY THE USER IN THE DROPDOWN LIST) SO
 //THAT WE COULD DECIDE WHICH LANGUAGE WE USE WHEN DISPLAYING JQUERY DATATABLES AND MESSAGES WE DISPLAY IN THE FRONTEND
 
+//declaring resources object to work just like resources files in the server
+var resources = {
+    en: {}, fr: {}
+};
+
+resources.en["hi"] = "hi";
+resources.fr["hi"] = "salut";
+
+//console.log(resources);
+
 
 
 /************************************ THIS IS HOW TO STORE AND READ A COOKIE (source:https://developer.mozilla.org/en-US/docs/Web/API/Document/cookie)
