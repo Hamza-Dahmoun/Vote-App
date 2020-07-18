@@ -49,7 +49,8 @@ function loadComingElections() {
             let errorParag = document.createElement("p");
             let responseMsg = document.createElement("div");
             responseMsg.className = "alert alert-danger";
-            errorParag.innerHTML = "<strong>Error!</strong> " + response.responseJSON.message;
+            errorParag.innerHTML = "<strong>" + resources[currentUserLanguage]["Error"] + "!</strong> " + response.responseJSON.message;
+                        
             responseMsg.appendChild(errorParag);
             document.getElementById("coming-elections-area").appendChild(responseMsg);
             //now lets hide the spinner
@@ -120,7 +121,8 @@ function loadCurrentElection() {
             let errorParag = document.createElement("p");
             let responseMsg = document.createElement("div");
             responseMsg.className = "alert alert-danger";
-            errorParag.innerHTML = "<strong>Error!</strong> " + response.responseJSON.message;
+            errorParag.innerHTML = "<strong>" + resources[currentUserLanguage]["Error"] + "!</strong> " + response.responseJSON.message;
+            
             responseMsg.appendChild(errorParag);
             document.getElementById("current-election-area").appendChild(responseMsg);
             //now lets hide the spinner
@@ -145,31 +147,32 @@ function displayCurrentElection(currentElection) {
     if (currentElection == null) {
         //so there is no current election, lets just display a simple text
         let p = document.createElement("p");
-        p.innerText = "There is no Election currently!";
+        p.innerText = resources[currentUserLanguage]["There is no Election currently"] + "!";
+
         currentElectionArea.appendChild(p);
     }
     else {
         //so there is an election currently, lets display its info with a 'Vote' button
         let name = document.createElement("p");
-        name.innerText = "Name: ";
+        name.innerText = resources[currentUserLanguage]["Name"] + ": ";
         let strongName = document.createElement("strong");
-        strongName.innerText = currentElection.Name + " | " + currentElection.CandidatesCount + " Candidates";
+        strongName.innerText = currentElection.Name + " | " + currentElection.CandidatesCount + " " + resources[currentUserLanguage]["Candidates"];
         name.appendChild(strongName);
 
         let startdate = document.createElement("p");
-        startdate.innerText = "Date: ";
+        startdate.innerText = resources[currentUserLanguage]["Date"] + ": "; 
         let strongDate = document.createElement("strong");
         strongDate.innerText = currentElection.StartDate;
         startdate.appendChild(strongDate);
 
         let durationindays = document.createElement("p");
-        durationindays.innerText = "Duration (days): ";
+        durationindays.innerText = resources[currentUserLanguage]["Duration (days)"] +  ": ";
         let strongDuration = document.createElement("strong");
         strongDuration.innerText = currentElection.DurationInDays;
         durationindays.appendChild(strongDuration);
 
         let participationRate = document.createElement("p");
-        participationRate.innerText = "Participation Rate: ";
+        participationRate.innerText = resources[currentUserLanguage]["Participation Rate"] + ": ";
         let strongParticipationRate = document.createElement("strong");
         strongParticipationRate.innerText = Math.floor(parseFloat(currentElection.ParticipationRate * 100)) + "%";
         participationRate.appendChild(strongParticipationRate);
@@ -185,13 +188,13 @@ function displayCurrentElection(currentElection) {
         if (!currentElection.HasUserVoted) {
             let voteButton = document.createElement("a");
             voteButton.className = "btn btn-default animated-button";
-            voteButton.setAttribute("title", "Go Vote");
+            voteButton.setAttribute("title", resources[currentUserLanguage]["Go Vote"]);
             //voteButton.setAttribute("href", "Vote/Index/" + currentElection.Id);
             //currentElectionId in Vote/Index() was always received as empty Guid .. lets just get the current election inside the Index() action
             voteButton.setAttribute("href", "/Vote/Index/");
             let icon = document.createElement("i");
             icon.className = "fa fa-chevron-right";
-            icon.innerText = "Vote";
+            icon.innerText = resources[currentUserLanguage]["Vote"];
             voteButton.appendChild(icon);
             currentElectionArea.appendChild(voteButton);
         }
@@ -200,8 +203,8 @@ function displayCurrentElection(currentElection) {
             resultsButton.setAttribute("electionId", currentElection.Id);
             resultsButton.style.color = "#3d7e9a";
             resultsButton.style.cursor = "pointer";
-            resultsButton.setAttribute("title", "Show Details");
-            resultsButton.innerText = "Show Results";
+            resultsButton.setAttribute("title", resources[currentUserLanguage]["Show Details"]);
+            resultsButton.innerText = resources[currentUserLanguage]["Show Details"];
             resultsButton.addEventListener("click", getElectionResults);
             let div = document.createElement("div");
             div.appendChild(resultsButton);
@@ -283,7 +286,7 @@ function loadPreviousElectionsDatatable() {
                     let errorParag = document.createElement("p");
                     let responseMsg = document.createElement("div");
                     responseMsg.className = "alert alert-danger";
-                    errorParag.innerHTML = "<strong>Error!</strong> " + reason.responseJSON.message;
+                    errorParag.innerHTML = "<strong>" + resources[currentUserLanguage]["Error"] + "!</strong> " + reason.responseJSON.message;
                     responseMsg.appendChild(errorParag);
                     document.getElementById("previous-elections-area").appendChild(responseMsg);
                     //now lets hide the datatable wrapper (a div created by jquery which surrounds the table)
@@ -455,7 +458,7 @@ function getElectionResults(event) {
             //so there is a server error, lets display the error msg
             
             //alert("Error! " + response.responseJSON.message);
-            document.getElementById("redModal").querySelector("h4").innerText = "Error!";
+            document.getElementById("redModal").querySelector("h4").innerText = resources[currentUserLanguage]["Error"] + "!";
             document.getElementById("redModal").querySelector("p").innerText = response.responseJSON.message;
             $('#redModal').modal('show');
             //now lets hide the spinner
@@ -513,7 +516,7 @@ function displayElectionResults(response) {
     if (response == null || response.length == 0) {
         //so the respponse is empty, lets just display a text  to tell user that this election has no candidates
         let para = document.createElement("p");
-        para.innerText = "It seems this election had no Candidates!";
+        para.innerText = resources[currentUserLanguage]["It seems this election had no Candidates!"];
         para.style.textAlign = "center";
         electionResultsContainer.appendChild(para);
     }
@@ -591,7 +594,7 @@ function buildPdf(electionInfo, results) {
     let neutralVotes = 0;
     let totalVotes = 0;
     let myRows = [
-        [{ text: 'Rank', style: 'tableHeader' }, { text: 'Candidate', style: 'tableHeader' }, { text: 'Votes', style: 'tableHeader' }]
+        [{ text: resources[currentUserLanguage]['Rank'], style: 'tableHeader' }, { text: resources[currentUserLanguage]['Candidate'], style: 'tableHeader' }, { text: resources[currentUserLanguage]['Votes'], style: 'tableHeader' }]
     ];
 
     for (let i = 0; i < results.length; i++) {
@@ -620,13 +623,13 @@ function buildPdf(electionInfo, results) {
         pageSize: 'A4',
         footer: //we're going to get the footer from the below function which returns a valid pdfMake element composed of {text, style}
             function (currentPage, pageCount) {
-            return { text: currentPage.toString() + ' of ' + pageCount, style: "footer" }
+                return { text: currentPage.toString() + ' ' + resources[currentUserLanguage]['of'] + ' ' + pageCount, style: "footer" }
         },
         //the below represents the content of the document
         content:
             [
                 {
-                    text: 'Election Results', style: 'title'
+                    text: resources[currentUserLanguage]['Election Results'], style: 'title'
                 },
                 {
                     text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
@@ -635,23 +638,23 @@ function buildPdf(electionInfo, results) {
                 //'pdfmake does not generate pdfs from the html. Rather, it generates them directly from javascript.',
                 //'It is very fast, but very limited, especially compared to PHP alternatives.', 
                 {
-                    text: "- Election Name: " + electionName,
+                    text: "- " + resources[currentUserLanguage]["Election Name"]+": " + electionName,
                     style: "points"
                 },
                 {
-                    text: "- Start Date: " + electionStartDate,
+                    text: "- " + resources[currentUserLanguage]["Start Date"] + ": " + electionStartDate,
                     style: "points"
                 },
                 {
-                    text: "- Duration: " + electionDuration,
+                    text: "- " + resources[currentUserLanguage]["Duration"] + ": " + electionDuration,
                     style: "points"
                 },
                 {
-                    text: "- Number of Candidates: " + candidatesCount,
+                    text: "- " + resources[currentUserLanguage]["Number of Candidates"] + ": " + candidatesCount,
                     style: "points"
                 },
                 {
-                    text: "Results:",
+                    text: resources[currentUserLanguage]["Results"] + ":",
                     style: "resultsTitle"
                 },
                 {
@@ -663,15 +666,15 @@ function buildPdf(electionInfo, results) {
                     }
                 },
                 {
-                    text: "Notes: ",
+                    text: resources[currentUserLanguage]["Notes"]+": ",
                     style: "notes"
                 },
                 {
-                    text: "Neutral Votes: " + neutralVotes + ".",
+                    text: resources[currentUserLanguage]["Neutral Votes"]+": " + neutralVotes + ".",
                     style: "points"
                 },
                 {
-                    text: "Total Number of Votes: " + totalVotes + ".",
+                    text: resources[currentUserLanguage]["Total Number of Votes"] + ": " + totalVotes + ".",
                     style: "points"
                 },
             ],

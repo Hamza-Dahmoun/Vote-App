@@ -9,8 +9,59 @@ var resources = {
 
 resources.en["hi"] = "hi";
 resources.fr["hi"] = "salut";
+resources.en["Error"] = "Error";
+resources.fr["Error"] = "Erreur";
+resources.en["There is no Election currently"] = "There is no Election currently";
+resources.fr["There is no Election currently"] = "Il n'a pas d'Election pour le moment";
+resources.en["Name"] = "Name";
+resources.fr["Name"] = "Nom";
+resources.en["Candidates"] = "Candidates";
+resources.fr["Candidates"] = "Candidats";
+resources.en["Date"] = "Date";
+resources.fr["Date"] = "Date";
+resources.en["Duration (days)"] = "Duration (days)";
+resources.fr["Duration (days)"] = "Durée (jours)";
+resources.en["Participation Rate"] = "Participation Rate";
+resources.fr["Participation Rate"] = "Taux de Participation";
+resources.en["Go Vote"] = "Go Vote";
+resources.fr["Go Vote"] = "Allez Voter";
+resources.en["Vote"] = "Vote";
+resources.fr["Vote"] = "Voter";
+resources.en["Show Details"] = "Show Details";
+resources.fr["Show Details"] = "Show Details";
+resources.en["It seems this election had no Candidates!"] = "It seems this election had no Candidates!";
+resources.fr["It seems this election had no Candidates!"] = "It seems this election had no Candidates!";
+resources.en["Rank"] = "Rank";
+resources.fr["Rank"] = "Rang";
+resources.en["Candidate"] = "Candidate";
+resources.fr["Candidate"] = "Candidat";
+resources.en["Votes"] = "Votes";
+resources.fr["Votes"] = "Votes";
+resources.en["of"] = "of";
+resources.fr["of"] = "de";
+resources.en["Election Results"] = "Election Results";
+resources.fr["Election Results"] = "Résultats";
+resources.en["Election Name"] = "Election Name";
+resources.fr["Election Name"] = "Nom d'Election";
+resources.en["Start Date"] = "Start Date";
+resources.fr["Start Date"] = "Date Début";
+resources.en["Duration"] = "Duration";
+resources.fr["Duration"] = "Durée";
+resources.en["Number of Candidates"] = "Number of Candidates";
+resources.fr["Number of Candidates"] = "Nombre de Candidats";
+resources.en["Results"] = "Results";
+resources.fr["Results"] = "Résultats";
+resources.en["Notes"] = "Notes";
+resources.fr["Notes"] = "Remarque";
+resources.en["Neutral Votes"] = "Neutral Votes";
+resources.fr["Neutral Votes"] = "Opinion Neutre";
+resources.en["Total Number of Votes"] = "Total Number of Votes";
+resources.fr["Total Number of Votes"] = "Nombre Totale des votes";
 
-//console.log(resources);
+
+//var language = "en";
+//console.log(resources[language]["Error"]);
+
 
 
 
@@ -42,8 +93,8 @@ A new string representing the decoded version of the given encoded Uniform Resou
 
 *************************************/////////////////////////////
 
-var currentUserLanguage = getCookieValue(".AspNetCore.Culture");
-function getCookieValue(cookieName) {
+var currentUserLanguage = getLanguageCookieValue(".AspNetCore.Culture");
+function getLanguageCookieValue(cookieName) {
     let cookieValue = document.cookie
         .split('; ')
         .find(row => row.startsWith(cookieName))
@@ -63,7 +114,6 @@ function getCookieValue(cookieName) {
     //now it looks like: mylanguage=['c', 'en'] OR ..
 
     return mylanguage[1];
-
 }
 
 console.log(currentUserLanguage);
