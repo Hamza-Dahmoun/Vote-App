@@ -123,6 +123,12 @@
   <data name="Home" xml:space="preserve">
     <value>Acceuil</value>
   </data>
+  <data name="Login" xml:space="preserve">
+    <value>Connexion</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Déconnexion</value>
+  </data>
   <data name="States" xml:space="preserve">
     <value>Etats</value>
   </data>
