@@ -120,6 +120,9 @@
   <data name="An Election must last at least one day and less than five days" xml:space="preserve">
     <value>Une Election doit dure au minimum un jour et au maximum cinq jours</value>
   </data>
+  <data name="An error occurred while processing your request." xml:space="preserve">
+    <value>Erreur lors le traitement de votre requete.</value>
+  </data>
   <data name="Are you sure you want to delete this?" xml:space="preserve">
     <value>Etes vous sure de supprimer cette élément?</value>
   </data>
@@ -198,6 +201,9 @@
   <data name="Elections" xml:space="preserve">
     <value>Elections</value>
   </data>
+  <data name="Error" xml:space="preserve">
+    <value>Erreur</value>
+  </data>
   <data name="Error or Warning here!" xml:space="preserve">
     <value>Erreur or Warning ici!</value>
   </data>
@@ -243,6 +249,9 @@
   <data name="Number of Candidates" xml:space="preserve">
     <value>Nombre de Candidats</value>
   </data>
+  <data name="Please contact your System Administrator." xml:space="preserve">
+    <value>Veuillez contacter votre Administrateur Système.</value>
+  </data>
   <data name="Please Select Candidates concerned by this Election" xml:space="preserve">
     <value>Veuillez sélectionner les Candidats de cette Election</value>
   </data>
@@ -254,6 +263,9 @@
   </data>
   <data name="Removing an Election from the system will remove all its Votes and Candidates as well!" xml:space="preserve">
     <value>La suppression d'une élection supprime également ses Votes et ses Candidatures!</value>
+  </data>
+  <data name="Request ID:" xml:space="preserve">
+    <value>ID du requete:</value>
   </data>
   <data name="Required" xml:space="preserve">
     <value>Obligatoire</value>
