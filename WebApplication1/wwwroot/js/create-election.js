@@ -80,7 +80,7 @@ not the form.
 
                 //so there is a server error, lets display the error msg
 
-                document.getElementById("redModal").querySelector("h4").innerText = "Error!";
+                document.getElementById("redModal").querySelector("h4").innerText = resources[currentUserLanguage]["Error!"];
                 document.getElementById("redModal").querySelector("p").innerText = response.responseJSON.message;
                 $('#redModal').modal('show');
             },
@@ -162,7 +162,7 @@ function prepareVotersjQueryDatatable(electionId) {
                     let errorParag = document.createElement("p");
                     let responseMsg = document.createElement("div");
                     responseMsg.className = "alert alert-danger";
-                    errorParag.innerHTML = "<strong>Error when retrieving Candidates!</strong> " + reason.responseJSON.message;
+                    errorParag.innerHTML = "<strong>" + resources[currentUserLanguage]["Error when retrieving Candidates!"]+"</strong> " + reason.responseJSON.message;
                     responseMsg.appendChild(errorParag);
                     document.getElementById("step-two").appendChild(responseMsg);
                     //now lets hide the datatable wrapper (a div created by jquery which surrounds the table)
@@ -175,9 +175,9 @@ function prepareVotersjQueryDatatable(electionId) {
             "columns":
                 [//These are the columns to be displayed, and they are the fields of the voters objects brought from the server
                     { "data": "Id", "visible": false, "searchable": false },
-                    { "data": "FirstName", "title": "FirstName", "name": "FirstName", "visible": true, "searchable": true, "sortable": false },
-                    { "data": "LastName", "title": "Last Name", "name": "LastName", "visible": true, "searchable": true, "sortable": false },
-                    { "data": "State.Name", "title": "State", "visible": true, "searchable": true, "sortable": false },
+                    { "data": "FirstName", "title": resources[currentUserLanguage]["FirstName"], "name": "FirstName", "visible": true, "searchable": true, "sortable": false },
+                    { "data": "LastName", "title": resources[currentUserLanguage]["LastName"], "name": "LastName", "visible": true, "searchable": true, "sortable": false },
+                    { "data": "State.Name", "title": resources[currentUserLanguage]["State"], "visible": true, "searchable": true, "sortable": false },
                     {
                         "data": null, "searchable": false, "sortable": false,
                         "render": function (data, type, row, meta) {
@@ -226,7 +226,7 @@ function selectNewCandidate() {
             //so there is a server error, lets display the error msg
             clickedButton.parentElement.querySelector(".spinner-border").style.display = "none";
             clickedButton.style.display = "block";
-            document.getElementById("redModal").querySelector("h4").innerText = "Error!";
+            document.getElementById("redModal").querySelector("h4").innerText = resources[currentUserLanguage]["Error"]+"!";
             document.getElementById("redModal").querySelector("p").innerText = response.responseJSON.message;
             $('#redModal').modal('show');
 
@@ -256,9 +256,9 @@ function displayAddedCandidate(candidateFullName, voterid) {
     let spinner = document.createElement("div");
     spinner.className = "spinner-border text-danger hidden-spinner centered-spinner";
     let closeButton = document.createElement("a");
-    closeButton.innerText = "Remove";
+    closeButton.innerText = resources[currentUserLanguage]["Remove"];
     closeButton.setAttribute("voterid", voterid);
-    closeButton.setAttribute("title", "Remove Candidate");
+    closeButton.setAttribute("title", resources[currentUserLanguage]["Remove Candidate"]);
     closeButton.className = "remove-candidate-btn";
     closeButton.addEventListener("click", removeCandidateFromElection);
     let div = document.createElement("div");
@@ -298,7 +298,7 @@ function removeCandidateFromElection() {
             //so there is a server error, lets display the error msg
             clickedButton.parentElement.querySelector(".spinner-border").style.display = "none";
             clickedButton.style.display = "block";
-            document.getElementById("redModal").querySelector("h4").innerText = "Error!";
+            document.getElementById("redModal").querySelector("h4").innerText = resources[currentUserLanguage]["Error"]+"!";
             document.getElementById("redModal").querySelector("p").innerText = response.responseJSON.message;
             $('#redModal').modal('show');
         },
