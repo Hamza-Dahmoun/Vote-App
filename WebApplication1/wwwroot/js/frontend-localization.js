@@ -57,7 +57,53 @@ resources.en["Neutral Votes"] = "Neutral Votes";
 resources.fr["Neutral Votes"] = "Opinion Neutre";
 resources.en["Total Number of Votes"] = "Total Number of Votes";
 resources.fr["Total Number of Votes"] = "Nombre Totale des votes";
+resources.en["N° Of Candidates"] = "N° Of Candidates";
+resources.fr["N° Of Candidates"] = "N° de Candidats";
+resources.en["Neutral Opinion"] = "Neutral Opinion";
+resources.fr["Neutral Opinion"] = "Opinion Neutre";
+resources.en["Number of Votes"] = "Number of Votes";
+resources.fr["Number of Votes"] = "Nombre de Votes";
+resources.en[""] = "";
+resources.fr[""] = "";
+resources.en[""] = "";
+resources.fr[""] = "";
+resources.en[""] = "";
+resources.fr[""] = "";
+resources.en[""] = "";
+resources.fr[""] = "";
+resources.en[""] = "";
+resources.fr[""] = "";
+resources.en[""] = "";
+resources.fr[""] = "";
 
+function getTranslatedDataTable() {
+    //console.log("checking language");
+    if (currentUserLanguage == 'fr') {
+        //console.log("language is french");
+        return frenchDataTable;
+    }
+}
+var frenchDataTable = {
+    processing: "Traitement en cours...",
+    search: "Rechercher&nbsp;:",
+    lengthMenu: "Afficher _MENU_ &eacute;l&eacute;ments",
+    info: "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+    infoEmpty: "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
+    infoFiltered: "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+    infoPostFix: "",
+    loadingRecords: "Chargement en cours...",
+    zeroRecords: "Aucun &eacute;l&eacute;ment &agrave; afficher",
+    emptyTable: "Aucune donnée disponible dans le tableau",
+    paginate: {
+        first: "Premier",
+        previous: "Pr&eacute;c&eacute;dent",
+        next: "Suivant",
+        last: "Dernier"
+    },
+    aria: {
+        sortAscending: ": activer pour trier la colonne par ordre croissant",
+        sortDescending: ": activer pour trier la colonne par ordre décroissant"
+    }};
 
 //var language = "en";
 //console.log(resources[language]["Error"]);
@@ -92,9 +138,13 @@ Return value
 A new string representing the decoded version of the given encoded Uniform Resource Identifier (URI) component.
 
 *************************************/////////////////////////////
-
+//console.log(document.cookie);
 var currentUserLanguage = getLanguageCookieValue(".AspNetCore.Culture");
 function getLanguageCookieValue(cookieName) {
+
+    //WE ARE LOOKING FOR THIS COOKIE: .AspNetCore.Culture=c%3Den%7Cuic%3Den
+    //write: console.log(document.cookie); which displays all the cookies, you'll see it
+
     let cookieValue = document.cookie
         .split('; ')
         .find(row => row.startsWith(cookieName))

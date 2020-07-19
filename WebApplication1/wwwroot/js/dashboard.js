@@ -101,7 +101,9 @@ function displayComingElections(comingElections) {
     hideElement(comingElectionsArea.querySelector(".spinner-border"));
     displayElement(table);
     //now lets make it a jquery datatables
-    $('#coming-elections-table').DataTable();
+    $('#coming-elections-table').DataTable({
+        "language": getTranslatedDataTable()
+    });
 }
 
 
@@ -239,12 +241,12 @@ function loadPreviousElectionsDatatable() {
     let columnsArray =
         [//These are the columns to be displayed, and they are the fields of the voters objects brought from the server
             { "data": "Id", "visible": false, "searchable": false },
-            { "data": "Name", "title": "Name", "name": "Name", "visible": true, "searchable": true, "sortable": true },
-            { "data": "StartDate", "title": "Start Date", "name": "Start Date", "visible": true, "searchable": true, "sortable": true },
-            { "data": "DurationInDays", "title": "Duration (days)", "name": "Duration (days)", "visible": true, "searchable": true, "sortable": false },
-            { "data": "NumberOfCandidates", "title": "N° Of Candidates", "name": "N° Of Candidates", "visible": true, "searchable": true, "sortable": false },
-            { "data": "HasNeutral", "title": "Neutral Opinion", "name": "Neutral Opinion", "visible": true, "searchable": false, "sortable": false },
-            { "data": "NumberOfVotes", "title": "Number of Votes", "name": "Number of Votes", "visible": true, "searchable": false, "sortable": false },
+            { "data": "Name", "name": "Name", "title": resources[currentUserLanguage]["Name"], "visible": true, "searchable": true, "sortable": true },
+            { "data": "StartDate", "name": "Start Date", "title": resources[currentUserLanguage]["Start Date"], "visible": true, "searchable": true, "sortable": true },
+            { "data": "DurationInDays", "name": "Duration (days)", "title": resources[currentUserLanguage]["Duration (days)"], "visible": true, "searchable": true, "sortable": false },
+            { "data": "NumberOfCandidates", "name": "N° Of Candidates", "title": resources[currentUserLanguage]["N° Of Candidates"], "visible": true, "searchable": true, "sortable": false },
+            { "data": "HasNeutral", "name": "Neutral Opinion", "title": resources[currentUserLanguage]["Neutral Opinion"], "visible": true, "searchable": false, "sortable": false },
+            { "data": "NumberOfVotes", "name": "Number of Votes", "title": resources[currentUserLanguage]["Number of Votes"], "visible": true, "searchable": false, "sortable": false },
             {
                 "data": null, "searchable": false, "sortable": false,
                 "render": function (data, type, row, meta) {
@@ -297,6 +299,7 @@ function loadPreviousElectionsDatatable() {
                 { "type": "numeric-comma", targets: "_all" }
             ],
             "columns": columnsArray, 
+            "language": getTranslatedDataTable()
         }
         
     );
