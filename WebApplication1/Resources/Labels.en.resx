@@ -129,6 +129,9 @@
   <data name="Candidates" xml:space="preserve">
     <value>Candidates</value>
   </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
   <data name="Create" xml:space="preserve">
     <value>Create</value>
   </data>
@@ -194,6 +197,12 @@
   </data>
   <data name="Elections" xml:space="preserve">
     <value>Elections</value>
+  </data>
+  <data name="Error or Warning here!" xml:space="preserve">
+    <value>Error or Warning here!</value>
+  </data>
+  <data name="Error Text Here" xml:space="preserve">
+    <value>Error Text Here</value>
   </data>
   <data name="FirstName" xml:space="preserve">
     <value>First Name</value>

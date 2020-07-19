@@ -1,4 +1,15 @@
 ﻿
+
+@{ /*Importing namespace Microsoft.Extensions.Localization; */}
+@using Microsoft.Extensions.Localization;
+
+@{/*Injecting IStringLocalizer for Labelsc.s shared resource in variable named labelsLocalizer */}
+@inject IStringLocalizer<Labels> labelsLocalizer
+
+
+
+
+
 @*THIS MODAL IS USED ONLY TO DISPLAY POSSIBLE SERVER ERRORS WHEN CLICKING ON ELECTION RESULTS OR WHEN DOWNLOADING ELECTION RESULTS AS PDF*@
 <div class="modal fade text-danger" id="redModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-confirm" role="document">
@@ -14,11 +25,11 @@
                 </button>
             </div>
             <div class="modal-body">
-                <h4 class="modal-title" id="exampleModalLongTitle">Error or Warning here!</h4>
-                <p>Error Text Here</p>
+                <h4 class="modal-title" id="exampleModalLongTitle">@labelsLocalizer["Error or Warning here!"]</h4>
+                <p>@labelsLocalizer["Error Text Here"]</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">@labelsLocalizer["Close"]</button>
             </div>
         </div>
     </div>
