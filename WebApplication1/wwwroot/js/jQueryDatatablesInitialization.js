@@ -7,9 +7,9 @@ function initializeDatatable(tableSelector, url, columnsArray, model) {
             "data": null, "searchable": false, "sortable": false,
             "render": function (data, type, row, meta) {
                 var buttons =
-                    "<a class='table-button button-edit' title='Edit' href=" + model+'/Edit/' + row.Id + "><i class='fa fa-pencil'></i></a>" + " " +
-                    "<a class='table-button button-details' title='Details' href=" + model +'/Details/' + row.Id + "><i class='fa fa-file-text'></i></a>" + " " +
-                    "<a class='table-button button-delete' title='Delete' href=" + model +'/Delete/' + row.Id + "><i class='fa fa-trash'></i></a>"
+                    "<a class='table-button button-edit' title=" + resources[currentUserLanguage]["Edit"]+" href=" + model+'/Edit/' + row.Id + "><i class='fa fa-pencil'></i></a>" + " " +
+                    "<a class='table-button button-details' title=" + resources[currentUserLanguage]["Details"]+" href=" + model +'/Details/' + row.Id + "><i class='fa fa-file-text'></i></a>" + " " +
+                    "<a class='table-button button-delete' title=" + resources[currentUserLanguage]["Delete"]+" href=" + model +'/Delete/' + row.Id + "><i class='fa fa-trash'></i></a>"
                     ;
                 return buttons;
             }
@@ -28,6 +28,7 @@ function initializeDatatable(tableSelector, url, columnsArray, model) {
             "columnDefs": [
                 { "type": "numeric-comma", targets: "_all" }
             ],
+            "language": getTranslatedDataTable(),
             "columns": columnsArray
         }
     );
