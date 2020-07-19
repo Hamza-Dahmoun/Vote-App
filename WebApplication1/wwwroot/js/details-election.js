@@ -13,8 +13,17 @@ function loadCandidatesList() {
         data: JSON.stringify(document.getElementById("candidate-id-holder").value),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        error: function () {
-            alert("error");
+        error: function (response) {
+            //to know why I used 'response.responseJSON.message' to get the error text just log the response object and check its properties
+
+            //so there is a server error, lets display the error msg
+
+            //alert("Error! " + response.responseJSON.message);
+            document.getElementById("redModal").querySelector("h4").innerText = resources[currentUserLanguage]["Error"] + "!";
+            document.getElementById("redModal").querySelector("p").innerText = response.responseJSON.message;
+            $('#redModal').modal('show');
+            //now lets hide the spinner
+            hideElement(document.getElementById("candidates-table-spinner"));
         },
         success: function (response) {
             //'response' represents the object returned from the api which is the Election object newly stored in the db
@@ -27,6 +36,15 @@ function loadCandidatesList() {
     });
     //console.log("loaded data");
 }
+function displayElement(elt) {
+    //this function displays an element
+    elt.style.display = "block";
+}
+function hideElement(elt) {
+    //this function hides an element
+    elt.style.display = "none";
+}
+
 function displayCandidates(candidatesList) {
     //console.log(candidatesList.length);
     //alert("I am displaying list of candidates");
