@@ -1,4 +1,4 @@
-﻿#select-manguage-dropdown-container {
+﻿#select-language-dropdown-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -7,7 +7,7 @@
 
 /*source:https://codepen.io/raubaca/pen/VejpQP*/
 /* Reset Select */
-select {
+#select-language-dropdown-container select {
     -webkit-appearance: none;
     -moz-appearance: none;
     -ms-appearance: none;
@@ -15,26 +15,26 @@ select {
     outline: 0;
     box-shadow: none;
     border: 0 !important;
-    background: transparent /*#2c3e50*/;
+    background: transparent;
     background-image: none;
 }
     /* Remove IE arrow */
-    select::-ms-expand {
-        display: none;
-    }
-/* Custom Select */
-.select {
-    position: relative;
-    display: flex;
-    width: 20em;
-    height: 3em;
-    line-height: 3;
-    background: transparent /* #2c3e50*/;
-    overflow: hidden;
-    border-radius: .25em;
+#select-language-dropdown-container select::-ms-expand {
+    display: none;
 }
+/* Custom Select */
+    #select-language-dropdown-container .select {
+        position: relative;
+        display: flex;
+        width: 20em;
+        height: 3em;
+        line-height: 3;
+        background: transparent ;
+        overflow: hidden;
+        border-radius: .25em;
+    }
 
-select {
+#select-language-dropdown-container select {
     flex: 1;
     padding: 0 .5em;
     color: #2c3e50;
