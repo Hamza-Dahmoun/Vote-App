@@ -292,10 +292,10 @@
     <value>Voter</value>
   </data>
   <data name="Voter" xml:space="preserve">
-    <value>Voteur</value>
+    <value>Electeur</value>
   </data>
   <data name="Voters" xml:space="preserve">
-    <value>Voteurs</value>
+    <value>Electeurs</value>
   </data>
   <data name="Votes" xml:space="preserve">
     <value>Votes</value>
