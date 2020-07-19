@@ -124,7 +124,7 @@ function sendCandidates() {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         error: function (response) {
-            document.getElementById("redModal").querySelector("h4").innerText = "Error!";
+            document.getElementById("redModal").querySelector("h4").innerText = resources[currentUserLanguage]["Error!"];
             document.getElementById("redModal").querySelector("p").innerText = response.responseJSON.message;
             $('#redModal').modal('show');
         },
