@@ -65,7 +65,7 @@ not the form.
 
                 //so there is a server error, lets display the error msg
 
-                document.getElementById("redModal").querySelector("h4").innerText = "Error!";
+                document.getElementById("redModal").querySelector("h4").innerText = resources[currentUserLanguage]["Error!"];
                 document.getElementById("redModal").querySelector("p").innerText = response.responseJSON.message;
                 $('#redModal').modal('show');
 
@@ -96,11 +96,11 @@ function displayResponseMsg(success) {
     let p = responseMsg.querySelector("p");
     if (success) {
         responseMsg.className = "alert alert-success";        
-        p.innerHTML = "<strong>Success!</strong> The updates have been done successfully";
+        p.innerHTML = "<strong>" + resources[currentUserLanguage]["Success"] + "!</strong>" + " " + resources[currentUserLanguage]["The updates have been done successfully"];
     }
     else {
         responseMsg.className = "alert alert-danger";        
-        p.innerHTML = "<strong>Error!</strong> Something went wrong, please try again!";
+        p.innerHTML = "<strong>" + resources[currentUserLanguage]["Error!"] + "</strong>" + " " + resources[currentUserLanguage]["Something went wrong, please try again!"];
     }
     responseMsg.style.display = "block";
 }
@@ -174,19 +174,20 @@ function prepareVotersjQueryDatatable(electionId) {
             "columnDefs": [
                 { "type": "numeric-comma", targets: "_all" }
             ],
+            "language": getTranslatedDataTable(),
             "columns":
                 [//These are the columns to be displayed, and they are the fields of the voters objects brought from the server
                     { "data": "Id", "visible": false, "searchable": false },
-                    { "data": "FirstName", "title": "FirstName", "name": "FirstName", "visible": true, "searchable": true, "sortable": false },
-                    { "data": "LastName", "title": "Last Name", "name": "LastName", "visible": true, "searchable": true, "sortable": false },
-                    { "data": "State.Name", "title": "State", "visible": true, "searchable": true, "sortable": false },
+                    { "data": "FirstName", "title": resources[currentUserLanguage]["FirstName"], "name": "FirstName", "visible": true, "searchable": true, "sortable": false },
+                    { "data": "LastName", "title": resources[currentUserLanguage]["LastName"], "name": "LastName", "visible": true, "searchable": true, "sortable": false },
+                    { "data": "State.Name", "title": resources[currentUserLanguage]["State"], "visible": true, "searchable": true, "sortable": false },
                     {
                         "data": null, "searchable": false, "sortable": false,
                         "render": function (data, type, row, meta) {
                             var button =
-                                "<a class='select-candidate-btn' title='Select this Voter as a Candidate' voterid=" +
+                                "<a class='select-candidate-btn' title="+resources[currentUserLanguage]['Select this Voter as a Candidate']+" voterid=" +
                                 row.Id + " voterfullname='" + row.FirstName + " " + row.LastName
-                                + "' onclick='selectNewCandidate()'>Select as Candidate</a>"
+                                + "' onclick='selectNewCandidate()'>" + resources[currentUserLanguage]["Select as Candidate"]+"</a>"
                                 + "<div class='spinner-border text-success hidden-spinner'></div>"
                                 ;
 
@@ -229,7 +230,7 @@ function displayCandidates(response) {
         let div = document.createElement("div");
         div.className = "one-container transparent-candidate";
         let p = document.createElement("p");
-        p.innerText = "No Candidates Selected";
+        p.innerText = resources[currentUserLanguage]["No Candidates Selected"];
         div.appendChild(p);
         document.getElementById("candidates-container").appendChild(div);
     }
@@ -240,9 +241,9 @@ function displayCandidates(response) {
         let spinner = document.createElement("div");
         spinner.className = "spinner-border text-danger hidden-spinner centered-spinner";
         let closeButton = document.createElement("a");
-        closeButton.innerText = "Remove";
+        closeButton.innerText = resources[currentUserLanguage]["Remove"];
         closeButton.setAttribute("candidateid", response[i].Id);
-        closeButton.setAttribute("title", "Remove Candidate");
+        closeButton.setAttribute("title", resources[currentUserLanguage]["Remove Candidate"]);
         closeButton.className = "remove-candidate-btn";
         closeButton.addEventListener("click", removeCandidateFromElection);
         let div = document.createElement("div");
@@ -279,7 +280,7 @@ function removeCandidateFromElection() {
             //so there is a server error, lets display the error msg
             removeButton.parentElement.querySelector(".spinner-border").style.display = "none";
             removeButton.style.display = "block";
-            document.getElementById("redModal").querySelector("h4").innerText = "Error!";
+            document.getElementById("redModal").querySelector("h4").innerText = resources[currentUserLanguage]["Error!"];
             document.getElementById("redModal").querySelector("p").innerText = response.responseJSON.message;
             $('#redModal').modal('show');
 
@@ -336,7 +337,7 @@ function selectNewCandidate() {
             //so there is a server error, lets display the error msg
             selectCandidateButton.parentElement.querySelector(".spinner-border").style.display = "none";
             selectCandidateButton.style.display = "block";
-            document.getElementById("redModal").querySelector("h4").innerText = "Error!";
+            document.getElementById("redModal").querySelector("h4").innerText = resources[currentUserLanguage]["Error!"];
             document.getElementById("redModal").querySelector("p").innerText = response.responseJSON.message;
             $('#redModal').modal('show');
 
@@ -368,9 +369,9 @@ function displayNewCandidate(candidateFullName, candidateId) {
     let spinner = document.createElement("div");
     spinner.className = "spinner-border text-danger hidden-spinner centered-spinner";
     let closeButton = document.createElement("a");
-    closeButton.innerText = "Remove";
+    closeButton.innerText = resources[currentUserLanguage]["Remove"];
     closeButton.setAttribute("candidateid", candidateId);
-    closeButton.setAttribute("title", "Remove Candidate");
+    closeButton.setAttribute("title", resources[currentUserLanguage]["Remove Candidate"]);
     closeButton.className = "remove-candidate-btn";
     closeButton.addEventListener("click", removeCandidateFromElection);
     let div = document.createElement("div");
