@@ -71,7 +71,12 @@ namespace WebApplication1.Business
                 //and when I wanted to access a candidate's state name thru candidate.voterbeing.state.name it was always null
 
                 _voterRepository = voterRepository;
-                return _voterRepository.GetById(voterId).State.Name;
+                Voter v = _voterRepository.GetById(voterId);
+                if (v.State!=null)
+                {
+                    return v.State.Name;
+                }
+                return "";
             }
             catch(Exception E)
             {

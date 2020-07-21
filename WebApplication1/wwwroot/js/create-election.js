@@ -177,7 +177,7 @@ function prepareVotersjQueryDatatable(electionId) {
                     { "data": "Id", "visible": false, "searchable": false },
                     { "data": "FirstName", "title": resources[currentUserLanguage]["FirstName"], "name": "FirstName", "visible": true, "searchable": true, "sortable": false },
                     { "data": "LastName", "title": resources[currentUserLanguage]["LastName"], "name": "LastName", "visible": true, "searchable": true, "sortable": false },
-                    { "data": "State.Name", "title": resources[currentUserLanguage]["State"], "visible": true, "searchable": true, "sortable": false },
+                    { "data": "StateName", "title": resources[currentUserLanguage]["State"], "visible": true, "searchable": true, "sortable": false },
                     {
                         "data": null, "searchable": false, "sortable": false,
                         "render": function (data, type, row, meta) {

@@ -202,7 +202,7 @@ namespace WebApplication1.Business
                 vc.VoterId = v.Id.ToString();
                 vc.FirstName = v.FirstName;
                 vc.LastName = v.LastName;
-                vc.StateName = v.State.Name;
+                vc.StateName = v.State?.Name;
                 return vc;
             }
             catch(Exception E)

@@ -528,7 +528,7 @@ namespace WebApplication1.Controllers
                     System.Linq.Expressions.Expression<Func<Voter, bool>> expr =
                         v => v.FirstName.Contains(searchValue) ||
                         v.LastName.Contains(searchValue) ||
-                        v.State.Name.Contains(searchValue);
+                        (v.State != null && v.State.Name.Contains(searchValue));
 
                     //lets get the list of voters filtered and paged
                     PagedResult<Voter> pagedResult = _voterRepository.GetAllFilteredPaged(expr, sortColumnName, sortColumnDirection, skip, pageSize);
@@ -546,7 +546,7 @@ namespace WebApplication1.Controllers
                         draw = draw,
                         recordsFiltered = totalRecords,
                         recordsTotal = totalRecords,
-                        data = pagedResult.Items
+                        data = Utilities.convertVoterList_toPersonViewModelList(pagedResult.Items)
                     }, settings);
                     _logger.LogInformation("Return the response as JSON");
                     return Ok(json);
@@ -571,7 +571,7 @@ namespace WebApplication1.Controllers
                         draw = draw,
                         recordsFiltered = totalRecords,
                         recordsTotal = totalRecords,
-                        data = pagedResult.Items
+                        data = Utilities.convertVoterList_toPersonViewModelList(pagedResult.Items)
                     }, settings);                    
                     _logger.LogInformation("Return the response as JSON");
                     return Ok(json);
@@ -788,7 +788,7 @@ namespace WebApplication1.Controllers
                     {
                         worksheet.Cells[c, 1].Value = voters[c - 2].FirstName;
                         worksheet.Cells[c, 2].Value = voters[c - 2].LastName;
-                        worksheet.Cells[c, 3].Value = voters[c - 2].State.Name;
+                        worksheet.Cells[c, 3].Value = voters[c - 2].State?.Name;
                     }
 
                     package.Save();

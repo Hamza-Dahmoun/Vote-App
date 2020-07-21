@@ -425,7 +425,7 @@ namespace WebApplication1.Controllers
                         draw = draw,
                         recordsFiltered = totalRecords,
                         recordsTotal = totalRecords,
-                        data = pagedResult.Items
+                        data = Utilities.convertVoterList_toPersonViewModelList(pagedResult.Items)
                     }) ;
                     return Ok(json);
 

@@ -31,12 +31,17 @@ namespace WebApplication1.Controllers
         private readonly IStringLocalizer<Messages> _messagesLoclizer;
 
         public IRepository<State> _stateRepository { get; }
+        public IRepository<Voter> _voterRepository { get; }
         //Lets inject the services using the constructor, this is called Constructor Dependency Injection
-        public StateController(IRepository<State> stateRepository, ILogger<StateController> logger, IStringLocalizer<Messages> messagesLoclizer)
+        public StateController(IRepository<State> stateRepository, 
+            ILogger<StateController> logger, 
+            IStringLocalizer<Messages> messagesLoclizer,
+            IRepository<Voter> voterRepository)
         {
             _logger = logger;
             _stateRepository = stateRepository;
             _messagesLoclizer = messagesLoclizer;
+            _voterRepository = voterRepository;
         }
 
 
@@ -195,6 +200,7 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public IActionResult DeleteState(Guid id)
         {
+            //we'll first update the Voters related to the State by making StateID in them 'null' then proceed removing the State row
             _logger.LogInformation("State/DeleteState() action is called");
             try
             {
@@ -203,6 +209,22 @@ namespace WebApplication1.Controllers
                     _logger.LogError("Passed parameter 'id' is null");
                     throw new BusinessException(_messagesLoclizer["Passed parameter 'id' can not be null"]);
                 }
+
+                //declaring an expression that is special to Election objects
+                System.Linq.Expressions.Expression<Func<Voter, bool>> expr = v => v.State.Id == id;
+                _logger.LogInformation("Calling VotereRepository.GetAllFiltered() method");
+                var voters = _voterRepository.GetAllFiltered(expr);
+                //now lets update each voter by removing its relation to the state
+                foreach (var voter in voters)
+                {
+                    voter.State = null;
+                    _logger.LogInformation("Updating the Voter id= " + voter.Id);
+                    _voterRepository.Edit(voter.Id, voter);
+                }
+
+
+                
+
                 _logger.LogInformation("Calling StateRepository.Delete() method");
                 _stateRepository.Delete(id);                
                 _logger.LogInformation("Redirecting to Index view");
