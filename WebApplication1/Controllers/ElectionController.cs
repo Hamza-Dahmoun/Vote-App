@@ -14,6 +14,7 @@ using WebApplication1.Models.Helpers;
 using WebApplication1.Models.Repositories;
 using WebApplication1.Models.ViewModels;
 using Microsoft.Extensions.Localization;
+using System.Globalization;
 
 namespace WebApplication1.Controllers
 {
@@ -1219,7 +1220,8 @@ namespace WebApplication1.Controllers
                     /*.Select(e => new { e.Id, e.Name, e.StartDate, e.DurationInDays, e.Candidates.Count})*/
                     ;
 
-                if(currentElection != null)
+                
+                if (currentElection != null)
                 {
                     CurrentElectionDashboard a = new CurrentElectionDashboard();
                     a.Id = currentElection.Id;
@@ -1234,7 +1236,9 @@ namespace WebApplication1.Controllers
 
                     a.ParticipationRate = (double)VoteUtilities.getNumberOfVotersVotedOnElection(_voteRepository, currentElection.Id) / _voterRepository.GetAll().Count;
 
-                    var json = JsonConvert.SerializeObject(a);
+                    //lets build the settings so that when serializing the object into json we will respect the datetime format according to the selected culture by user
+                    JsonSerializerSettings settings = new JsonSerializerSettings { DateFormatString = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern };
+                    var json = JsonConvert.SerializeObject(a, settings);
                     return Ok(json);
                 }
                 else

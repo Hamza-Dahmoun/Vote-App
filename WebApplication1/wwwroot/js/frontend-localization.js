@@ -221,6 +221,15 @@ function getLanguageCookieValue(cookieName) {
     let mylanguage = myarray[0].split('=');
     //now it looks like: mylanguage=['c', 'en'] OR ..
 
+    //now we know we are supporting only two cultures in the frontend js methods which are 'en' and 'fr', so just in case the cookie value is
+    //en-US we'll return 'en' to avoid having: resources['en-US'] is undefined
+    if (mylanguage[1] == 'en-US' || mylanguage[1] == 'en-GB') {
+        return 'en';
+    }
+    if (mylanguage[1] == 'fr-FR') {
+        return 'fr';
+    }
+
     return mylanguage[1];
 }
 

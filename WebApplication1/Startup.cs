@@ -118,8 +118,9 @@ namespace WebApplication1
             //Configureing RequestLocalizationOptions
             var cultures = new List<CultureInfo>
             {
-                new CultureInfo("en"),
-                new CultureInfo("fr")
+                new CultureInfo("en-GB"),
+                new CultureInfo("en-US"),
+                new CultureInfo("fr-FR")
             };
             services.Configure<RequestLocalizationOptions>(options =>
             {
@@ -130,7 +131,7 @@ namespace WebApplication1
                 options.SupportedUICultures = cultures;
 
                 //define DefaultRequestCulture to be en-EN
-                options.DefaultRequestCulture = new RequestCulture("en-EN");
+                options.DefaultRequestCulture = new RequestCulture("en-US");
             });
         }
 
