@@ -14,6 +14,7 @@ using WebApplication1.Models.Helpers;
 using WebApplication1.Models.Repositories;
 using WebApplication1.Models.ViewModels;
 using Microsoft.Extensions.Localization;
+using System.Globalization;
 
 namespace WebApplication1.Controllers
 {
@@ -539,13 +540,14 @@ namespace WebApplication1.Controllers
 
                     //now lets return json data so that it is understandable by jQuery   
                     _logger.LogInformation("Going to serialize the response");
+                    JsonSerializerSettings settings = new JsonSerializerSettings { DateFormatString = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern };
                     var json = JsonConvert.SerializeObject(new
                     {
                         draw = draw,
                         recordsFiltered = totalRecords,
                         recordsTotal = totalRecords,
                         data = pagedResult.Items
-                    });
+                    }, settings);
                     _logger.LogInformation("Return the response as JSON");
                     return Ok(json);
 
@@ -563,13 +565,14 @@ namespace WebApplication1.Controllers
 
                     //now lets return json data so that it is understandable by jQuery                
                     _logger.LogInformation("Going to serialize the response");
+                    JsonSerializerSettings settings = new JsonSerializerSettings { DateFormatString = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern };
                     var json = JsonConvert.SerializeObject(new
                     {
                         draw = draw,
                         recordsFiltered = totalRecords,
                         recordsTotal = totalRecords,
                         data = pagedResult.Items
-                    });
+                    }, settings);                    
                     _logger.LogInformation("Return the response as JSON");
                     return Ok(json);
                 }
