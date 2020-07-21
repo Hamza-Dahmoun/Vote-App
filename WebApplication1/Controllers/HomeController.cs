@@ -20,6 +20,7 @@ using OfficeOpenXml;
 using Microsoft.Extensions.Localization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
+using System.Globalization;
 
 namespace WebApplication1.Controllers
 {
@@ -163,8 +164,10 @@ namespace WebApplication1.Controllers
                 var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, election);
                 _logger.LogInformation("Calling Utilities.convertCandidateList_toCandidateViewModelList() method");
                 List<CandidateViewModel> candidatesViewModel = Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, candidates);
+
                 //lets serialize the list of candidatesviewmodel as json object
-                var json = JsonConvert.SerializeObject(candidatesViewModel.OrderByDescending(c => c.VotesCount));
+                JsonSerializerSettings settings = new JsonSerializerSettings { DateFormatString = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern };
+                var json = JsonConvert.SerializeObject(candidatesViewModel.OrderByDescending(c => c.VotesCount), settings);
                 return Ok(json);
             }
             catch (BusinessException be)
