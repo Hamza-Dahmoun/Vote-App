@@ -1106,12 +1106,14 @@ namespace WebApplication1.Controllers
                 System.Linq.Expressions.Expression<Func<Election, bool>> expr = e => e.StartDate > DateTime.Now;
 
                 var futureElections = _electionRepository.GetAllFiltered(expr).Select(e => new { e.Name, e.StartDate, e.DurationInDays, e.Candidates.Count});
-                
-                
-                var json = JsonConvert.SerializeObject(futureElections);
 
-                //return Json(new { Success = false, Message = "error testing" });
+
+
+
+                JsonSerializerSettings settings = new JsonSerializerSettings { DateFormatString = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern };
+                var json = JsonConvert.SerializeObject(futureElections, settings);
                 return Ok(json);
+
 
             }
             catch (Exception E)
@@ -1160,7 +1162,9 @@ namespace WebApplication1.Controllers
                     }).
                     ToList();
 
-                var json = JsonConvert.SerializeObject(futureElections);
+
+                JsonSerializerSettings settings = new JsonSerializerSettings { DateFormatString = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern };
+                var json = JsonConvert.SerializeObject(futureElections, settings);
                 return Ok(json);
 
             }
@@ -1377,16 +1381,16 @@ namespace WebApplication1.Controllers
                     //lets assign totalRecords the correct value
                     totalRecords = pagedResult2.TotalCount;
 
-                    //now lets return json data so that it is understandable by jQuery                
-                    var json = JsonConvert.SerializeObject(new
-                    {
-                        draw = draw,
-                        recordsFiltered = totalRecords,
-                        recordsTotal = totalRecords,
-                        data = pagedResult2.Items
-                    });
-
-                    return Ok(json);
+                //now lets return json data so that it is understandable by jQuery      
+                JsonSerializerSettings settings = new JsonSerializerSettings { DateFormatString = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern };
+                var json = JsonConvert.SerializeObject(new
+                {
+                    draw = draw,
+                    recordsFiltered = totalRecords,
+                    recordsTotal = totalRecords,
+                    data = pagedResult2.Items
+                }, settings);
+                return Ok(json);
                 
             }
             catch(Exception E)
