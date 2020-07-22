@@ -131,7 +131,8 @@ namespace WebApplication1.Controllers
                     state.Id = Guid.NewGuid();
                     _logger.LogInformation("Calling StateRepository.Add() to add state instance to the DB");
                     int updatedRows = _stateRepository.Add(state);
-                    if(updatedRows > 0)
+                    //updatedRows = 0;
+                    if (updatedRows > 0)
                     {
                         //row updated successfully in the DB
                         _logger.LogInformation("Stated added successfully, redirection to Index");                        
@@ -140,7 +141,7 @@ namespace WebApplication1.Controllers
                     else
                     {
                         //row not updated in the DB
-                        throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                        throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
                     }
                     
                 }
@@ -150,7 +151,16 @@ namespace WebApplication1.Controllers
                 throw new BusinessException(_messagesLoclizer["Information provided not valid"]);
                 //return View(state);
             }
-            catch(BusinessException be)
+            catch (DataNotUpdatedException bnu)
+            {
+                _logger.LogError(bnu.Message);
+                //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
+                //by whatever we want
+                BusinessMessage bm = new BusinessMessage("Error", bnu.Message);
+                ViewBag.BusinessMessage = bm;
+                return View();
+            }
+            catch (BusinessException be)
             {
                 _logger.LogError(be.Message);
                 //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
@@ -234,7 +244,7 @@ namespace WebApplication1.Controllers
                     if (updatedRows <1)
                     {
                         //row not updated in the DB
-                        throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                        throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
                     }
                 }
 
@@ -254,10 +264,19 @@ namespace WebApplication1.Controllers
                 else
                 {
                     //row not updated in the DB
-                    throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                    throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
                 }
 
-                
+
+            }
+            catch (DataNotUpdatedException bnu)
+            {
+                _logger.LogError(bnu.Message);
+                //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
+                //by whatever we want
+                BusinessMessage bm = new BusinessMessage("Error", bnu.Message);
+                ViewBag.BusinessMessage = bm;
+                return View();
             }
             catch (BusinessException be)
             {
@@ -337,11 +356,20 @@ namespace WebApplication1.Controllers
                     else
                     {
                         //row not updated in the DB
-                        throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                        throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
                     }                    
                 }
                 //so there is a business rule not met, lets throw a businessException and catch it
                 throw new BusinessException(_messagesLoclizer["Information provided not valid"]);
+            }
+            catch (DataNotUpdatedException bnu)
+            {
+                _logger.LogError(bnu.Message);
+                //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
+                //by whatever we want
+                BusinessMessage bm = new BusinessMessage("Error", bnu.Message);
+                ViewBag.BusinessMessage = bm;
+                return View();
             }
             catch (BusinessException be)
             {
