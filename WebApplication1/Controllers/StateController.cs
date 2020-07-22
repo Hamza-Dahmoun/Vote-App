@@ -242,9 +242,22 @@ namespace WebApplication1.Controllers
                 
 
                 _logger.LogInformation("Calling StateRepository.Delete() method");
-                _stateRepository.Delete(id);                
-                _logger.LogInformation("Redirecting to Index view");
-                return RedirectToAction(nameof(Index));
+                
+                
+                int updatedRows2 = _stateRepository.Delete(id);
+                if (updatedRows2 > 0)
+                {
+                    //row updated successfully in the DB
+                    _logger.LogInformation("Redirecting to Index view");
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    //row not updated in the DB
+                    throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                }
+
+                
             }
             catch (BusinessException be)
             {
