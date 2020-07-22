@@ -33,12 +33,12 @@ namespace WebApplication1.Models.Repositories
             }            
         }
 
-        public void Delete(Guid Id)
+        public int Delete(Guid Id)
         {
             try
             {
                 _dBContext.Remove(GetById(Id));
-                _dBContext.SaveChanges();
+                return _dBContext.SaveChanges();
             }
             catch (Exception E)
             {
