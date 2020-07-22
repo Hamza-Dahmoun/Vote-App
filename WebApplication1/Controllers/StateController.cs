@@ -229,7 +229,13 @@ namespace WebApplication1.Controllers
                 {
                     voter.State = null;
                     _logger.LogInformation("Updating the Voter id= " + voter.Id);
-                    _voterRepository.Edit(voter.Id, voter);
+
+                    int updatedRows = _voterRepository.Edit(voter.Id, voter);
+                    if (updatedRows <1)
+                    {
+                        //row not updated in the DB
+                        throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                    }
                 }
 
 
@@ -307,9 +313,19 @@ namespace WebApplication1.Controllers
                 if (ModelState.IsValid)
                 {
                     _logger.LogInformation("Calling StateRepository.Edit() method");
-                    _stateRepository.Edit(id, state);
-                    _logger.LogInformation("Redirecting to Index view");
-                    return RedirectToAction(nameof(Index));
+                    
+                    int updatedRows = _stateRepository.Edit(id, state);
+                    if (updatedRows > 0)
+                    {
+                        //row updated successfully in the DB
+                        _logger.LogInformation("Redirecting to Index view");
+                        return RedirectToAction(nameof(Index));
+                    }
+                    else
+                    {
+                        //row not updated in the DB
+                        throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                    }                    
                 }
                 //so there is a business rule not met, lets throw a businessException and catch it
                 throw new BusinessException(_messagesLoclizer["Information provided not valid"]);
