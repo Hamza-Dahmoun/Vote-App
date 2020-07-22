@@ -189,7 +189,7 @@ namespace WebApplication1.Controllers
                             else
                             {
                                 //row not updated in the DB
-                                throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                                throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
                             }                            
                         }
                     }
@@ -200,6 +200,15 @@ namespace WebApplication1.Controllers
                 _logger.LogInformation("Model is not valid");
                 //so there is a business rule not met, lets throw a businessException and catch it
                 throw new BusinessException(_messagesLoclizer["Information provided not valid"]);
+            }
+            catch (DataNotUpdatedException bnu)
+            {
+                _logger.LogError(bnu.Message);
+                //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
+                //by whatever we want
+                BusinessMessage bm = new BusinessMessage("Error", bnu.Message);
+                ViewBag.BusinessMessage = bm;
+                return View();
             }
             catch (BusinessException be)
             {
@@ -290,7 +299,7 @@ namespace WebApplication1.Controllers
                     if (updatedRows2 < 1)
                     {
                         //row not updated in the DB
-                        throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                        throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
                     }
                 }
                 _logger.LogInformation("Done deleting to delete all Vote instances of a Voter");
@@ -308,7 +317,7 @@ namespace WebApplication1.Controllers
                     if (updatedRows3 < 1)
                     {
                         //row not updated in the DB
-                        throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                        throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
                     }
                 }
                 _logger.LogInformation("Done deleting all Candidates instances of the Voter");
@@ -337,12 +346,21 @@ namespace WebApplication1.Controllers
                     else
                     {
                         //row not updated in the DB
-                        throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                        throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
                     }                    
                 }
 
                 _logger.LogInformation("Redirecting to Index view");
                 return RedirectToAction(nameof(Index));
+            }
+            catch (DataNotUpdatedException bnu)
+            {
+                _logger.LogError(bnu.Message);
+                //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
+                //by whatever we want
+                BusinessMessage bm = new BusinessMessage("Error", bnu.Message);
+                ViewBag.BusinessMessage = bm;
+                return View();
             }
             catch (BusinessException be)
             {
@@ -454,10 +472,19 @@ namespace WebApplication1.Controllers
                 else
                 {
                     //row not updated in the DB
-                    throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                    throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
                 }
 
-                
+
+            }
+            catch (DataNotUpdatedException bnu)
+            {
+                _logger.LogError(bnu.Message);
+                //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
+                //by whatever we want
+                BusinessMessage bm = new BusinessMessage("Error", bnu.Message);
+                ViewBag.BusinessMessage = bm;
+                return View();
             }
             catch (BusinessException be)
             {
