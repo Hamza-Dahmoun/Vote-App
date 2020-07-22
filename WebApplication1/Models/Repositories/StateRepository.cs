@@ -22,12 +22,12 @@ namespace WebApplication1.Models.Repositories
 
 
 
-        public void Add(State item)
+        public int Add(State item)
         {
             try
             {
                 _dbContext.Add(item);
-                _dbContext.SaveChanges();
+                return _dbContext.SaveChanges();
             }
             catch (Exception E)
             {

@@ -130,9 +130,19 @@ namespace WebApplication1.Controllers
                     _logger.LogInformation("Model is valid");
                     state.Id = Guid.NewGuid();
                     _logger.LogInformation("Calling StateRepository.Add() to add state instance to the DB");
-                    _stateRepository.Add(state);
-                    _logger.LogInformation("Stated added successfully, redirection to Index");
-                    return RedirectToAction(nameof(Index));
+                    int updatedRows = _stateRepository.Add(state);
+                    if(updatedRows > 0)
+                    {
+                        //row updated successfully in the DB
+                        _logger.LogInformation("Stated added successfully, redirection to Index");                        
+                        return RedirectToAction(nameof(Index));
+                    }
+                    else
+                    {
+                        //row not updated in the DB
+                        throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                    }
+                    
                 }
                 //so the model isn't valid, lets keep the user in the same view so that he could read the validation msgs
                 _logger.LogInformation("Model is not valid");
@@ -145,7 +155,7 @@ namespace WebApplication1.Controllers
                 _logger.LogError(be.Message);
                 //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
                 //by whatever we want
-                BusinessMessage bm = new BusinessMessage(_messagesLoclizer["Error"], be.Message);
+                BusinessMessage bm = new BusinessMessage("Error", be.Message);
                 ViewBag.BusinessMessage = bm;
                 return View(state);
             }

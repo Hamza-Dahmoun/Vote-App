@@ -21,12 +21,12 @@ namespace WebApplication1.Models.Repositories
             _dbSet = dbContext.Set<Vote>();
         }
 
-        public void Add(Vote item)
+        public int Add(Vote item)
         {
             try
             {
                 _dbContext.Add(item);
-                _dbContext.SaveChanges();
+                return _dbContext.SaveChanges();
             }
             catch(Exception E)
             {

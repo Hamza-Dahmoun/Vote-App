@@ -21,12 +21,12 @@ namespace WebApplication1.Models.Repositories
             _dbSet = _dBContext.Set<Candidate>();
         }
 
-        public void Add(Candidate item)
+        public int Add(Candidate item)
         {
             try
             {
                 _dBContext.Add(item);
-                _dBContext.SaveChanges();
+                return _dBContext.SaveChanges();
             }
             catch(Exception E)
             {

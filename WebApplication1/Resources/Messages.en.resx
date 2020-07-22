@@ -150,6 +150,9 @@
   <data name="Dashboard is null! Please contact your administrator." xml:space="preserve">
     <value>Dashboard is null! Please contact your administrator.</value>
   </data>
+  <data name="Data not updated, operation failed." xml:space="preserve">
+    <value>Data not updated, operation failed.</value>
+  </data>
   <data name="Data not valid, please check again." xml:space="preserve">
     <value>Data not valid, please check again.</value>
   </data>

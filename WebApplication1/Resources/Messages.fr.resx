@@ -150,6 +150,9 @@
   <data name="Dashboard is null! Please contact your administrator." xml:space="preserve">
     <value>Le tableau de bord est null! Veuillez contacter l'administrateur du système.</value>
   </data>
+  <data name="Data not updated, operation failed." xml:space="preserve">
+    <value>Données ne sont pas mis à jour, opération non réussie.</value>
+  </data>
   <data name="Data not valid, please check again." xml:space="preserve">
     <value>Données ne sont pas valides, veuillez vérifier.</value>
   </data>

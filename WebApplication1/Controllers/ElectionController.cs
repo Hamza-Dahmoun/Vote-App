@@ -255,13 +255,32 @@ namespace WebApplication1.Controllers
                             Election = election
                         };
                         //election.NeutralCandidateID = neutralOpinion.Id;
-                        _electionRepository.Add(election);
-                        _candidateRepository.Add(neutralOpinion);
+                        int updatedRows = _electionRepository.Add(election);
+                        if (updatedRows > 0)
+                        {
+                            //row updated successfully in the DB
+                            int updatedRows2 = _candidateRepository.Add(neutralOpinion);
+                            if (updatedRows2 < 1)
+                            {
+                                //row not updated in the DB
+                                throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                            }
+                        }
+                        else
+                        {
+                            //row not updated in the DB
+                            throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                        }                        
                         
                     }
                     else
                     {
-                        _electionRepository.Add(election);
+                        int updatedRows = _electionRepository.Add(election);
+                        if (updatedRows < 1)
+                        {
+                            //row not updated in the DB
+                            throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                        }
                     }
                     //-------IMPORTANT: THIS ACTION IS ACCESSIBLE USING AN AJAX CALL, IN THIS CASE, TRYING TO REDIRECTTOACTION FROM
                     //C# CODE WILL EXECUTED THE ACTION BUT THE BROWSER WILL IGNORE REDIRECTING, USER WILL STAY IN THE SAME PAGE
@@ -475,7 +494,27 @@ namespace WebApplication1.Controllers
                         Election = _electionRepository.GetById(mydata.electionId)
                     }
                     );
-                return Json(new { success = true }); ;
+                int updatedRows = _candidateRepository.Add(
+                    new Candidate
+                    {
+                        Id = Guid.NewGuid(),
+                        /*FirstName = voter.FirstName,
+                        LastName = voter.LastName,*/
+                        VoterBeing = voter,
+                        /*State = voter.State,*/
+                        Election = _electionRepository.GetById(mydata.electionId)
+                    }
+                    );
+                if (updatedRows > 0)
+                {
+                    //row updated successfully in the DB
+                    return Json(new { success = true });
+                }
+                else
+                {
+                    //row not updated in the DB
+                    throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                }
             }
             catch (BusinessException be)
             {
@@ -520,14 +559,24 @@ namespace WebApplication1.Controllers
                     VoterBeing = voter,
                     Election = _electionRepository.GetById(mydata.electionId)
                 };
-                _candidateRepository.Add(newCandidate);
-                //now lets return json data so that it is understandable by jQuery                
-                var json = JsonConvert.SerializeObject(new
+                
+                int updatedRows = _candidateRepository.Add(newCandidate); 
+                if (updatedRows > 0)
                 {
-                    candidateId = newCandidate.Id
-                }) ;
-                return Ok(json);
-                //return Json(new { success = true }); ;
+                    //row updated successfully in the DB
+                    //now lets return json data so that it is understandable by jQuery                
+                    var json = JsonConvert.SerializeObject(new
+                    {
+                        candidateId = newCandidate.Id
+                    });
+                    return Ok(json);
+                    //return Json(new { success = true }); ;
+                }
+                else
+                {
+                    //row not updated in the DB
+                    throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                }                
             }
             catch (BusinessException be)
             {
@@ -943,7 +992,13 @@ namespace WebApplication1.Controllers
                                 isNeutralOpinion = true,
                                 Election = _electionRepository.GetById(myElection.Id)
                             };
-                            _candidateRepository.Add(neutralOpinion);
+                            
+                            int updatedRows = _candidateRepository.Add(neutralOpinion);
+                            if (updatedRows <1)
+                            {
+                                //row not updated in the DB
+                                throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                            }
                         }
                         else
                         {

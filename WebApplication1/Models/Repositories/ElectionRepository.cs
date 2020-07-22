@@ -20,12 +20,12 @@ namespace WebApplication1.Models.Repositories
             _dBContext = voteDBContext;
             _dbSet = _dBContext.Set<Election>();
         }
-        public void Add(Election item)
+        public int Add(Election item)
         {
             try
             {
                 _dBContext.Add(item);
-                _dBContext.SaveChanges();
+                return _dBContext.SaveChanges();
             }
             catch(Exception E)
             {

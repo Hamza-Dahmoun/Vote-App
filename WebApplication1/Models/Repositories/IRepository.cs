@@ -13,7 +13,7 @@ namespace WebApplication1.Models.Repositories
         //so that it can be re-used by other classes that implement this interface
         IList<T> GetAll();
         T GetById(Guid Id);
-        void Add(T item);
+        int Add(T item);
         void Edit(Guid Id, T item);
         void Delete(Guid Id);
         List<T> GetAllFiltered(Expression<Func<T, bool>> predicate);

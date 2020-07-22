@@ -23,12 +23,12 @@ namespace WebApplication1.Models.Repositories
 
 
 
-        public void Add(Voter item)
+        public int Add(Voter item)
         {
             try
             {
                 _dbContext.Add(item);
-                _dbContext.SaveChanges();
+                return _dbContext.SaveChanges();
             }
             catch(Exception E)
             {
