@@ -627,8 +627,21 @@ namespace WebApplication1.Controllers
                     _candidateRepository, 
                     voter, 
                     election);
-                _candidateRepository.Delete(myCandidate.Id);
-                return Json(new { success = true});
+                
+
+                int updatedRows = _candidateRepository.Delete(myCandidate.Id);
+                if (updatedRows > 0)
+                {
+                    //row updated successfully in the DB
+                    return Json(new { success = true });
+                }
+                else
+                {
+                    //row not updated in the DB
+                    throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                }
+
+                
             }
             catch (BusinessException be)
             {
@@ -669,8 +682,20 @@ namespace WebApplication1.Controllers
                     throw new BusinessException(_messagesLoclizer["Candidate not found."]);
                 }
 
-                _candidateRepository.Delete(myCandidate.Id);
-                return Json(new { success = true });
+                
+                int updatedRows3 = _candidateRepository.Delete(myCandidate.Id); 
+                if (updatedRows3 > 0)
+                {
+                    //row updated successfully in the DB
+                    return Json(new { success = true });
+                }
+                else
+                {
+                    //row not updated in the DB
+                    throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                }
+
+                
             }
             catch (BusinessException be)
             {
@@ -1009,8 +1034,13 @@ namespace WebApplication1.Controllers
                         {
                             //lets remove a neutral candidate instance from db which is related to this instance of Election
                             System.Linq.Expressions.Expression<Func<Candidate, bool>> expr = e => e.Election.Id == myElection.Id && e.isNeutralOpinion == true;
-                            Candidate myNeutralCandidate = _candidateRepository.GetOneFiltered(expr);
-                            _candidateRepository.Delete(myNeutralCandidate.Id);
+                            Candidate myNeutralCandidate = _candidateRepository.GetOneFiltered(expr);                            
+                            int updatedRows4 = _candidateRepository.Delete(myNeutralCandidate.Id);
+                            if (updatedRows4 < 1)
+                            {
+                                //row not updated in the DB
+                                throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                            }
                         }
                     }
 
@@ -1092,8 +1122,13 @@ namespace WebApplication1.Controllers
                 System.Linq.Expressions.Expression<Func<Vote, bool>> expr1 = e => e.Election.Id == id;
                 List<Vote> votesList = _voteRepository.GetAllFiltered(expr1);
                 foreach (var vote in votesList)
-                {
-                    _voteRepository.Delete(vote.Id);
+                {                    
+                    int updatedRows5 = _voteRepository.Delete(vote.Id);
+                    if (updatedRows5 < 1)
+                    {
+                        //row not updated in the DB
+                        throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                    }
                 }
 
 
@@ -1102,14 +1137,28 @@ namespace WebApplication1.Controllers
                 System.Linq.Expressions.Expression<Func<Candidate, bool>> expr2 = e => e.Election.Id == id;
                 List<Candidate> candidatesList = _candidateRepository.GetAllFiltered(expr2);
                 foreach (var candidate in candidatesList)
-                {
-                    _candidateRepository.Delete(candidate.Id);
+                {                    
+                    int updatedRows6 = _candidateRepository.Delete(candidate.Id);
+                    if (updatedRows6 < 1)
+                    {
+                        //row not updated in the DB
+                        throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                    }
                 }
 
 
-                //3- Now remove the Election from the db
-                _electionRepository.Delete(id);
-                return RedirectToAction(nameof(Index));
+                //3- Now remove the Election from the db                
+                int updatedRows = _electionRepository.Delete(id);
+                if (updatedRows > 0)
+                {
+                    //row updated successfully in the DB
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    //row not updated in the DB
+                    throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                }                
             }
             catch (BusinessException be)
             {
