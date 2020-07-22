@@ -155,7 +155,7 @@ namespace WebApplication1.Controllers
                     if (updatedRows < 1)
                     {
                         //row not updated in the DB
-                        throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                        throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
                     }
                 }
                 _logger.LogInformation("Added Vote instance to the DB foreach Candidate");
@@ -181,6 +181,15 @@ namespace WebApplication1.Controllers
                 var json = JsonConvert.SerializeObject(candidatesViewModel.OrderByDescending(c => c.VotesCount));
                 _logger.LogInformation("Returning the list of CadidateViewModel as a json");
                 return Ok(json);
+            }
+            catch (DataNotUpdatedException bnu)
+            {
+                _logger.LogError(bnu.Message);
+                //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
+                //by whatever we want
+                BusinessMessage bm = new BusinessMessage("Error", bnu.Message);
+                ViewBag.BusinessMessage = bm;
+                return View();
             }
             catch (BusinessException be)
             {
