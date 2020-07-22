@@ -49,13 +49,13 @@ namespace WebApplication1.Models.Repositories
             }            
         }
 
-        public void Edit(Guid Id, State item)
+        public int Edit(Guid Id, State item)
         {
             try
             {
                 var myState = GetById(Id);
                 myState.Name = item.Name;
-                _dbContext.SaveChanges();
+                return _dbContext.SaveChanges();
             }
             catch(Exception E)
             {

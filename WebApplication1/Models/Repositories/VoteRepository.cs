@@ -47,7 +47,7 @@ namespace WebApplication1.Models.Repositories
             }            
         }
 
-        public void Edit(Guid Id, Vote item)
+        public int Edit(Guid Id, Vote item)
         {
             throw new NotImplementedException();
         }

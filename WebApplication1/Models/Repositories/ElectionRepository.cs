@@ -46,7 +46,7 @@ namespace WebApplication1.Models.Repositories
             }            
         }
 
-        public void Edit(Guid Id, Election item)
+        public int Edit(Guid Id, Election item)
         {
             try
             {
@@ -55,7 +55,7 @@ namespace WebApplication1.Models.Repositories
                 myElection.StartDate = item.StartDate;
                 myElection.HasNeutral = item.HasNeutral;
                 myElection.DurationInDays = item.DurationInDays;
-                _dBContext.SaveChanges();
+                return _dBContext.SaveChanges();
             }
             catch (Exception E)
             {

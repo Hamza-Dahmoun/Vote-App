@@ -49,7 +49,7 @@ namespace WebApplication1.Models.Repositories
             }            
         }
 
-        public void Edit(Guid Id, Voter item)
+        public int Edit(Guid Id, Voter item)
         {
             try
             {
@@ -57,7 +57,7 @@ namespace WebApplication1.Models.Repositories
                 myVoter.FirstName = item.FirstName;
                 myVoter.LastName = item.LastName;
                 myVoter.State = item.State;
-                _dbContext.SaveChanges();
+                return _dbContext.SaveChanges();
             }
             catch (Exception E)
             {
