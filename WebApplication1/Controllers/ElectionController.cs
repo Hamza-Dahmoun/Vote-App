@@ -971,8 +971,13 @@ namespace WebApplication1.Controllers
                         DurationInDays = int.Parse(election.DurationInDays),
                         HasNeutral = bool.Parse(election.HasNeutral)
                     };
-
-                    _electionRepository.Edit(myElection.Id, myElection);
+                    
+                    int updatedRows = _electionRepository.Edit(myElection.Id, myElection);
+                    if (updatedRows <1)
+                    {
+                        //row not updated in the DB
+                        throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                    }
 
                     //if hasNeutral field was updated then we should add/delete neutralCandidate from the db                
                     if (myElection.HasNeutral == oldHasNeutral)
@@ -993,8 +998,8 @@ namespace WebApplication1.Controllers
                                 Election = _electionRepository.GetById(myElection.Id)
                             };
                             
-                            int updatedRows = _candidateRepository.Add(neutralOpinion);
-                            if (updatedRows <1)
+                            int updatedCandidateRows = _candidateRepository.Add(neutralOpinion);
+                            if (updatedCandidateRows < 1)
                             {
                                 //row not updated in the DB
                                 throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
