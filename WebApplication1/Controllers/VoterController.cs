@@ -177,11 +177,20 @@ namespace WebApplication1.Controllers
 
                             //the user has been stored successully lets insert now the new voter
                             v.UserId = Guid.Parse(user.Id);
-                            _logger.LogInformation("Adding the new voter to the DB");
-                            _voterRepository.Add(v);
-                            _logger.LogInformation("The new voter is added to the DB successfully");
-                            _logger.LogInformation("Redirecting to the Voter Index view");
-                            return RedirectToAction(nameof(Index));
+                            _logger.LogInformation("Adding the new voter to the DB");                            
+                            int updatedRows = _voterRepository.Add(v);
+                            if (updatedRows > 0)
+                            {
+                                //row updated successfully in the DB
+                                _logger.LogInformation("The new voter is added to the DB successfully");
+                                _logger.LogInformation("Redirecting to the Voter Index view");
+                                return RedirectToAction(nameof(Index));
+                            }
+                            else
+                            {
+                                //row not updated in the DB
+                                throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                            }                            
                         }
                     }
 
