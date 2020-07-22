@@ -285,8 +285,13 @@ namespace WebApplication1.Controllers
 
                 _logger.LogInformation("Going to delete all Vote instances of a Voter");
                 foreach (var vote in votesList)
-                {
-                    _voteRepository.Delete(vote.Id);
+                {                    
+                    int updatedRows2 = _voteRepository.Delete(vote.Id);
+                    if (updatedRows2 < 1)
+                    {
+                        //row not updated in the DB
+                        throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                    }
                 }
                 _logger.LogInformation("Done deleting to delete all Vote instances of a Voter");
 
@@ -299,7 +304,12 @@ namespace WebApplication1.Controllers
                 _logger.LogInformation("Going to delete all Candidates instances of the Voter");
                 foreach (var candidate in candidatesList)
                 {
-                    _candidateRepository.Delete(candidate.Id);
+                    int updatedRows3 = _candidateRepository.Delete(candidate.Id);
+                    if (updatedRows3 < 1)
+                    {
+                        //row not updated in the DB
+                        throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                    }
                 }
                 _logger.LogInformation("Done deleting all Candidates instances of the Voter");
 
@@ -317,9 +327,18 @@ namespace WebApplication1.Controllers
                     _logger.LogInformation("done deleting the corresponding IdentityUser of the Voter instance");
 
                     //4- Remove the Voter
-                    _logger.LogInformation("Going to delete the Voter instance");
-                    _voterRepository.Delete(id);
-                    _logger.LogInformation("Done deleting the Voter instance");
+                    _logger.LogInformation("Going to delete the Voter instance");                    
+                    int updatedRows5 = _voterRepository.Delete(id);
+                    if (updatedRows5 > 0)
+                    {
+                        //row updated successfully in the DB
+                        _logger.LogInformation("Done deleting the Voter instance");
+                    }
+                    else
+                    {
+                        //row not updated in the DB
+                        throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                    }                    
                 }
 
                 _logger.LogInformation("Redirecting to Index view");
