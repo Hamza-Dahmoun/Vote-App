@@ -150,7 +150,13 @@ namespace WebApplication1.Controllers
                     v.Voter = currentVoter; 
                     v.Datetime = DateTime.Now;
                     v.Election = election;
-                    _voteRepository.Add(v);
+                    
+                    int updatedRows = _voteRepository.Add(v);
+                    if (updatedRows < 1)
+                    {
+                        //row not updated in the DB
+                        throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                    }
                 }
                 _logger.LogInformation("Added Vote instance to the DB foreach Candidate");
                 exceptionDifferentiator = 1;
