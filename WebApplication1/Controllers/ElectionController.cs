@@ -263,13 +263,13 @@ namespace WebApplication1.Controllers
                             if (updatedRows2 < 1)
                             {
                                 //row not updated in the DB
-                                throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                                throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
                             }
                         }
                         else
                         {
                             //row not updated in the DB
-                            throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                            throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
                         }                        
                         
                     }
@@ -279,7 +279,7 @@ namespace WebApplication1.Controllers
                         if (updatedRows < 1)
                         {
                             //row not updated in the DB
-                            throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                            throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
                         }
                     }
                     //-------IMPORTANT: THIS ACTION IS ACCESSIBLE USING AN AJAX CALL, IN THIS CASE, TRYING TO REDIRECTTOACTION FROM
@@ -309,7 +309,15 @@ namespace WebApplication1.Controllers
                     //HttpContext.Response.StatusCode = 500;
                     //return Json(new { Message = "Data not valid, please check again." });
                 }
-                
+
+            }
+            catch (DataNotUpdatedException bnu)
+            {
+                //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
+                //by whatever we want
+                BusinessMessage bm = new BusinessMessage("Error", bnu.Message);
+                ViewBag.BusinessMessage = bm;
+                return View();
             }
             catch (BusinessException be)
             {
@@ -513,8 +521,16 @@ namespace WebApplication1.Controllers
                 else
                 {
                     //row not updated in the DB
-                    throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                    throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
                 }
+            }
+            catch (DataNotUpdatedException bnu)
+            {
+                //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
+                //by whatever we want
+                BusinessMessage bm = new BusinessMessage("Error", bnu.Message);
+                ViewBag.BusinessMessage = bm;
+                return View();
             }
             catch (BusinessException be)
             {
@@ -575,8 +591,16 @@ namespace WebApplication1.Controllers
                 else
                 {
                     //row not updated in the DB
-                    throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
-                }                
+                    throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
+                }
+            }
+            catch (DataNotUpdatedException bnu)
+            {
+                //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
+                //by whatever we want
+                BusinessMessage bm = new BusinessMessage("Error", bnu.Message);
+                ViewBag.BusinessMessage = bm;
+                return View();
             }
             catch (BusinessException be)
             {
@@ -638,10 +662,18 @@ namespace WebApplication1.Controllers
                 else
                 {
                     //row not updated in the DB
-                    throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                    throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
                 }
 
-                
+
+            }
+            catch (DataNotUpdatedException bnu)
+            {
+                //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
+                //by whatever we want
+                BusinessMessage bm = new BusinessMessage("Error", bnu.Message);
+                ViewBag.BusinessMessage = bm;
+                return View();
             }
             catch (BusinessException be)
             {
@@ -692,10 +724,18 @@ namespace WebApplication1.Controllers
                 else
                 {
                     //row not updated in the DB
-                    throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                    throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
                 }
 
-                
+
+            }
+            catch (DataNotUpdatedException bnu)
+            {
+                //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
+                //by whatever we want
+                BusinessMessage bm = new BusinessMessage("Error", bnu.Message);
+                ViewBag.BusinessMessage = bm;
+                return View();
             }
             catch (BusinessException be)
             {
@@ -1001,7 +1041,7 @@ namespace WebApplication1.Controllers
                     if (updatedRows <1)
                     {
                         //row not updated in the DB
-                        throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                        throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
                     }
 
                     //if hasNeutral field was updated then we should add/delete neutralCandidate from the db                
@@ -1027,7 +1067,7 @@ namespace WebApplication1.Controllers
                             if (updatedCandidateRows < 1)
                             {
                                 //row not updated in the DB
-                                throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                                throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
                             }
                         }
                         else
@@ -1039,7 +1079,7 @@ namespace WebApplication1.Controllers
                             if (updatedRows4 < 1)
                             {
                                 //row not updated in the DB
-                                throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                                throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
                             }
                         }
                     }
@@ -1054,6 +1094,14 @@ namespace WebApplication1.Controllers
                     //so there is a business rule not met, lets throw a businessException and catch it
                     throw new BusinessException(_messagesLoclizer["Data not valid, please check again."]);                    
                 }
+            }
+            catch (DataNotUpdatedException bnu)
+            {
+                //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
+                //by whatever we want
+                BusinessMessage bm = new BusinessMessage("Error", bnu.Message);
+                ViewBag.BusinessMessage = bm;
+                return View();
             }
             catch (BusinessException be)
             {
@@ -1127,7 +1175,7 @@ namespace WebApplication1.Controllers
                     if (updatedRows5 < 1)
                     {
                         //row not updated in the DB
-                        throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                        throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
                     }
                 }
 
@@ -1142,7 +1190,7 @@ namespace WebApplication1.Controllers
                     if (updatedRows6 < 1)
                     {
                         //row not updated in the DB
-                        throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                        throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
                     }
                 }
 
@@ -1157,8 +1205,16 @@ namespace WebApplication1.Controllers
                 else
                 {
                     //row not updated in the DB
-                    throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                    throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
                 }                
+            }
+            catch (DataNotUpdatedException bnu)
+            {
+                //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
+                //by whatever we want
+                BusinessMessage bm = new BusinessMessage("Error", bnu.Message);
+                ViewBag.BusinessMessage = bm;
+                return View();
             }
             catch (BusinessException be)
             {
