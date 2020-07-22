@@ -424,10 +424,21 @@ namespace WebApplication1.Controllers
                 };
 
                 _logger.LogInformation("Calling VoterRepository.Edit() method");
-                _voterRepository.Edit(voterstate.Id, v);
+                
+                int updatedRows = _voterRepository.Edit(voterstate.Id, v);
+                if (updatedRows > 0)
+                {
+                    //row updated successfully in the DB
+                    _logger.LogInformation("Redirecting to Index action");
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    //row not updated in the DB
+                    throw new BusinessException(_messagesLoclizer["Data not updated, operation failed."]);
+                }
 
-                _logger.LogInformation("Redirecting to Index action");
-                return RedirectToAction(nameof(Index));
+                
             }
             catch (BusinessException be)
             {
