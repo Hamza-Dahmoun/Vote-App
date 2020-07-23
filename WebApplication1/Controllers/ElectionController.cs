@@ -108,7 +108,7 @@ namespace WebApplication1.Controllers
             {
                 //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
                 //by whatever we want
-                BusinessMessage bm = new BusinessMessage(_messagesLoclizer["Error"], be.Message);
+                BusinessMessage bm = new BusinessMessage("Error", be.Message);
                 ViewBag.BusinessMessage = bm;
                 return View();
             }
@@ -974,7 +974,7 @@ namespace WebApplication1.Controllers
             {
                 //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
                 //by whatever we want
-                BusinessMessage bm = new BusinessMessage(_messagesLoclizer["Error"], be.Message);
+                BusinessMessage bm = new BusinessMessage("Error", be.Message);
                 ViewBag.BusinessMessage = bm;
                 return View();
             }
@@ -1140,7 +1140,7 @@ namespace WebApplication1.Controllers
             {
                 //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
                 //by whatever we want
-                BusinessMessage bm = new BusinessMessage(_messagesLoclizer["Error"], be.Message);
+                BusinessMessage bm = new BusinessMessage("Error", be.Message);
                 ViewBag.BusinessMessage = bm;
                 return View();
             }
@@ -1220,7 +1220,7 @@ namespace WebApplication1.Controllers
             {
                 //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
                 //by whatever we want
-                BusinessMessage bm = new BusinessMessage(_messagesLoclizer["Error"], be.Message);
+                BusinessMessage bm = new BusinessMessage("Error", be.Message);
                 ViewBag.BusinessMessage = bm;
                 return View(nameof(Delete));
             }
