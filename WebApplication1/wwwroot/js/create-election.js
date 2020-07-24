@@ -284,6 +284,7 @@ function removeCandidateFromElection() {
 
     let voterid = event.target.getAttribute("voterid");
 
+    //console.log("going to delete this candidate: " + { electionId: electionId, voterId: voterid });
     //Send the JSON data of voterId and electionId to Controller using AJAX.
     $.ajax({
         type: "POST",

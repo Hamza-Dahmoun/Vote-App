@@ -491,17 +491,7 @@ namespace WebApplication1.Controllers
                     throw new BusinessException(_messagesLoclizer["Properties voterId and electionId can not be null."]);
                 }
                 Voter voter = _voterRepository.GetById(mydata.voterId);
-                _candidateRepository.Add(
-                    new Candidate
-                    {
-                        Id = Guid.NewGuid(),
-                        /*FirstName = voter.FirstName,
-                        LastName = voter.LastName,*/
-                        VoterBeing = voter,
-                        /*State = voter.State,*/
-                        Election = _electionRepository.GetById(mydata.electionId)
-                    }
-                    );
+                
                 int updatedRows = _candidateRepository.Add(
                     new Candidate
                     {
