@@ -286,7 +286,7 @@ namespace WebApplication1.Controllers
             var futureElections = _electionRepository.GetAllFiltered(expr).ToList();
             return futureElections;
         }
-        public int countFutureElections()
+        private int countFutureElections()
         {
             //declaring an expression that is special to Election objects
             System.Linq.Expressions.Expression<Func<Election, bool>> expr = e => e.StartDate > DateTime.Now;
@@ -354,7 +354,7 @@ namespace WebApplication1.Controllers
             var previousElections = _electionRepository.GetAllFiltered(expr).ToList();
             return previousElections;
         }
-        public int countPreviousElections()
+        private int countPreviousElections()
         {
             //declaring an expression that is special to Election objects
             System.Linq.Expressions.Expression<Func<Election, bool>> expr = e => e.StartDate.AddDays(e.DurationInDays) < DateTime.Now;

@@ -11,7 +11,7 @@ namespace WebApplication1.Business
     public static class Utilities
     {
 
-        public static CandidateViewModel convertCandidate_toCandidateViewModel(IRepository<Voter> voterRepository, Candidate candidate)
+        private static CandidateViewModel convertCandidate_toCandidateViewModel(IRepository<Voter> voterRepository, Candidate candidate)
         {//the parameter voterRepository is passed to be used in a Method Dependancy Injection in VoterUtilities.getStateName() method
             try
             {
@@ -194,7 +194,7 @@ namespace WebApplication1.Business
 
 
 
-        public static VoterCandidateEntityViewModel convertVoter_toVoterCandidateEntityViewModel(Voter v)
+        private static VoterCandidateEntityViewModel convertVoter_toVoterCandidateEntityViewModel(Voter v)
         {
             try
             {
@@ -210,7 +210,7 @@ namespace WebApplication1.Business
                 throw E;
             }            
         }
-        public static VoterCandidateEntityViewModel convertCandidate_toVoterCandidateEntityViewModel(IRepository<Voter> voterRepository, Candidate c)
+        private static VoterCandidateEntityViewModel convertCandidate_toVoterCandidateEntityViewModel(IRepository<Voter> voterRepository, Candidate c)
         {
             try
             {
