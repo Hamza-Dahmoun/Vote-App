@@ -15,6 +15,7 @@ using WebApplication1.Models.Repositories;
 using WebApplication1.Models.ViewModels;
 using Microsoft.Extensions.Localization;
 using System.Globalization;
+using System.Text;
 
 namespace WebApplication1.Controllers
 {
@@ -860,10 +861,17 @@ namespace WebApplication1.Controllers
                     package.Save();
                 }
 
-                string fileName = _messagesLoclizer["Voters"]+".xlsx";
-                string fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+
+                //string fileName = _messagesLoclizer["Voters"]+".xlsx";
+                StringBuilder fileName = new StringBuilder();
+                fileName.Append(_messagesLoclizer["Voters"] + ".xlsx");
+
+                //string fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                StringBuilder fileType = new StringBuilder();
+                fileType.Append("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
                 stream.Position = 0;
-                return File(stream, fileType, fileName);
+                return File(stream, fileType.ToString(), fileName.ToString());
             }
             catch(Exception E)
             {

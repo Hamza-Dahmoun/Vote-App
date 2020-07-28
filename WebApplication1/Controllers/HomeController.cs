@@ -267,10 +267,16 @@ namespace WebApplication1.Controllers
                     package.Save();
                 }
 
-                string fileName = _messagesLoclizer["futureElections.xlsx"];
-                string fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                //string fileName = _messagesLoclizer["futureElections.xlsx"];
+                StringBuilder fileName = new StringBuilder();
+                fileName.Append(_messagesLoclizer["futureElections.xlsx"]);
+
+                //string fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                StringBuilder fileType = new StringBuilder();
+                fileType.Append("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
                 stream.Position = 0;
-                return File(stream, fileType, fileName);
+                return File(stream, fileType.ToString(), fileName.ToString());
             }
             catch (Exception E)
             {
@@ -336,10 +342,17 @@ namespace WebApplication1.Controllers
                     package.Save();
                 }
 
-                string fileName = _messagesLoclizer["previousElections.xlsx"];
-                string fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                //string fileName = _messagesLoclizer["previousElections.xlsx"];
+                StringBuilder fileName = new StringBuilder();
+                fileName.Append(_messagesLoclizer["previousElections.xlsx"]);
+
+
+                //string fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                StringBuilder fileType = new StringBuilder();
+                fileType.Append("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                
                 stream.Position = 0;
-                return File(stream, fileType, fileName);
+                return File(stream, fileType.ToString(), fileName.ToString());
             }
             catch (Exception E)
             {
