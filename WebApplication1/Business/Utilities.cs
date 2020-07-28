@@ -19,8 +19,7 @@ namespace WebApplication1.Business
                 {
                     Id = candidate.Id,
                     isNeutralOpinion = candidate.isNeutralOpinion,
-                    VotesCount = candidate.Votes.Count(),
-                    /*electionId = candidate.Election.Id*/
+                    VotesCount = candidate.Votes.Count(),                    
                 };
                 if (!candidate.isNeutralOpinion)
                 {
@@ -29,9 +28,6 @@ namespace WebApplication1.Business
                     c.LastName = candidate.VoterBeing.LastName;
                     c.StateName = VoterUtilities.getStateName(voterRepository, candidate.VoterBeing.Id);
 
-                    /*if (candidate.VoterBeing.hasVoted())
-                        c.hasVoted = "Yes";
-                    else c.hasVoted = "No";*/
                 }
                 else
                 {
@@ -73,10 +69,6 @@ namespace WebApplication1.Business
                     LastName = voter.LastName,
                     StateName = voter.State?.Name
                 };
-                /*if (voter.hasVoted())
-                    p.hasVoted = "Yes";
-                else p.hasVoted = "No";
-                */
 
                 return p;
             }
@@ -149,7 +141,6 @@ namespace WebApplication1.Business
         {
             try
             {
-                //int numberOfCandidates  = election.Candidates.Count();
                 ElectionViewModel e = new ElectionViewModel
                 {
                     Id = election.Id,
@@ -159,7 +150,6 @@ namespace WebApplication1.Business
                     HasNeutral = election.HasNeutral,
                     NumberOfCandidates = election.Candidates.Where(c => c.isNeutralOpinion != true).Count(),
                     NumberOfVotes = election.Votes.Count()
-                    //NumberOfVoters = election.ElectionVoters.Count()
                 };
 
                 return e;

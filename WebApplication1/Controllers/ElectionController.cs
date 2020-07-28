@@ -29,8 +29,7 @@ namespace WebApplication1.Controllers
     {
         //the below are services we're going to use in this controller, they will be injected in the constructor
         public IRepository<Election> _electionRepository { get; }
-        //public IRepository<ElectionVoter> _electionVoterRepository { get; }
-        //public IRepository<ElectionCandidate> _electionCandidateRepository { get; }
+
         public IRepository<Voter> _voterRepository { get; }
         public IRepository<Vote> _voteRepository { get; }
         public IRepository<Candidate> _candidateRepository { get; }
@@ -45,9 +44,7 @@ namespace WebApplication1.Controllers
             IRepository<Candidate> candidateRepository,
             IRepository<Election> electionRepository,
             UserManager<IdentityUser> userManager,
-            IStringLocalizer<Messages> messagesLoclizer
-            //IRepository<ElectionVoter> electionVoterRepository
-            /*, IRepository<ElectionCandidate> electionCandidateRepository*/)
+            IStringLocalizer<Messages> messagesLoclizer)
         {
             _voteRepository = voteRepository;
             _voterRepository = voterRepository;
@@ -132,59 +129,8 @@ namespace WebApplication1.Controllers
             return View();
         }
 
-        //Step(1): Adding info of the election(name, duration,,,) and send them to backend using api method in inside the controller,
-        //then send back the response to javascript to redirect to step2
-        // POST: Election/Create
-        /*[HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(Election election)
-        {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    election.Id = Guid.NewGuid();
-                    //if election has a neutral opinion then we should add it to the db
-                    if (election.HasNeutral)
-                    {
-                        Candidate neutral = CandidateUtilities.GetNeutralCandidate();
-                        if (neutral == null)
-                        {//so there is no neutral opinion candidate in the db yet, lets insert it to use it
-                            Candidate neutralOpinion = new Candidate
-                            {
-                                Id = Guid.NewGuid(),
-                                FirstName = "Neutral",
-                                LastName = "Opinion",
-                                isNeutralOpinion = true
-                            };
-                            election.NeutralCandidateID = neutralOpinion.Id;
-                            _electionRepository.Add(election);
-                            _candidateRepository.Add(neutralOpinion);
-                        }
-                        else
-                        {
-                            //there is already a neutral opinion candidate stored in the db, lets use it
-                            election.NeutralCandidateID = neutral.Id;
-                            _electionRepository.Add(election);
-                        }
-                        
-                    }
-                    else
-                    {
-                        _electionRepository.Add(election);
-                    }
-                    
-                    return RedirectToAction(nameof(Index));
-                }
-                return View(election);
-            }
-            catch
-            {
-                return View();
-            }
-        }
-        */
-
+        
+        
 
 
         
@@ -195,10 +141,11 @@ namespace WebApplication1.Controllers
             public Guid ElectionId;
             public List<PersonViewModel> Voters;
         }
+        //Step(1): Adding info of the election(name, duration,,,) and send them to backend using api method in inside the controller,
+        //then send back the response to javascript to redirect to step2
         //this is a web api called when adding a new Election instance
         [HttpPost]
-        [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
-        //[ValidateAntiForgeryToken] If I uncomment this the api will not work
+        [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]        
         public async Task<IActionResult> ValidateElection([FromBody] Election election)
         {
             //this method is called using ajax calls
@@ -218,31 +165,19 @@ namespace WebApplication1.Controllers
                     if (election.StartDate <= DateTime.Now)
                     {
                         //so it is not a future election
-                        throw new BusinessException(_messagesLoclizer["A New Election should take place in a future date."]);
-                        
-                        //lets I create an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
-                        //HttpContext.Response.StatusCode = 500;
-                        //return Json(new { Message = "A New Election should take place in a future date." });                        
+                        throw new BusinessException(_messagesLoclizer["A New Election should take place in a future date."]);                            
                     }
 
                     if (ElectionUtilities.getElectionsInSamePeriod(_electionRepository, election.StartDate, election.DurationInDays)>0)
                     {
                         //so there is other existing elections which the period overlap with this new election's period
                         throw new BusinessException(_messagesLoclizer["There is an existing Election during the same period."]);
-
-                        //lets I create an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
-                        //HttpContext.Response.StatusCode = 500;
-                        //return Json(new { Message = "There is an existing Election during the same period." });
                     }
                     if (election.DurationInDays < 0 || election.DurationInDays > 5)
                     {
                         //so the number of days is invalid
 
                         throw new BusinessException(_messagesLoclizer["The duration of the Election should be from one to five days."]);
-
-                        //lets create an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
-                        //HttpContext.Response.StatusCode = 500;
-                        //return Json(new { Message = "The duration of the Election should one to five days." });
                     }
 
                     election.Id = Guid.NewGuid();
@@ -255,7 +190,7 @@ namespace WebApplication1.Controllers
                             isNeutralOpinion = true,
                             Election = election
                         };
-                        //election.NeutralCandidateID = neutralOpinion.Id;
+
                         int updatedRows = _electionRepository.Add(election);
                         if (updatedRows > 0)
                         {
@@ -283,13 +218,7 @@ namespace WebApplication1.Controllers
                             throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
                         }
                     }
-                    //-------IMPORTANT: THIS ACTION IS ACCESSIBLE USING AN AJAX CALL, IN THIS CASE, TRYING TO REDIRECTTOACTION FROM
-                    //C# CODE WILL EXECUTED THE ACTION BUT THE BROWSER WILL IGNORE REDIRECTING, USER WILL STAY IN THE SAME PAGE
-                    //BROWSERS IGNORE THE REDIRECT BECUZ IT ASSUME JS CODE WHICH DID THE AJAX CALL WILL BE IN CHARGE OF THE SUCCESS
-                    //RESPONSE TO REDIRECT: WINDOW.LOCATION.HREF="CONTROLLERNAME/ACTION"
-                    //return RedirectToAction("Index", "Home");
-
-
+                    
 
 
                     response_Voters_and_NewElection r;
@@ -305,10 +234,6 @@ namespace WebApplication1.Controllers
                 {
                     //Model is not valid
                     throw new BusinessException(_messagesLoclizer["Data not valid, please check again."]);
-
-                    //lets I create an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
-                    //HttpContext.Response.StatusCode = 500;
-                    //return Json(new { Message = "Data not valid, please check again." });
                 }
 
             }
@@ -436,10 +361,6 @@ namespace WebApplication1.Controllers
                 {
                     //lets send a linq Expression exrpessing that we don't want voters who are already candidates                                        
                     expr = v => !excludedVotersIDs.Contains(v.Id);
-
-                    //LINQ couldn't be translated with the below expressions
-                    //expr = v => !alreadyCandidates.Any(a => a.Id == v.Id);
-                    //expr = v => alreadyCandidates.All(a => a.Id != v.Id);
                 }
                 //lets get the list of voters filtered and paged
                 PagedResult<Voter> pagedResult = _voterRepository.GetAllFilteredPaged(expr, sortColumnName, sortColumnDirection, skip, pageSize);
@@ -497,10 +418,7 @@ namespace WebApplication1.Controllers
                     new Candidate
                     {
                         Id = Guid.NewGuid(),
-                        /*FirstName = voter.FirstName,
-                        LastName = voter.LastName,*/
                         VoterBeing = voter,
-                        /*State = voter.State,*/
                         Election = _electionRepository.GetById(mydata.electionId)
                     }
                     );
@@ -577,7 +495,6 @@ namespace WebApplication1.Controllers
                         candidateId = newCandidate.Id
                     });
                     return Ok(json);
-                    //return Json(new { success = true }); ;
                 }
                 else
                 {
@@ -834,7 +751,7 @@ namespace WebApplication1.Controllers
                     throw new BusinessException(_messagesLoclizer["Candidates List not found."]);
                 }
 
-                //var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, e);
+
                 var json = JsonConvert.SerializeObject(Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, candidates));
                 return Ok(json);
 
@@ -896,30 +813,11 @@ namespace WebApplication1.Controllers
 
                 List<VoterCandidateEntityViewModel> entityList = new List<VoterCandidateEntityViewModel>();
                 entityList = Utilities.convertCandidateList_toVoterCandidateEntityViewModelList(_voterRepository, entityList, candidates);
-                /*foreach (var candidate in candidates)
-                {
-                    VoterCandidateEntityViewModel vc = new VoterCandidateEntityViewModel();
-                    vc.VoterId = candidate.VoterBeing.Id.ToString();
-                    vc.FirstName = candidate.FirstName;
-                    vc.LastName = candidate.LastName;
-                    vc.StateName = candidate.State.Name;
-                    vc.CandidateId = candidate.Id.ToString();
-                    entityList.Add(vc);
-                }*/
+                
 
                 var otherVoters = VoterUtilities.getOtherVoters(_voterRepository, Utilities.getCorrespondingVoters(candidates));
                 entityList = Utilities.convertVoterList_toVoterCandidateEntityViewModelList(entityList, otherVoters);
                 
-                /*foreach (var v in otherVoters)
-                {
-                    VoterCandidateEntityViewModel vc = new VoterCandidateEntityViewModel();
-                    vc.VoterId = v.Id.ToString();
-                    vc.FirstName = v.FirstName;
-                    vc.LastName = v.LastName;
-                    vc.StateName = v.State.Name;
-                    entityList.Add(vc);
-                }*/
-
 
                 var json = JsonConvert.SerializeObject(entityList);
                 return Ok(json);
@@ -1275,7 +1173,7 @@ namespace WebApplication1.Controllers
             catch (Exception E)
             {
                 HttpContext.Response.StatusCode = 500;
-                ///return BadRequest();
+
                 return Json(new { Message = E.Message });
             }
         }
@@ -1377,7 +1275,6 @@ namespace WebApplication1.Controllers
 
 
                 var currentElection = _electionRepository.GetOneFiltered(expr)
-                    /*.Select(e => new { e.Id, e.Name, e.StartDate, e.DurationInDays, e.Candidates.Count})*/
                     ;
 
                 

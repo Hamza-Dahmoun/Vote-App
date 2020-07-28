@@ -53,14 +53,14 @@ namespace WebApplication1.Business
                 //int votersWithVote = VoterUtilities.getNumberOfVoterWithVote(_voterRepository);
                 //Now lets get the currentUser to check if he has voted or not yet
                 var currentUser = user;
-                //bool userHasVoted = VoterUtilities.getVoterByUserId(Guid.Parse(currentUser.Id), _voterRepository).hasVoted();
+
                 DashboardViewModel d = new DashboardViewModel
                 {
                     NbElections = NbElections,
                     NbCandidates = NbCandidates,
                     NbVoters = NbVoters,
                     NbVotes = NbVotes,
-                    //ParticipationRate = (double)votersWithVote / (double)NbVoters,
+
                     Candidates = candidates
                 };
                 return d;

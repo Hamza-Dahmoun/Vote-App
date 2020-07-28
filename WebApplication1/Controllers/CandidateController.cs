@@ -29,69 +29,6 @@ namespace WebApplication1.Controllers
             _voterRepository = voterRepository;
         }
 
-        /*
-        
-        OLD USELESS CODE
-        
-        public IActionResult Index()
-        {
-
-            return View(_candidateRepository.GetAll());
-        }
-
-
-        public IActionResult Details(Guid id)
-        {
-            return View(Utilities.convertCandidate_toCandidateViewModel(_voterRepository, _candidateRepository.GetById(id)));
-        }
-
-
-        public IActionResult Delete(Guid id)
-        {
-            return View(Utilities.convertCandidate_toCandidateViewModel(_voterRepository, _candidateRepository.GetById(id)));
-        }
-        [HttpPost]
-        public IActionResult DeleteCandidate(Guid id)
-        {
-            try
-            {
-                _candidateRepository.Delete(id);
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-        
-
-
-        public IActionResult GoToVotersList()
-        {
-            return View(Utilities.convertVoterList_toPersonViewModelList(_voterRepository.GetAll()));
-        }
-
-        public IActionResult SelectNewCandidate(Guid voterId)
-        {
-            try
-            {
-                Voter voter = _voterRepository.GetById(voterId);
-                _candidateRepository.Add(
-                    new Candidate
-                    {
-                        Id = Guid.NewGuid(),
-                        VoterBeing = voter
-                    }
-                    );
-                return RedirectToAction(nameof(GoToVotersList));
-            }
-            catch
-            {
-                return View();
-            }
-            
-        }
-        */
 
 
    

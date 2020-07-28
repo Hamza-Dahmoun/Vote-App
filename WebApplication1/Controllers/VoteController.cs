@@ -110,7 +110,7 @@ namespace WebApplication1.Controllers
                 if (candidateIdList == null || candidateIdList.Count <= 0)
                 {
                     _logger.LogError("Cannot validate votes of empty list of candidates");
-                    //return BadRequest();
+
                     throw new BusinessException(_messagesLoclizer["Cannot validate votes of empty list of candidates"]);
                 }
                 //lets first get the concerned election
@@ -119,7 +119,7 @@ namespace WebApplication1.Controllers
                 if (election == null)
                 {
                     _logger.LogError("Cannot validate for null election");
-                    //return BadRequest();
+
                     throw new BusinessException(_messagesLoclizer["Cannot validate vote of null election"]);
                 }
 
@@ -161,16 +161,7 @@ namespace WebApplication1.Controllers
                 _logger.LogInformation("Added Vote instance to the DB foreach Candidate");
                 exceptionDifferentiator = 1;
 
-                //-------IMPORTANT: THIS ACTION IS ACCESSIBLE USING AN AJAX CALL, IN THIS CASE, TRYING TO REDIRECTTOACTION FROM
-                //C# CODE WILL EXECUTED THE ACTION BUT THE BROWSER WILL IGNORE REDIRECTING, USER WILL STAY IN THE SAME PAGE
-                //BROWSERS IGNORE THE REDIRECT BECUZ IT ASSUME JS CODE WHICH DID THE AJAX CALL WILL BE IN CHARGE OF THE SUCCESS
-                //RESPONSE TO REDIRECT: WINDOW.LOCATION.HREF="CONTROLLERNAME/ACTION"
-                //return RedirectToAction("Index", "Home");
-                /*return Json(new
-                {
-                    success = true
-                });*/
-
+                
                 //everything is okey, lets return a list of candidates with votes counter ordered so that the winner is the first
                 _logger.LogInformation("Calling CandidateUtilities.GetCandidate_byElection() method");
                 var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, election);

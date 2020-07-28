@@ -102,11 +102,6 @@ namespace WebApplication1.Controllers
                     return View(cachedDashboard);
 
 
-                    /*
-                    THIS IS HOW I USED TO LOAD THE OLD DASHBOARD BEFORE INTRODUCING THE ELECTION NOTION 
-                    */
-                    //we load an empty view, then it'll be filled using jQuery Ajax
-                    //return View();
 
                 }
                 else

@@ -131,7 +131,7 @@ namespace WebApplication1.Controllers
                     state.Id = Guid.NewGuid();
                     _logger.LogInformation("Calling StateRepository.Add() to add state instance to the DB");
                     int updatedRows = _stateRepository.Add(state);
-                    //updatedRows = 0;
+                    
                     if (updatedRows > 0)
                     {
                         //row updated successfully in the DB
@@ -149,7 +149,7 @@ namespace WebApplication1.Controllers
                 _logger.LogInformation("Model is not valid");
                 //so there is a business rule not met, lets throw a businessException and catch it
                 throw new BusinessException(_messagesLoclizer["Information provided not valid"]);
-                //return View(state);
+                
             }
             catch (DataNotUpdatedException bnu)
             {
@@ -398,17 +398,13 @@ namespace WebApplication1.Controllers
                 var stream = new System.IO.MemoryStream();
                 using (ExcelPackage package = new ExcelPackage(stream))
                 {
-                    //var subscribers = await _context.Subscribers.ToListAsync();
+                    
                     var states = _stateRepository.GetAll();
                     ExcelWorksheet worksheet = package.Workbook.Worksheets.Add(_messagesLoclizer["States"]);
 
                     worksheet.Cells[1, 1].Value = _messagesLoclizer["Name"];
                     worksheet.Row(1).Style.Font.Bold = true;
 
-                    //worksheet.Cells[1, 1].Value = "Name";
-                    //worksheet.Cells[1, 2].Value = "Email";
-                    //worksheet.Cells[1, 3].Value = "Date Subscribed";
-                    //worksheet.Row(1).Style.Font.Bold = true;
 
                     for (int c = 2; c < states.Count + 2; c++)
                     {
