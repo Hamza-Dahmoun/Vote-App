@@ -250,7 +250,7 @@ namespace WebApplication1.Controllers
                 _logger.LogInformation("Calling Utilities.convertVoter_toPersonViewModel() method");
                 PersonViewModel p = Utilities.convertVoter_toPersonViewModel(voter);
                 _logger.LogInformation("Returning PersonViewModel to the view");
-                return View();
+                return View(p);
             }
             catch (BusinessException be)
             {
