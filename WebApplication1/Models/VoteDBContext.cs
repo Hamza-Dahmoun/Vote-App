@@ -17,14 +17,45 @@ namespace WebApplication1.Models
         {
 
         }
+        
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            //I OVERRIDED THIS METHOD SO I CAN SEED MINIMUM DATA TO THE DATABASE FOR BETTER USER EXPERIENCE
+            //FOR PEOPLE WHO GET THE SOURCE CODE OF THE APP AND ANT TO TRY IT
+            modelBuilder.Entity<State>().HasData(
+                new State { Id = Guid.Parse("fa9b72ee-dfcc-4353-b195-5c2855b1343f"), Name = "Oran" },
+                new State { Id = Guid.Parse("32065802-7f25-47bc-8987-dd4fdb2829c4"), Name = "Meca" },
+                new State { Id = Guid.Parse("3138e047-e80f-44a1-ae1d-96804784f807"), Name = "Cairo" },
+                new State { Id = Guid.Parse("33f88529-1a04-4d5e-84dc-135646948bc0"), Name = "ElQuds" }
+                );
+
+        }
+        
+        public virtual DbSet<Candidate> Candidate { get; set; }
+        public virtual DbSet<Voter> Voter { get; set; }
+        public virtual DbSet<Vote> Vote { get; set; }
+        public virtual DbSet<State> State { get; set; }
+        public virtual DbSet<Election> Election { get; set; }
+        //public virtual DbSet<ElectionVoter> ElectionVoter { get; set; }
+        //public virtual DbSet<ElectionCandidate> ElectionCandidate { get; set; }
+        
+
+        public DbSet<WebApplication1.Models.ViewModels.PersonViewModel> PersonViewModel { get; set; }
+        public DbSet<WebApplication1.Models.ViewModels.StateViewModel> StateViewModel { get; set; }
+        public DbSet<WebApplication1.Models.ViewModels.CandidateViewModel> CandidateViewModel { get; set; }
+        public DbSet<WebApplication1.Models.ViewModels.VoterStateViewModel> VoterStateViewModel { get; set; }
+
+
+
+
         /*protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {//I had to override this method bcuz when EF was trying to create the model he found one-to-one relationship Vote->Voter
-            //and Voter->Vote, it was confused how to create foreign keys, so here I am clarifying it
-            modelBuilder.Entity<Voter>()
-                .HasOne(v => v.Vote)
-                .WithOne(v => v.Voter)
-                .HasForeignKey<Vote>(v=>v.VoterID);
-        }*/
+            {//I had to override this method bcuz when EF was trying to create the model he found one-to-one relationship Vote->Voter
+                //and Voter->Vote, it was confused how to create foreign keys, so here I am clarifying it
+                modelBuilder.Entity<Voter>()
+                    .HasOne(v => v.Vote)
+                    .WithOne(v => v.Voter)
+                    .HasForeignKey<Vote>(v=>v.VoterID);
+            }*/
 
 
         //protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -56,18 +87,5 @@ namespace WebApplication1.Models
                 .HasForeignKey<Vote>(v=>v.ElectionID);
         }*/
 
-        public virtual DbSet<Candidate> Candidate { get; set; }
-        public virtual DbSet<Voter> Voter { get; set; }
-        public virtual DbSet<Vote> Vote { get; set; }
-        public virtual DbSet<State> State { get; set; }
-        public virtual DbSet<Election> Election { get; set; }
-        //public virtual DbSet<ElectionVoter> ElectionVoter { get; set; }
-        //public virtual DbSet<ElectionCandidate> ElectionCandidate { get; set; }
-        
-
-        public DbSet<WebApplication1.Models.ViewModels.PersonViewModel> PersonViewModel { get; set; }
-        public DbSet<WebApplication1.Models.ViewModels.StateViewModel> StateViewModel { get; set; }
-        public DbSet<WebApplication1.Models.ViewModels.CandidateViewModel> CandidateViewModel { get; set; }
-        public DbSet<WebApplication1.Models.ViewModels.VoterStateViewModel> VoterStateViewModel { get; set; }
     }
 }
