@@ -80,28 +80,6 @@ namespace WebApplication1.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("State");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("fa9b72ee-dfcc-4353-b195-5c2855b1343f"),
-                            Name = "Oran"
-                        },
-                        new
-                        {
-                            Id = new Guid("32065802-7f25-47bc-8987-dd4fdb2829c4"),
-                            Name = "Meca"
-                        },
-                        new
-                        {
-                            Id = new Guid("3138e047-e80f-44a1-ae1d-96804784f807"),
-                            Name = "Cairo"
-                        },
-                        new
-                        {
-                            Id = new Guid("33f88529-1a04-4d5e-84dc-135646948bc0"),
-                            Name = "ElQuds"
-                        });
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Vote", b =>
@@ -147,7 +125,7 @@ namespace WebApplication1.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("StateId")
+                    b.Property<Guid?>("StateId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("UserId")
@@ -196,9 +174,7 @@ namespace WebApplication1.Migrations
                 {
                     b.HasOne("WebApplication1.Models.State", "State")
                         .WithMany()
-                        .HasForeignKey("StateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("StateId");
                 });
 #pragma warning restore 612, 618
         }
