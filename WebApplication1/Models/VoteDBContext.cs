@@ -73,6 +73,34 @@ namespace WebApplication1.Models
             modelBuilder.Entity<Voter>().HasData(voter16);
 
 
+
+            //  seeding data to State table
+            Election Election1 = new Election { Id = Guid.Parse("ef62cf71-3892-4f12-8f54-4a80580eb3b0"), Name = "Election Test 1", DurationInDays=3, HasNeutral=false, StartDate=DateTime.Parse("01/01/2011") };
+            Election Election2 = new Election { Id = Guid.Parse("c71e21c7-3c87-4aea-bf8d-2be8edc8722a"), Name = "Election Test 2", DurationInDays = 3, HasNeutral = false, StartDate = DateTime.Parse("01/01/2012") };
+            Election Election3 = new Election { Id = Guid.Parse("6d1ac165-5488-4f86-84ad-47301d813802"), Name = "Election Test 3", DurationInDays = 3, HasNeutral = false, StartDate = DateTime.Parse("01/01/2013") };
+            Election Election4 = new Election { Id = Guid.Parse("76daa454-e061-46ac-ba1e-4c09fdcd418e"), Name = "Election Test 4", DurationInDays = 3, HasNeutral = false, StartDate = DateTime.Parse("01/01/2014") };
+            Election Election5 = new Election { Id = Guid.Parse("40556dbd-b5ae-47af-89eb-32deee130dd9"), Name = "Election Test 5", DurationInDays = 3, HasNeutral = false, StartDate = DateTime.Parse("01/01/2015") };
+            Election Election6 = new Election { Id = Guid.Parse("42c5a090-b3bd-4b0b-9de4-48f987d8346e"), Name = "Election Test 6", DurationInDays = 3, HasNeutral = false, StartDate = DateTime.Parse("01/01/2016") };
+            Election Election7 = new Election { Id = Guid.Parse("442530b2-3e0a-4fc1-995d-1da1c6cb55cc"), Name = "Election Test 7", DurationInDays = 3, HasNeutral = false, StartDate = DateTime.Parse("01/01/2017") };
+            Election Election8 = new Election { Id = Guid.Parse("f8899970-5057-4a23-833c-dc75ee84c8d2"), Name = "Election Test 8", DurationInDays = 3, HasNeutral = false, StartDate = DateTime.Parse("01/01/2018") };
+            Election Election9 = new Election { Id = Guid.Parse("b6ea83b1-3cbe-47ed-bf25-9abc8dac9644"), Name = "Election Test 9", DurationInDays = 3, HasNeutral = false, StartDate = DateTime.Parse("01/01/2019") };
+            Election Election10 = new Election { Id = Guid.Parse("cfd1f2a9-3984-42a0-8ec1-26fd4eef0ead"), Name = "Election Test 10", DurationInDays = 3, HasNeutral = false, StartDate = DateTime.Parse("01/01/2020") };
+            Election Election11 = new Election { Id = Guid.Parse("bbcd22cb-dc43-4ea2-854c-acb61564699c"), Name = "Election Test 11", DurationInDays = 3, HasNeutral = false, StartDate = DateTime.Parse("01/01/2021") };
+            Election Election12 = new Election { Id = Guid.Parse("b798676d-750e-4950-a527-5ccbc17004a4"), Name = "Election Test 12", DurationInDays = 3, HasNeutral = false, StartDate = DateTime.Parse("01/01/2022") };
+            Election Election13 = new Election { Id = Guid.Parse("33e5e889-f44b-461a-83c9-680f34f82e06"), Name = "Election Test 13", DurationInDays = 3, HasNeutral = false, StartDate = DateTime.Parse("01/01/2023") };
+            modelBuilder.Entity<Election>().HasData(Election1);
+            modelBuilder.Entity<Election>().HasData(Election2);
+            modelBuilder.Entity<Election>().HasData(Election3);
+            modelBuilder.Entity<Election>().HasData(Election4);
+            modelBuilder.Entity<Election>().HasData(Election5);
+            modelBuilder.Entity<Election>().HasData(Election6);
+            modelBuilder.Entity<Election>().HasData(Election7);
+            modelBuilder.Entity<Election>().HasData(Election8);
+            modelBuilder.Entity<Election>().HasData(Election9);
+            modelBuilder.Entity<Election>().HasData(Election10);
+            modelBuilder.Entity<Election>().HasData(Election11);
+            modelBuilder.Entity<Election>().HasData(Election12);
+            modelBuilder.Entity<Election>().HasData(Election13);
         }
 
 
