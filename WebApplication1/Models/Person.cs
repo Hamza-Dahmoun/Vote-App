@@ -21,6 +21,7 @@ namespace WebApplication1.Models
         [Display(Name = "State")]
         
         public State State { get; set; }
+        public Guid StateId { get; set; }
 
         public Guid UserId { get; set; }        
     }

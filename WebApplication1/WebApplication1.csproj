@@ -22,6 +22,12 @@
     <Compile Remove="Migrations\20200416152348_Add_Elections_to_Votes_Relatioship2.Designer.cs" />
     <Compile Remove="Migrations\20200416152513_Add_Elections_to_Votes_Relatioship3.cs" />
     <Compile Remove="Migrations\20200416152513_Add_Elections_to_Votes_Relatioship3.Designer.cs" />
+    <Compile Remove="Migrations\20200810111217_seedInitialStateAndVoterData.cs" />
+    <Compile Remove="Migrations\20200810111217_seedInitialStateAndVoterData.Designer.cs" />
+    <Compile Remove="Migrations\20200810131242_seedInitialStateAndVoterData.cs" />
+    <Compile Remove="Migrations\20200810131242_seedInitialStateAndVoterData.Designer.cs" />
+    <Compile Remove="Migrations\20200810133105_seedInitialStateAndVoterData.cs" />
+    <Compile Remove="Migrations\20200810133105_seedInitialStateAndVoterData.Designer.cs" />
   </ItemGroup>
 
 

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.Models;
 
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(VoteDBContext))]
-    partial class VoteDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200810142252_seedInitialStateAndVoterData3")]
+    partial class seedInitialStateAndVoterData3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -91,21 +93,6 @@ namespace WebApplication1.Migrations
                         {
                             Id = new Guid("32065802-7f25-47bc-8987-dd4fdb2829c4"),
                             Name = "Meca"
-                        },
-                        new
-                        {
-                            Id = new Guid("3138e047-e80f-44a1-ae1d-96804784f807"),
-                            Name = "Cairo"
-                        },
-                        new
-                        {
-                            Id = new Guid("33f88529-1a04-4d5e-84dc-135646948bc0"),
-                            Name = "ElQuds"
-                        },
-                        new
-                        {
-                            Id = new Guid("918333ff-ac52-4424-a3d9-09bee4c39b91"),
-                            Name = "Algiers"
                         });
                 });
 
@@ -219,78 +206,6 @@ namespace WebApplication1.Migrations
                             FirstName = "Djamel",
                             LastName = "Tahraoui",
                             StateId = new Guid("32065802-7f25-47bc-8987-dd4fdb2829c4"),
-                            UserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Id = new Guid("62ae0555-718d-4623-a12a-7ae4a2e26aef"),
-                            FirstName = "Sidahmed",
-                            LastName = "Dahmoun",
-                            StateId = new Guid("3138e047-e80f-44a1-ae1d-96804784f807"),
-                            UserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Id = new Guid("6c9de511-db59-4be8-9315-d58700ce10be"),
-                            FirstName = "Bilal",
-                            LastName = "Dahmoun",
-                            StateId = new Guid("3138e047-e80f-44a1-ae1d-96804784f807"),
-                            UserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Id = new Guid("cd285ce6-b6e9-4933-8e07-6d50e0251788"),
-                            FirstName = "Maria",
-                            LastName = "Hafsa",
-                            StateId = new Guid("33f88529-1a04-4d5e-84dc-135646948bc0"),
-                            UserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Id = new Guid("d454ae67-913e-4f7b-82c1-4da539737199"),
-                            FirstName = "Brahim",
-                            LastName = "Roudjai",
-                            StateId = new Guid("33f88529-1a04-4d5e-84dc-135646948bc0"),
-                            UserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Id = new Guid("18537eea-e8f8-49cd-8ddf-10646c9a9f21"),
-                            FirstName = "Amine",
-                            LastName = "Brahem",
-                            StateId = new Guid("33f88529-1a04-4d5e-84dc-135646948bc0"),
-                            UserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Id = new Guid("d789a80a-493f-4248-90b0-35edab1c3c63"),
-                            FirstName = "Azzedine",
-                            LastName = "Brahmi",
-                            StateId = new Guid("3138e047-e80f-44a1-ae1d-96804784f807"),
-                            UserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Id = new Guid("71ad22cf-168a-40be-9867-4a7ebe34c339"),
-                            FirstName = "Mohamed",
-                            LastName = "Chikhi",
-                            StateId = new Guid("918333ff-ac52-4424-a3d9-09bee4c39b91"),
-                            UserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Id = new Guid("783118b1-111d-4c6e-b75e-dcd721ccfc2c"),
-                            FirstName = "Mahmoud",
-                            LastName = "Dahmoun",
-                            StateId = new Guid("918333ff-ac52-4424-a3d9-09bee4c39b91"),
-                            UserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Id = new Guid("0642267b-8df3-405d-b596-e50c2cdeefde"),
-                            FirstName = "Lakhdar",
-                            LastName = "Zitouni",
-                            StateId = new Guid("918333ff-ac52-4424-a3d9-09bee4c39b91"),
                             UserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
