@@ -23,6 +23,8 @@ namespace WebApplication1.Models
             //I OVERRIDED THIS METHOD SO I CAN SEED MINIMUM DATA TO THE DATABASE FOR BETTER USER EXPERIENCE
             //FOR PEOPLE WHO GET THE SOURCE CODE OF THE APP AND ANT TO TRY IT
 
+            //N.B: I used hard coded GUID instead of Guid.NewGuid() to avoid inserting new data everytime we run the app, in this way the rows are identified by the hard coded GUID
+
             //  seeding data to State table
             State Oran = new State { Id = Guid.Parse("fa9b72ee-dfcc-4353-b195-5c2855b1343f"), Name = "Oran" };
             State Meca = new State { Id = Guid.Parse("32065802-7f25-47bc-8987-dd4fdb2829c4"), Name = "Meca" };
@@ -113,130 +115,133 @@ namespace WebApplication1.Models
 
             // seeding data to Candidate table            
             // Election1 candidates
-            Candidate Candidate2 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter2.Id, ElectionId = Election1.Id };
+            Candidate Candidate2 = new Candidate { Id = Guid.Parse("8bc92480-c3d1-440d-86c4-a6a4ed89255a"), isNeutralOpinion = false, VoterBeingId = voter2.Id, ElectionId = Election1.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate2);
-            Candidate Candidate3 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter3.Id, ElectionId = Election1.Id };
+            Candidate Candidate3 = new Candidate { Id = Guid.Parse("0d201c31-b90f-4721-98ce-03f7806a1d2d"), isNeutralOpinion = false, VoterBeingId = voter3.Id, ElectionId = Election1.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate3);
-            Candidate Candidate4 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter4.Id, ElectionId = Election1.Id };
+            Candidate Candidate4 = new Candidate { Id = Guid.Parse("87945fcb-6b98-4a17-99d6-0611606fb203"), isNeutralOpinion = false, VoterBeingId = voter4.Id, ElectionId = Election1.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate4);
-            Candidate Candidate5 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter5.Id, ElectionId = Election1.Id };
+            Candidate Candidate5 = new Candidate { Id = Guid.Parse("b58d1bf6-a210-40e1-a745-6bade04019a7"), isNeutralOpinion = false, VoterBeingId = voter5.Id, ElectionId = Election1.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate5);
-            Candidate Candidate6 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter6.Id, ElectionId = Election1.Id };
+            Candidate Candidate6 = new Candidate { Id = Guid.Parse("0f2088c2-06d8-4913-9986-c44473b50f2b"), isNeutralOpinion = false, VoterBeingId = voter6.Id, ElectionId = Election1.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate6);
 
             // Election2 candidates
-            Candidate Candidate7 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter4.Id, ElectionId = Election2.Id };
+            Candidate Candidate7 = new Candidate { Id = Guid.Parse("2c9b8405-39bc-4bc8-b539-a473122eb007"), isNeutralOpinion = false, VoterBeingId = voter4.Id, ElectionId = Election2.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate7);
-            Candidate Candidate8 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter5.Id, ElectionId = Election2.Id };
+            Candidate Candidate8 = new Candidate { Id = Guid.Parse("43b303b1-630e-4dd6-811b-63f88c06e60d"), isNeutralOpinion = false, VoterBeingId = voter5.Id, ElectionId = Election2.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate8);
-            Candidate Candidate9 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter6.Id, ElectionId = Election2.Id };
+            Candidate Candidate9 = new Candidate { Id = Guid.Parse("470ac0b5-151c-43a2-bbd8-af80f38d9435"), isNeutralOpinion = false, VoterBeingId = voter6.Id, ElectionId = Election2.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate9);
 
             // Election3 candidates
-            Candidate Candidate10 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter4.Id, ElectionId = Election3.Id };
+            Candidate Candidate10 = new Candidate { Id = Guid.Parse("cb6e54e2-77a0-4f31-96f4-4ef31fee2d24"), isNeutralOpinion = false, VoterBeingId = voter4.Id, ElectionId = Election3.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate10);
-            Candidate Candidate11 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter5.Id, ElectionId = Election3.Id };
+            Candidate Candidate11 = new Candidate { Id = Guid.Parse("69da0af1-b243-439b-a227-95cec2ed4350"), isNeutralOpinion = false, VoterBeingId = voter5.Id, ElectionId = Election3.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate11);
 
             // Election4 candidates
-            Candidate Candidate12 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter6.Id, ElectionId = Election4.Id };
+            Candidate Candidate12 = new Candidate { Id = Guid.Parse("c877feb9-c8a2-42de-80c0-196410a60196"), isNeutralOpinion = false, VoterBeingId = voter6.Id, ElectionId = Election4.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate12);
-            Candidate Candidate13 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter7.Id, ElectionId = Election4.Id };
+            Candidate Candidate13 = new Candidate { Id = Guid.Parse("e194ac0c-a0d0-48ec-a3a6-25b9f6a07587"), isNeutralOpinion = false, VoterBeingId = voter7.Id, ElectionId = Election4.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate13);
-            Candidate Candidate14 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter8.Id, ElectionId = Election4.Id };
+            Candidate Candidate14 = new Candidate { Id = Guid.Parse("556e2593-197d-4c40-a1a7-159917816196"), isNeutralOpinion = false, VoterBeingId = voter8.Id, ElectionId = Election4.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate14);
-            Candidate Candidate15 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter9.Id, ElectionId = Election4.Id };
+            Candidate Candidate15 = new Candidate { Id = Guid.Parse("2bdb3acd-e9b7-40a0-b2ea-d958f59c3b6c"), isNeutralOpinion = false, VoterBeingId = voter9.Id, ElectionId = Election4.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate15);
 
             // Election5 candidates
-            Candidate Candidate16 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter10.Id, ElectionId = Election5.Id };
+            Candidate Candidate16 = new Candidate { Id = Guid.Parse("ea0eefce-3b8e-4a33-9af9-524ba5c678ee"), isNeutralOpinion = false, VoterBeingId = voter10.Id, ElectionId = Election5.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate16);
-            Candidate Candidate17 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter11.Id, ElectionId = Election5.Id };
+            Candidate Candidate17 = new Candidate { Id = Guid.Parse("575d00a6-b8e1-4b71-ba9e-4d26490d4d84"), isNeutralOpinion = false, VoterBeingId = voter11.Id, ElectionId = Election5.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate17);
-            Candidate Candidate18 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter12.Id, ElectionId = Election5.Id };
+            Candidate Candidate18 = new Candidate { Id = Guid.Parse("473f81e3-aa8b-457a-9d83-cffb1d277dec"), isNeutralOpinion = false, VoterBeingId = voter12.Id, ElectionId = Election5.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate18);
-            Candidate Candidate19 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter13.Id, ElectionId = Election5.Id };
+            Candidate Candidate19 = new Candidate { Id = Guid.Parse("62055ca5-e962-4fff-b32d-48d7c71f9f23"), isNeutralOpinion = false, VoterBeingId = voter13.Id, ElectionId = Election5.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate19);
-            Candidate Candidate20 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter14.Id, ElectionId = Election5.Id };
+            Candidate Candidate20 = new Candidate { Id = Guid.Parse("701bd96b-02e4-47af-92f4-d1e49951a2dc"), isNeutralOpinion = false, VoterBeingId = voter14.Id, ElectionId = Election5.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate20);
 
             // Election6 candidates
-            Candidate Candidate21 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter6.Id, ElectionId = Election6.Id };
+            Candidate Candidate21 = new Candidate { Id = Guid.Parse("1590c51e-7122-48e3-bcd1-12a43e170ede"), isNeutralOpinion = false, VoterBeingId = voter6.Id, ElectionId = Election6.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate21);
-            Candidate Candidate22 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter7.Id, ElectionId = Election6.Id };
+            Candidate Candidate22 = new Candidate { Id = Guid.Parse("950a79f2-bed6-40e1-8cb6-6d89ab553188"), isNeutralOpinion = false, VoterBeingId = voter7.Id, ElectionId = Election6.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate22);
-            Candidate Candidate23 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter8.Id, ElectionId = Election6.Id };
+            Candidate Candidate23 = new Candidate { Id = Guid.Parse("a5452366-7898-47cd-a5bb-0e4a95ed319b"), isNeutralOpinion = false, VoterBeingId = voter8.Id, ElectionId = Election6.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate23);
-            Candidate Candidate24 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter9.Id, ElectionId = Election6.Id };
+            Candidate Candidate24 = new Candidate { Id = Guid.Parse("fda62639-faf3-4178-90fe-7da3484c48af"), isNeutralOpinion = false, VoterBeingId = voter9.Id, ElectionId = Election6.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate24);
 
 
             // Election7 candidates
-            Candidate Candidate29 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter2.Id, ElectionId = Election7.Id };
+            Candidate Candidate29 = new Candidate { Id = Guid.Parse("943633be-4f99-44d1-b9cf-04434f03fc6d"), isNeutralOpinion = false, VoterBeingId = voter2.Id, ElectionId = Election7.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate29);
-            Candidate Candidate25 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter3.Id, ElectionId = Election7.Id };
+            Candidate Candidate25 = new Candidate { Id = Guid.Parse("7f2811bc-48df-478d-83ad-649a7e2a8195"), isNeutralOpinion = false, VoterBeingId = voter3.Id, ElectionId = Election7.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate25);
-            Candidate Candidate26 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter4.Id, ElectionId = Election7.Id };
+            Candidate Candidate26 = new Candidate { Id = Guid.Parse("a49e5a59-c2b5-451f-a620-425adec7c44d"), isNeutralOpinion = false, VoterBeingId = voter4.Id, ElectionId = Election7.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate26);
-            Candidate Candidate27 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter5.Id, ElectionId = Election7.Id };
+            Candidate Candidate27 = new Candidate { Id = Guid.Parse("910fb488-8da3-4183-a92a-17d046d59553"), isNeutralOpinion = false, VoterBeingId = voter5.Id, ElectionId = Election7.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate27);
-            Candidate Candidate28 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter6.Id, ElectionId = Election7.Id };
+            Candidate Candidate28 = new Candidate { Id = Guid.Parse("85c45467-32c4-4dae-8023-06df1df955b4"), isNeutralOpinion = false, VoterBeingId = voter6.Id, ElectionId = Election7.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate28);
 
             // Election8 candidates
-            Candidate Candidate30 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter4.Id, ElectionId = Election8.Id };
+            Candidate Candidate30 = new Candidate { Id = Guid.Parse("342a2bbc-d9ec-41d8-b45d-91ffa59975b2"), isNeutralOpinion = false, VoterBeingId = voter4.Id, ElectionId = Election8.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate30);
-            Candidate Candidate31 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter5.Id, ElectionId = Election8.Id };
+            Candidate Candidate31 = new Candidate { Id = Guid.Parse("c0e68551-3e5e-4268-89e9-b6310de3956b"), isNeutralOpinion = false, VoterBeingId = voter5.Id, ElectionId = Election8.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate31);
-            Candidate Candidate32 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter6.Id, ElectionId = Election8.Id };
+            Candidate Candidate32 = new Candidate { Id = Guid.Parse("6c44ea03-afa1-4546-94fa-0cf086293fc2"), isNeutralOpinion = false, VoterBeingId = voter6.Id, ElectionId = Election8.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate32);
 
             // Election9 candidates
-            Candidate Candidate33 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter4.Id, ElectionId = Election9.Id };
+            Candidate Candidate33 = new Candidate { Id = Guid.Parse("80cd8f07-8c6e-4279-b62e-9883aedf0d56"), isNeutralOpinion = false, VoterBeingId = voter4.Id, ElectionId = Election9.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate33);
-            Candidate Candidate34 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter5.Id, ElectionId = Election9.Id };
+            Candidate Candidate34 = new Candidate { Id = Guid.Parse("ba5a0188-6983-40d9-9364-9113509e97ee"), isNeutralOpinion = false, VoterBeingId = voter5.Id, ElectionId = Election9.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate34);
 
             // Election10 candidates
-            Candidate Candidate35 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter6.Id, ElectionId = Election10.Id };
+            Candidate Candidate35 = new Candidate { Id = Guid.Parse("e139e024-45d8-4e24-83fb-1b394bd458cb"), isNeutralOpinion = false, VoterBeingId = voter6.Id, ElectionId = Election10.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate35);
-            Candidate Candidate36 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter7.Id, ElectionId = Election10.Id };
+            Candidate Candidate36 = new Candidate { Id = Guid.Parse("3a884c97-5e90-4e3d-87c0-5d96745e54a9"), isNeutralOpinion = false, VoterBeingId = voter7.Id, ElectionId = Election10.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate36);
-            Candidate Candidate37 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter8.Id, ElectionId = Election10.Id };
+            Candidate Candidate37 = new Candidate { Id = Guid.Parse("0bc40cad-00fe-4ca8-a789-91b59f0c5a2f"), isNeutralOpinion = false, VoterBeingId = voter8.Id, ElectionId = Election10.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate37);
-            Candidate Candidate38 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter9.Id, ElectionId = Election10.Id };
+            Candidate Candidate38 = new Candidate { Id = Guid.Parse("ea67fb4e-329b-4340-9a71-2fb944461ca5"), isNeutralOpinion = false, VoterBeingId = voter9.Id, ElectionId = Election10.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate38);
 
             // Election11 candidates
-            Candidate Candidate39 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter10.Id, ElectionId = Election11.Id };
+            Candidate Candidate39 = new Candidate { Id = Guid.Parse("dd50e713-110f-4ea5-91a2-9144d95cc1fa"), isNeutralOpinion = false, VoterBeingId = voter10.Id, ElectionId = Election11.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate39);
-            Candidate Candidate40 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter11.Id, ElectionId = Election11.Id };
+            Candidate Candidate40 = new Candidate { Id = Guid.Parse("5d1858eb-06f1-40a4-ad71-04f5f2ec37bf"), isNeutralOpinion = false, VoterBeingId = voter11.Id, ElectionId = Election11.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate40);
-            Candidate Candidate41 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter12.Id, ElectionId = Election11.Id };
+            Candidate Candidate41 = new Candidate { Id = Guid.Parse("08828a2a-b8aa-4c7e-be3a-7961b8e40daf"), isNeutralOpinion = false, VoterBeingId = voter12.Id, ElectionId = Election11.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate41);
-            Candidate Candidate42 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter13.Id, ElectionId = Election11.Id };
+            Candidate Candidate42 = new Candidate { Id = Guid.Parse("0668f926-7d1f-4f3d-b0a0-3dbc90357eb7"), isNeutralOpinion = false, VoterBeingId = voter13.Id, ElectionId = Election11.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate42);
-            Candidate Candidate43 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter14.Id, ElectionId = Election11.Id };
+            Candidate Candidate43 = new Candidate { Id = Guid.Parse("83c9cd1b-4212-426b-985f-1770676c0be9"), isNeutralOpinion = false, VoterBeingId = voter14.Id, ElectionId = Election11.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate43);
 
             // Election12 candidates
-            Candidate Candidate44 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter6.Id, ElectionId = Election12.Id };
+            Candidate Candidate44 = new Candidate { Id = Guid.Parse("73da9cde-8eed-4743-b369-8cb2280e4278"), isNeutralOpinion = false, VoterBeingId = voter6.Id, ElectionId = Election12.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate44);
-            Candidate Candidate45 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter7.Id, ElectionId = Election12.Id };
+            Candidate Candidate45 = new Candidate { Id = Guid.Parse("2548f0bc-8005-42cc-a938-dd9c19b29216"), isNeutralOpinion = false, VoterBeingId = voter7.Id, ElectionId = Election12.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate45);
-            Candidate Candidate46 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter8.Id, ElectionId = Election12.Id };
+            Candidate Candidate46 = new Candidate { Id = Guid.Parse("b2b4e50f-ad7d-4736-8d9d-5067b7a4f173"), isNeutralOpinion = false, VoterBeingId = voter8.Id, ElectionId = Election12.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate46);
-            Candidate Candidate47 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter9.Id, ElectionId = Election12.Id };
+            Candidate Candidate47 = new Candidate { Id = Guid.Parse("e3bdc2bb-b5d0-4b0b-b187-3e43454f5f34"), isNeutralOpinion = false, VoterBeingId = voter9.Id, ElectionId = Election12.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate47);
 
             // Election13 candidates
-            Candidate Candidate48 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter6.Id, ElectionId = Election13.Id };
+            Candidate Candidate48 = new Candidate { Id = Guid.Parse("be668d55-1706-4f8b-98eb-c0af8a7341fe"), isNeutralOpinion = false, VoterBeingId = voter6.Id, ElectionId = Election13.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate48);
-            Candidate Candidate49 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter7.Id, ElectionId = Election13.Id };
+            Candidate Candidate49 = new Candidate { Id = Guid.Parse("15ca3802-01d6-4f7d-beef-fb99a6485606"), isNeutralOpinion = false, VoterBeingId = voter7.Id, ElectionId = Election13.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate49);
-            Candidate Candidate50 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter8.Id, ElectionId = Election13.Id };
+            Candidate Candidate50 = new Candidate { Id = Guid.Parse("224cdcc9-ae8e-4668-b88a-ceb9e3927594"), isNeutralOpinion = false, VoterBeingId = voter8.Id, ElectionId = Election13.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate50);
 
+            // seeding data to Vote table
+            Vote Vote2= new Vote { Id = Guid.Parse("7c6fadf7-089b-4836-a849-1a81f2c0b84f"), CandidateId = Candidate2.Id, ElectionId = Election2.Id, VoterId = voter2.Id, Datetime = Election2.StartDate.AddHours(1) };
+            modelBuilder.Entity<Vote>().HasData(Vote2);
         }
 
 

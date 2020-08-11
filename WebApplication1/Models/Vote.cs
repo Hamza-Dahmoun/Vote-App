@@ -13,13 +13,13 @@ namespace WebApplication1.Models
         public DateTime Datetime { get; set; }
         [Required]
         public Voter Voter { get; set; }
-        //public Guid VoterID { get; set; }
+        public Guid VoterId { get; set; }
         [Required]
         public Candidate Candidate { get; set; }
-        //public Guid CandidateID { get; set; }
+        public Guid CandidateId { get; set; }
         [Required]
         public Election Election { get; set; }
-        //public Guid ElectionId { get; set; }
+        public Guid ElectionId { get; set; }
 
     }
 }

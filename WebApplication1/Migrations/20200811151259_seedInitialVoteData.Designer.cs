@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.Models;
 
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(VoteDBContext))]
-    partial class VoteDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200811151259_seedInitialVoteData")]
+    partial class seedInitialVoteData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -593,7 +595,7 @@ namespace WebApplication1.Migrations
                         {
                             Id = new Guid("7c6fadf7-089b-4836-a849-1a81f2c0b84f"),
                             CandidateId = new Guid("8bc92480-c3d1-440d-86c4-a6a4ed89255a"),
-                            Datetime = new DateTime(2012, 1, 1, 1, 0, 0, 0, DateTimeKind.Unspecified),
+                            Datetime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ElectionId = new Guid("c71e21c7-3c87-4aea-bf8d-2be8edc8722a"),
                             VoterId = new Guid("8dd6ebe1-e2e4-4555-ac61-9887cebebf61")
                         });
