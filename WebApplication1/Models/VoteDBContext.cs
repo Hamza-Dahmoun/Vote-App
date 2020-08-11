@@ -36,7 +36,7 @@ namespace WebApplication1.Models
             modelBuilder.Entity<State>().HasData(Algiers);
 
             //  seeding data to Voter table
-            Voter voter1 = new Voter { Id = Guid.Parse("0d925194-fee5-4750-a53c-b36a47afeeab"), FirstName = "Hamza", LastName = "Dahmoun", StateId= Oran.Id };
+            Voter voter1 = new Voter { Id = Guid.Parse("0d925194-fee5-4750-a53c-b36a47afeeab"), FirstName = "Hamza", LastName = "Dahmoun", StateId = Oran.Id };
             Voter voter2 = new Voter { Id = Guid.Parse("8dd6ebe1-e2e4-4555-ac61-9887cebebf61"), FirstName = "Ikram", LastName = "Dahmoun", StateId = Oran.Id };
             Voter voter3 = new Voter { Id = Guid.Parse("df4b1285-b216-488c-88b7-0de75528f2fc"), FirstName = "Ahmed", LastName = "Mohamed", StateId = Oran.Id };
             Voter voter4 = new Voter { Id = Guid.Parse("c81388cf-be3e-42fc-b791-02eccce16095"), FirstName = "Mohamed", LastName = "Zitouni", StateId = Meca.Id };
@@ -74,8 +74,15 @@ namespace WebApplication1.Models
 
 
 
-            //  seeding data to State table
-            Election Election1 = new Election { Id = Guid.Parse("ef62cf71-3892-4f12-8f54-4a80580eb3b0"), Name = "Election Test 1", DurationInDays=3, HasNeutral=false, StartDate=DateTime.Parse("01/01/2011") };
+
+
+
+
+            
+
+
+            //  seeding data to Election table
+            Election Election1 = new Election { Id = Guid.Parse("ef62cf71-3892-4f12-8f54-4a80580eb3b0"), Name = "Election Test 1", DurationInDays = 3, HasNeutral = false, StartDate = DateTime.Parse("01/01/2011") };
             Election Election2 = new Election { Id = Guid.Parse("c71e21c7-3c87-4aea-bf8d-2be8edc8722a"), Name = "Election Test 2", DurationInDays = 3, HasNeutral = false, StartDate = DateTime.Parse("01/01/2012") };
             Election Election3 = new Election { Id = Guid.Parse("6d1ac165-5488-4f86-84ad-47301d813802"), Name = "Election Test 3", DurationInDays = 3, HasNeutral = false, StartDate = DateTime.Parse("01/01/2013") };
             Election Election4 = new Election { Id = Guid.Parse("76daa454-e061-46ac-ba1e-4c09fdcd418e"), Name = "Election Test 4", DurationInDays = 3, HasNeutral = false, StartDate = DateTime.Parse("01/01/2014") };
@@ -101,6 +108,135 @@ namespace WebApplication1.Models
             modelBuilder.Entity<Election>().HasData(Election11);
             modelBuilder.Entity<Election>().HasData(Election12);
             modelBuilder.Entity<Election>().HasData(Election13);
+
+
+
+            // seeding data to Candidate table            
+            // Election1 candidates
+            Candidate Candidate2 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter2.Id, ElectionId = Election1.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate2);
+            Candidate Candidate3 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter3.Id, ElectionId = Election1.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate3);
+            Candidate Candidate4 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter4.Id, ElectionId = Election1.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate4);
+            Candidate Candidate5 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter5.Id, ElectionId = Election1.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate5);
+            Candidate Candidate6 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter6.Id, ElectionId = Election1.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate6);
+
+            // Election2 candidates
+            Candidate Candidate7 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter4.Id, ElectionId = Election2.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate7);
+            Candidate Candidate8 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter5.Id, ElectionId = Election2.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate8);
+            Candidate Candidate9 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter6.Id, ElectionId = Election2.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate9);
+
+            // Election3 candidates
+            Candidate Candidate10 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter4.Id, ElectionId = Election3.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate10);
+            Candidate Candidate11 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter5.Id, ElectionId = Election3.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate11);
+
+            // Election4 candidates
+            Candidate Candidate12 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter6.Id, ElectionId = Election4.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate12);
+            Candidate Candidate13 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter7.Id, ElectionId = Election4.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate13);
+            Candidate Candidate14 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter8.Id, ElectionId = Election4.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate14);
+            Candidate Candidate15 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter9.Id, ElectionId = Election4.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate15);
+
+            // Election5 candidates
+            Candidate Candidate16 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter10.Id, ElectionId = Election5.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate16);
+            Candidate Candidate17 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter11.Id, ElectionId = Election5.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate17);
+            Candidate Candidate18 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter12.Id, ElectionId = Election5.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate18);
+            Candidate Candidate19 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter13.Id, ElectionId = Election5.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate19);
+            Candidate Candidate20 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter14.Id, ElectionId = Election5.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate20);
+
+            // Election6 candidates
+            Candidate Candidate21 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter6.Id, ElectionId = Election6.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate21);
+            Candidate Candidate22 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter7.Id, ElectionId = Election6.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate22);
+            Candidate Candidate23 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter8.Id, ElectionId = Election6.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate23);
+            Candidate Candidate24 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter9.Id, ElectionId = Election6.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate24);
+
+
+            // Election7 candidates
+            Candidate Candidate29 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter2.Id, ElectionId = Election7.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate29);
+            Candidate Candidate25 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter3.Id, ElectionId = Election7.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate25);
+            Candidate Candidate26 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter4.Id, ElectionId = Election7.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate26);
+            Candidate Candidate27 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter5.Id, ElectionId = Election7.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate27);
+            Candidate Candidate28 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter6.Id, ElectionId = Election7.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate28);
+
+            // Election8 candidates
+            Candidate Candidate30 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter4.Id, ElectionId = Election8.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate30);
+            Candidate Candidate31 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter5.Id, ElectionId = Election8.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate31);
+            Candidate Candidate32 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter6.Id, ElectionId = Election8.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate32);
+
+            // Election9 candidates
+            Candidate Candidate33 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter4.Id, ElectionId = Election9.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate33);
+            Candidate Candidate34 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter5.Id, ElectionId = Election9.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate34);
+
+            // Election10 candidates
+            Candidate Candidate35 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter6.Id, ElectionId = Election10.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate35);
+            Candidate Candidate36 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter7.Id, ElectionId = Election10.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate36);
+            Candidate Candidate37 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter8.Id, ElectionId = Election10.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate37);
+            Candidate Candidate38 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter9.Id, ElectionId = Election10.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate38);
+
+            // Election11 candidates
+            Candidate Candidate39 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter10.Id, ElectionId = Election11.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate39);
+            Candidate Candidate40 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter11.Id, ElectionId = Election11.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate40);
+            Candidate Candidate41 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter12.Id, ElectionId = Election11.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate41);
+            Candidate Candidate42 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter13.Id, ElectionId = Election11.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate42);
+            Candidate Candidate43 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter14.Id, ElectionId = Election11.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate43);
+
+            // Election12 candidates
+            Candidate Candidate44 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter6.Id, ElectionId = Election12.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate44);
+            Candidate Candidate45 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter7.Id, ElectionId = Election12.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate45);
+            Candidate Candidate46 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter8.Id, ElectionId = Election12.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate46);
+            Candidate Candidate47 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter9.Id, ElectionId = Election12.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate47);
+
+            // Election13 candidates
+            Candidate Candidate48 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter6.Id, ElectionId = Election13.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate48);
+            Candidate Candidate49 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter7.Id, ElectionId = Election13.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate49);
+            Candidate Candidate50 = new Candidate { Id = Guid.NewGuid(), isNeutralOpinion = false, VoterBeingId = voter8.Id, ElectionId = Election13.Id };
+            modelBuilder.Entity<Candidate>().HasData(Candidate50);
+
         }
 
 
