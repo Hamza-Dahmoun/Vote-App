@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.Data;
 
 namespace WebApplication1.Data.Migrations
 {
     [DbContext(typeof(IdentityDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200812131922_seedAdminUserWithRole")]
+    partial class seedAdminUserWithRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,8 +50,8 @@ namespace WebApplication1.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "2c5e174e-3b0e-446f-86af-483d56fd7210",
-                            ConcurrencyStamp = "6aa7fe70-fefc-443a-b905-9df6980ccef5",
+                            Id = "b885366d-7d91-4dac-ba45-0899f6cacceb",
+                            ConcurrencyStamp = "8c3f0c6b-4eab-4487-a3ae-6bce5e46ade4",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -146,15 +148,15 @@ namespace WebApplication1.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                            Id = "6eb33ce9-8dd1-4eaf-b0f3-41c27ae9233f",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "2bbcd4f1-3a1d-471e-adde-c8d67a9a2905",
+                            ConcurrencyStamp = "9f4f7380-a777-4c52-8a5c-b0ef470fec50",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedUserName = "MYUSER",
-                            PasswordHash = "AQAAAAEAACcQAAAAEA75HDFdXwDn73vBeIay8by50rZfye/WRx2KCJzBlO00RXz5U8jbsrVk1H1izjeDUw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEHBQhxIut0AuvYJ3hThIeCpuPlWxRlGBsIA4cZPlIPoX/gKJ18eM/ZeIPU2qmnp3qQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "5a7f2e41-d67b-411a-bef4-46fc8fad6614",
+                            SecurityStamp = "511ce72f-7796-4b6c-9a2b-60674ddd86e2",
                             TwoFactorEnabled = false,
                             UserName = "myuser"
                         });
@@ -225,8 +227,8 @@ namespace WebApplication1.Data.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
-                            RoleId = "2c5e174e-3b0e-446f-86af-483d56fd7210"
+                            UserId = "6eb33ce9-8dd1-4eaf-b0f3-41c27ae9233f",
+                            RoleId = "b885366d-7d91-4dac-ba45-0899f6cacceb"
                         });
                 });
 

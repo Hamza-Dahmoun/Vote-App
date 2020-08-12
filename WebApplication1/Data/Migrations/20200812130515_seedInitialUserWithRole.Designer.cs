@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.Data;
 
 namespace WebApplication1.Data.Migrations
 {
     [DbContext(typeof(IdentityDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200812130515_seedInitialUserWithRole")]
+    partial class seedInitialUserWithRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,10 +50,10 @@ namespace WebApplication1.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "2c5e174e-3b0e-446f-86af-483d56fd7210",
-                            ConcurrencyStamp = "6aa7fe70-fefc-443a-b905-9df6980ccef5",
-                            Name = "Administrator",
-                            NormalizedName = "ADMINISTRATOR"
+                            Id = "b885366d-7d91-4dac-ba45-0899f6cacceb",
+                            ConcurrencyStamp = "1891dd4a-8e35-4eab-972f-bc098b1579ea",
+                            Name = "Testrole",
+                            NormalizedName = "TESTROLE"
                         });
                 });
 
@@ -146,17 +148,29 @@ namespace WebApplication1.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                            Id = "3e67f5a9-073d-4ad2-96f3-475739e242af",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "2bbcd4f1-3a1d-471e-adde-c8d67a9a2905",
+                            ConcurrencyStamp = "8875e977-6d41-40c8-81cd-fe74b3ea758e",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
-                            NormalizedUserName = "MYUSER",
-                            PasswordHash = "AQAAAAEAACcQAAAAEA75HDFdXwDn73vBeIay8by50rZfye/WRx2KCJzBlO00RXz5U8jbsrVk1H1izjeDUw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "5a7f2e41-d67b-411a-bef4-46fc8fad6614",
+                            SecurityStamp = "30232fe3-f32b-426f-821c-4191143fce77",
                             TwoFactorEnabled = false,
-                            UserName = "myuser"
+                            UserName = "admin.user"
+                        },
+                        new
+                        {
+                            Id = "6eb33ce9-8dd1-4eaf-b0f3-41c27ae9233f",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "d82be2c5-1aaf-447f-9d68-8b32cc9c85b9",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            NormalizedUserName = "ADMIN",
+                            PasswordHash = "AQAAAAEAACcQAAAAEAv4XhTH0M6LJxT4vavONXSs9wZ36df7Y0YQqx9/RFPSzYDyrce7biVOxyMgUe0w9g==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "f50bd34c-3534-4813-91cd-5b7ec39c0926",
+                            TwoFactorEnabled = false,
+                            UserName = "admin"
                         });
                 });
 
@@ -225,8 +239,8 @@ namespace WebApplication1.Data.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
-                            RoleId = "2c5e174e-3b0e-446f-86af-483d56fd7210"
+                            UserId = "6eb33ce9-8dd1-4eaf-b0f3-41c27ae9233f",
+                            RoleId = "b885366d-7d91-4dac-ba45-0899f6cacceb"
                         });
                 });
 
