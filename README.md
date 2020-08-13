@@ -14,7 +14,7 @@ Voting App where an Admin can:
 
 
 # How to get it working:
-After downloading the app, change the conection string in appsettings.json file, and run the below two commands to create VoteDB and VoteDB-Identity databases
+After downloading the app, change the conection string in appsettings.json file, and run the below two commands in the Console Package Manager to create VoteDB and VoteDB-Identity databases
 along with data seeded in them:
 
 update-database -context VoteDBContext
