@@ -46,3 +46,4 @@ password: Pa$$w0rd
 -  Migrations
 -  Select2
 -  jQuery Datatable
+-  Seeding data

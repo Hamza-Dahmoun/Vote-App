@@ -203,11 +203,18 @@ function getLanguageCookieValue(cookieName) {
     //WE ARE LOOKING FOR THIS COOKIE: .AspNetCore.Culture=c%3Den%7Cuic%3Den
     //write: console.log(document.cookie); which displays all the cookies, you'll see it
 
-    let cookieValue = document.cookie
+    let cookieRaw = document.cookie
         .split('; ')
-        .find(row => row.startsWith(cookieName))
-        .split('=')[1];
-    //cookieValue should look like: OR
+        .find(row => row.startsWith(cookieName));
+
+    //Now lets test it just in case the cookie wasn't found (case: if the cookies are removed from browsing history)
+    if (cookieRaw == undefined || cookieRaw == null) {
+        //so the cookie doesnt exist, lets give it the supposed value with English as a selected language
+        cookieRaw = ".AspNetCore.Culture=c%3Den%7Cuic%3Den";
+    }
+
+    let cookieValue = cookieRaw.split('=')[1];
+    //cookieValue should look like: .AspNetCore.Culture :"c%3Den-US%7Cuic%3Den-US" OR
 
     //lets decode it
     cookieValue = decodeURIComponent(cookieValue)
