@@ -14,7 +14,7 @@ Voting App where an Admin can:
 -  A Voter when added will have a user account added automatically with the role 'Prevoter', he has to reset his password to get the role 'Voter'.
 -  A Voter can see current election with its results, previous elections with its results and future election info, and can download both results in a pdf format.
  -  An Admin can download listings of States/Voters/Elections in an excel format.
-
+-  A Voter can vote whereas an Admin cannot, he should get the role 'Voter' first.
 
 
 # How to get it working:
