@@ -46,6 +46,8 @@ password: Pa$$w0rd
 
 #  Concepts I used for the first time:
 -  MVC
+-  Repository Design Patter
+-  Logging Info & Errors
 -  Localization
 -  Migrations
 -  Select2
