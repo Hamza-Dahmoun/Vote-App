@@ -26,6 +26,7 @@ namespace WebApplication1.Models
             //N.B: I used hard coded GUID instead of Guid.NewGuid() to avoid inserting new data everytime we run the app, in this way the rows are identified by the hard coded GUID
 
             //  seeding data to State table
+            #region seed data to State table 
             State Oran = new State { Id = Guid.Parse("fa9b72ee-dfcc-4353-b195-5c2855b1343f"), Name = "Oran" };
             State Meca = new State { Id = Guid.Parse("32065802-7f25-47bc-8987-dd4fdb2829c4"), Name = "Meca" };
             State Cairo = new State { Id = Guid.Parse("3138e047-e80f-44a1-ae1d-96804784f807"), Name = "Cairo" };
@@ -36,8 +37,11 @@ namespace WebApplication1.Models
             modelBuilder.Entity<State>().HasData(Cairo);
             modelBuilder.Entity<State>().HasData(ElQuds);
             modelBuilder.Entity<State>().HasData(Algiers);
+            #endregion
+
 
             //  seeding data to Voter table
+            #region seed data to Voter table
             Voter voter1 = new Voter { Id = Guid.Parse("0d925194-fee5-4750-a53c-b36a47afeeab"), FirstName = "Hamza", LastName = "Dahmoun", StateId = Oran.Id };
             Voter voter2 = new Voter { Id = Guid.Parse("8dd6ebe1-e2e4-4555-ac61-9887cebebf61"), FirstName = "Ikram", LastName = "Dahmoun", StateId = Oran.Id };
             Voter voter3 = new Voter { Id = Guid.Parse("df4b1285-b216-488c-88b7-0de75528f2fc"), FirstName = "Ahmed", LastName = "Mohamed", StateId = Oran.Id };
@@ -73,17 +77,11 @@ namespace WebApplication1.Models
             modelBuilder.Entity<Voter>().HasData(voter14);
             modelBuilder.Entity<Voter>().HasData(voter15);
             modelBuilder.Entity<Voter>().HasData(voter16);
+            #endregion
 
-
-
-
-
-
-
-            
-
-
+                       
             //  seeding data to Election table
+            #region seed data to Election table
             Election Election1 = new Election { Id = Guid.Parse("ef62cf71-3892-4f12-8f54-4a80580eb3b0"), Name = "Election Test 1", DurationInDays = 3, HasNeutral = false, StartDate = DateTime.Parse("01/01/2011") };
             Election Election2 = new Election { Id = Guid.Parse("c71e21c7-3c87-4aea-bf8d-2be8edc8722a"), Name = "Election Test 2", DurationInDays = 3, HasNeutral = false, StartDate = DateTime.Parse("01/01/2012") };
             Election Election3 = new Election { Id = Guid.Parse("6d1ac165-5488-4f86-84ad-47301d813802"), Name = "Election Test 3", DurationInDays = 3, HasNeutral = false, StartDate = DateTime.Parse("01/01/2013") };
@@ -110,11 +108,12 @@ namespace WebApplication1.Models
             modelBuilder.Entity<Election>().HasData(Election11);
             modelBuilder.Entity<Election>().HasData(Election12);
             modelBuilder.Entity<Election>().HasData(Election13);
-
+            #endregion
 
 
             // seeding data to Candidate table            
-            // Election1 candidates
+            #region seed data to Candidate table
+            // Election1 candidates            
             Candidate Candidate2 = new Candidate { Id = Guid.Parse("8bc92480-c3d1-440d-86c4-a6a4ed89255a"), isNeutralOpinion = false, VoterBeingId = voter2.Id, ElectionId = Election1.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate2);
             Candidate Candidate3 = new Candidate { Id = Guid.Parse("0d201c31-b90f-4721-98ce-03f7806a1d2d"), isNeutralOpinion = false, VoterBeingId = voter3.Id, ElectionId = Election1.Id };
@@ -238,8 +237,11 @@ namespace WebApplication1.Models
             modelBuilder.Entity<Candidate>().HasData(Candidate49);
             Candidate Candidate50 = new Candidate { Id = Guid.Parse("224cdcc9-ae8e-4668-b88a-ceb9e3927594"), isNeutralOpinion = false, VoterBeingId = voter8.Id, ElectionId = Election13.Id };
             modelBuilder.Entity<Candidate>().HasData(Candidate50);
+            #endregion
+
 
             // seeding data to Vote table
+            #region seed data to Vote table
             //below code has been written using Excel sheet
             Vote Vote1 = new Vote { Id = Guid.Parse("36ee9f08-6a2e-46ee-87a0-5c41eada7e1e"), CandidateId = Candidate2.Id, ElectionId = Election1.Id, VoterId = voter15.Id, Datetime = Election1.StartDate.AddHours(1) }; modelBuilder.Entity<Vote>().HasData(Vote1);
             Vote Vote2 = new Vote { Id = Guid.Parse("14c2a76e-8ae3-41e7-a6f3-063378d7f48d"), CandidateId = Candidate3.Id, ElectionId = Election1.Id, VoterId = voter6.Id, Datetime = Election1.StartDate.AddHours(1) }; modelBuilder.Entity<Vote>().HasData(Vote2);
@@ -336,7 +338,7 @@ namespace WebApplication1.Models
             Vote Vote93 = new Vote { Id = Guid.Parse("96ca05c2-ff5a-4cc8-991f-8ee3ec63d5b5"), CandidateId = Candidate45.Id, ElectionId = Election12.Id, VoterId = voter2.Id, Datetime = Election12.StartDate.AddHours(1) }; modelBuilder.Entity<Vote>().HasData(Vote93);
             Vote Vote94 = new Vote { Id = Guid.Parse("02029116-35e6-4860-897b-abf35aade507"), CandidateId = Candidate46.Id, ElectionId = Election12.Id, VoterId = voter8.Id, Datetime = Election12.StartDate.AddHours(1) }; modelBuilder.Entity<Vote>().HasData(Vote94);
             Vote Vote95 = new Vote { Id = Guid.Parse("d6c9a4ff-e41d-41e6-b0e6-4532f87fd557"), CandidateId = Candidate48.Id, ElectionId = Election13.Id, VoterId = voter9.Id, Datetime = Election13.StartDate.AddHours(1) }; modelBuilder.Entity<Vote>().HasData(Vote95);
-
+            #endregion
 
         }
 
