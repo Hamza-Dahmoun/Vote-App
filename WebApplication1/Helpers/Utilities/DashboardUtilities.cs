@@ -44,10 +44,10 @@ namespace WebApplication1.Business
                 _voteRepository = voteRepository;
                 _electionRepository = electionRepository;
 
-                List<CandidateViewModel> candidates = Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, _candidateRepository.GetAll().ToList());
+                //List<CandidateViewModel> candidates = Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, _candidateRepository.GetAll().ToList());
 
                 int NbElections = _electionRepository.GetAll().Count;
-                int NbCandidates = candidates.Count;
+                int NbCandidates = _candidateRepository.CountAll();
                 int NbVoters = _voterRepository.GetAll().Count;
                 int NbVotes = _voteRepository.GetAll().Count;
                 //int votersWithVote = VoterUtilities.getNumberOfVoterWithVote(_voterRepository);
@@ -59,9 +59,7 @@ namespace WebApplication1.Business
                     NbElections = NbElections,
                     NbCandidates = NbCandidates,
                     NbVoters = NbVoters,
-                    NbVotes = NbVotes,
-
-                    Candidates = candidates
+                    NbVotes = NbVotes
                 };
                 return d;
             }
