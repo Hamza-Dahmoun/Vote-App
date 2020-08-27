@@ -43,23 +43,16 @@ namespace WebApplication1.Business
                 _voterRepository = voterRepository;
                 _voteRepository = voteRepository;
                 _electionRepository = electionRepository;
-
-                //List<CandidateViewModel> candidates = Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, _candidateRepository.GetAll().ToList());
-
-                int NbElections = _electionRepository.GetAll().Count;
-                int NbCandidates = _candidateRepository.CountAll();
-                int NbVoters = _voterRepository.GetAll().Count;
-                int NbVotes = _voteRepository.GetAll().Count;
-                //int votersWithVote = VoterUtilities.getNumberOfVoterWithVote(_voterRepository);
+                
                 //Now lets get the currentUser to check if he has voted or not yet
                 var currentUser = user;
 
                 DashboardViewModel d = new DashboardViewModel
                 {
-                    NbElections = NbElections,
-                    NbCandidates = NbCandidates,
-                    NbVoters = NbVoters,
-                    NbVotes = NbVotes
+                    NbElections = _electionRepository.CountAll(),
+                    NbCandidates = _candidateRepository.CountAll(),
+                    NbVoters = _voterRepository.CountAll(),
+                    NbVotes = _voteRepository.CountAll()
                 };
                 return d;
             }
