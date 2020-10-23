@@ -67,7 +67,7 @@ namespace WebApplication1.Models.Repositories
         {
             try
             {
-                return _dbSet.ToList();
+                return _dbSet.AsNoTracking().ToList();
                 //return _dbSet.ToList();
             }
             catch (Exception E)
@@ -82,7 +82,7 @@ namespace WebApplication1.Models.Repositories
             try
             {
                 //use eager loading to bring other tables data 
-                return _dbSet.Where(predicate).ToList();
+                return _dbSet.Where(predicate).AsNoTracking().ToList();
             }
             catch (Exception E)
             {
@@ -104,7 +104,7 @@ namespace WebApplication1.Models.Repositories
         {
             try
             {
-                return _dbSet.SingleOrDefault(s => s.Id == Id);
+                return _dbSet.AsNoTracking().SingleOrDefault(s => s.Id == Id);
                 //return _dbSet.Find(Id);
             }
             catch (Exception E)
@@ -117,7 +117,7 @@ namespace WebApplication1.Models.Repositories
         {
             try
             {
-                return _dbSet.SingleOrDefault(predicate);
+                return _dbSet.AsNoTracking().SingleOrDefault(predicate);
             }
             catch(Exception E)
             {
@@ -128,7 +128,7 @@ namespace WebApplication1.Models.Repositories
         public int CountAll()
         {
             int count = 0;
-            count = _dbSet.Count();
+            count = _dbSet.AsNoTracking().Count();
             return count;
         }
     }

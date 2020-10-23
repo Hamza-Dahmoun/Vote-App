@@ -68,7 +68,7 @@ namespace WebApplication1.Models.Repositories
             try
             {
                 //use eager loading to bring Candidaates data too
-                return _dbSet.Include(e => e.Candidates).Include(e => e.Votes).ToList();
+                return _dbSet.Include(e => e.Candidates).Include(e => e.Votes).AsNoTracking().ToList();
             }
             catch (Exception E)
             {
@@ -82,7 +82,7 @@ namespace WebApplication1.Models.Repositories
             try
             {
                 //use eager loading to bring other tables data 
-                return _dbSet.Where(predicate).Include(e => e.Votes).Include(e => e.Candidates).ToList();
+                return _dbSet.Where(predicate).Include(e => e.Votes).Include(e => e.Candidates).AsNoTracking().ToList();
             }
             catch (Exception E)
             {
@@ -128,7 +128,7 @@ namespace WebApplication1.Models.Repositories
                 }*/
 
                 //in case there is no ordering requested
-                List<Election> elections = _dbSet.Where(predicate).Include(v => v.Candidates).Include(v => v.Votes).ToList();
+                List<Election> elections = _dbSet.Where(predicate).Include(v => v.Candidates).Include(v => v.Votes).AsNoTracking().ToList();
                 int totalCount = elections.Count;
                 elections = elections.Skip(startRowIndex).Take(maxRows).ToList();
                 PagedResult<Election> p = new PagedResult<Election>(elections, totalCount);
@@ -174,7 +174,7 @@ namespace WebApplication1.Models.Repositories
                     return _dbSet.OrderByDescending(v => propertyName.GetValue(v)).Include(v => v.State).Skip(startRowIndex).Take(maxRows).ToList();
                 }*/
                 //in case there is no ordering requested
-                var elections = _dbSet.Include(e => e.Candidates).Include(v => v.Votes).ToList();
+                var elections = _dbSet.Include(e => e.Candidates).Include(v => v.Votes).AsNoTracking().ToList();
                 int totalCount = elections.Count;
                 elections = elections.Skip(startRowIndex).Take(maxRows).ToList();
                 PagedResult<Election> p = new PagedResult<Election>(elections, totalCount);
@@ -190,7 +190,7 @@ namespace WebApplication1.Models.Repositories
         {
             try
             {
-                return _dbSet.Include(e => e.Candidates).Include(e => e.Votes).SingleOrDefault(e => e.Id == Id);
+                return _dbSet.Include(e => e.Candidates).Include(e => e.Votes).AsNoTracking().SingleOrDefault(e => e.Id == Id);
             }
             catch (Exception E)
             {
@@ -202,7 +202,7 @@ namespace WebApplication1.Models.Repositories
         {
             try
             {
-                return _dbSet.Include(e => e.Candidates).Include(e => e.Votes).SingleOrDefault(predicate);
+                return _dbSet.Include(e => e.Candidates).Include(e => e.Votes).AsNoTracking().SingleOrDefault(predicate);
             }
             catch (Exception E)
             {
@@ -212,7 +212,7 @@ namespace WebApplication1.Models.Repositories
         public int CountAll()
         {
             int count = 0;
-            count = _dbSet.Count();
+            count = _dbSet.AsNoTracking().Count();
             return count;
         }
     }

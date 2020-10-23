@@ -57,7 +57,7 @@ namespace WebApplication1.Models.Repositories
             try
             {
                 //use eager loading to bring Candidate data too
-                return _dbSet.Include(v => v.Candidate).ToList();
+                return _dbSet.Include(v => v.Candidate).AsNoTracking().ToList();
             }
             catch (Exception E)
             {
@@ -71,7 +71,7 @@ namespace WebApplication1.Models.Repositories
             try
             {
                 //use eager loading to bring other tables data 
-                return _dbSet.Where(predicate).Include(v => v.Candidate).ToList();
+                return _dbSet.Where(predicate).Include(v => v.Candidate).AsNoTracking().ToList();
             }
             catch (Exception E)
             {
@@ -94,7 +94,7 @@ namespace WebApplication1.Models.Repositories
             try
             {
                 //use eager loading to bring Candidate data too
-                return _dbSet.Include(v => v.Candidate).SingleOrDefault(v => v.Id == Id);
+                return _dbSet.Include(v => v.Candidate).AsNoTracking().SingleOrDefault(v => v.Id == Id);
             }
             catch (Exception E)
             {
@@ -106,7 +106,7 @@ namespace WebApplication1.Models.Repositories
         {
             try
             {
-                return _dbSet.Include(v => v.Candidate).SingleOrDefault(predicate);
+                return _dbSet.Include(v => v.Candidate).AsNoTracking().SingleOrDefault(predicate);
             }
             catch (Exception E)
             {
@@ -116,7 +116,7 @@ namespace WebApplication1.Models.Repositories
         public int CountAll()
         {
             int count = 0;
-            count = _dbSet.Count();
+            count = _dbSet.AsNoTracking().Count();
             return count;
         }
     }
