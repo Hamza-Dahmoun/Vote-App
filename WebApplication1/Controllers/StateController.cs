@@ -31,7 +31,7 @@ namespace WebApplication1.Controllers
         //Lets create a private readonly field IStringLocalizer<Messages> so that we can use Localization service, we'll inject it inside the constructor
         private readonly IStringLocalizer<Messages> _messagesLoclizer;
 
-        public IRepository<State> _stateRepository { get; }
+
         private readonly StateBusiness _stateBusiness;
         public IRepository<Voter> _voterRepository { get; }
         //Lets inject the services using the constructor, this is called Constructor Dependency Injection
@@ -42,7 +42,6 @@ namespace WebApplication1.Controllers
             StateBusiness stateBusiness)
         {
             _logger = logger;
-            _stateRepository = stateRepository;
             _messagesLoclizer = messagesLoclizer;
             _voterRepository = voterRepository;
             _stateBusiness = stateBusiness;
