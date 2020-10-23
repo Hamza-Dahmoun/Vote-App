@@ -350,7 +350,7 @@ namespace WebApplication1.Controllers
                 {
                     _logger.LogInformation("Calling StateRepository.Edit() method");
                     
-                    int updatedRows = _stateRepository.Edit(id, state);
+                    int updatedRows = _stateBusiness.Edit(id, state);
                     if (updatedRows > 0)
                     {
                         //row updated successfully in the DB

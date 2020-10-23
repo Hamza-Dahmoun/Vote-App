@@ -64,5 +64,17 @@ namespace WebApplication1.BusinessService
                 throw E;
             }
         }
+
+        public int Edit(Guid Id, State state)
+        {
+            try
+            {
+                return _stateRepository.Edit(Id, state);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
     }
 }
