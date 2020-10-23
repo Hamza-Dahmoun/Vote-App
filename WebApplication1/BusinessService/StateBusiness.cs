@@ -76,5 +76,17 @@ namespace WebApplication1.BusinessService
                 throw E;
             }
         }
+
+        public List<State> GetAllFiltered(Expression<Func<State, bool>> predicate)
+        {
+            try
+            {
+                return _stateRepository.GetAllFiltered(predicate);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
     }
 }
