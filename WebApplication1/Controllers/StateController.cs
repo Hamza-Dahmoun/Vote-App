@@ -13,6 +13,7 @@ using System.Net;
 using Microsoft.AspNetCore.Http;
 using OfficeOpenXml;
 using Microsoft.Extensions.Localization;
+using WebApplication1.BusinessService;
 
 namespace WebApplication1.Controllers
 {
@@ -31,17 +32,20 @@ namespace WebApplication1.Controllers
         private readonly IStringLocalizer<Messages> _messagesLoclizer;
 
         public IRepository<State> _stateRepository { get; }
+        private readonly StateBusiness _stateBusiness;
         public IRepository<Voter> _voterRepository { get; }
         //Lets inject the services using the constructor, this is called Constructor Dependency Injection
         public StateController(IRepository<State> stateRepository, 
             ILogger<StateController> logger, 
             IStringLocalizer<Messages> messagesLoclizer,
-            IRepository<Voter> voterRepository)
+            IRepository<Voter> voterRepository,
+            StateBusiness stateBusiness)
         {
             _logger = logger;
             _stateRepository = stateRepository;
             _messagesLoclizer = messagesLoclizer;
             _voterRepository = voterRepository;
+            _stateBusiness = stateBusiness;
         }
 
 
@@ -53,7 +57,7 @@ namespace WebApplication1.Controllers
             try
             {
                 _logger.LogInformation("Calling StateRepository.GetAll() method");
-                List<State> states = _stateRepository.GetAll().ToList();
+                List<State> states = _stateBusiness.GetAll();
                 ViewBag.statesCount = states.Count;
 
                 _logger.LogInformation("Calling Utilities.convertStateList_toStateViewModelList() method");
@@ -399,7 +403,7 @@ namespace WebApplication1.Controllers
                 using (ExcelPackage package = new ExcelPackage(stream))
                 {
                     
-                    var states = _stateRepository.GetAll();
+                    var states = _stateBusiness.GetAll();
                     ExcelWorksheet worksheet = package.Workbook.Worksheets.Add(_messagesLoclizer["States"]);
 
                     worksheet.Cells[1, 1].Value = _messagesLoclizer["Name"];
