@@ -35,7 +35,6 @@ namespace WebApplication1.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<VoterController> _logger;
         public IRepository<Voter> _voterRepository { get; }
-        public IRepository<State> _stateRepository { get; }
         private readonly StateBusiness _stateBusiness;
         public IRepository<Vote> _voteRepository { get; }
         public IRepository<Candidate> _candidateRepository { get; }
@@ -56,7 +55,6 @@ namespace WebApplication1.Controllers
         {
             _voterRepository = voterRepository;
             _voteRepository = voteRepository;
-            _stateRepository = stateRepository;
             _candidateRepository = candidateRepository;
             _userManager = userManager;
             _logger = logger;
