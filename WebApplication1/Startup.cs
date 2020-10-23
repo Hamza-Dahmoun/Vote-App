@@ -19,8 +19,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Localization;
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
-
-
+using WebApplication1.BusinessService;
 
 namespace WebApplication1
 {
@@ -48,6 +47,8 @@ namespace WebApplication1
             services.AddTransient<IRepository<Election>, ElectionRepository>();
             //Lets register Memory Cach services
             services.AddMemoryCache();
+            //Lets register the  StateBusiness so that it could be used whenever needed
+            services.AddTransient<StateBusiness>();
 
 
             //1- in IdentityHostingStartup.cs file:
