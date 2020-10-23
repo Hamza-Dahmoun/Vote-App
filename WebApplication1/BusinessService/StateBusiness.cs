@@ -16,5 +16,17 @@ namespace WebApplication1.BusinessService
         {
             _stateRepository = stateRepository;
         }
+
+        public List<State> GetAll()
+        {
+            try
+            {
+                return (List<State>)_stateRepository.GetAll();
+            }
+            catch(Exception E)
+            {
+                throw E;
+            }
+        }
     }
 }
