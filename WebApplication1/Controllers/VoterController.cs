@@ -16,6 +16,7 @@ using WebApplication1.Models.ViewModels;
 using Microsoft.Extensions.Localization;
 using System.Globalization;
 using System.Text;
+using WebApplication1.BusinessService;
 
 namespace WebApplication1.Controllers
 {
@@ -35,6 +36,7 @@ namespace WebApplication1.Controllers
         private readonly ILogger<VoterController> _logger;
         public IRepository<Voter> _voterRepository { get; }
         public IRepository<State> _stateRepository { get; }
+        private readonly StateBusiness _stateBusiness;
         public IRepository<Vote> _voteRepository { get; }
         public IRepository<Candidate> _candidateRepository { get; }
 
@@ -49,7 +51,8 @@ namespace WebApplication1.Controllers
             IRepository<Candidate> candidateRepository,
             UserManager<IdentityUser> userManager,
             ILogger<VoterController> logger,
-            IStringLocalizer<Messages> messagesLoclizer)
+            IStringLocalizer<Messages> messagesLoclizer,
+            StateBusiness stateBusiness)
         {
             _voterRepository = voterRepository;
             _voteRepository = voteRepository;
@@ -58,6 +61,7 @@ namespace WebApplication1.Controllers
             _userManager = userManager;
             _logger = logger;
             _messagesLoclizer = messagesLoclizer;
+            stateBusiness = _stateBusiness;
         }
         
         public IActionResult Index()
@@ -127,7 +131,7 @@ namespace WebApplication1.Controllers
                 //this method will return an empty VoterStateViewModel but with a list of all states, in a view
                 VoterStateViewModel vs = new VoterStateViewModel
                 {
-                    States = _stateRepository.GetAll()
+                    States = _stateBusiness.GetAll()
                 };
                 return View(vs);
             }
@@ -153,7 +157,7 @@ namespace WebApplication1.Controllers
                         Id = Guid.NewGuid(),
                         FirstName = vs.FirstName,
                         LastName = vs.LastName,
-                        State = _stateRepository.GetById(vs.StateID)
+                        State = _stateBusiness.GetById(vs.StateID)
                     };
 
                     //now lets add this new voter as a new user to the IdentityDB using UserManager<IdentityUser> service
@@ -409,7 +413,7 @@ namespace WebApplication1.Controllers
                     Id = voter.Id,
                     FirstName = voter.FirstName,
                     LastName = voter.LastName,
-                    States = _stateRepository.GetAll()
+                    States = _stateBusiness.GetAll()
                 };
                 /*just in case user wanted to edit info of Neutral vote which doesn't have a state*/
                 if (voter.State != null)
@@ -447,7 +451,7 @@ namespace WebApplication1.Controllers
                     if (voterstate.States == null)
                     {
                         //in caase the object received doesn't have a list of states
-                        voterstate.States = _stateRepository.GetAll();
+                        voterstate.States = _stateBusiness.GetAll();
                     }
                     _logger.LogInformation("Returning to the view to display validation messages");
                     //so there is a business rule not met, lets throw a businessException and catch it
@@ -458,7 +462,7 @@ namespace WebApplication1.Controllers
                     Id = voterstate.Id,
                     FirstName = voterstate.FirstName,
                     LastName = voterstate.LastName,
-                    State = _stateRepository.GetById(voterstate.StateID)
+                    State = _stateBusiness.GetById(voterstate.StateID)
                 };
 
                 _logger.LogInformation("Calling VoterRepository.Edit() method");
@@ -495,7 +499,7 @@ namespace WebApplication1.Controllers
                 BusinessMessage bm = new BusinessMessage("Error", be.Message);
                 ViewBag.BusinessMessage = bm;
                 //lets refill States list
-                voterstate.States = _stateRepository.GetAll();
+                voterstate.States = _stateBusiness.GetAll();
                 return View(voterstate);
             }
             catch (Exception E)
@@ -675,7 +679,7 @@ namespace WebApplication1.Controllers
                 expr = s => s.Name.StartsWith(q);
 
                 _logger.LogInformation("Calling StateRepository.GetAllFiltered() method");
-                var states = _stateRepository.GetAllFiltered(expr).Select(s => new { text = s.Name, id = s.Id});
+                var states = _stateBusiness.GetAllFiltered(expr).Select(s => new { text = s.Name, id = s.Id});
                 //now lets return json data
 
                 _logger.LogInformation("Going to  serialize the list of states");
