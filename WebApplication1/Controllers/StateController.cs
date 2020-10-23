@@ -134,7 +134,7 @@ namespace WebApplication1.Controllers
                     _logger.LogInformation("Model is valid");
                     state.Id = Guid.NewGuid();
                     _logger.LogInformation("Calling StateRepository.Add() to add state instance to the DB");
-                    int updatedRows = _stateRepository.Add(state);
+                    int updatedRows = _stateBusiness.Add(state);
                     
                     if (updatedRows > 0)
                     {

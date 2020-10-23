@@ -39,5 +39,17 @@ namespace WebApplication1.BusinessService
                 throw E;
             }
         }
+
+        public int Add(State state)
+        {
+            try
+            {
+                return _stateRepository.Add(state);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
     }
 }
