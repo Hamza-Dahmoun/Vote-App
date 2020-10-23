@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using WebApplication1.Models;
 using WebApplication1.Models.Repositories;
@@ -45,6 +46,18 @@ namespace WebApplication1.BusinessService
             try
             {
                 return _stateRepository.Add(state);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
+        public int Delete(Guid Id)
+        {
+            try
+            {
+                return _stateRepository.Delete(Id);
             }
             catch (Exception E)
             {

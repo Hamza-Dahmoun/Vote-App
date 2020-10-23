@@ -258,7 +258,7 @@ namespace WebApplication1.Controllers
                 _logger.LogInformation("Calling StateRepository.Delete() method");
                 
                 
-                int updatedRows2 = _stateRepository.Delete(id);
+                int updatedRows2 = _stateBusiness.Delete(id);
                 if (updatedRows2 > 0)
                 {
                     //row updated successfully in the DB
