@@ -28,5 +28,16 @@ namespace WebApplication1.BusinessService
                 throw E;
             }
         }
+        public State GetById(Guid Id)
+        {
+            try
+            {
+                return _stateRepository.GetById(Id);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
     }
 }

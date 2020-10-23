@@ -84,7 +84,7 @@ namespace WebApplication1.Controllers
                 }
 
                 _logger.LogInformation("Calling StateRepository.GetById() method");
-                State s = _stateRepository.GetById(id);
+                State s = _stateBusiness.GetById(id);
 
                 if (s == null)
                 {
@@ -195,7 +195,7 @@ namespace WebApplication1.Controllers
                 }
                 
                 _logger.LogInformation("Calling StateRepository.GetById() method");
-                var state = _stateRepository.GetById(id);
+                var state = _stateBusiness.GetById(id);
                 if(state == null)
                 {
                     _logger.LogError("State not found");
@@ -315,7 +315,7 @@ namespace WebApplication1.Controllers
                 }
 
                 _logger.LogInformation("Calling StateRepository.GetById() method");
-                var state = _stateRepository.GetById(id);
+                var state = _stateBusiness.GetById(id);
                 if (state == null)
                 {
                     _logger.LogError("State not found");
