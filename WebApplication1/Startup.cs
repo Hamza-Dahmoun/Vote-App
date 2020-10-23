@@ -49,6 +49,8 @@ namespace WebApplication1
             services.AddMemoryCache();
             //Lets register the  StateBusiness so that it could be used whenever needed
             services.AddTransient<StateBusiness>();
+            //Lets register the  VoteBusiness so that it could be used whenever needed
+            services.AddTransient<VoteBusiness>();
 
 
             //1- in IdentityHostingStartup.cs file:
