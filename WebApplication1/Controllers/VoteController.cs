@@ -25,7 +25,6 @@ namespace WebApplication1.Controllers
     {
         //the below are services we're going to use in this controller, they will be injected in the constructor
         public IRepository<Candidate> _candidateRepository { get; }
-        public IRepository<Vote> _voteRepository { get; }
         public IRepository<Voter> _voterRepository { get; }
         public IRepository<Election> _electionRepository { get; }
         //this is only used to get able to generate a 'code' needed to reset the password, and to get the currentUser ID
@@ -37,7 +36,6 @@ namespace WebApplication1.Controllers
         //Lets inject the services using the constructor, this is called Constructor Dependency Injection
         public VoteController(
             IRepository<Candidate> candidateRepository, 
-            IRepository<Vote> voteRepository, 
             IRepository<Voter> voterRepository,
             IRepository<Election> electionRepository,
             UserManager<IdentityUser> userManager,
@@ -45,7 +43,6 @@ namespace WebApplication1.Controllers
             IStringLocalizer<Messages> messagesLoclizer)
         {
             _candidateRepository = candidateRepository;
-            _voteRepository = voteRepository;
             _voterRepository = voterRepository;
             _electionRepository = electionRepository;
             _userManager = userManager;
@@ -117,7 +114,12 @@ namespace WebApplication1.Controllers
                     throw new BusinessException(_messagesLoclizer["Cannot validate votes of empty list of candidates"]);
                 }
 
-                _voteBusiness.AddVotes(candidateIdList);                
+                int updatedRows = await _voteBusiness.AddVotes(candidateIdList);
+                if (updatedRows != candidateIdList.Count())
+                {
+                    //not all rows updated in the DB
+                    throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
+                }
                 _logger.LogInformation("Added Vote instance to the DB foreach Candidate");
 
                 exceptionDifferentiator = 1;

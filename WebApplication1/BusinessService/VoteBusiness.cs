@@ -47,7 +47,7 @@ namespace WebApplication1.BusinessService
 
 
 
-        public async void AddVotes(List<string> candidateIdList)
+        public async Task<int> AddVotes(List<string> candidateIdList)
         {
             try
             {
@@ -95,6 +95,7 @@ namespace WebApplication1.BusinessService
                         throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
                     }
                 }
+                return candidateIdList.Count();
             }
             catch(DataNotUpdatedException E)
             {
