@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using WebApplication1.Business;
 using WebApplication1.Models;
@@ -108,5 +109,28 @@ namespace WebApplication1.BusinessService
         }
 
 
+        public int Delete(Guid Id)
+        {
+            try
+            {
+                return _voteRepository.Delete(Id);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
+        public List<Vote> GetAllFiltered(Expression<Func<Vote, bool>> predicate)
+        {
+            try
+            {
+                return _voteRepository.GetAllFiltered(predicate);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
     }
 }
