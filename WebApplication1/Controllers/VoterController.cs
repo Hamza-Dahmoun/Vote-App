@@ -36,14 +36,15 @@ namespace WebApplication1.Controllers
         private readonly ILogger<VoterController> _logger;
         public IRepository<Voter> _voterRepository { get; }
         private readonly StateBusiness _stateBusiness;
-        public IRepository<Vote> _voteRepository { get; }
         public IRepository<Candidate> _candidateRepository { get; }
 
         //Lets create a private readonly field IStringLocalizer<Messages> so that we can use Localization service, we'll inject it inside the constructor
         private readonly IStringLocalizer<Messages> _messagesLoclizer;
+        private readonly VoteBusiness _voteBusiness;
 
         //Lets inject the services using the constructor, this is called Constructor Dependency Injection
         public VoterController(
+            VoteBusiness voteBusiness,
             IRepository<Voter> voterRepository,
             IRepository<State> stateRepository,
             IRepository<Vote> voteRepository,
@@ -53,13 +54,13 @@ namespace WebApplication1.Controllers
             IStringLocalizer<Messages> messagesLoclizer,
             StateBusiness stateBusiness)
         {
+            _voteBusiness = voteBusiness;
             _voterRepository = voterRepository;
-            _voteRepository = voteRepository;
             _candidateRepository = candidateRepository;
             _userManager = userManager;
             _logger = logger;
             _messagesLoclizer = messagesLoclizer;
-            stateBusiness = _stateBusiness;
+            _stateBusiness = stateBusiness;
         }
         
         public IActionResult Index()
@@ -293,12 +294,12 @@ namespace WebApplication1.Controllers
                 //declaring an expression that is special to Vote objects
                 System.Linq.Expressions.Expression<Func<Vote, bool>> expr1 = e => e.Voter == voter;
                 _logger.LogInformation("Calling VoteRepository.GetAllFiltered() method");
-                List<Vote> votesList = _voteRepository.GetAllFiltered(expr1);
+                List<Vote> votesList = _voteBusiness.GetAllFiltered(expr1);
 
                 _logger.LogInformation("Going to delete all Vote instances of a Voter");
                 foreach (var vote in votesList)
                 {                    
-                    int updatedRows2 = _voteRepository.Delete(vote.Id);
+                    int updatedRows2 = _voteBusiness.Delete(vote.Id);
                     if (updatedRows2 < 1)
                     {
                         //row not updated in the DB
