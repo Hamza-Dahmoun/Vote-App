@@ -12,6 +12,7 @@ using WebApplication1.Business;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Localization;
+using WebApplication1.BusinessService;
 
 namespace WebApplication1.Controllers
 {
@@ -32,6 +33,7 @@ namespace WebApplication1.Controllers
         private readonly ILogger<VoteController> _logger;
         //Lets create a private readonly field IStringLocalizer<Messages> so that we can use Localization service, we'll inject it inside the constructor
         private readonly IStringLocalizer<Messages> _messagesLoclizer;
+        private readonly VoteBusiness _voteBusiness;
         //Lets inject the services using the constructor, this is called Constructor Dependency Injection
         public VoteController(
             IRepository<Candidate> candidateRepository, 
@@ -95,6 +97,7 @@ namespace WebApplication1.Controllers
             }            
         }
 
+        
         [HttpPost]
         public async Task<IActionResult> ValidateVote([FromBody] List<string> candidateIdList)
         {//this action gets the list of the candidates ids that the user voted on, and add them to the db as vote objects, 
@@ -113,57 +116,17 @@ namespace WebApplication1.Controllers
 
                     throw new BusinessException(_messagesLoclizer["Cannot validate votes of empty list of candidates"]);
                 }
-                //lets first get the concerned election
-                Candidate firstOne = _candidateRepository.GetById(Guid.Parse(candidateIdList.FirstOrDefault()));
-                Election election = _electionRepository.GetById(firstOne.Election.Id);
-                if (election == null)
-                {
-                    _logger.LogError("Cannot validate for null election");
 
-                    throw new BusinessException(_messagesLoclizer["Cannot validate vote of null election"]);
-                }
-
-                //lets get the voter instance of the current user, so that we use its id with his votes
-                var currentUser = await _userManager.GetUserAsync(HttpContext.User);
-                _logger.LogInformation("Calling VoterUtilities.getVoterByUserId() method");
-                Voter currentVoter = VoterUtilities.getVoterByUserId(Guid.Parse(currentUser.Id), _voterRepository);
-                if(currentVoter == null)
-                {
-                    _logger.LogError("Voter instance was not found for current user");
-                    throw new BusinessException(_messagesLoclizer["Voter instance was not found for current user"]);
-                }
-
-
-                _logger.LogInformation("Going to add Vote instance to the DB foreach Candidate");
-                Vote v = new Vote();
-                //lets add 'Vote' objects to the db
-                foreach (var candidateId in candidateIdList)
-                {
-                    v.Id = Guid.NewGuid();
-                    Candidate candidate = _candidateRepository.GetById(Guid.Parse(candidateId));
-                    if (candidate == null)
-                    {
-                        _logger.LogError("Candidate instance was not found for " + candidateId);
-                        throw new BusinessException(_messagesLoclizer["Candidate instance was not found for"] + " " + candidateId);
-                    }
-                    v.Candidate = candidate;
-                    v.Voter = currentVoter; 
-                    v.Datetime = DateTime.Now;
-                    v.Election = election;
-                    
-                    int updatedRows = _voteRepository.Add(v);
-                    if (updatedRows < 1)
-                    {
-                        //row not updated in the DB
-                        throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
-                    }
-                }
+                _voteBusiness.AddVotes(candidateIdList);                
                 _logger.LogInformation("Added Vote instance to the DB foreach Candidate");
+
                 exceptionDifferentiator = 1;
 
                 
                 //everything is okey, lets return a list of candidates with votes counter ordered so that the winner is the first
                 _logger.LogInformation("Calling CandidateUtilities.GetCandidate_byElection() method");
+                Candidate firstOne = _candidateRepository.GetById(Guid.Parse(candidateIdList.FirstOrDefault()));
+                Election election = _electionRepository.GetById(firstOne.Election.Id);
                 var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, election);
                 _logger.LogInformation("Calling Utilities.convertCandidateList_toCandidateViewModelList() method");
                 List<CandidateViewModel> candidatesViewModel = Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, candidates);
@@ -209,6 +172,7 @@ namespace WebApplication1.Controllers
                 }
             }
         }
+        
 
         
     }

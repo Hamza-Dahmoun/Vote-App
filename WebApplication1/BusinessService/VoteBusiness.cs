@@ -45,6 +45,67 @@ namespace WebApplication1.BusinessService
         }
 
 
-        
+
+
+        public async void AddVotes(List<string> candidateIdList)
+        {
+            try
+            {
+                //lets first get the concerned election
+                Candidate firstOne = _candidateRepository.GetById(Guid.Parse(candidateIdList.FirstOrDefault()));
+                Election election = _electionRepository.GetById(firstOne.Election.Id);
+                if (election == null)
+                {
+                    //_logger.LogError("Cannot validate for null election");
+                    throw new BusinessException(_messagesLoclizer["Cannot validate vote of null election"]);
+                }
+
+                //lets get the voter instance of the current user, so that we use its id with his votes
+                var currentUser = await _userManager.GetUserAsync(_contextAccessor.HttpContext.User);
+                //_logger.LogInformation("Calling VoterUtilities.getVoterByUserId() method");
+                Voter currentVoter = VoterUtilities.getVoterByUserId(Guid.Parse(currentUser.Id), _voterRepository);
+                if (currentVoter == null)
+                {
+                    //_logger.LogError("Voter instance was not found for current user");
+                    throw new BusinessException(_messagesLoclizer["Voter instance was not found for current user"]);
+                }
+
+
+                //_logger.LogInformation("Going to add Vote instance to the DB foreach Candidate");
+                Vote v = new Vote();
+                //lets add 'Vote' objects to the db
+                foreach (var candidateId in candidateIdList)
+                {
+                    v.Id = Guid.NewGuid();
+                    Candidate candidate = _candidateRepository.GetById(Guid.Parse(candidateId));
+                    if (candidate == null)
+                    {
+                        //_logger.LogError("Candidate instance was not found for " + candidateId);
+                        throw new BusinessException(_messagesLoclizer["Candidate instance was not found for"] + " " + candidateId);
+                    }
+                    v.Candidate = candidate;
+                    v.Voter = currentVoter;
+                    v.Datetime = DateTime.Now;
+                    v.Election = election;
+
+                    int updatedRows = _voteRepository.Add(v);
+                    if (updatedRows < 1)
+                    {
+                        //row not updated in the DB
+                        throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
+                    }
+                }
+            }
+            catch(DataNotUpdatedException E)
+            {
+                throw E;
+            }
+            catch (BusinessException E)
+            {
+                throw E;
+            }
+        }
+
+
     }
 }
