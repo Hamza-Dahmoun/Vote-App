@@ -16,6 +16,7 @@ using WebApplication1.Models.ViewModels;
 using Microsoft.Extensions.Localization;
 using System.Globalization;
 using System.Text;
+using WebApplication1.BusinessService;
 
 namespace WebApplication1.Controllers
 {
@@ -37,8 +38,10 @@ namespace WebApplication1.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         //Lets create a private readonly field IStringLocalizer<Messages> so that we can use Localization service, we'll inject it inside the constructor
         private readonly IStringLocalizer<Messages> _messagesLoclizer;
+        private readonly VoteBusiness _voteBusiness;
         //Lets inject the services using the constructor, this is called Constructor Dependency Injection
         public ElectionController(
+            VoteBusiness voteBusiness,
             IRepository<Vote> voteRepository,
             IRepository<Voter> voterRepository,
             IRepository<Candidate> candidateRepository,
@@ -46,6 +49,7 @@ namespace WebApplication1.Controllers
             UserManager<IdentityUser> userManager,
             IStringLocalizer<Messages> messagesLoclizer)
         {
+            _voteBusiness = voteBusiness;
             _voteRepository = voteRepository;
             _voterRepository = voterRepository;
             _candidateRepository = candidateRepository;
@@ -1057,10 +1061,10 @@ namespace WebApplication1.Controllers
                 //1- Remove all Votes related to this Election
                 //declaring an expression that is special to Vote objects
                 System.Linq.Expressions.Expression<Func<Vote, bool>> expr1 = e => e.Election.Id == id;
-                List<Vote> votesList = _voteRepository.GetAllFiltered(expr1);
+                List<Vote> votesList = _voteBusiness.GetAllFiltered(expr1);
                 foreach (var vote in votesList)
                 {                    
-                    int updatedRows5 = _voteRepository.Delete(vote.Id);
+                    int updatedRows5 = _voteBusiness.Delete(vote.Id);
                     if (updatedRows5 < 1)
                     {
                         //row not updated in the DB
