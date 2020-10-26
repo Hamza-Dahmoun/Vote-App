@@ -25,6 +25,7 @@ namespace WebApplication1.Controllers
     {
         //the below are services we're going to use in this controller, they will be injected in the constructor
         public IRepository<Candidate> _candidateRepository { get; }
+        private readonly CandidateBusiness _candidateBusiness;
         public IRepository<Voter> _voterRepository { get; }
         public IRepository<Election> _electionRepository { get; }
         //this is only used to get able to generate a 'code' needed to reset the password, and to get the currentUser ID
@@ -40,8 +41,10 @@ namespace WebApplication1.Controllers
             IRepository<Election> electionRepository,
             UserManager<IdentityUser> userManager,
             ILogger<VoteController> logger,
-            IStringLocalizer<Messages> messagesLoclizer)
+            IStringLocalizer<Messages> messagesLoclizer,
+            CandidateBusiness candidateBusiness)
         {
+            _candidateBusiness = candidateBusiness;
             _candidateRepository = candidateRepository;
             _voterRepository = voterRepository;
             _electionRepository = electionRepository;
@@ -127,7 +130,7 @@ namespace WebApplication1.Controllers
                 
                 //everything is okey, lets return a list of candidates with votes counter ordered so that the winner is the first
                 _logger.LogInformation("Calling CandidateUtilities.GetCandidate_byElection() method");
-                Candidate firstOne = _candidateRepository.GetById(Guid.Parse(candidateIdList.FirstOrDefault()));
+                Candidate firstOne = _candidateBusiness.GetById(Guid.Parse(candidateIdList.FirstOrDefault()));
                 Election election = _electionRepository.GetById(firstOne.Election.Id);
                 var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, election);
                 _logger.LogInformation("Calling Utilities.convertCandidateList_toCandidateViewModelList() method");
