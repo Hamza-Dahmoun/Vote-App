@@ -33,18 +33,20 @@ namespace WebApplication1.Controllers
 
 
         private readonly StateBusiness _stateBusiness;
-        public IRepository<Voter> _voterRepository { get; }
+
+        private readonly VoterBusiness _voterBusiness;
+
         //Lets inject the services using the constructor, this is called Constructor Dependency Injection
         public StateController(IRepository<State> stateRepository, 
             ILogger<StateController> logger, 
             IStringLocalizer<Messages> messagesLoclizer,
-            IRepository<Voter> voterRepository,
-            StateBusiness stateBusiness)
+            StateBusiness stateBusiness,
+            VoterBusiness voterBusiness)
         {
             _logger = logger;
             _messagesLoclizer = messagesLoclizer;
-            _voterRepository = voterRepository;
             _stateBusiness = stateBusiness;
+            _voterBusiness = voterBusiness;
         }
 
 
@@ -236,14 +238,14 @@ namespace WebApplication1.Controllers
                 //declaring an expression that is special to Election objects
                 System.Linq.Expressions.Expression<Func<Voter, bool>> expr = v => v.State.Id == id;
                 _logger.LogInformation("Calling VotereRepository.GetAllFiltered() method");
-                var voters = _voterRepository.GetAllFiltered(expr);
+                var voters = _voterBusiness.GetAllFiltered(expr);
                 //now lets update each voter by removing its relation to the state
                 foreach (var voter in voters)
                 {
                     voter.State = null;
                     _logger.LogInformation("Updating the Voter id= " + voter.Id);
 
-                    int updatedRows = _voterRepository.Edit(voter.Id, voter);
+                    int updatedRows = _voterBusiness.Edit(voter.Id, voter);
                     if (updatedRows <1)
                     {
                         //row not updated in the DB
