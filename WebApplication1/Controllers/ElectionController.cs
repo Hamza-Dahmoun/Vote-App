@@ -1292,7 +1292,17 @@ namespace WebApplication1.Controllers
                     a.CandidatesCount = currentElection.Candidates.Count;
 
                     var currentUser = await _userManager.GetUserAsync(HttpContext.User);
-                    bool userHasVoted = VoteUtilities.hasVoted(_voteRepository, currentElection.Id, VoterUtilities.getVoterByUserId(Guid.Parse(currentUser.Id), _voterRepository).Id);
+
+                    bool userHasVoted = false;
+                    if (!await _userManager.IsInRoleAsync(currentUser, "Voter"))
+                    {
+                        userHasVoted = false;
+                    }
+                    else
+                    {
+                        userHasVoted = VoteUtilities.hasVoted(_voteRepository, currentElection.Id, VoterUtilities.getVoterByUserId(Guid.Parse(currentUser.Id), _voterRepository).Id);
+                    }
+                    
                     a.HasUserVoted = userHasVoted;
 
                     a.ParticipationRate = (double)VoteUtilities.getNumberOfVotersVotedOnElection(_voteRepository, currentElection.Id) / _voterRepository.GetAll().Count;
