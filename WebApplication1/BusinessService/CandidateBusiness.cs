@@ -39,5 +39,54 @@ namespace WebApplication1.BusinessService
             _voterRepository = voterRepository;
             _electionRepository = electionRepository;
         }
+
+        public Candidate GetById(Guid Id)
+        {
+            try
+            {
+                return _candidateRepository.GetById(Id);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
+        public List<Candidate> GetAll()
+        {
+            try
+            {
+                return (List<Candidate>)_candidateRepository.GetAll();
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
+
+        public int Add(Candidate candidate)
+        {
+            try
+            {
+                return _candidateRepository.Add(candidate);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
+        public int Delete(Guid Id)
+        {
+            try
+            {
+                return _candidateRepository.Delete(Id);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
     }
 }
