@@ -119,13 +119,27 @@ namespace WebApplication1.BusinessService
         {
             try
             {
-                return _voterRepository.GetAllFilteredPaged(predicate, orderBy, orderDirection, startRowIndex = 0, maxRows = 10);
+                return _voterRepository.GetAllFilteredPaged(predicate, orderBy, orderDirection, startRowIndex, maxRows);
             }
             catch (Exception E)
             {
                 throw E;
             }
         }
+
+        public PagedResult<Voter> GetAllPaged(string orderBy, string orderDirection, int startRowIndex = 0, int maxRows = 10)
+        {
+            try
+            {
+                return _voterRepository.GetAllPaged(orderBy, orderDirection, startRowIndex, maxRows);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+
+        }
+
 
     }
 }

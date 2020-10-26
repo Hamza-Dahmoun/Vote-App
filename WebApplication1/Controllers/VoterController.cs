@@ -34,7 +34,8 @@ namespace WebApplication1.Controllers
         //the below service is used to store a new user for each new voter
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<VoterController> _logger;
-        public IRepository<Voter> _voterRepository { get; }
+
+        private readonly VoterBusiness _voterBusiness;
         private readonly StateBusiness _stateBusiness;
         public IRepository<Candidate> _candidateRepository { get; }
 
@@ -45,9 +46,7 @@ namespace WebApplication1.Controllers
         //Lets inject the services using the constructor, this is called Constructor Dependency Injection
         public VoterController(
             VoteBusiness voteBusiness,
-            IRepository<Voter> voterRepository,
-            IRepository<State> stateRepository,
-            IRepository<Vote> voteRepository,
+            VoterBusiness voterBusiness,
             IRepository<Candidate> candidateRepository,
             UserManager<IdentityUser> userManager,
             ILogger<VoterController> logger,
@@ -55,7 +54,7 @@ namespace WebApplication1.Controllers
             StateBusiness stateBusiness)
         {
             _voteBusiness = voteBusiness;
-            _voterRepository = voterRepository;
+            _voterBusiness = voterBusiness;
             _candidateRepository = candidateRepository;
             _userManager = userManager;
             _logger = logger;
@@ -69,7 +68,7 @@ namespace WebApplication1.Controllers
             try
             {
                 _logger.LogInformation("Calling VoterRepository.GetAll() method");
-                List<Voter> voters = _voterRepository.GetAll().ToList();
+                List<Voter> voters = _voterBusiness.GetAll().ToList();
                 ViewBag.votersCount = voters.Count;
 
                 _logger.LogInformation("Returning a list of voters to Index view");
@@ -94,7 +93,7 @@ namespace WebApplication1.Controllers
                 }
 
                 _logger.LogInformation("Calling VoterRepository.GetById() method");
-                Voter v = _voterRepository.GetById(id);
+                Voter v = _voterBusiness.GetById(id);
                 if (v == null)
                 {
                     _logger.LogError("Voter not found");
@@ -182,7 +181,7 @@ namespace WebApplication1.Controllers
                             //the user has been stored successully lets insert now the new voter
                             v.UserId = Guid.Parse(user.Id);
                             _logger.LogInformation("Adding the new voter to the DB");                            
-                            int updatedRows = _voterRepository.Add(v);
+                            int updatedRows = _voterBusiness.Add(v);
                             if (updatedRows > 0)
                             {
                                 //row updated successfully in the DB
@@ -243,7 +242,7 @@ namespace WebApplication1.Controllers
                 }
 
                 _logger.LogInformation("Calling VoterRepository.GetById() method");
-                var voter = _voterRepository.GetById(id);
+                var voter = _voterBusiness.GetById(id);
                 if (voter == null)
                 {
                     _logger.LogError("Voter not found");
@@ -283,7 +282,7 @@ namespace WebApplication1.Controllers
                 }
 
                 _logger.LogInformation("Calling VoterRepository.GetById() method");
-                Voter voter = _voterRepository.GetById(id);
+                Voter voter = _voterBusiness.GetById(id);
                 if (voter == null)
                 {
                     _logger.LogError("Voter not found");
@@ -331,7 +330,7 @@ namespace WebApplication1.Controllers
                 //lets get the User by his ID
 
                 _logger.LogInformation("Going to get the corresponding IdentityUser of the Voter instance");
-                var voterUserAccount = await _userManager.FindByIdAsync(_voterRepository.GetById(id).UserId.ToString());
+                var voterUserAccount = await _userManager.FindByIdAsync(_voterBusiness.GetById(id).UserId.ToString());
                 
                 //DeleteAsync() is an asynchronous method, we have to mark this method with 'async task'
                 _logger.LogInformation("Going to delete the corresponding IdentityUser of the Voter instance");
@@ -342,7 +341,7 @@ namespace WebApplication1.Controllers
 
                     //4- Remove the Voter
                     _logger.LogInformation("Going to delete the Voter instance");                    
-                    int updatedRows5 = _voterRepository.Delete(id);
+                    int updatedRows5 = _voterBusiness.Delete(id);
                     if (updatedRows5 > 0)
                     {
                         //row updated successfully in the DB
@@ -400,7 +399,7 @@ namespace WebApplication1.Controllers
                 }
 
                 _logger.LogInformation("Calling VoterRepository.GetById() method");
-                var voter = _voterRepository.GetById(Id);
+                var voter = _voterBusiness.GetById(Id);
                 if (voter == null)
                 {
                     _logger.LogError("Voter not found");
@@ -467,7 +466,7 @@ namespace WebApplication1.Controllers
 
                 _logger.LogInformation("Calling VoterRepository.Edit() method");
                 
-                int updatedRows = _voterRepository.Edit(voterstate.Id, v);
+                int updatedRows = _voterBusiness.Edit(voterstate.Id, v);
                 if (updatedRows > 0)
                 {
                     //row updated successfully in the DB
@@ -602,7 +601,7 @@ namespace WebApplication1.Controllers
                         (v.State != null && v.State.Name.Contains(searchValue));
 
                     //lets get the list of voters filtered and paged
-                    PagedResult<Voter> pagedResult = _voterRepository.GetAllFilteredPaged(expr, sortColumnName, sortColumnDirection, skip, pageSize);
+                    PagedResult<Voter> pagedResult = _voterBusiness.GetAllFilteredPaged(expr, sortColumnName, sortColumnDirection, skip, pageSize);
 
                     _logger.LogInformation("pagedResult filled by data from DB GetAllFilteredPaged()");
 
@@ -629,7 +628,7 @@ namespace WebApplication1.Controllers
 
                     //lets get the list of voters paged
                     _logger.LogInformation("Calling VoterRepository.GetAllPaged() method");
-                    PagedResult<Voter> pagedResult = _voterRepository.GetAllPaged(sortColumnName, sortColumnDirection, skip, pageSize);
+                    PagedResult<Voter> pagedResult = _voterBusiness.GetAllPaged(sortColumnName, sortColumnDirection, skip, pageSize);
 
                     //lets assign totalRecords the correct value
                     totalRecords = pagedResult.TotalCount;
@@ -710,7 +709,7 @@ namespace WebApplication1.Controllers
                 var stream = new System.IO.MemoryStream();
                 using (ExcelPackage package = new ExcelPackage(stream))
                 {
-                    var voters = _voterRepository.GetAll();
+                    var voters = _voterBusiness.GetAll();
                     ExcelWorksheet worksheet = package.Workbook.Worksheets.Add(_messagesLoclizer["Voters"]);
 
                     worksheet.Cells[1, 1].Value = _messagesLoclizer["First Name"];
