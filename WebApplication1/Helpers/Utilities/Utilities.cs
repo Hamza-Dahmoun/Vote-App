@@ -23,10 +23,12 @@ namespace WebApplication1.Business
                 };
                 if (!candidate.isNeutralOpinion)
                 {
-
-                    c.FirstName = candidate.VoterBeing.FirstName;
-                    c.LastName = candidate.VoterBeing.LastName;
-                    c.StateName = VoterUtilities.getStateName(voterRepository, candidate.VoterBeing.Id);
+                    Voter v = voterRepository.GetById(candidate.VoterBeingId);
+                    //c.FirstName = candidate.VoterBeing.FirstName;
+                    //c.LastName = candidate.VoterBeing.LastName;
+                    c.FirstName = v.FirstName;
+                    c.LastName = v.LastName;
+                    c.StateName = VoterUtilities.getStateName(voterRepository, v.Id);
 
                 }
                 else
@@ -204,11 +206,16 @@ namespace WebApplication1.Business
         {
             try
             {
+                Voter v = voterRepository.GetById(c.VoterBeingId);
                 VoterCandidateEntityViewModel vc = new VoterCandidateEntityViewModel();
-                vc.VoterId = c.VoterBeing.Id.ToString();
-                vc.FirstName = c.VoterBeing.FirstName;
-                vc.LastName = c.VoterBeing.LastName;
-                vc.StateName = VoterUtilities.getStateName(voterRepository, c.VoterBeing.Id);
+                //vc.VoterId = c.VoterBeing.Id.ToString();
+                //vc.FirstName = c.VoterBeing.FirstName;
+                //vc.LastName = c.VoterBeing.LastName;
+                //vc.StateName = VoterUtilities.getStateName(voterRepository, c.VoterBeing.Id);
+                vc.VoterId = v.Id.ToString();
+                vc.FirstName = v.FirstName;
+                vc.LastName = v.LastName;
+                vc.StateName = VoterUtilities.getStateName(voterRepository, v.Id);
                 vc.CandidateId = c.Id.ToString();
                 return vc;
             }
@@ -265,14 +272,14 @@ namespace WebApplication1.Business
 
 
 
-        public static List<Voter> getCorrespondingVoters(List<Candidate> candidates)
+        public static List<Voter> getCorrespondingVoters(List<Candidate> candidates, IRepository<Voter> voterRepository)
         {
             try
             {
                 List<Voter> voters = new List<Voter>();
                 foreach (var candidate in candidates)
                 {
-                    voters.Add(candidate.VoterBeing);
+                    voters.Add(voterRepository.GetById(candidate.VoterBeingId));
                 }
                 return voters;
             }

@@ -57,7 +57,7 @@ namespace WebApplication1.Models.Repositories
             try
             {
                 //use eager loading to bring State data 
-                return _dbSet/*.Include(c => c.State)*/.Include(c=>c.Election).Include(c => c.Votes).Include(c => c.VoterBeing).AsNoTracking().ToList();
+                return _dbSet/*.Include(c => c.State)*/.Include(c=>c.Election).Include(c => c.Votes)/*.Include(c => c.VoterBeing)*/.AsNoTracking().ToList();
             }
             catch (Exception E)
             {
@@ -73,7 +73,7 @@ namespace WebApplication1.Models.Repositories
             try
             {
                 //use eager loading to bring other tables data 
-                return _dbSet.Where(predicate)/*.Include(c => c.State)*/.Include(c => c.Election).Include(c => c.Votes).Include(c => c.VoterBeing).AsNoTracking().ToList();
+                return _dbSet.Where(predicate)/*.Include(c => c.State)*/.Include(c => c.Election).Include(c => c.Votes)/*.Include(c => c.VoterBeing)*/.AsNoTracking().ToList();
             }
             catch (Exception E)
             {
@@ -96,7 +96,7 @@ namespace WebApplication1.Models.Repositories
             try
             {
                 //use eager loading to bring State data and Votes data and VoterBeing data too
-                return _dbSet.Include(c => c.Election)/*.Include(c=>c.State)*/.Include(c => c.Votes).Include(c => c.VoterBeing).AsNoTracking().SingleOrDefault(c => c.Id == Id);
+                return _dbSet.Include(c => c.Election)/*.Include(c=>c.State)*/.Include(c => c.Votes)/*.Include(c => c.VoterBeing)*/.AsNoTracking().SingleOrDefault(c => c.Id == Id);
             }
             catch (Exception E)
             {
@@ -109,7 +109,7 @@ namespace WebApplication1.Models.Repositories
             try
             {
                 //use eager loading to bring State data and Votes data and VoterBeing data too
-                return _dbSet.Include(c => c.Election)/*.Include(c=>c.State)*/.Include(c => c.Votes).Include(c => c.VoterBeing).AsNoTracking().SingleOrDefault(predicate);
+                return _dbSet.Include(c => c.Election)/*.Include(c=>c.State)*/.Include(c => c.Votes)/*.Include(c => c.VoterBeing)*/.AsNoTracking().SingleOrDefault(predicate);
             }
             catch (Exception E)
             {

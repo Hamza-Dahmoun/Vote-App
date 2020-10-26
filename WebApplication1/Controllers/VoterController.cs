@@ -310,7 +310,8 @@ namespace WebApplication1.Controllers
 
                 //2- Remove corresponding Candidates objects
                 //declaring an expression that is special to Vote objects
-                System.Linq.Expressions.Expression<Func<Candidate, bool>> expr2 = e => e.VoterBeing == voter;
+                //System.Linq.Expressions.Expression<Func<Candidate, bool>> expr2 = e => e.VoterBeing == voter;
+                System.Linq.Expressions.Expression<Func<Candidate, bool>> expr2 = e => e.VoterBeingId == voter.Id;
                 _logger.LogInformation("Going to get all Candidates instances of the Voter");
                 List<Candidate> candidatesList = _candidateRepository.GetAllFiltered(expr2);
 

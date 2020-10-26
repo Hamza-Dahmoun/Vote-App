@@ -345,7 +345,7 @@ namespace WebApplication1.Controllers
                 
                 //lets first get the list of voterswho are already candidates of this election
                 Election election = _electionRepository.GetById(electionId);
-                List<Voter> alreadyCandidates = CandidateUtilities.GetVoterBeing_ofCandidatesList_byElection(_candidateRepository, election);
+                List<Voter> alreadyCandidates = CandidateUtilities.GetVoterBeing_ofCandidatesList_byElection(_candidateRepository, election, _voterRepository);
                 List<Guid> excludedVotersIDs = alreadyCandidates.Select(v => v.Id).ToList();
 
                 System.Linq.Expressions.Expression<Func<Voter, bool>> expr;
@@ -422,8 +422,10 @@ namespace WebApplication1.Controllers
                     new Candidate
                     {
                         Id = Guid.NewGuid(),
-                        VoterBeing = voter,
-                        Election = _electionRepository.GetById(mydata.electionId)
+                        //VoterBeing = voter,
+                        VoterBeingId = voter.Id,
+                        ElectionId = mydata.electionId
+                        //Election = _electionRepository.GetById(mydata.electionId)
                     }
                     );
                 if (updatedRows > 0)
@@ -485,8 +487,10 @@ namespace WebApplication1.Controllers
                 Candidate newCandidate = new Candidate
                 {
                     Id = Guid.NewGuid(),
-                    VoterBeing = voter,
-                    Election = _electionRepository.GetById(mydata.electionId)
+                    //VoterBeing = voter,
+                    VoterBeingId = voter.Id,
+                    ElectionId = mydata.electionId,
+                    //Election = _electionRepository.GetById(mydata.electionId)
                 };
                 
                 int updatedRows = _candidateRepository.Add(newCandidate); 
@@ -819,7 +823,7 @@ namespace WebApplication1.Controllers
                 entityList = Utilities.convertCandidateList_toVoterCandidateEntityViewModelList(_voterRepository, entityList, candidates);
                 
 
-                var otherVoters = VoterUtilities.getOtherVoters(_voterRepository, Utilities.getCorrespondingVoters(candidates));
+                var otherVoters = VoterUtilities.getOtherVoters(_voterRepository, Utilities.getCorrespondingVoters(candidates, _voterRepository));
                 entityList = Utilities.convertVoterList_toVoterCandidateEntityViewModelList(entityList, otherVoters);
                 
 

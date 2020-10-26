@@ -16,7 +16,7 @@ namespace WebApplication1.Models
         public Election Election { get; set; }
         public Guid? ElectionId { get; set; }
 
-        public Voter VoterBeing { get; set; }
+        /*public Voter VoterBeing { get; set; }*/
         public Guid VoterBeingId { get; set; }
 
         public bool isNeutralOpinion { get; set; }

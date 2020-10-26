@@ -17,6 +17,7 @@ namespace WebApplication1.Business
         THIS IS CALLED METHOD DEPENDANCY INJECTION
          */
         public static IRepository<Candidate> _candidateRepository;
+        public static IRepository<Voter> _voterRepository;
 
 
 
@@ -28,7 +29,8 @@ namespace WebApplication1.Business
                 _candidateRepository = candidateRepository;
 
                 //declaring an expression that is special to Candidate objects
-                System.Linq.Expressions.Expression<Func<Candidate, bool>> expr = c => c.VoterBeing == voter;
+                //System.Linq.Expressions.Expression<Func<Candidate, bool>> expr = c => c.VoterBeing == voter;
+                System.Linq.Expressions.Expression<Func<Candidate, bool>> expr = c => c.VoterBeingId == voter.Id;
 
                 Candidate candidate = _candidateRepository.GetOneFiltered(expr);
 
@@ -57,7 +59,8 @@ namespace WebApplication1.Business
             {
                 //declaring an expression that is special to Candidate objects and it compares the election instance of the candidates 
                 //with 'election' parameter and voterBeing with voter parameter
-                System.Linq.Expressions.Expression<Func<Candidate, bool>> expr = i => i.Election == election && i.VoterBeing == voter;
+                //System.Linq.Expressions.Expression<Func<Candidate, bool>> expr = i => i.Election == election && i.VoterBeing == voter;
+                System.Linq.Expressions.Expression<Func<Candidate, bool>> expr = i => i.Election == election && i.VoterBeingId == voter.Id;
                 return _candidateRepository.GetOneFiltered(expr);                
             }
             catch (Exception E)
@@ -86,7 +89,10 @@ namespace WebApplication1.Business
 
 
 
-        public static List<Voter> GetVoterBeing_ofCandidatesList_byElection(IRepository<Candidate> candidateRepository, Election election)
+        public static List<Voter> GetVoterBeing_ofCandidatesList_byElection(
+            IRepository<Candidate> candidateRepository, 
+            Election election,
+            IRepository<Voter> voterRepository)
         {
             //this methods returns a list of voters who are considered as candidates for this election except the neutral opinion
             try
@@ -96,7 +102,7 @@ namespace WebApplication1.Business
                 foreach (var item in candidates)
                 {
                     if(!item.isNeutralOpinion)
-                    voters.Add(item.VoterBeing);
+                    voters.Add(voterRepository.GetById(item.VoterBeingId));
                 }
                 return voters;
 
