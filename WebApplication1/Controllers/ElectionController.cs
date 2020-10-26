@@ -32,6 +32,7 @@ namespace WebApplication1.Controllers
         public IRepository<Election> _electionRepository { get; }
 
         public IRepository<Voter> _voterRepository { get; }
+        private readonly VoterBusiness _voterBusiness;
         public IRepository<Vote> _voteRepository { get; }
         public IRepository<Candidate> _candidateRepository { get; }
         //this is only used to get the currentUser so that we check whether he voted or not in order to generate the dashboard
@@ -47,8 +48,10 @@ namespace WebApplication1.Controllers
             IRepository<Candidate> candidateRepository,
             IRepository<Election> electionRepository,
             UserManager<IdentityUser> userManager,
-            IStringLocalizer<Messages> messagesLoclizer)
+            IStringLocalizer<Messages> messagesLoclizer,
+            VoterBusiness voterBusiness)
         {
+            _voterBusiness = voterBusiness;
             _voteBusiness = voteBusiness;
             _voteRepository = voteRepository;
             _voterRepository = voterRepository;
@@ -56,8 +59,6 @@ namespace WebApplication1.Controllers
             _electionRepository = electionRepository;
             _userManager = userManager;
             _messagesLoclizer = messagesLoclizer;
-            //_electionVoterRepository = electionVoterRepository;
-            //_electionCandidateRepository = electionCandidateRepository;
         }
 
 
@@ -228,7 +229,7 @@ namespace WebApplication1.Controllers
                     response_Voters_and_NewElection r;
                     r.ElectionId = election.Id;
                     r.Voters = Utilities.convertVoterList_toPersonViewModelList(
-                        _voterRepository.GetAll());
+                        _voterBusiness.GetAll());
 
                     //lets serialize the struct we've got and send it back as a reponse
                     var json = JsonConvert.SerializeObject(r);                
@@ -367,7 +368,7 @@ namespace WebApplication1.Controllers
                     expr = v => !excludedVotersIDs.Contains(v.Id);
                 }
                 //lets get the list of voters filtered and paged
-                PagedResult<Voter> pagedResult = _voterRepository.GetAllFilteredPaged(expr, sortColumnName, sortColumnDirection, skip, pageSize);
+                PagedResult<Voter> pagedResult = _voterBusiness.GetAllFilteredPaged(expr, sortColumnName, sortColumnDirection, skip, pageSize);
                 
                 //lets assign totalRecords the correct value
                 totalRecords = pagedResult.TotalCount;
@@ -416,7 +417,7 @@ namespace WebApplication1.Controllers
                     //so it is not a future election
                     throw new BusinessException(_messagesLoclizer["Properties voterId and electionId can not be null."]);
                 }
-                Voter voter = _voterRepository.GetById(mydata.voterId);
+                Voter voter = _voterBusiness.GetById(mydata.voterId);
                 
                 int updatedRows = _candidateRepository.Add(
                     new Candidate
@@ -478,7 +479,7 @@ namespace WebApplication1.Controllers
                     throw new BusinessException(_messagesLoclizer["Properties voterId and electionId can not be null."]);
                 }
 
-                Voter voter = _voterRepository.GetById(mydata.voterId);
+                Voter voter = _voterBusiness.GetById(mydata.voterId);
                 if (voter == null)
                 {
                     throw new BusinessException(_messagesLoclizer["Voter not found"] + ".");
@@ -551,7 +552,7 @@ namespace WebApplication1.Controllers
                     throw new BusinessException(_messagesLoclizer["Properties voterId and electionId can not be null."]);
                 }
 
-                Voter voter = _voterRepository.GetById(mydata.voterId);
+                Voter voter = _voterBusiness.GetById(mydata.voterId);
                 if (voter == null)
                 {
                     throw new BusinessException(_messagesLoclizer["Corresponding Voter instance not found."]);
@@ -1309,7 +1310,7 @@ namespace WebApplication1.Controllers
                     
                     a.HasUserVoted = userHasVoted;
 
-                    a.ParticipationRate = (double)VoteUtilities.getNumberOfVotersVotedOnElection(_voteRepository, currentElection.Id) / _voterRepository.GetAll().Count;
+                    a.ParticipationRate = (double)VoteUtilities.getNumberOfVotersVotedOnElection(_voteRepository, currentElection.Id) / _voterBusiness.GetAll().Count;
 
                     //lets build the settings so that when serializing the object into json we will respect the datetime format according to the selected culture by user
                     JsonSerializerSettings settings = new JsonSerializerSettings { DateFormatString = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern };
