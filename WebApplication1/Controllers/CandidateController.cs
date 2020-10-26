@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Business;
+using WebApplication1.BusinessService;
 using WebApplication1.Models;
 using WebApplication1.Models.Repositories;
 using WebApplication1.Models.ViewModels;
@@ -21,12 +22,12 @@ namespace WebApplication1.Controllers
     {
         //the below are services we're going to use in this controller, they will be injected in the constructor
         public IRepository<Candidate> _candidateRepository { get; }
-        public IRepository<Voter> _voterRepository { get; }
+        private readonly VoterBusiness _voterBusiness;
         //Lets inject the services using the constructor, this is called Constructor Dependency Injection
-        public CandidateController(IRepository<Candidate> candidateRepository, IRepository<Voter> voterRepository)
+        public CandidateController(IRepository<Candidate> candidateRepository, VoterBusiness voterBusiness)
         {
             _candidateRepository = candidateRepository;
-            _voterRepository = voterRepository;
+            _voterBusiness = voterBusiness;
         }
 
 
