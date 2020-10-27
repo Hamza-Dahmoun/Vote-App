@@ -21,6 +21,7 @@ using Microsoft.Extensions.Localization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using System.Globalization;
+using WebApplication1.BusinessService;
 
 namespace WebApplication1.Controllers
 {
@@ -43,6 +44,7 @@ namespace WebApplication1.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         //Creting  private readonly field of type IMemoryCach
         private readonly IMemoryCache _memoryCache;
+        private readonly ElectionBusiness _electionBusiness;
 
         //Lets inject the services using the constructor, this is called Constructor Dependency Injection
         public HomeController(
@@ -53,13 +55,15 @@ namespace WebApplication1.Controllers
             IRepository<Vote> voteRepository,
             IRepository<Election> electionRepository,
             UserManager<IdentityUser> userManager,
-            IStringLocalizer<Messages> messagesLoclizer)
+            IStringLocalizer<Messages> messagesLoclizer,
+            ElectionBusiness electionBusiness)
         {
             _logger = logger;
             _candidateRepository = candidateRepository;
             _voterRepository = voterRepository;
             _voteRepository = voteRepository;
             _electionRepository = electionRepository;
+            _electionBusiness = electionBusiness;
             _userManager = userManager;
             _memoryCache = memoryCache;
             _messagesLoclizer = messagesLoclizer;
@@ -149,7 +153,7 @@ namespace WebApplication1.Controllers
                 }
 
                 //this method returns a list of candidates (of an election) ordered by their number of votes
-                var election = _electionRepository.GetById(electionId);
+                var election = _electionBusiness.GetById(electionId);
                 if (election == null)
                 {
                     throw new BusinessException(_messagesLoclizer["Election is not found."]);
@@ -284,14 +288,14 @@ namespace WebApplication1.Controllers
         {
             //declaring an expression that is special to Election objects
             System.Linq.Expressions.Expression<Func<Election, bool>> expr = e => e.StartDate > DateTime.Now;
-            var futureElections = _electionRepository.GetAllFiltered(expr).ToList();
+            var futureElections = _electionBusiness.GetAllFiltered(expr).ToList();
             return futureElections;
         }
         private int countFutureElections()
         {
             //declaring an expression that is special to Election objects
             System.Linq.Expressions.Expression<Func<Election, bool>> expr = e => e.StartDate > DateTime.Now;
-            int count = _electionRepository.GetAllFiltered(expr).Count();
+            int count = _electionBusiness.GetAllFiltered(expr).Count();
             return count;
         }
         #endregion
@@ -359,7 +363,7 @@ namespace WebApplication1.Controllers
         {
             //declaring an expression that is special to Election objects
             System.Linq.Expressions.Expression<Func<Election, bool>> expr = e => e.StartDate.AddDays(e.DurationInDays) < DateTime.Now;
-            var previousElections = _electionRepository.GetAllFiltered(expr).ToList();
+            var previousElections = _electionBusiness.GetAllFiltered(expr).ToList();
             return previousElections;
         }
         private int countPreviousElections()
