@@ -55,6 +55,8 @@ namespace WebApplication1
             services.AddTransient<VoterBusiness>();
             //Lets register the  CandidateBusiness so that it could be used whenever needed
             services.AddTransient<CandidateBusiness>();
+            //Lets register the  ElectionBusiness so that it could be used whenever needed
+            services.AddTransient<ElectionBusiness>();
 
 
             //1- in IdentityHostingStartup.cs file:
