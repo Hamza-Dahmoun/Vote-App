@@ -35,6 +35,7 @@ namespace WebApplication1.Controllers
         private readonly VoterBusiness _voterBusiness;
         public IRepository<Vote> _voteRepository { get; }
         public IRepository<Candidate> _candidateRepository { get; }
+        private readonly CandidateBusiness _candidateBusiness;
         //this is only used to get the currentUser so that we check whether he voted or not in order to generate the dashboard
         private readonly UserManager<IdentityUser> _userManager;
         //Lets create a private readonly field IStringLocalizer<Messages> so that we can use Localization service, we'll inject it inside the constructor
@@ -49,13 +50,15 @@ namespace WebApplication1.Controllers
             IRepository<Election> electionRepository,
             UserManager<IdentityUser> userManager,
             IStringLocalizer<Messages> messagesLoclizer,
-            VoterBusiness voterBusiness)
+            VoterBusiness voterBusiness,
+            CandidateBusiness candidateBusiness)
         {
             _voterBusiness = voterBusiness;
             _voteBusiness = voteBusiness;
             _voteRepository = voteRepository;
             _voterRepository = voterRepository;
             _candidateRepository = candidateRepository;
+            _candidateBusiness = candidateBusiness;
             _electionRepository = electionRepository;
             _userManager = userManager;
             _messagesLoclizer = messagesLoclizer;
@@ -200,7 +203,7 @@ namespace WebApplication1.Controllers
                         if (updatedRows > 0)
                         {
                             //row updated successfully in the DB
-                            int updatedRows2 = _candidateRepository.Add(neutralOpinion);
+                            int updatedRows2 = _candidateBusiness.Add(neutralOpinion);
                             if (updatedRows2 < 1)
                             {
                                 //row not updated in the DB
@@ -419,7 +422,7 @@ namespace WebApplication1.Controllers
                 }
                 Voter voter = _voterBusiness.GetById(mydata.voterId);
                 
-                int updatedRows = _candidateRepository.Add(
+                int updatedRows = _candidateBusiness.Add(
                     new Candidate
                     {
                         Id = Guid.NewGuid(),
@@ -494,7 +497,7 @@ namespace WebApplication1.Controllers
                     //Election = _electionRepository.GetById(mydata.electionId)
                 };
                 
-                int updatedRows = _candidateRepository.Add(newCandidate); 
+                int updatedRows = _candidateBusiness.Add(newCandidate); 
                 if (updatedRows > 0)
                 {
                     //row updated successfully in the DB
@@ -570,7 +573,7 @@ namespace WebApplication1.Controllers
                     election);
                 
 
-                int updatedRows = _candidateRepository.Delete(myCandidate.Id);
+                int updatedRows = _candidateBusiness.Delete(myCandidate.Id);
                 if (updatedRows > 0)
                 {
                     //row updated successfully in the DB
@@ -625,14 +628,14 @@ namespace WebApplication1.Controllers
                     throw new BusinessException(_messagesLoclizer["candidateId cannot be null."]);
                 }
                 
-                Candidate myCandidate = _candidateRepository.GetById(Guid.Parse(candidateId)) ;
+                Candidate myCandidate = _candidateBusiness.GetById(Guid.Parse(candidateId)) ;
                 if (myCandidate == null)
                 {
                     throw new BusinessException(_messagesLoclizer["Candidate not found."]);
                 }
 
                 
-                int updatedRows3 = _candidateRepository.Delete(myCandidate.Id); 
+                int updatedRows3 = _candidateBusiness.Delete(myCandidate.Id); 
                 if (updatedRows3 > 0)
                 {
                     //row updated successfully in the DB
@@ -754,7 +757,7 @@ namespace WebApplication1.Controllers
                 //declaring an expression that is special to Election objects
                 System.Linq.Expressions.Expression<Func<Candidate, bool>> expr = e => e.Election.Id == Guid.Parse(electionId) && e.isNeutralOpinion !=true;
 
-                var candidates = _candidateRepository.GetAllFiltered(expr);
+                var candidates = _candidateBusiness.GetAllFiltered(expr);
                 if (candidates == null)
                 {
                     throw new BusinessException(_messagesLoclizer["Candidates List not found."]);
@@ -961,7 +964,7 @@ namespace WebApplication1.Controllers
                                 Election = _electionRepository.GetById(myElection.Id)
                             };
                             
-                            int updatedCandidateRows = _candidateRepository.Add(neutralOpinion);
+                            int updatedCandidateRows = _candidateBusiness.Add(neutralOpinion);
                             if (updatedCandidateRows < 1)
                             {
                                 //row not updated in the DB
@@ -972,8 +975,8 @@ namespace WebApplication1.Controllers
                         {
                             //lets remove a neutral candidate instance from db which is related to this instance of Election
                             System.Linq.Expressions.Expression<Func<Candidate, bool>> expr = e => e.Election.Id == myElection.Id && e.isNeutralOpinion == true;
-                            Candidate myNeutralCandidate = _candidateRepository.GetOneFiltered(expr);                            
-                            int updatedRows4 = _candidateRepository.Delete(myNeutralCandidate.Id);
+                            Candidate myNeutralCandidate = _candidateBusiness.GetOneFiltered(expr);                            
+                            int updatedRows4 = _candidateBusiness.Delete(myNeutralCandidate.Id);
                             if (updatedRows4 < 1)
                             {
                                 //row not updated in the DB
@@ -1081,10 +1084,10 @@ namespace WebApplication1.Controllers
                 //2- Remove all Candidates of this Election
                 //declaring an expression that is special to Election objects
                 System.Linq.Expressions.Expression<Func<Candidate, bool>> expr2 = e => e.Election.Id == id;
-                List<Candidate> candidatesList = _candidateRepository.GetAllFiltered(expr2);
+                List<Candidate> candidatesList = _candidateBusiness.GetAllFiltered(expr2);
                 foreach (var candidate in candidatesList)
                 {                    
-                    int updatedRows6 = _candidateRepository.Delete(candidate.Id);
+                    int updatedRows6 = _candidateBusiness.Delete(candidate.Id);
                     if (updatedRows6 < 1)
                     {
                         //row not updated in the DB
