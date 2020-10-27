@@ -113,17 +113,5 @@ namespace WebApplication1.BusinessService
                 throw E;
             }
         }
-
-        public int Edit(Guid Id, Election election)
-        {
-            try
-            {
-                return _electionRepository.Edit(Id, election);
-            }
-            catch (Exception E)
-            {
-                throw E;
-            }
-        }
     }
 }
