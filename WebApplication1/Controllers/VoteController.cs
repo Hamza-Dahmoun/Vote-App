@@ -34,6 +34,7 @@ namespace WebApplication1.Controllers
         //Lets create a private readonly field IStringLocalizer<Messages> so that we can use Localization service, we'll inject it inside the constructor
         private readonly IStringLocalizer<Messages> _messagesLoclizer;
         private readonly VoteBusiness _voteBusiness;
+        private readonly ElectionBusiness _electionBusiness;
         //Lets inject the services using the constructor, this is called Constructor Dependency Injection
         public VoteController(
             IRepository<Candidate> candidateRepository, 
@@ -42,7 +43,8 @@ namespace WebApplication1.Controllers
             UserManager<IdentityUser> userManager,
             ILogger<VoteController> logger,
             IStringLocalizer<Messages> messagesLoclizer,
-            CandidateBusiness candidateBusiness)
+            CandidateBusiness candidateBusiness,
+            ElectionBusiness electionBusiness)
         {
             _candidateBusiness = candidateBusiness;
             _candidateRepository = candidateRepository;
@@ -51,6 +53,7 @@ namespace WebApplication1.Controllers
             _userManager = userManager;
             _logger = logger;
             _messagesLoclizer = messagesLoclizer;
+            _electionBusiness = electionBusiness;
         }
 
 
@@ -131,7 +134,7 @@ namespace WebApplication1.Controllers
                 //everything is okey, lets return a list of candidates with votes counter ordered so that the winner is the first
                 _logger.LogInformation("Calling CandidateUtilities.GetCandidate_byElection() method");
                 Candidate firstOne = _candidateBusiness.GetById(Guid.Parse(candidateIdList.FirstOrDefault()));
-                Election election = _electionRepository.GetById(firstOne.Election.Id);
+                Election election = _electionBusiness.GetById(firstOne.Election.Id);
                 var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, election);
                 _logger.LogInformation("Calling Utilities.convertCandidateList_toCandidateViewModelList() method");
                 List<CandidateViewModel> candidatesViewModel = Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, candidates);
