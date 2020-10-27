@@ -40,5 +40,17 @@ namespace WebApplication1.BusinessService
             _electionRepository = electionRepository;
         }
 
+
+        public Election GetById(Guid Id)
+        {
+            try
+            {
+                return _electionRepository.GetById(Id);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
     }
 }
