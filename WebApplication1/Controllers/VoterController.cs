@@ -37,7 +37,8 @@ namespace WebApplication1.Controllers
 
         private readonly VoterBusiness _voterBusiness;
         private readonly StateBusiness _stateBusiness;
-        public IRepository<Candidate> _candidateRepository { get; }
+        private readonly CandidateBusiness _candidateBusiness;
+        //public IRepository<Candidate> _candidateRepository { get; }
 
         //Lets create a private readonly field IStringLocalizer<Messages> so that we can use Localization service, we'll inject it inside the constructor
         private readonly IStringLocalizer<Messages> _messagesLoclizer;
@@ -47,7 +48,7 @@ namespace WebApplication1.Controllers
         public VoterController(
             VoteBusiness voteBusiness,
             VoterBusiness voterBusiness,
-            IRepository<Candidate> candidateRepository,
+            CandidateBusiness candidateBusiness,
             UserManager<IdentityUser> userManager,
             ILogger<VoterController> logger,
             IStringLocalizer<Messages> messagesLoclizer,
@@ -55,7 +56,7 @@ namespace WebApplication1.Controllers
         {
             _voteBusiness = voteBusiness;
             _voterBusiness = voterBusiness;
-            _candidateRepository = candidateRepository;
+            _candidateBusiness = candidateBusiness;
             _userManager = userManager;
             _logger = logger;
             _messagesLoclizer = messagesLoclizer;
@@ -312,12 +313,12 @@ namespace WebApplication1.Controllers
                 //System.Linq.Expressions.Expression<Func<Candidate, bool>> expr2 = e => e.VoterBeing == voter;
                 System.Linq.Expressions.Expression<Func<Candidate, bool>> expr2 = e => e.VoterBeingId == voter.Id;
                 _logger.LogInformation("Going to get all Candidates instances of the Voter");
-                List<Candidate> candidatesList = _candidateRepository.GetAllFiltered(expr2);
+                List<Candidate> candidatesList = _candidateBusiness.GetAllFiltered(expr2);
 
                 _logger.LogInformation("Going to delete all Candidates instances of the Voter");
                 foreach (var candidate in candidatesList)
                 {
-                    int updatedRows3 = _candidateRepository.Delete(candidate.Id);
+                    int updatedRows3 = _candidateBusiness.Delete(candidate.Id);
                     if (updatedRows3 < 1)
                     {
                         //row not updated in the DB
