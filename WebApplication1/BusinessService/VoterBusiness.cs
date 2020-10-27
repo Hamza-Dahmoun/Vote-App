@@ -140,6 +140,16 @@ namespace WebApplication1.BusinessService
 
         }
 
-
+        public int CountAll()
+        {
+            try
+            {
+                return _voterRepository.CountAll();
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
     }
 }

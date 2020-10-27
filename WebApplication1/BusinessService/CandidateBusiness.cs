@@ -113,5 +113,17 @@ namespace WebApplication1.BusinessService
                 throw E;
             }
         }
+
+        public int CountAll()
+        {
+            try
+            {
+                return _candidateRepository.CountAll();
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
     }
 }
