@@ -45,6 +45,7 @@ namespace WebApplication1.Controllers
         //Creting  private readonly field of type IMemoryCach
         private readonly IMemoryCache _memoryCache;
         private readonly ElectionBusiness _electionBusiness;
+        private readonly DashboardBusiness _dashboardBusiness;
 
         //Lets inject the services using the constructor, this is called Constructor Dependency Injection
         public HomeController(
@@ -56,7 +57,8 @@ namespace WebApplication1.Controllers
             IRepository<Election> electionRepository,
             UserManager<IdentityUser> userManager,
             IStringLocalizer<Messages> messagesLoclizer,
-            ElectionBusiness electionBusiness)
+            ElectionBusiness electionBusiness,
+            DashboardBusiness dashboardBusiness)
         {
             _logger = logger;
             _candidateRepository = candidateRepository;
@@ -67,6 +69,7 @@ namespace WebApplication1.Controllers
             _userManager = userManager;
             _memoryCache = memoryCache;
             _messagesLoclizer = messagesLoclizer;
+            _dashboardBusiness = dashboardBusiness;
         }
 
 
@@ -81,12 +84,14 @@ namespace WebApplication1.Controllers
                     var currentUser = await _userManager.GetUserAsync(HttpContext.User);
 
 
-                    _logger.LogInformation("Calling DashboardUtilities.getDashboard() method");
+                    //_logger.LogInformation("Calling DashboardUtilities.getDashboard() method");
+                    _logger.LogInformation("Calling DashboardBusiness.GetDashboard() method");
                     //Now lets Get a Cached Dashboard or Create it and Cached it
                     var cachedDashboard = _memoryCache.GetOrCreate(typeof(DashboardViewModel), d =>
                     {
                         d.AbsoluteExpiration = DateTime.Now.AddMinutes(3);
-                        return DashboardUtilities.getDashboard(_candidateRepository, _voterRepository, _voteRepository, _electionRepository, currentUser); ;
+                        //return DashboardUtilities.getDashboard(_candidateRepository, _voterRepository, _voteRepository, _electionRepository, currentUser); ;
+                        return _dashboardBusiness.GetDashboard();
                     });
                     if(cachedDashboard == null)
                     {
