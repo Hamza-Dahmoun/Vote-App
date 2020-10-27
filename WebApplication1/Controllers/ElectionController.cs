@@ -33,6 +33,7 @@ namespace WebApplication1.Controllers
 
         public IRepository<Voter> _voterRepository { get; }
         private readonly VoterBusiness _voterBusiness;
+        private readonly ElectionBusiness _electionBusiness;
         public IRepository<Vote> _voteRepository { get; }
         public IRepository<Candidate> _candidateRepository { get; }
         private readonly CandidateBusiness _candidateBusiness;
@@ -51,7 +52,8 @@ namespace WebApplication1.Controllers
             UserManager<IdentityUser> userManager,
             IStringLocalizer<Messages> messagesLoclizer,
             VoterBusiness voterBusiness,
-            CandidateBusiness candidateBusiness)
+            CandidateBusiness candidateBusiness,
+            ElectionBusiness electionBusiness)
         {
             _voterBusiness = voterBusiness;
             _voteBusiness = voteBusiness;
@@ -60,6 +62,7 @@ namespace WebApplication1.Controllers
             _candidateRepository = candidateRepository;
             _candidateBusiness = candidateBusiness;
             _electionRepository = electionRepository;
+            _electionBusiness = electionBusiness;
             _userManager = userManager;
             _messagesLoclizer = messagesLoclizer;
         }
@@ -71,10 +74,10 @@ namespace WebApplication1.Controllers
         {
             try
             {
-                ViewBag.electionsCount = _electionRepository.CountAll();
+                ViewBag.electionsCount = _electionBusiness.CountAll();
                 //returning a list of Elections but without their neutral candidate
                 
-                return View(_electionRepository.GetAll().OrderByDescending(d => d.StartDate).
+                return View(_electionBusiness.GetAll().OrderByDescending(d => d.StartDate).
                 Select(e => new Election
                 {
                     Id = e.Id,
@@ -102,7 +105,7 @@ namespace WebApplication1.Controllers
                     throw new BusinessException(_messagesLoclizer["Passed parameter 'id' can not be null"]);
                 }
 
-                Election e = _electionRepository.GetById(id);
+                Election e = _electionBusiness.GetById(id);
                 if (e == null)
                 {
                     throw new BusinessException(_messagesLoclizer["Election not found"]);
@@ -199,7 +202,7 @@ namespace WebApplication1.Controllers
                             Election = election
                         };
 
-                        int updatedRows = _electionRepository.Add(election);
+                        int updatedRows = _electionBusiness.Add(election);
                         if (updatedRows > 0)
                         {
                             //row updated successfully in the DB
@@ -219,7 +222,7 @@ namespace WebApplication1.Controllers
                     }
                     else
                     {
-                        int updatedRows = _electionRepository.Add(election);
+                        int updatedRows = _electionBusiness.Add(election);
                         if (updatedRows < 1)
                         {
                             //row not updated in the DB
@@ -348,7 +351,7 @@ namespace WebApplication1.Controllers
 
                 
                 //lets first get the list of voterswho are already candidates of this election
-                Election election = _electionRepository.GetById(electionId);
+                Election election = _electionBusiness.GetById(electionId);
                 List<Voter> alreadyCandidates = CandidateUtilities.GetVoterBeing_ofCandidatesList_byElection(_candidateRepository, election, _voterRepository);
                 List<Guid> excludedVotersIDs = alreadyCandidates.Select(v => v.Id).ToList();
 
@@ -561,7 +564,7 @@ namespace WebApplication1.Controllers
                     throw new BusinessException(_messagesLoclizer["Corresponding Voter instance not found."]);
                 }
 
-                Election election = _electionRepository.GetById(mydata.electionId);
+                Election election = _electionBusiness.GetById(mydata.electionId);
                 if (election == null)
                 {
                     throw new BusinessException(_messagesLoclizer["Election instance not found."]);
@@ -691,7 +694,7 @@ namespace WebApplication1.Controllers
                 {
                     throw new BusinessException(_messagesLoclizer["electionId cannot be null."]);
                 }
-                Election e = _electionRepository.GetById(Guid.Parse(electionId));
+                Election e = _electionBusiness.GetById(Guid.Parse(electionId));
                 if (e == null)
                 {
                     throw new BusinessException(_messagesLoclizer["Election is not found."]);
@@ -746,7 +749,7 @@ namespace WebApplication1.Controllers
                 {
                     throw new BusinessException(_messagesLoclizer["electionId cannot be null."]);
                 }
-                Election e = _electionRepository.GetById(Guid.Parse(electionId));
+                Election e = _electionBusiness.GetById(Guid.Parse(electionId));
                 //lets serialize the list of candidates of the election we've got and send it back as a reponse
                 //note that I didn't retrieve candidates as they are, I selected only needed attributes bcuz when i tried serializing
                 //candidates objects as they are I got this error "self referencing loop detected with type" it means json tried to serialize the candidate object
@@ -804,7 +807,7 @@ namespace WebApplication1.Controllers
                     throw new BusinessException(_messagesLoclizer["electionId cannot be null."]);
                 }
                 
-                Election election = _electionRepository.GetById(Guid.Parse(electionId));
+                Election election = _electionBusiness.GetById(Guid.Parse(electionId));
                 if (election == null)
                 {
                     throw new BusinessException(_messagesLoclizer["Election not found"] + ".");
@@ -863,7 +866,7 @@ namespace WebApplication1.Controllers
                     throw new BusinessException(_messagesLoclizer["Passed parameter 'id' can not be null"]);
                 }
 
-                Election election = _electionRepository.GetById(id);
+                Election election = _electionBusiness.GetById(id);
                 if (election == null)
                 {
                     throw new BusinessException(_messagesLoclizer["State not found"]);
@@ -926,7 +929,7 @@ namespace WebApplication1.Controllers
                         throw new BusinessException(_messagesLoclizer["The duration of the Election should be from one to five days."]);
                     }
                     //this variable is going to be used when checking if user updated hasNeutral opinion
-                    bool oldHasNeutral = _electionRepository.GetById(Guid.Parse(election.Id)).HasNeutral;
+                    bool oldHasNeutral = _electionBusiness.GetById(Guid.Parse(election.Id)).HasNeutral;
 
 
                     Election myElection = new Election
@@ -938,7 +941,7 @@ namespace WebApplication1.Controllers
                         HasNeutral = bool.Parse(election.HasNeutral)
                     };
                     
-                    int updatedRows = _electionRepository.Edit(myElection.Id, myElection);
+                    int updatedRows = _electionBusiness.Edit(myElection.Id, myElection);
                     if (updatedRows <1)
                     {
                         //row not updated in the DB
@@ -961,7 +964,7 @@ namespace WebApplication1.Controllers
                             {
                                 Id = Guid.NewGuid(),
                                 isNeutralOpinion = true,
-                                Election = _electionRepository.GetById(myElection.Id)
+                                Election = _electionBusiness.GetById(myElection.Id)
                             };
                             
                             int updatedCandidateRows = _candidateBusiness.Add(neutralOpinion);
@@ -1029,7 +1032,7 @@ namespace WebApplication1.Controllers
                     throw new BusinessException(_messagesLoclizer["Passed parameter 'id' can not be null"]);
                 }
 
-                var election = _electionRepository.GetById(id);
+                var election = _electionBusiness.GetById(id);
                 if (election == null)
                 {
                     throw new BusinessException(_messagesLoclizer["Election not found"]);
@@ -1097,7 +1100,7 @@ namespace WebApplication1.Controllers
 
 
                 //3- Now remove the Election from the db                
-                int updatedRows = _electionRepository.Delete(id);
+                int updatedRows = _electionBusiness.Delete(id);
                 if (updatedRows > 0)
                 {
                     //row updated successfully in the DB
@@ -1171,7 +1174,7 @@ namespace WebApplication1.Controllers
                 //declaring an expression that is special to Election objects
                 System.Linq.Expressions.Expression<Func<Election, bool>> expr = e => e.StartDate > DateTime.Now;
 
-                var futureElections = _electionRepository.GetAllFiltered(expr).Select(e => new { e.Name, e.StartDate, e.DurationInDays, e.Candidates.Count});
+                var futureElections = _electionBusiness.GetAllFiltered(expr).Select(e => new { e.Name, e.StartDate, e.DurationInDays, e.Candidates.Count});
 
 
 
@@ -1217,7 +1220,7 @@ namespace WebApplication1.Controllers
                 System.Linq.Expressions.Expression<Func<Election, bool>> expr = e => e.StartDate.AddDays(e.DurationInDays) < DateTime.Now;
 
 
-                var futureElections = _electionRepository.GetAllFiltered(expr).
+                var futureElections = _electionBusiness.GetAllFiltered(expr).
                     Select(e => new
                     {
                         e.Id,
@@ -1286,7 +1289,7 @@ namespace WebApplication1.Controllers
 
 
 
-                var currentElection = _electionRepository.GetOneFiltered(expr)
+                var currentElection = _electionBusiness.GetOneFiltered(expr)
                     ;
 
                 
@@ -1427,7 +1430,7 @@ namespace WebApplication1.Controllers
                     expr = e => e.StartDate.AddDays(e.DurationInDays) < DateTime.Now;
                 }
                 //lets get the list of elections paged
-                PagedResult<Election> pagedResult1 = _electionRepository.GetAllFilteredPaged(expr, sortColumnName, sortColumnDirection, skip, pageSize);
+                PagedResult<Election> pagedResult1 = _electionBusiness.GetAllFilteredPaged(expr, sortColumnName, sortColumnDirection, skip, pageSize);
 
                 //Now the pagedResult we've got has two properties: pagedResult.Items and pagedResult.TotalCount
                 //the first one is a list of Elections with their Candidates icnluded. When I try to serialise it to json
@@ -1489,7 +1492,7 @@ namespace WebApplication1.Controllers
                 var stream = new System.IO.MemoryStream();
                 using (ExcelPackage package = new ExcelPackage(stream))
                 {
-                    var elections = _electionRepository.GetAll();
+                    var elections = _electionBusiness.GetAll();
                     ExcelWorksheet worksheet = package.Workbook.Worksheets.Add(_messagesLoclizer["Elections"]);
 
                     worksheet.Cells[1, 1].Value = _messagesLoclizer["Name"];
