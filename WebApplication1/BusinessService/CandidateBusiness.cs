@@ -101,5 +101,17 @@ namespace WebApplication1.BusinessService
                 throw E;
             }
         }
+
+        public Candidate GetOneFiltered(Expression<Func<Candidate, bool>> predicate)
+        {
+            try
+            {
+                return _candidateRepository.GetOneFiltered(predicate);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
     }
 }
