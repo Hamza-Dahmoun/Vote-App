@@ -7,6 +7,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using WebApplication1.Models;
+using WebApplication1.Models.Helpers;
 using WebApplication1.Models.Repositories;
 
 namespace WebApplication1.BusinessService
@@ -64,5 +65,78 @@ namespace WebApplication1.BusinessService
                 throw E;
             }
         }
+
+        public List<Election> GetAll()
+        {
+            try
+            {
+                return (List<Election>)_electionRepository.GetAll();
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
+        public int CountAll()
+        {
+            try
+            {
+                return _electionRepository.CountAll();
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
+        public int Add(Election election)
+        {
+            try
+            {
+                return _electionRepository.Add(election);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
+        public int Delete(Guid Id)
+        {
+            try
+            {
+                return _electionRepository.Delete(Id);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
+        public Election GetOneFiltered(Expression<Func<Election, bool>> predicate)
+        {
+            try
+            {
+                return _electionRepository.GetOneFiltered(predicate);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
+        public PagedResult<Election> GetAllFilteredPaged(Expression<Func<Election, bool>> predicate, string orderBy, string orderDirection, int startRowIndex = 0, int maxRows = 10)
+        {
+            try
+            {
+                return _electionRepository.GetAllFilteredPaged(predicate, orderBy, orderDirection, startRowIndex, maxRows);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
     }
 }
