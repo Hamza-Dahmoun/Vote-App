@@ -162,24 +162,7 @@ namespace WebApplication1.Business
             }            
         }
 
-        public static List<ElectionViewModel> convertElectionList_toElectionViewModelList(IList<Election> elections)
-        {
-            try
-            {
-                List<ElectionViewModel> myList = new List<ElectionViewModel>();
-                foreach (var item in elections)
-                {
-                    myList.Add(convertElection_toElectionViewModel(item));
-                }
-
-                return myList.OrderBy(c => c.StartDate).ToList();
-            }
-            catch(Exception E)
-            {
-                throw E;
-            }            
-        }
-
+        
 
 
 
