@@ -149,5 +149,47 @@ namespace WebApplication1.BusinessService
                 throw E;
             }
         }
+
+        public Election GetCurrentElection()
+        {
+            try
+            {
+                //declaring an expression that is special to Election objects
+                //a current Election is the one that 'Date.Now' is between the startDate and the endDate(endDate = startDate + duration in days)
+                System.Linq.Expressions.Expression<Func<Election, bool>> expr = e => DateTime.Now.Date >= e.StartDate && DateTime.Now.Date.AddDays(-e.DurationInDays) <= e.StartDate;
+
+                Election currentElection = GetAllFiltered(expr).FirstOrDefault();
+                return currentElection;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
+        public int GetElectionsInSamePeriod(DateTime startDate, int durationInDays)
+        {
+            //this method returns elections from db that are happening in the period between 'startDate' and 'durationInDays'
+            //this method is used when adding a new Election, there should be no elections in the same period
+            //and used when editing an Election, there should be only one election in the same period in the db which is the election instance to edit
+
+            try
+            {
+                //to do so we have to check if one of these cases exist:
+                //(https://stackoverflow.com/questions/13513932/algorithm-to-detect-overlapping-periods)
+                //(tired to think of my own solution right now, lets just use this, it works)
+                DateTime endDate = startDate.AddDays(durationInDays);
+                //declaring an expression that is special to Election objects
+                System.Linq.Expressions.Expression<Func<Election, bool>> expr = e => e.StartDate <= endDate && startDate <= e.StartDate.AddDays(e.DurationInDays);
+                var elections = GetAllFiltered(expr).ToList();
+
+                return elections.Count;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
     }
 }
