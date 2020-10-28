@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using WebApplication1.Models;
 using WebApplication1.Models.Helpers;
 using WebApplication1.Models.Repositories;
+using WebApplication1.Models.ViewModels;
 
 namespace WebApplication1.BusinessService
 {
@@ -212,5 +213,45 @@ namespace WebApplication1.BusinessService
                 throw E;
             }
         }
+
+
+        public PersonViewModel ConvertVoter_ToPersonViewModel(Voter voter)
+        {
+            try
+            {
+                PersonViewModel p = new PersonViewModel
+                {
+                    Id = voter.Id,
+                    FirstName = voter.FirstName,
+                    LastName = voter.LastName,
+                    StateName = voter.State?.Name
+                };
+
+                return p;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
+        public List<PersonViewModel> ConvertVoterList_ToPersonViewModelList(IList<Voter> voters)
+        {
+            try
+            {
+                List<PersonViewModel> myList = new List<PersonViewModel>();
+                foreach (var item in voters)
+                {
+                    myList.Add(ConvertVoter_ToPersonViewModel(item));
+                }
+
+                return myList;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
     }
 }
