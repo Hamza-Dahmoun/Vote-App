@@ -178,7 +178,8 @@ namespace WebApplication1.Controllers
                         throw new BusinessException(_messagesLoclizer["A New Election should take place in a future date."]);                            
                     }
 
-                    if (ElectionUtilities.getElectionsInSamePeriod(_electionRepository, election.StartDate, election.DurationInDays)>0)
+                    //if (ElectionUtilities.getElectionsInSamePeriod(_electionRepository, election.StartDate, election.DurationInDays)>0)
+                    if (_electionBusiness.GetElectionsInSamePeriod(election.StartDate, election.DurationInDays) > 0)
                     {
                         //so there is other existing elections which the period overlap with this new election's period
                         throw new BusinessException(_messagesLoclizer["There is an existing Election during the same period."]);
@@ -916,7 +917,8 @@ namespace WebApplication1.Controllers
                         //so there is a business rule not met, lets throw a businessException and catch it
                         throw new BusinessException(_messagesLoclizer["A New Election should take place in a future date."]);
                     }
-                    if (ElectionUtilities.getElectionsInSamePeriod(_electionRepository, DateTime.Parse(election.StartDate), int.Parse(election.DurationInDays)) > 1)
+                    //if (ElectionUtilities.getElectionsInSamePeriod(_electionRepository, DateTime.Parse(election.StartDate), int.Parse(election.DurationInDays)) > 1)
+                    if (_electionBusiness.GetElectionsInSamePeriod(DateTime.Parse(election.StartDate), int.Parse(election.DurationInDays)) > 1)
                     {
                         //so in addtion to the election instance to edit, there are other elections in the db from the same period
                         //so there is a business rule not met, lets throw a businessException and catch it

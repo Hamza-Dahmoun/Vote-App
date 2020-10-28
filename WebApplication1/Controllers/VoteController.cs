@@ -62,9 +62,10 @@ namespace WebApplication1.Controllers
             _logger.LogInformation("VoteController/Index() action is called");
             try
             {
-                _logger.LogInformation("Calling ElectionUtilities.getCurrentElection() method");
+                _logger.LogInformation("Calling ElectionBusiness.GetCurrentElection() method");
                 //this action returns a view containing all candidates of the current election for the user to vote on five of them maximum
-                Election election = ElectionUtilities.getCurrentElection(_electionRepository);
+                //Election election = ElectionUtilities.getCurrentElection(_electionRepository);
+                Election election = _electionBusiness.GetCurrentElection();
                 if (election == null)
                 {
                     _logger.LogError("Current election not found");
