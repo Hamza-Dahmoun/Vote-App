@@ -289,5 +289,22 @@ namespace WebApplication1.BusinessService
             }
         }
 
+        public List<Voter> GetCorrespondingVoters(List<Candidate> candidates)
+        {
+            try
+            {
+                List<Voter> voters = new List<Voter>();
+                foreach (var candidate in candidates)
+                {
+                    voters.Add(GetById(candidate.VoterBeingId));
+                }
+                return voters;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
     }
 }

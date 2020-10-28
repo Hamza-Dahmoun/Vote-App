@@ -828,10 +828,11 @@ namespace WebApplication1.Controllers
 
                 List<VoterCandidateEntityViewModel> entityList = new List<VoterCandidateEntityViewModel>();
                 entityList = Utilities.convertCandidateList_toVoterCandidateEntityViewModelList(_voterRepository, entityList, candidates);
-                
+
 
                 //var otherVoters = VoterUtilities.getOtherVoters(_voterRepository, Utilities.getCorrespondingVoters(candidates, _voterRepository));
-                var otherVoters = _voterBusiness.GetOtherVoters(Utilities.getCorrespondingVoters(candidates, _voterRepository));
+                //var otherVoters = _voterBusiness.GetOtherVoters(Utilities.getCorrespondingVoters(candidates, _voterRepository));
+                var otherVoters = _voterBusiness.GetOtherVoters(_voterBusiness.GetCorrespondingVoters(candidates));
                 entityList = Utilities.convertVoterList_toVoterCandidateEntityViewModelList(entityList, otherVoters);
                 
 
