@@ -151,5 +151,66 @@ namespace WebApplication1.BusinessService
                 throw E;
             }
         }
+
+        public Voter GetOneFiltered(Expression<Func<Voter, bool>> predicate)
+        {
+            try
+            {
+                return _voterRepository.GetOneFiltered(predicate);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
+        public Voter GetVoterByUserId(Guid userId)
+        {
+            try
+            {
+                //declaring an expression that is special to Voter objects
+                System.Linq.Expressions.Expression<Func<Voter, bool>> expr = v => v.UserId == userId;
+
+                return GetOneFiltered(expr);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
+        public List<Voter> GetOtherVoters(List<Voter> voters)
+        {
+            try
+            {
+                //this method takes a list of Voters and return a list of voters different than those mentioned previously
+
+                return GetAll().Except(voters).ToList();
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
+        public string GetStateNameByVoterId(Guid voterId)
+        {
+            try
+            {
+                //this method returns the state name of a voter, I found myself obliged to write this bcuz I am using eager loading
+                //and when I wanted to access a candidate's state name thru candidate.voterbeing.state.name it was always null
+
+                Voter v = GetById(voterId);
+                if (v.State != null)
+                {
+                    return v.State.Name;
+                }
+                return "";
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
     }
 }
