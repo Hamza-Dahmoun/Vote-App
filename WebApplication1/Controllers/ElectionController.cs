@@ -34,7 +34,7 @@ namespace WebApplication1.Controllers
         public IRepository<Voter> _voterRepository { get; }
         private readonly VoterBusiness _voterBusiness;
         private readonly ElectionBusiness _electionBusiness;
-        public IRepository<Vote> _voteRepository { get; }
+
         public IRepository<Candidate> _candidateRepository { get; }
         private readonly CandidateBusiness _candidateBusiness;
         //this is only used to get the currentUser so that we check whether he voted or not in order to generate the dashboard
@@ -57,7 +57,6 @@ namespace WebApplication1.Controllers
         {
             _voterBusiness = voterBusiness;
             _voteBusiness = voteBusiness;
-            _voteRepository = voteRepository;
             _voterRepository = voterRepository;
             _candidateRepository = candidateRepository;
             _candidateBusiness = candidateBusiness;
@@ -1311,12 +1310,14 @@ namespace WebApplication1.Controllers
                     }
                     else
                     {
-                        userHasVoted = VoteUtilities.hasVoted(_voteRepository, currentElection.Id, VoterUtilities.getVoterByUserId(Guid.Parse(currentUser.Id), _voterRepository).Id);
+                        //userHasVoted = VoteUtilities.hasVoted(_voteRepository, currentElection.Id, VoterUtilities.getVoterByUserId(Guid.Parse(currentUser.Id), _voterRepository).Id);
+                        userHasVoted = _voteBusiness.HasVoted(currentElection.Id, VoterUtilities.getVoterByUserId(Guid.Parse(currentUser.Id), _voterRepository).Id);
                     }
                     
                     a.HasUserVoted = userHasVoted;
 
-                    a.ParticipationRate = (double)VoteUtilities.getNumberOfVotersVotedOnElection(_voteRepository, currentElection.Id) / _voterBusiness.GetAll().Count;
+                    //a.ParticipationRate = (double)VoteUtilities.getNumberOfVotersVotedOnElection(_voteRepository, currentElection.Id) / _voterBusiness.GetAll().Count;
+                    a.ParticipationRate = (double)_voteBusiness.GetNumberOfVotersVotedOnElection(currentElection.Id) / _voterBusiness.GetAll().Count;
 
                     //lets build the settings so that when serializing the object into json we will respect the datetime format according to the selected culture by user
                     JsonSerializerSettings settings = new JsonSerializerSettings { DateFormatString = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern };
