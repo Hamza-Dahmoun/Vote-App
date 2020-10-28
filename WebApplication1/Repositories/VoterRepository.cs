@@ -56,7 +56,8 @@ namespace WebApplication1.Models.Repositories
                 var myVoter = GetById(Id);
                 myVoter.FirstName = item.FirstName;
                 myVoter.LastName = item.LastName;
-                myVoter.State = item.State;
+                //myVoter.State = item.State;
+                myVoter.StateId = item.StateId;
                 return _dbContext.SaveChanges();
             }
             catch (Exception E)
@@ -194,7 +195,7 @@ namespace WebApplication1.Models.Repositories
             try
             {
                 //use eager loading to bring State data 
-                return _dbSet.Include(v => v.State).AsNoTracking().SingleOrDefault(v => v.Id == Id);
+                return _dbSet.Include(v => v.State)/*.AsNoTracking()*/.SingleOrDefault(v => v.Id == Id);
             }
             catch (Exception E)
             {
