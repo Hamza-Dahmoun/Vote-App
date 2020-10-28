@@ -352,7 +352,8 @@ namespace WebApplication1.Controllers
                 
                 //lets first get the list of voterswho are already candidates of this election
                 Election election = _electionBusiness.GetById(electionId);
-                List<Voter> alreadyCandidates = CandidateUtilities.GetVoterBeing_ofCandidatesList_byElection(_candidateRepository, election, _voterRepository);
+                //List<Voter> alreadyCandidates = CandidateUtilities.GetVoterBeing_ofCandidatesList_byElection(_candidateRepository, election, _voterRepository);
+                List<Voter> alreadyCandidates = _candidateBusiness.GetVoterBeing_ofCandidatesList_byElection(election);
                 List<Guid> excludedVotersIDs = alreadyCandidates.Select(v => v.Id).ToList();
 
                 System.Linq.Expressions.Expression<Func<Voter, bool>> expr;
@@ -570,11 +571,8 @@ namespace WebApplication1.Controllers
                     throw new BusinessException(_messagesLoclizer["Election instance not found."]);
                 }
 
-                Candidate myCandidate = CandidateUtilities.GetCandidate_byVoter_byElection(
-                    _candidateRepository, 
-                    voter, 
-                    election);
-                
+                //Candidate myCandidate = CandidateUtilities.GetCandidate_byVoter_byElection(_candidateRepository, voter, election);
+                Candidate myCandidate = _candidateBusiness.GetCandidate_byVoter_byElection(voter, election);
 
                 int updatedRows = _candidateBusiness.Delete(myCandidate.Id);
                 if (updatedRows > 0)
@@ -707,7 +705,8 @@ namespace WebApplication1.Controllers
                 //from the selection to avoid the infinite loop
                 //var candidates = e.Candidates/*.Select(p => new { p.FirstName, p.LastName, p.State})*/.ToList();
                 
-                var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, e);
+                //var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, e);
+                var candidates = _candidateBusiness.GetCandidate_byElection(e);
                 if (candidates == null)
                 {
                     throw new BusinessException(_messagesLoclizer["Candidates List not found."]);
@@ -820,7 +819,8 @@ namespace WebApplication1.Controllers
                 //from the selection to avoid the infinite loop
 
 
-                var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, election);
+                //var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, election);
+                var candidates = _candidateBusiness.GetCandidate_byElection(election);
                 if (candidates == null)
                 {
                     throw new BusinessException(_messagesLoclizer["Candidates List not found."]);
