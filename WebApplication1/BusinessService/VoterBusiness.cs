@@ -253,5 +253,41 @@ namespace WebApplication1.BusinessService
             }
         }
 
+        private VoterCandidateEntityViewModel ConvertVoter_ToVoterCandidateEntityViewModel(Voter v)
+        {
+            try
+            {
+                VoterCandidateEntityViewModel vc = new VoterCandidateEntityViewModel();
+                vc.VoterId = v.Id.ToString();
+                vc.FirstName = v.FirstName;
+                vc.LastName = v.LastName;
+                vc.StateName = v.State?.Name;
+                return vc;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+                
+        public List<VoterCandidateEntityViewModel> ConvertVoterList_ToVoterCandidateEntityViewModelList(
+            List<VoterCandidateEntityViewModel> myList,
+            List<Voter> voterList)
+        {//this is used and called when editing an election
+            try
+            {
+                foreach (var item in voterList)
+                {
+                    myList.Add(ConvertVoter_ToVoterCandidateEntityViewModel(item));
+                }
+
+                return myList;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
     }
 }
