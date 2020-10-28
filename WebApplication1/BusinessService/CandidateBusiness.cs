@@ -138,7 +138,43 @@ namespace WebApplication1.BusinessService
                 //with 'election' parameter and voterBeing with voter parameter
                 //System.Linq.Expressions.Expression<Func<Candidate, bool>> expr = i => i.Election == election && i.VoterBeing == voter;
                 System.Linq.Expressions.Expression<Func<Candidate, bool>> expr = i => i.Election == election && i.VoterBeingId == voter.Id;
-                return _candidateRepository.GetOneFiltered(expr);
+                return GetOneFiltered(expr);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
+        public List<Candidate> GetCandidate_byElection(Election election)
+        {
+            try
+            {
+                //declaring an expression that is special to Candidate objects and it compares the election instance of the candidates 
+                //with 'election' parameter
+                System.Linq.Expressions.Expression<Func<Candidate, bool>> expr = i => i.Election == election;
+                return GetAllFiltered(expr);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
+        public List<Voter> GetVoterBeing_ofCandidatesList_byElection(Election election)
+        {
+            //this methods returns a list of voters who are considered as candidates for this election except the neutral opinion
+            try
+            {
+                var candidates = GetCandidate_byElection(election);
+                List<Voter> voters = new List<Voter>();
+                foreach (var item in candidates)
+                {
+                    if (!item.isNeutralOpinion)
+                        voters.Add(_voterRepository.GetById(item.VoterBeingId));
+                }
+                return voters;
+
             }
             catch (Exception E)
             {
