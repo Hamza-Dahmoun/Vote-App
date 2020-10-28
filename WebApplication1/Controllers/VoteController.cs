@@ -71,8 +71,9 @@ namespace WebApplication1.Controllers
                     throw new BusinessException(_messagesLoclizer["Current election not found"]);
                 }
 
-                _logger.LogInformation("Calling CandidateUtilities.GetCandidate_byElection() method");
-                var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, election);
+                _logger.LogInformation("Calling CandidateBusiness.GetCandidate_byElection() method");
+                //var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, election);
+                var candidates = _candidateBusiness.GetCandidate_byElection(election);
                 if (candidates == null || candidates.Count == 0)
                 {
                     _logger.LogError("No candidates found for this election");
@@ -132,10 +133,11 @@ namespace WebApplication1.Controllers
 
                 
                 //everything is okey, lets return a list of candidates with votes counter ordered so that the winner is the first
-                _logger.LogInformation("Calling CandidateUtilities.GetCandidate_byElection() method");
+                _logger.LogInformation("Calling CandidateBusiness.GetCandidate_byElection() method");
                 Candidate firstOne = _candidateBusiness.GetById(Guid.Parse(candidateIdList.FirstOrDefault()));
                 Election election = _electionBusiness.GetById(firstOne.Election.Id);
-                var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, election);
+                //var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, election);
+                var candidates = _candidateBusiness.GetCandidate_byElection(election);
                 _logger.LogInformation("Calling Utilities.convertCandidateList_toCandidateViewModelList() method");
                 List<CandidateViewModel> candidatesViewModel = Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, candidates);
                 //lets serialize the list of candidatesviewmodel as json object
