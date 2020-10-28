@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using WebApplication1.Models;
 using WebApplication1.Models.Helpers;
 using WebApplication1.Models.Repositories;
+using WebApplication1.Models.ViewModels;
 
 namespace WebApplication1.BusinessService
 {
@@ -191,5 +192,28 @@ namespace WebApplication1.BusinessService
             }
         }
 
+
+        public ElectionViewModel ConvertElection_ToElectionViewModel(Election election)
+        {
+            try
+            {
+                ElectionViewModel e = new ElectionViewModel
+                {
+                    Id = election.Id,
+                    Name = election.Name,
+                    StartDate = election.StartDate,
+                    DurationInDays = election.DurationInDays,
+                    HasNeutral = election.HasNeutral,
+                    NumberOfCandidates = election.Candidates.Where(c => c.isNeutralOpinion != true).Count(),
+                    NumberOfVotes = election.Votes.Count()
+                };
+
+                return e;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
     }
 }
