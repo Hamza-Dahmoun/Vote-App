@@ -101,8 +101,9 @@ namespace WebApplication1.Controllers
                     throw new BusinessException(_messagesLoclizer["Voter not found"]);
                 }
 
-                _logger.LogInformation("Calling Utilities.convertVoter_toPersonViewModel() method");
-                PersonViewModel p = Utilities.convertVoter_toPersonViewModel(v);
+                _logger.LogInformation("Calling _voterBusiness.ConvertVoter_ToPersonViewModel() method");
+                //PersonViewModel p = Utilities.convertVoter_toPersonViewModel(v);
+                PersonViewModel p = _voterBusiness.ConvertVoter_ToPersonViewModel(v);
                 _logger.LogInformation("Returning a PersonViewModel to the Details view");
                 return View(p);
             }
@@ -250,8 +251,9 @@ namespace WebApplication1.Controllers
                     throw new BusinessException(_messagesLoclizer["Voter not found"]);
                 }
 
-                _logger.LogInformation("Calling Utilities.convertVoter_toPersonViewModel() method");
-                PersonViewModel p = Utilities.convertVoter_toPersonViewModel(voter);
+                _logger.LogInformation("Calling _voterBusiness.ConvertVoter_ToPersonViewModel() method");
+                //PersonViewModel p = Utilities.convertVoter_toPersonViewModel(voter);
+                PersonViewModel p = _voterBusiness.ConvertVoter_ToPersonViewModel(voter);
                 _logger.LogInformation("Returning PersonViewModel to the view");
                 return View(p);
             }
@@ -617,7 +619,8 @@ namespace WebApplication1.Controllers
                         draw = draw,
                         recordsFiltered = totalRecords,
                         recordsTotal = totalRecords,
-                        data = Utilities.convertVoterList_toPersonViewModelList(pagedResult.Items)
+                        //data = Utilities.convertVoterList_toPersonViewModelList(pagedResult.Items)
+                        data = _voterBusiness.ConvertVoterList_ToPersonViewModelList(pagedResult.Items)
                     }, settings);
                     _logger.LogInformation("Return the response as JSON");
                     return Ok(json);
@@ -642,7 +645,8 @@ namespace WebApplication1.Controllers
                         draw = draw,
                         recordsFiltered = totalRecords,
                         recordsTotal = totalRecords,
-                        data = Utilities.convertVoterList_toPersonViewModelList(pagedResult.Items)
+                        //data = Utilities.convertVoterList_toPersonViewModelList(pagedResult.Items)
+                        data = _voterBusiness.ConvertVoterList_ToPersonViewModelList(pagedResult.Items)
                     }, settings);                    
                     _logger.LogInformation("Return the response as JSON");
                     return Ok(json);

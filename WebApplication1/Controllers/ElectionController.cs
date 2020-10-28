@@ -110,7 +110,8 @@ namespace WebApplication1.Controllers
                     throw new BusinessException(_messagesLoclizer["Election not found"]);
                 }
 
-                return View(Utilities.convertElection_toElectionViewModel(e));
+                //return View(Utilities.convertElection_toElectionViewModel(e));
+                return View(_electionBusiness.ConvertElection_ToElectionViewModel(e));
             }
             catch (BusinessException be)
             {
@@ -234,8 +235,8 @@ namespace WebApplication1.Controllers
 
                     response_Voters_and_NewElection r;
                     r.ElectionId = election.Id;
-                    r.Voters = Utilities.convertVoterList_toPersonViewModelList(
-                        _voterBusiness.GetAll());
+                    //r.Voters = Utilities.convertVoterList_toPersonViewModelList(_voterBusiness.GetAll());
+                    r.Voters = _voterBusiness.ConvertVoterList_ToPersonViewModelList(_voterBusiness.GetAll());
 
                     //lets serialize the struct we've got and send it back as a reponse
                     var json = JsonConvert.SerializeObject(r);                
@@ -386,7 +387,8 @@ namespace WebApplication1.Controllers
                         draw = draw,
                         recordsFiltered = totalRecords,
                         recordsTotal = totalRecords,
-                        data = Utilities.convertVoterList_toPersonViewModelList(pagedResult.Items)
+                        //data = Utilities.convertVoterList_toPersonViewModelList(pagedResult.Items)
+                        data = _voterBusiness.ConvertVoterList_ToPersonViewModelList(pagedResult.Items)
                     }) ;
                     return Ok(json);
 
@@ -712,7 +714,8 @@ namespace WebApplication1.Controllers
                     throw new BusinessException(_messagesLoclizer["Candidates List not found."]);
                 }
 
-                var json = JsonConvert.SerializeObject(Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, candidates));
+                //var json = JsonConvert.SerializeObject(Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, candidates));
+                var json = JsonConvert.SerializeObject(_candidateBusiness.ConvertCandidateList_ToCandidateViewModelList(candidates));
                 return Ok(json);
                 
             }
@@ -766,7 +769,8 @@ namespace WebApplication1.Controllers
                 }
 
 
-                var json = JsonConvert.SerializeObject(Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, candidates));
+                //var json = JsonConvert.SerializeObject(Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, candidates));
+                var json = JsonConvert.SerializeObject(_candidateBusiness.ConvertCandidateList_ToCandidateViewModelList(candidates));
                 return Ok(json);
 
             }
@@ -827,14 +831,16 @@ namespace WebApplication1.Controllers
                 }
 
                 List<VoterCandidateEntityViewModel> entityList = new List<VoterCandidateEntityViewModel>();
-                entityList = Utilities.convertCandidateList_toVoterCandidateEntityViewModelList(_voterRepository, entityList, candidates);
+                //entityList = Utilities.convertCandidateList_toVoterCandidateEntityViewModelList(_voterRepository, entityList, candidates);
+                entityList = _candidateBusiness.ConvertCandidateList_ToVoterCandidateEntityViewModelList(entityList, candidates);
 
 
                 //var otherVoters = VoterUtilities.getOtherVoters(_voterRepository, Utilities.getCorrespondingVoters(candidates, _voterRepository));
                 //var otherVoters = _voterBusiness.GetOtherVoters(Utilities.getCorrespondingVoters(candidates, _voterRepository));
                 var otherVoters = _voterBusiness.GetOtherVoters(_voterBusiness.GetCorrespondingVoters(candidates));
-                entityList = Utilities.convertVoterList_toVoterCandidateEntityViewModelList(entityList, otherVoters);
-                
+                //entityList = Utilities.convertVoterList_toVoterCandidateEntityViewModelList(entityList, otherVoters);
+                entityList = _voterBusiness.ConvertVoterList_ToVoterCandidateEntityViewModelList(entityList, otherVoters);
+
 
                 var json = JsonConvert.SerializeObject(entityList);
                 return Ok(json);
@@ -1041,7 +1047,8 @@ namespace WebApplication1.Controllers
                     throw new BusinessException(_messagesLoclizer["Election not found"]);
                 }
 
-                return View(Utilities.convertElection_toElectionViewModel(election));
+                //return View(Utilities.convertElection_toElectionViewModel(election));
+                return View(_electionBusiness.ConvertElection_ToElectionViewModel(election));
             }
             catch (BusinessException be)
             {

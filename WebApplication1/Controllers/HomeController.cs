@@ -167,8 +167,9 @@ namespace WebApplication1.Controllers
                 _logger.LogInformation("Calling method CandidateBusiness.GetCandidate_byElection()");
                 //var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, election);
                 var candidates = _candidateBusiness.GetCandidate_byElection(election);
-                _logger.LogInformation("Calling Utilities.convertCandidateList_toCandidateViewModelList() method");
-                List<CandidateViewModel> candidatesViewModel = Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, candidates);
+                _logger.LogInformation("Calling _candidateBusiness.ConvertCandidateList_ToCandidateViewModelList() method");
+                //List<CandidateViewModel> candidatesViewModel = Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, candidates);
+                List<CandidateViewModel> candidatesViewModel = _candidateBusiness.ConvertCandidateList_ToCandidateViewModelList(candidates);
 
                 //lets serialize the list of candidatesviewmodel as json object
                 JsonSerializerSettings settings = new JsonSerializerSettings { DateFormatString = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern };

@@ -61,8 +61,9 @@ namespace WebApplication1.Controllers
                 List<State> states = _stateBusiness.GetAll();
                 ViewBag.statesCount = states.Count;
 
-                _logger.LogInformation("Calling Utilities.convertStateList_toStateViewModelList() method");
-                List<StateViewModel> svmList = Utilities.convertStateList_toStateViewModelList(states);
+                _logger.LogInformation("Calling _stateBusiness.ConvertStateList_ToStateViewModelList() method");
+                //List<StateViewModel> svmList = Utilities.convertStateList_toStateViewModelList(states);
+                List<StateViewModel> svmList = _stateBusiness.ConvertStateList_ToStateViewModelList(states);
                 _logger.LogInformation("Returning a list of StateViewModels to the Index view");
                 return View(svmList);
             }
@@ -93,9 +94,10 @@ namespace WebApplication1.Controllers
                     throw new BusinessException(_messagesLoclizer["State not found"]);
                 }
 
-                _logger.LogInformation("Calling Utilities.convertState_toStateViewModel() method");
-                StateViewModel svm = Utilities.convertState_toStateViewModel(s);
-                
+                _logger.LogInformation("Calling _stateBusiness.ConvertState_ToStateViewModel() method");
+                //StateViewModel svm = Utilities.convertState_toStateViewModel(s);
+                StateViewModel svm = _stateBusiness.ConvertState_ToStateViewModel(s);
+
                 _logger.LogInformation("Returning a StateViewModel to the Details view");
                 return View(svm);
             }
