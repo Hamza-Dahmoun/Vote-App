@@ -144,5 +144,41 @@ namespace WebApplication1.BusinessService
                 throw E;
             }
         }
+
+
+        public int GetNumberOfVotersVotedOnElection(Guid ElectionId)
+        {//this method returns the number of voters who voted in a given election
+            try
+            {
+                //declaring an expression that is special to Vote objects
+                System.Linq.Expressions.Expression<Func<Vote, bool>> expr = v => v.Election.Id == ElectionId;
+
+                //I used GroupBy() so that I get the rows by voter to count how many voters, not how many vote ... It worked like Distinct()
+                int votesNumber = GetAllFiltered(expr).GroupBy(v => v.Voter).Count();
+                return votesNumber;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
+        public bool HasVoted(Guid ElectionId, Guid VoterId)
+        {
+            try
+            {
+                //declaring an expression that is special to Vote objects
+                System.Linq.Expressions.Expression<Func<Vote, bool>> expr = v => v.Election.Id == ElectionId && v.Voter.Id == VoterId;
+
+                var votes = GetAllFiltered(expr);
+                if (votes.Count() > 0)
+                    return true;
+                else return false;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
     }
 }
