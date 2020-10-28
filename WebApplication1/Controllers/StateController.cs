@@ -57,7 +57,7 @@ namespace WebApplication1.Controllers
             _logger.LogInformation("State/Index() action is called");
             try
             {
-                _logger.LogInformation("Calling StateRepository.GetAll() method");
+                _logger.LogInformation("Calling _stateBusiness.GetAll() method");
                 List<State> states = _stateBusiness.GetAll();
                 ViewBag.statesCount = states.Count;
 
@@ -85,7 +85,7 @@ namespace WebApplication1.Controllers
                     throw new BusinessException(_messagesLoclizer["Passed parameter 'id' can not be null"]);
                 }
 
-                _logger.LogInformation("Calling StateRepository.GetById() method");
+                _logger.LogInformation("Calling _stateBusiness.GetById() method");
                 State s = _stateBusiness.GetById(id);
 
                 if (s == null)
@@ -136,7 +136,7 @@ namespace WebApplication1.Controllers
                 {
                     _logger.LogInformation("Model is valid");
                     state.Id = Guid.NewGuid();
-                    _logger.LogInformation("Calling StateRepository.Add() to add state instance to the DB");
+                    _logger.LogInformation("Calling _stateBusiness.Add() to add state instance to the DB");
                     int updatedRows = _stateBusiness.Add(state);
                     
                     if (updatedRows > 0)
@@ -197,7 +197,7 @@ namespace WebApplication1.Controllers
                     throw new BusinessException(_messagesLoclizer["Passed parameter 'id' can not be null"]);
                 }
                 
-                _logger.LogInformation("Calling StateRepository.GetById() method");
+                _logger.LogInformation("Calling _stateBusiness.GetById() method");
                 var state = _stateBusiness.GetById(id);
                 if(state == null)
                 {
@@ -258,10 +258,7 @@ namespace WebApplication1.Controllers
 
 
 
-
-
-                _logger.LogInformation("Calling StateRepository.Delete() method");
-                
+                _logger.LogInformation("Calling _stateBusiness.Delete() method");               
                 
                 int updatedRows2 = _stateBusiness.Delete(id);
                 if (updatedRows2 > 0)
@@ -275,8 +272,6 @@ namespace WebApplication1.Controllers
                     //row not updated in the DB
                     throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
                 }
-
-
             }
             catch (DataNotUpdatedException bnu)
             {
@@ -319,7 +314,7 @@ namespace WebApplication1.Controllers
                     throw new BusinessException(_messagesLoclizer["Passed parameter 'id' can not be null"]);
                 }
 
-                _logger.LogInformation("Calling StateRepository.GetById() method");
+                _logger.LogInformation("Calling _stateBusiness.GetById() method");
                 var state = _stateBusiness.GetById(id);
                 if (state == null)
                 {
@@ -353,7 +348,7 @@ namespace WebApplication1.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    _logger.LogInformation("Calling StateRepository.Edit() method");
+                    _logger.LogInformation("Calling _stateBusiness.Edit() method");
                     
                     int updatedRows = _stateBusiness.Edit(id, state);
                     if (updatedRows > 0)
