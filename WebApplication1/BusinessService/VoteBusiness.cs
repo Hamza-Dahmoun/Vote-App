@@ -27,6 +27,7 @@ namespace WebApplication1.BusinessService
         private readonly IRepository<Candidate> _candidateRepository;
         private readonly IRepository<Voter> _voterRepository;
         private readonly IRepository<Election> _electionRepository;
+        private readonly VoterBusiness _voterBusiness;
 
         public VoteBusiness(IRepository<Vote> voteRepository,
             UserManager<IdentityUser> userManager,
@@ -34,7 +35,8 @@ namespace WebApplication1.BusinessService
             IStringLocalizer<Messages> messagesLoclizer,
             IRepository<Candidate> candidateRepository,
             IRepository<Voter> voterRepository,
-            IRepository<Election> electionRepository)
+            IRepository<Election> electionRepository,
+            VoterBusiness voterBusiness)
         {
             _voteRepository = voteRepository;
             _userManager = userManager;
@@ -43,6 +45,7 @@ namespace WebApplication1.BusinessService
             _candidateRepository = candidateRepository;
             _voterRepository = voterRepository;
             _electionRepository = electionRepository;
+            _voterBusiness = voterBusiness;
         }
 
 
@@ -64,7 +67,7 @@ namespace WebApplication1.BusinessService
                 //lets get the voter instance of the current user, so that we use its id with his votes
                 var currentUser = await _userManager.GetUserAsync(_contextAccessor.HttpContext.User);
                 //_logger.LogInformation("Calling VoterUtilities.getVoterByUserId() method");
-                Voter currentVoter = VoterUtilities.getVoterByUserId(Guid.Parse(currentUser.Id), _voterRepository);
+                Voter currentVoter = _voterBusiness.GetVoterByUserId(Guid.Parse(currentUser.Id));
                 if (currentVoter == null)
                 {
                     //_logger.LogError("Voter instance was not found for current user");
