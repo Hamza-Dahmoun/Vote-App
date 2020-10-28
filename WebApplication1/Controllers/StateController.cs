@@ -237,8 +237,9 @@ namespace WebApplication1.Controllers
                     throw new BusinessException(_messagesLoclizer["Passed parameter 'id' can not be null"]);
                 }
 
+                _voterBusiness.MakeVotersStatesNull(id);
                 //declaring an expression that is special to Election objects
-                System.Linq.Expressions.Expression<Func<Voter, bool>> expr = v => v.State.Id == id;
+                /*System.Linq.Expressions.Expression<Func<Voter, bool>> expr = v => v.State.Id == id;
                 _logger.LogInformation("Calling VotereRepository.GetAllFiltered() method");
                 var voters = _voterBusiness.GetAllFiltered(expr);
                 //now lets update each voter by removing its relation to the state
@@ -253,10 +254,11 @@ namespace WebApplication1.Controllers
                         //row not updated in the DB
                         throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
                     }
-                }
+                }*/
 
 
-                
+
+
 
                 _logger.LogInformation("Calling StateRepository.Delete() method");
                 

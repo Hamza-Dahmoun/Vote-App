@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using WebApplication1.Business;
 using WebApplication1.Models;
 using WebApplication1.Models.Helpers;
 using WebApplication1.Models.Repositories;
@@ -306,5 +307,35 @@ namespace WebApplication1.BusinessService
             }
         }
 
+        public void MakeVotersStatesNull(Guid stateId)
+        {
+            //this method get a list of Voters by their stateId and make their StateId 'null'
+            try
+            {
+                //declaring an expression that is special to Election objects
+                Expression<Func<Voter, bool>> expr = v => v.State.Id == stateId;
+                var voters = GetAllFiltered(expr);
+                //now lets update each voter by removing its relation to the state
+                foreach (var voter in voters)
+                {
+                    voter.State = null;
+
+                    int isRowUpdated = Edit(voter.Id, voter);
+                    if (isRowUpdated < 1)
+                    {
+                        //row not updated in the DB
+                        throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
+                    }
+                }
+            }
+            catch (DataNotUpdatedException bnu)
+            {
+                throw bnu;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
     }
 }
