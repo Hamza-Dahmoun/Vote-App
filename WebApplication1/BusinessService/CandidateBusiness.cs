@@ -230,6 +230,42 @@ namespace WebApplication1.BusinessService
             return myList.OrderByDescending(c => c.VotesCount).ToList();
         }
 
+        private VoterCandidateEntityViewModel ConvertCandidate_ToVoterCandidateEntityViewModel(Candidate c)
+        {
+            try
+            {
+                Voter v = _voterBusiness.GetById(c.VoterBeingId);
+                VoterCandidateEntityViewModel vc = new VoterCandidateEntityViewModel();
+                vc.VoterId = v.Id.ToString();
+                vc.FirstName = v.FirstName;
+                vc.LastName = v.LastName;
+                vc.StateName = _voterBusiness.GetStateNameByVoterId(v.Id);
+                vc.CandidateId = c.Id.ToString();
+                return vc;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
 
+        public List<VoterCandidateEntityViewModel> ConvertCandidateList_ToVoterCandidateEntityViewModelList(
+            List<VoterCandidateEntityViewModel> myList,
+            List<Candidate> candidateList)
+        {//the parameter voterRepository is passed to be used in a Method Dependancy Injection in VoterUtilities.getStateName() method
+            try
+            {
+                foreach (var item in candidateList)
+                {
+                    myList.Add(ConvertCandidate_ToVoterCandidateEntityViewModel(item));
+                }
+
+                return myList;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
     }
 }
