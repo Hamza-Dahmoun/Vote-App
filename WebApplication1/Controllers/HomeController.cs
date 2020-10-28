@@ -36,7 +36,6 @@ namespace WebApplication1.Controllers
         private readonly IStringLocalizer<Messages> _messagesLoclizer;
 
         //the below are services we're going to use in this controller, they will be injected in the constructor
-        public IRepository<Candidate> _candidateRepository { get; }
         public IRepository<Voter> _voterRepository { get; }
         public IRepository<Vote> _voteRepository { get; }
         public IRepository<Election> _electionRepository { get; }
@@ -46,22 +45,22 @@ namespace WebApplication1.Controllers
         private readonly IMemoryCache _memoryCache;
         private readonly ElectionBusiness _electionBusiness;
         private readonly DashboardBusiness _dashboardBusiness;
+        private readonly CandidateBusiness _candidateBusiness;
 
         //Lets inject the services using the constructor, this is called Constructor Dependency Injection
         public HomeController(
             IMemoryCache memoryCache,
             ILogger<HomeController> logger,
-            IRepository<Candidate> candidateRepository,
             IRepository<Voter> voterRepository,
             IRepository<Vote> voteRepository,
             IRepository<Election> electionRepository,
             UserManager<IdentityUser> userManager,
             IStringLocalizer<Messages> messagesLoclizer,
             ElectionBusiness electionBusiness,
-            DashboardBusiness dashboardBusiness)
+            DashboardBusiness dashboardBusiness,
+            CandidateBusiness candidateBusiness)
         {
             _logger = logger;
-            _candidateRepository = candidateRepository;
             _voterRepository = voterRepository;
             _voteRepository = voteRepository;
             _electionRepository = electionRepository;
@@ -70,6 +69,7 @@ namespace WebApplication1.Controllers
             _memoryCache = memoryCache;
             _messagesLoclizer = messagesLoclizer;
             _dashboardBusiness = dashboardBusiness;
+            _candidateBusiness = candidateBusiness;
         }
 
 
@@ -164,8 +164,9 @@ namespace WebApplication1.Controllers
                     throw new BusinessException(_messagesLoclizer["Election is not found."]);
                 }
 
-                _logger.LogInformation("Calling method CandidateUtilities.GetCandidate_byElection()");
-                var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, election);
+                _logger.LogInformation("Calling method CandidateBusiness.GetCandidate_byElection()");
+                //var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, election);
+                var candidates = _candidateBusiness.GetCandidate_byElection(election);
                 _logger.LogInformation("Calling Utilities.convertCandidateList_toCandidateViewModelList() method");
                 List<CandidateViewModel> candidatesViewModel = Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, candidates);
 
