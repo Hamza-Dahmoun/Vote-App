@@ -8,6 +8,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using WebApplication1.Models;
 using WebApplication1.Models.Repositories;
+using WebApplication1.Models.ViewModels;
 
 namespace WebApplication1.BusinessService
 {
@@ -23,6 +24,7 @@ namespace WebApplication1.BusinessService
         private readonly IRepository<Candidate> _candidateRepository;
         private readonly IRepository<Voter> _voterRepository;
         private readonly IRepository<Election> _electionRepository;
+        private readonly VoterBusiness _voterBusiness;
 
         public CandidateBusiness(IRepository<Vote> voteRepository,
             UserManager<IdentityUser> userManager,
@@ -30,7 +32,8 @@ namespace WebApplication1.BusinessService
             IStringLocalizer<Messages> messagesLoclizer,
             IRepository<Candidate> candidateRepository,
             IRepository<Voter> voterRepository,
-            IRepository<Election> electionRepository)
+            IRepository<Election> electionRepository,
+            VoterBusiness voterBusiness)
         {
             _voteRepository = voteRepository;
             _userManager = userManager;
@@ -39,6 +42,7 @@ namespace WebApplication1.BusinessService
             _candidateRepository = candidateRepository;
             _voterRepository = voterRepository;
             _electionRepository = electionRepository;
+            _voterBusiness = voterBusiness;
         }
 
         public Candidate GetById(Guid Id)
@@ -181,5 +185,51 @@ namespace WebApplication1.BusinessService
                 throw E;
             }
         }
+
+
+        private CandidateViewModel ConvertCandidate_ToCandidateViewModel(Candidate candidate)
+        {
+            try
+            {
+                CandidateViewModel c = new CandidateViewModel
+                {
+                    Id = candidate.Id,
+                    isNeutralOpinion = candidate.isNeutralOpinion,
+                    VotesCount = candidate.Votes.Count(),
+                };
+                if (!candidate.isNeutralOpinion)
+                {
+                    Voter v = _voterBusiness.GetById(candidate.VoterBeingId);
+                    c.FirstName = v.FirstName;
+                    c.LastName = v.LastName;
+                    c.StateName = _voterBusiness.GetStateNameByVoterId(v.Id);
+
+                }
+                else
+                {
+                    c.FirstName = NeutralOpinion.Neutral.ToString();// "Neutral";
+                    c.LastName = NeutralOpinion.Opinion.ToString();// "Opinion";
+                }
+
+                return c;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
+        public List<CandidateViewModel> ConvertCandidateList_ToCandidateViewModelList(IList<Candidate> candidates)
+        {
+            List<CandidateViewModel> myList = new List<CandidateViewModel>();
+            foreach (var item in candidates)
+            {
+                myList.Add(ConvertCandidate_ToCandidateViewModel(item));
+            }
+
+            return myList.OrderByDescending(c => c.VotesCount).ToList();
+        }
+
+
     }
 }
