@@ -157,7 +157,8 @@ namespace WebApplication1.Controllers
                         Id = Guid.NewGuid(),
                         FirstName = vs.FirstName,
                         LastName = vs.LastName,
-                        State = _stateBusiness.GetById(vs.StateID)
+                        //State = _stateBusiness.GetById(vs.StateID)
+                         StateId= vs.StateID
                     };
 
                     //now lets add this new voter as a new user to the IdentityDB using UserManager<IdentityUser> service
@@ -464,7 +465,8 @@ namespace WebApplication1.Controllers
                     Id = voterstate.Id,
                     FirstName = voterstate.FirstName,
                     LastName = voterstate.LastName,
-                    State = _stateBusiness.GetById(voterstate.StateID)
+                    //State = _stateBusiness.GetById(voterstate.StateID)
+                    StateId = voterstate.StateID
                 };
 
                 _logger.LogInformation("Calling VoterRepository.Edit() method");
