@@ -829,7 +829,8 @@ namespace WebApplication1.Controllers
                 entityList = Utilities.convertCandidateList_toVoterCandidateEntityViewModelList(_voterRepository, entityList, candidates);
                 
 
-                var otherVoters = VoterUtilities.getOtherVoters(_voterRepository, Utilities.getCorrespondingVoters(candidates, _voterRepository));
+                //var otherVoters = VoterUtilities.getOtherVoters(_voterRepository, Utilities.getCorrespondingVoters(candidates, _voterRepository));
+                var otherVoters = _voterBusiness.GetOtherVoters(Utilities.getCorrespondingVoters(candidates, _voterRepository));
                 entityList = Utilities.convertVoterList_toVoterCandidateEntityViewModelList(entityList, otherVoters);
                 
 
@@ -1311,7 +1312,8 @@ namespace WebApplication1.Controllers
                     else
                     {
                         //userHasVoted = VoteUtilities.hasVoted(_voteRepository, currentElection.Id, VoterUtilities.getVoterByUserId(Guid.Parse(currentUser.Id), _voterRepository).Id);
-                        userHasVoted = _voteBusiness.HasVoted(currentElection.Id, VoterUtilities.getVoterByUserId(Guid.Parse(currentUser.Id), _voterRepository).Id);
+                        //userHasVoted = _voteBusiness.HasVoted(currentElection.Id, VoterUtilities.getVoterByUserId(Guid.Parse(currentUser.Id), _voterRepository).Id);
+                        userHasVoted = _voteBusiness.HasVoted(currentElection.Id, _voterBusiness.GetVoterByUserId(Guid.Parse(currentUser.Id)).Id);
                     }
                     
                     a.HasUserVoted = userHasVoted;
