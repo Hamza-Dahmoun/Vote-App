@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using WebApplication1.Models;
 using WebApplication1.Models.Repositories;
+using WebApplication1.Models.ViewModels;
 
 namespace WebApplication1.BusinessService
 {
@@ -88,5 +89,41 @@ namespace WebApplication1.BusinessService
                 throw E;
             }
         }
+
+
+        public StateViewModel ConvertState_ToStateViewModel(State state)
+        {
+            try
+            {
+                StateViewModel s = new StateViewModel
+                {
+                    Id = state.Id,
+                    Name = state.Name
+                };
+                return s;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
+        public List<StateViewModel> ConvertStateList_ToStateViewModelList(IList<State> states)
+        {
+            try
+            {
+                List<StateViewModel> myList = new List<StateViewModel>();
+                foreach (var item in states)
+                {
+                    myList.Add(ConvertState_ToStateViewModel(item));
+                }
+                return myList;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
     }
 }
