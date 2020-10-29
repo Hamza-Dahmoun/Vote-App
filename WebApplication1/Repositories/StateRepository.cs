@@ -67,7 +67,7 @@ namespace WebApplication1.Models.Repositories
         {
             try
             {
-                return _dbSet.AsNoTracking().ToList();
+                return _dbSet.ToList();
                 //return _dbSet.ToList();
             }
             catch (Exception E)
@@ -76,7 +76,34 @@ namespace WebApplication1.Models.Repositories
             }            
         }
 
+        public IList<State> GetAllReadOnly()
+        {
+            try
+            {
+                return _dbSet.AsNoTracking().ToList();
+                //return _dbSet.ToList();
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
         public List<State> GetAllFiltered(Expression<Func<State, bool>> predicate)
+        {
+            //this function uses the linq expression passed in the object 'predicate' of 'Expression' class to filter the rows from the db
+            try
+            {
+                //use eager loading to bring other tables data 
+                return _dbSet.Where(predicate).ToList();
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
+        public List<State> GetAllFilteredReadOnly(Expression<Func<State, bool>> predicate)
         {
             //this function uses the linq expression passed in the object 'predicate' of 'Expression' class to filter the rows from the db
             try
@@ -90,7 +117,13 @@ namespace WebApplication1.Models.Repositories
             }
         }
 
+
         public PagedResult<State> GetAllFilteredPaged(Expression<Func<State, bool>> predicate, string orderBy, string orderDirection, int startRowIndex = 0, int maxRows = 10)
+        {
+            throw new NotImplementedException();
+        }
+
+        public PagedResult<State> GetAllFilteredPagedReadOnly(Expression<Func<State, bool>> predicate, string orderBy, string orderDirection, int startRowIndex = 0, int maxRows = 10)
         {
             throw new NotImplementedException();
         }
@@ -100,11 +133,16 @@ namespace WebApplication1.Models.Repositories
             throw new NotImplementedException();
         }
 
+        public PagedResult<State> GetAllPagedReadOnly(string orderBy, string orderDirection, int startRowIndex = 0, int maxRows = 10)
+        {
+            throw new NotImplementedException();
+        }
+
         public State GetById(Guid Id)
         {
             try
             {
-                return _dbSet/*.AsNoTracking()*/.SingleOrDefault(s => s.Id == Id);
+                return _dbSet.SingleOrDefault(s => s.Id == Id);
                 //return _dbSet.Find(Id);
             }
             catch (Exception E)
@@ -113,16 +151,41 @@ namespace WebApplication1.Models.Repositories
             }            
         }
 
+        public State GetByIdReadOnly(Guid Id)
+        {
+            try
+            {
+                return _dbSet.AsNoTracking().SingleOrDefault(s => s.Id == Id);
+                //return _dbSet.Find(Id);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
         public State GetOneFiltered(Expression<Func<State, bool>> predicate)
         {
             try
             {
-                return _dbSet.AsNoTracking().SingleOrDefault(predicate);
+                return _dbSet.SingleOrDefault(predicate);
             }
             catch(Exception E)
             {
                 throw E;
             }            
+        }
+
+        public State GetOneFilteredReadOnly(Expression<Func<State, bool>> predicate)
+        {
+            try
+            {
+                return _dbSet.AsNoTracking().SingleOrDefault(predicate);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
         }
 
         public int CountAll()

@@ -68,7 +68,7 @@ namespace WebApplication1.Models.Repositories
             try
             {
                 //use eager loading to bring Candidaates data too
-                return _dbSet.Include(e => e.Candidates).Include(e => e.Votes).AsNoTracking().ToList();
+                return _dbSet.Include(e => e.Candidates).Include(e => e.Votes).ToList();
             }
             catch (Exception E)
             {
@@ -76,7 +76,34 @@ namespace WebApplication1.Models.Repositories
             }            
         }
 
+        public IList<Election> GetAllReadOnly()
+        {
+            try
+            {
+                //use eager loading to bring Candidaates data too
+                return _dbSet.Include(e => e.Candidates).Include(e => e.Votes).AsNoTracking().ToList();
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
         public List<Election> GetAllFiltered(Expression<Func<Election, bool>> predicate)
+        {
+            //this function uses the linq expression passed in the object 'predicate' of 'Expression' class to filter the rows from the db
+            try
+            {
+                //use eager loading to bring other tables data 
+                return _dbSet.Where(predicate).Include(e => e.Votes).Include(e => e.Candidates).ToList();
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
+        public List<Election> GetAllFilteredReadOnly(Expression<Func<Election, bool>> predicate)
         {
             //this function uses the linq expression passed in the object 'predicate' of 'Expression' class to filter the rows from the db
             try
@@ -128,6 +155,25 @@ namespace WebApplication1.Models.Repositories
                 }*/
 
                 //in case there is no ordering requested
+                List<Election> elections = _dbSet.Where(predicate).Include(v => v.Candidates).Include(v => v.Votes).ToList();
+                int totalCount = elections.Count;
+                elections = elections.Skip(startRowIndex).Take(maxRows).ToList();
+                PagedResult<Election> p = new PagedResult<Election>(elections, totalCount);
+                return p;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
+        public PagedResult<Election> GetAllFilteredPagedReadOnly(Expression<Func<Election, bool>> predicate, string orderBy, string orderDirection, int startRowIndex = 0, int maxRows = 10)
+        {
+            //this function returns 'maxRows' row of elections, skipping 'startRowIndex' rows, ordered by the column 'orderBy' and direction of ordering
+            //according to 'orderDirection' .... all filtered according to the expression 'predicate'
+            try
+            {
+                //in case there is no ordering requested
                 List<Election> elections = _dbSet.Where(predicate).Include(v => v.Candidates).Include(v => v.Votes).AsNoTracking().ToList();
                 int totalCount = elections.Count;
                 elections = elections.Skip(startRowIndex).Take(maxRows).ToList();
@@ -174,6 +220,25 @@ namespace WebApplication1.Models.Repositories
                     return _dbSet.OrderByDescending(v => propertyName.GetValue(v)).Include(v => v.State).Skip(startRowIndex).Take(maxRows).ToList();
                 }*/
                 //in case there is no ordering requested
+                var elections = _dbSet.Include(e => e.Candidates).Include(v => v.Votes).ToList();
+                int totalCount = elections.Count;
+                elections = elections.Skip(startRowIndex).Take(maxRows).ToList();
+                PagedResult<Election> p = new PagedResult<Election>(elections, totalCount);
+                return p;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
+        public PagedResult<Election> GetAllPagedReadOnly(string orderBy, string orderDirection, int startRowIndex = 0, int maxRows = 10)
+        {
+            //this function returns 'maxRows' row of elections, skipping 'startRowIndex', ordered by the column 'orderBy' and direction of ordering
+            //according to 'orderDirection'
+            try
+            {
+                //in case there is no ordering requested
                 var elections = _dbSet.Include(e => e.Candidates).Include(v => v.Votes).AsNoTracking().ToList();
                 int totalCount = elections.Count;
                 elections = elections.Skip(startRowIndex).Take(maxRows).ToList();
@@ -190,7 +255,7 @@ namespace WebApplication1.Models.Repositories
         {
             try
             {
-                return _dbSet.Include(e => e.Candidates).Include(e => e.Votes).AsNoTracking().SingleOrDefault(e => e.Id == Id);
+                return _dbSet.Include(e => e.Candidates).Include(e => e.Votes).SingleOrDefault(e => e.Id == Id);
             }
             catch (Exception E)
             {
@@ -198,7 +263,31 @@ namespace WebApplication1.Models.Repositories
             }            
         }
 
+        public Election GetByIdReadOnly(Guid Id)
+        {
+            try
+            {
+                return _dbSet.Include(e => e.Candidates).Include(e => e.Votes).AsNoTracking().SingleOrDefault(e => e.Id == Id);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
         public Election GetOneFiltered(Expression<Func<Election, bool>> predicate)
+        {
+            try
+            {
+                return _dbSet.Include(e => e.Candidates).Include(e => e.Votes).SingleOrDefault(predicate);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }             
+        }
+
+        public Election GetOneFilteredReadOnly(Expression<Func<Election, bool>> predicate)
         {
             try
             {
@@ -207,8 +296,9 @@ namespace WebApplication1.Models.Repositories
             catch (Exception E)
             {
                 throw E;
-            }             
+            }
         }
+
         public int CountAll()
         {
             int count = 0;
