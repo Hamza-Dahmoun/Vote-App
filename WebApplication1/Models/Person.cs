@@ -18,10 +18,10 @@ namespace WebApplication1.Models
         [Required(ErrorMessage = "Required")]
         
         public string LastName { get; set; }
-        [Display(Name = "State")]
         
+        [Display(Name = "State")]      
         public State State { get; set; }
-        public Guid StateId { get; set; }
+        public Guid? StateId { get; set; }
 
         public Guid UserId { get; set; }        
     }
