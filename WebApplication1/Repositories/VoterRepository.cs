@@ -56,7 +56,7 @@ namespace WebApplication1.Models.Repositories
                 var myVoter = GetById(Id);
                 myVoter.FirstName = item.FirstName;
                 myVoter.LastName = item.LastName;
-                //myVoter.State = item.State;
+                myVoter.State = item.State;
                 myVoter.StateId = item.StateId;
                 return _dbContext.SaveChanges();
             }
@@ -85,7 +85,7 @@ namespace WebApplication1.Models.Repositories
             try
             {
                 //use eager loading to bring other tables data 
-                return _dbSet.Where(predicate).Include(v => v.State).AsNoTracking().ToList();
+                return _dbSet.Where(predicate).Include(v => v.State)/*.AsNoTracking()*/.ToList();
             }
             catch (Exception E)
             {

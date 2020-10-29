@@ -319,6 +319,7 @@ namespace WebApplication1.BusinessService
                 foreach (var voter in voters)
                 {
                     voter.State = null;
+                    voter.StateId = null;
 
                     int isRowUpdated = Edit(voter.Id, voter);
                     if (isRowUpdated < 1)
