@@ -30,11 +30,33 @@ namespace WebApplication1.BusinessService
                 throw E;
             }
         }
+        public List<State> GetAllReadOnly()
+        {
+            try
+            {
+                return (List<State>)_stateRepository.GetAllReadOnly();
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
         public State GetById(Guid Id)
         {
             try
             {
                 return _stateRepository.GetById(Id);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+        public State GetByIdReadOnly(Guid Id)
+        {
+            try
+            {
+                return _stateRepository.GetByIdReadOnly(Id);
             }
             catch (Exception E)
             {
@@ -83,6 +105,17 @@ namespace WebApplication1.BusinessService
             try
             {
                 return _stateRepository.GetAllFiltered(predicate);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+        public List<State> GetAllFilteredReadOnly(Expression<Func<State, bool>> predicate)
+        {
+            try
+            {
+                return _stateRepository.GetAllFilteredReadOnly(predicate);
             }
             catch (Exception E)
             {
