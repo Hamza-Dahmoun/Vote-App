@@ -56,12 +56,35 @@ namespace WebApplication1.BusinessService
                 throw E;
             }
         }
+        public Candidate GetByIdReadOnly(Guid Id)
+        {
+            try
+            {
+                return _candidateRepository.GetByIdReadOnly(Id);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
 
         public List<Candidate> GetAll()
         {
             try
             {
                 return (List<Candidate>)_candidateRepository.GetAll();
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
+        public List<Candidate> GetAllReadOnly()
+        {
+            try
+            {
+                return (List<Candidate>)_candidateRepository.GetAllReadOnly();
             }
             catch (Exception E)
             {
@@ -106,11 +129,35 @@ namespace WebApplication1.BusinessService
             }
         }
 
+        public List<Candidate> GetAllFilteredReadOnly(Expression<Func<Candidate, bool>> predicate)
+        {
+            try
+            {
+                return _candidateRepository.GetAllFilteredReadOnly(predicate);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
         public Candidate GetOneFiltered(Expression<Func<Candidate, bool>> predicate)
         {
             try
             {
                 return _candidateRepository.GetOneFiltered(predicate);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
+        public Candidate GetOneFilteredReadOnly(Expression<Func<Candidate, bool>> predicate)
+        {
+            try
+            {
+                return _candidateRepository.GetOneFilteredReadOnly(predicate);
             }
             catch (Exception E)
             {
