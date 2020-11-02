@@ -56,6 +56,17 @@ namespace WebApplication1.BusinessService
                 throw E;
             }
         }
+        public List<Voter> GetAllFilteredReadOnly(Expression<Func<Voter, bool>> predicate)
+        {
+            try
+            {
+                return _voterRepository.GetAllFilteredReadOnly(predicate);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
 
         public int Edit(Guid Id, Voter state)
         {
@@ -80,12 +91,34 @@ namespace WebApplication1.BusinessService
                 throw E;
             }
         }
+        public List<Voter> GetAllReadOnly()
+        {
+            try
+            {
+                return (List<Voter>)_voterRepository.GetAllReadOnly ();
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
 
         public Voter GetById(Guid Id)
         {
             try
             {
                 return _voterRepository.GetById(Id);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+        public Voter GetByIdReadOnly(Guid Id)
+        {
+            try
+            {
+                return _voterRepository.GetByIdReadOnly(Id);
             }
             catch (Exception E)
             {
@@ -128,12 +161,35 @@ namespace WebApplication1.BusinessService
                 throw E;
             }
         }
+        public PagedResult<Voter> GetAllFilteredPagedReadOnly(Expression<Func<Voter, bool>> predicate, string orderBy, string orderDirection, int startRowIndex = 0, int maxRows = 10)
+        {
+            try
+            {
+                return _voterRepository.GetAllFilteredPagedReadOnly(predicate, orderBy, orderDirection, startRowIndex, maxRows);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
 
         public PagedResult<Voter> GetAllPaged(string orderBy, string orderDirection, int startRowIndex = 0, int maxRows = 10)
         {
             try
             {
                 return _voterRepository.GetAllPaged(orderBy, orderDirection, startRowIndex, maxRows);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+
+        }
+        public PagedResult<Voter> GetAllPagedReadOnly(string orderBy, string orderDirection, int startRowIndex = 0, int maxRows = 10)
+        {
+            try
+            {
+                return _voterRepository.GetAllPagedReadOnly(orderBy, orderDirection, startRowIndex, maxRows);
             }
             catch (Exception E)
             {
@@ -159,6 +215,17 @@ namespace WebApplication1.BusinessService
             try
             {
                 return _voterRepository.GetOneFiltered(predicate);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+        public Voter GetOneFilteredReadOnly(Expression<Func<Voter, bool>> predicate)
+        {
+            try
+            {
+                return _voterRepository.GetOneFilteredReadOnly(predicate);
             }
             catch (Exception E)
             {
