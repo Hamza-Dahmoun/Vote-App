@@ -60,22 +60,18 @@ namespace WebApplication1.BusinessService
                 Election election = _electionRepository.GetById(firstOne.Election.Id);
                 if (election == null)
                 {
-                    //_logger.LogError("Cannot validate for null election");
                     throw new BusinessException(_messagesLoclizer["Cannot validate vote of null election"]);
                 }
 
                 //lets get the voter instance of the current user, so that we use its id with his votes
                 var currentUser = await _userManager.GetUserAsync(_contextAccessor.HttpContext.User);
-                //_logger.LogInformation("Calling VoterUtilities.getVoterByUserId() method");
                 Voter currentVoter = _voterBusiness.GetVoterByUserId(Guid.Parse(currentUser.Id));
                 if (currentVoter == null)
                 {
-                    //_logger.LogError("Voter instance was not found for current user");
                     throw new BusinessException(_messagesLoclizer["Voter instance was not found for current user"]);
                 }
 
 
-                //_logger.LogInformation("Going to add Vote instance to the DB foreach Candidate");
                 Vote v = new Vote();
                 //lets add 'Vote' objects to the db
                 foreach (var candidateId in candidateIdList)
@@ -84,7 +80,6 @@ namespace WebApplication1.BusinessService
                     Candidate candidate = _candidateRepository.GetById(Guid.Parse(candidateId));
                     if (candidate == null)
                     {
-                        //_logger.LogError("Candidate instance was not found for " + candidateId);
                         throw new BusinessException(_messagesLoclizer["Candidate instance was not found for"] + " " + candidateId);
                     }
                     v.Candidate = candidate;

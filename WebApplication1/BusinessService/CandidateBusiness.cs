@@ -147,7 +147,7 @@ namespace WebApplication1.BusinessService
             {
                 //declaring an expression that is special to Candidate objects and it compares the election instance of the candidates 
                 //with 'election' parameter and voterBeing with voter parameter
-                //System.Linq.Expressions.Expression<Func<Candidate, bool>> expr = i => i.Election == election && i.VoterBeing == voter;
+
                 System.Linq.Expressions.Expression<Func<Candidate, bool>> expr = i => i.Election == election && i.VoterBeingId == voter.Id;
                 return GetOneFiltered(expr);
             }

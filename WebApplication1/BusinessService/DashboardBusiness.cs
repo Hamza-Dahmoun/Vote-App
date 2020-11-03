@@ -37,8 +37,6 @@ namespace WebApplication1.BusinessService
 
             try
             {
-                //IdentityUser currentUser = await _userManager.GetUserAsync(_contextAccessor.HttpContext.User);
-
                 DashboardViewModel d = new DashboardViewModel
                 {
                     NbElections = _electionBusiness.CountAll(),
