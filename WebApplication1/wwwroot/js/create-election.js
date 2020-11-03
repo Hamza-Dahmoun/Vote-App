@@ -59,7 +59,7 @@ not the form.
             DurationInDays: parseInt(document.getElementById("duration-in-days").value),
             HasNeutral: hasNeutral
         };
-        //alert(JSON.stringify(newElection));
+
         //lets hide the button and display the spinner next to it
         document.getElementById("send-election-spinner").style.display = "block";
         document.getElementById("send-election-button").style.display = "none";
@@ -71,7 +71,6 @@ not the form.
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             error: function (response) {
-                //alert("error");
                 document.getElementById("send-election-spinner").style.display = "none";
                 document.getElementById("send-election-button").style.display = "block";
                 //in here 'response' represents the following object {success: false, message ='...text here...'}
@@ -87,15 +86,12 @@ not the form.
             success: function (response) {
                 //'response' represents the object returned from the api which is the Election object newly stored in the db
                 console.log(response);
-                //alert("success" + response);
-                //electionId = response.Election.Id;
                 electionId = response.ElectionId;
                 disableAllInputs();
                 changeBgColor();
 
                 prepareVotersjQueryDatatable(response.ElectionId);
                 scrollDown();
-                //window.location.href = "Home/Index";
             }
         });
     }
@@ -105,15 +101,12 @@ not the form.
 }
 //this function disable all the new Election inputs, and hide the submit button. It is called after storing this new Election successfully
 function disableAllInputs() {
-    //console.log("disabling inputs started");
     let election_inputs = document.getElementById("election-input-container").querySelectorAll("input");
     for (let i = 0; i < election_inputs.length; i++) {
-        //console.log(election_inputs[i]);
         election_inputs[i].disabled = "true";
     }
     document.getElementById("send-election-spinner").style.display = "none";
     document.getElementById("send-election-button").style.display = "none";
-    //console.log("disabling inputs done");
 }
 function changeBgColor() {
     let stepOne = document.getElementById("step-one");
@@ -139,13 +132,10 @@ function prepareVotersjQueryDatatable(electionId) {
             "serverSide": true,//for server side processing
             "filter": true,//this is for disable filter (search box)
             "ajax": {
-                "url": '/Election/VotersDataTable/' /*+ electionId*/,
+                "url": '/Election/VotersDataTable/',
                 "type": 'POST',
                 "data": function (d) {
                     d.electionId = electionId;
-                    //d.myKey = "myValue";
-                    // d.custom = $('#myInput').val();
-                    // etc
                 },
                 /*
                  WHEN I USED THE BELOW TO SEND ELECTIONID TO THE SERVER, I GOT EVERY LETTER AND NUMBER OF THE GUID SENT AS A SEPARATE PARAMETER!
@@ -233,11 +223,9 @@ function selectNewCandidate() {
         },
         success: function (response) {
             //'response' represents the object returned from the api which is the Election object newly stored in the db
-            //console.log(response);
-            //alert("success" + response);
+;
 
             //now lets display the selected candidate into Candidates area
-            //alert(candidateFullName + " has been selected successfully");
             displayAddedCandidate(candidateFullName, voterid);
             //Now lets refresh jquery datatables.. this is speial to iquery datatables
             $("#voters-table").DataTable().ajax.reload();            
@@ -269,8 +257,6 @@ function displayAddedCandidate(candidateFullName, voterid) {
 
     let candidatesArea = document.getElementById("candidates-container");
     candidatesArea.appendChild(div);
-
-    //document.getElementById("selected-candidates-area").style.display = "block";
 }
 function removeCandidateFromElection() {
     //this function removes a candidate from the newly created election (from db and from ui)
@@ -279,12 +265,11 @@ function removeCandidateFromElection() {
     clickedButton.style.display = "none";
     clickedButton.parentElement.querySelector(".spinner-border").style.display = "block";
 
-    //console.log("I'm going to remove the candiate from the election");
     let removeButton = event.target;
 
     let voterid = event.target.getAttribute("voterid");
 
-    //console.log("going to delete this candidate: " + { electionId: electionId, voterId: voterid });
+
     //Send the JSON data of voterId and electionId to Controller using AJAX.
     $.ajax({
         type: "POST",
@@ -304,9 +289,6 @@ function removeCandidateFromElection() {
             $('#redModal').modal('show');
         },
         success: function (response) {
-            //console.log(response);
-            //alert("success" + response);
-
             //now lets remove the concerned candidate from the Candidates area
             console.log("i just removed the candidate from DB:");
             console.log(removeButton);

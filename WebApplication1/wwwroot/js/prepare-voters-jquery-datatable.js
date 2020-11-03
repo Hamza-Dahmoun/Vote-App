@@ -1,5 +1,4 @@
 ﻿//now lets make it a jquery datatables server side processing
-//document.addEventListener("DOMContentLoaded", initializeDatatable);
 document.addEventListener("DOMContentLoaded", preparejQueryDatatable());
 
 

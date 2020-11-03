@@ -6,8 +6,8 @@ var neutralCandidateId = "";
 if (neutralCandidate != undefined && neutralCandidate != null) {
     neutralCandidateId = neutralCandidate.querySelector(".hidden-candidateId").textContent /*"d3e32681-27af-4758-8bb7-5558bd2c7c55"*/;
 }
-    
-//alert(neutralCandidateId);
+
+
 var candidates = document.getElementsByClassName("candidate-container");
 for (let i = 0; i < candidates.length; i++) {
     candidates[i].addEventListener("click", clickCandidate);
@@ -18,22 +18,18 @@ function clickCandidate() {
     let newSelected;
     let selectedCandidateId;
     if (event.target.tagName == "DIV") {
-        //alert("div is clicked");
         newSelected = event.target;
     }
     else {
-        //alert("chlild is clicked");
         newSelected = event.target.parentNode;
     }
     selectedCandidateId = newSelected.querySelectorAll(".hidden-candidateId")[0].textContent;
-    //alert("its id is: " + selectedCandidateId.textContent);
+
 
     if (isAlreadySelected(newSelected)) {
-        //alert("it is already selected");
         removeSelection(newSelected, selectedCandidateId)
     }
     else {
-        //alert("it is not already selected");
         //there are three cases:
         //1 - user is selecting "Neutral" we'll unselect all candidates and empty the the array
         //2 - user is selecting a new candidate within the five, so we'll add the css class and the id to the array
@@ -78,7 +74,6 @@ function removeSelection(candidateContainer, selectedCandidateId) {
 function addNewSelection(newSelection, selectedCandidateId) {
     //this function will add selection of a candidate
     //but before, it checks if "Neutral Opinion" is selected and tries to unselect it
-    //console.log(unselectNeutral);
     unselectNeutral();
 
     newSelection.classList.add("selected-candidate");
@@ -106,10 +101,6 @@ function hideCheckIcon(selectedCandidate) {
 
 
 function sendCandidates() {
-    //for (let i = 0; i < selectedIdArray.length; i++) {
-    //    alert(selectedIdArray[i] + "  --  " + JSON.stringify(selectedIdArray),);
-    //}
-
     //lets hide the voting title
     hideElement(document.getElementById("voting-title"));
     //lets hide the list of candidates
@@ -130,8 +121,6 @@ function sendCandidates() {
         },
         success: function (response) {
             console.log(response);
-            //alert("success");
-            //window.location.href = "/Home/Index";
             displayCurrentResults(response);
         }
     });
@@ -192,13 +181,11 @@ function displayCurrentResults(response) {
             let span = document.createElement("span");
             span.appendChild(icon);
             rank_container.appendChild(span);
-            //<span><i class="fa fa-trophy" aria-hidden="true"></i></span>
         }
         else {
             let span = document.createElement("span");
             span.innerText = i + 1;
             rank_container.appendChild(span);
-            //<span>@i.ToString()</span>
         }
         one_result_container.appendChild(rank_container);
 
@@ -211,11 +198,6 @@ function displayCurrentResults(response) {
         votesCount.innerText = response[i].VotesCount;
         candidate_data_container.appendChild(votesCount);
         one_result_container.appendChild(candidate_data_container);
-
-        //<div class="candidate-data-container">
-         //   <p>@candidate.FirstName @candidate.LastName</p>
-          //  <p>@candidate.VotesCount Votes</p>
-        //</div>
 
 
         let results_container = document.getElementById("results-container");

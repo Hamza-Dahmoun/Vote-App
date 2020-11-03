@@ -5,7 +5,6 @@ for (let i = 0; i < inputs.length; i++) {
     inputs[i].addEventListener("change", displayButton);//becuz the above doesn't work properly for input numbers field
 }
 function displayButton() {
-    //console.log("going to display button");
     document.getElementById("submit-updated-election").style.display = "block";
     //lets hide the response msg in case it is the second update
     document.getElementById("response-msg").style.display = "none";
@@ -40,7 +39,7 @@ not the form.
 
         let electionId = document.getElementById("election-holder-id").value;
         let electionName = document.getElementById("election-name").value;
-        //console.log(electionName);
+
         let electionStartDate = document.getElementById("start-date-election").value;
         let electionDuration = document.getElementById("duration-in-days").value;
         let electionHasNeutral = getCheckBoxValue("has-neutral").toString();
@@ -56,9 +55,6 @@ not the form.
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             error: function (response) {
-                //console.log("error");
-                //document.getElementById("send-election-spinner").style.display = "none";
-                //document.getElementById("send-election-button").style.display = "block";
                 //in here 'response' represents the following object {success: false, message ='...text here...'}
                 //which I sent after creating an Error HttpContext.Response.StatusCode = 500 ...see the Catch block of code in the backend
                 //to know why I used 'response.responseJSON.message' to get the error text just log the response object and check its properties
@@ -70,11 +66,9 @@ not the form.
                 $('#redModal').modal('show');
 
                 hideSpinner();
-                //displayResponseMsg(false);
             },
             success: function (response) {
-                console.log("success");
-                //alert("success" + response);                
+                console.log("success");               
                 hideSpinner();
                 displayResponseMsg(true);
             }
@@ -131,7 +125,7 @@ document.addEventListener("DOMContentLoaded", function () {
 function prepareVotersjQueryDatatable(electionId) {
     //console.log("-" + electionId + "-");
     //I USED TO LOAD THE TABLE HIDDEN THEN IN JS CODE I DISPLAY IT, BUT THIS MISBEHAVED AND THE TABLE DIDNT HAVE A PROPER WIDTH
-    //document.getElementById("voters-table").style.display = "block";
+
 
     //this function send a request to the server to get the list of voters not candidates to a fiven election
     $("#voters-table").DataTable(
@@ -140,13 +134,10 @@ function prepareVotersjQueryDatatable(electionId) {
             "serverSide": true,//for server side processing
             "filter": true,//this is for disable filter (search box)
             "ajax": {
-                "url": '/Election/VotersDataTable/' /*+ electionId*/,
+                "url": '/Election/VotersDataTable/',
                 "type": 'POST',
                 "data": function (d) {
                     d.electionId = electionId;
-                    //d.myKey = "myValue";
-                    // d.custom = $('#myInput').val();
-                    // etc
                 },
                 /*
                  WHEN I USED THE BELOW TO SEND ELECTIONID TO THE SERVER, I GOT EVERY LETTER AND NUMBER OF THE GUID SENT AS A SEPARATE PARAMETER!
@@ -294,7 +285,6 @@ function removeCandidateFromElection() {
         },
         success: function (response) {
             //'response' represents the object returned from the api
-            //console.log("candidate removed");
 
             //now lets remove the candidate container from DOM slowly
             let candidateContainer = removeButton.parentElement;
@@ -352,7 +342,6 @@ function selectNewCandidate() {
         success: function (response) {
             //In here the response is the new candidate id
             console.log(response);
-            //console.log("canddiate inserted");
 
             //now lets hide and delete 'no selected candidate' container from the candidates area
             if (document.getElementsByClassName("transparent-candidate").length > 0) {

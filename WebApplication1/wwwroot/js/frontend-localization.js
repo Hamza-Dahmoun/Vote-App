@@ -135,9 +135,7 @@ resources.en[""] = "";
 resources.fr[""] = "";
 
 function getTranslatedDataTable() {
-    //console.log("checking language");
     if (currentUserLanguage == 'fr') {
-        //console.log("language is french");
         return frenchDataTable;
     }
 }
@@ -163,8 +161,7 @@ var frenchDataTable = {
         sortDescending: ": activer pour trier la colonne par ordre décroissant"
     }};
 
-//var language = "en";
-//console.log(resources[language]["Error"]);
+
 
 
 
@@ -196,7 +193,9 @@ Return value
 A new string representing the decoded version of the given encoded Uniform Resource Identifier (URI) component.
 
 *************************************/////////////////////////////
-//console.log(document.cookie);
+
+
+
 var currentUserLanguage = getLanguageCookieValue(".AspNetCore.Culture");
 function getLanguageCookieValue(cookieName) {
 
@@ -241,15 +240,4 @@ function getLanguageCookieValue(cookieName) {
 }
 
 console.log(currentUserLanguage);
-//console.log(decodeURIComponent(currentUserLanguage));
 
-
-
-
-/*
-var current = document.cookie.split('; ').reduce((r, v) => {
-    const parts = v.split('=')
-    return parts[0] === '.AspNetCore.Culture' ? decodeURIComponent(parts[1]) : r
-}, '').split('|')[0].split('=')[1];
-console.log(current);
-*/

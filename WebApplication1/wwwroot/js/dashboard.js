@@ -12,10 +12,6 @@ function loadElectionsData() {
 
 
     //2- Load Previous Elections Datatable (the commented line were used before using jQuery Datatables)
-    //let previousElectionsArea = document.getElementById("previous-elections-area");
-    //displayElement(previousElectionsArea.querySelector(".spinner-border"));
-    //hideElement(previousElectionsArea.querySelector(".table"));
-    //loadPreviousElections();
     loadPreviousElectionsDatatable();
 
 
@@ -34,15 +30,12 @@ function loadComingElections() {
     $.ajax({
         type: "POST",
         url: "/Election/GetComingElections",
-        /*data: JSON.stringify(document.getElementById("candidate-id-holder").value),*/
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         error: function (response) {
             //in here 'response' represents the following object {success: false, message ='...text here...'}
             //which I sent after creating an Error HttpContext.Response.StatusCode = 500 ...see the Catch block of code in the backend
-            //alert("error");
-            //console.log(response);
-            //console.log(response.responseJSON.message);
+
             //to know why I used 'response.responseJSON.message' to get the error text just log the response object and check its properties
 
             //so there is a server error, lets display the error msg
@@ -59,10 +52,7 @@ function loadComingElections() {
         success: function (response) {
             //'response' represents the object returned from the api which is a list of future elections
             console.log(response);
-            //console.log(response.length);
             displayComingElections(response);
-
-            //window.location.href = "Home/Index";
         }
     });
 
@@ -133,16 +123,12 @@ function loadCurrentElection() {
         success: function (response) {
             //'response' represents the object returned from the api which is the current election
             console.log(response);
-            //console.log(response.length);
-            displayCurrentElection(response);
 
-            //window.location.href = "Home/Index";
+            displayCurrentElection(response);
         }
     });
 }
 function displayCurrentElection(currentElection) {
-    //console.log(currentElection);
-
     let currentElectionArea = document.getElementById("current-election-area");
     hideElement(currentElectionArea.querySelector(".spinner-border"));
 
@@ -191,7 +177,6 @@ function displayCurrentElection(currentElection) {
             let voteButton = document.createElement("a");
             voteButton.className = "btn btn-default animated-button";
             voteButton.setAttribute("title", resources[currentUserLanguage]["Go Vote"]);
-            //voteButton.setAttribute("href", "Vote/Index/" + currentElection.Id);
             //currentElectionId in Vote/Index() was always received as empty Guid .. lets just get the current election inside the Index() action
             voteButton.setAttribute("href", "/Vote/Index/");
             let icon = document.createElement("i");
@@ -269,10 +254,7 @@ function loadPreviousElectionsDatatable() {
         ;
 
 
-    $(tableSelector)/*.on('error.dt', function (e, settings, techNote, message) {
-        console.log('An error has been reported by DataTables: ');
-        console.log(message);
-    })*/.DataTable(
+    $(tableSelector).DataTable(
         {
             "processing": true,//whether to show 'processing' indicator when waiting for a processing result or not
             "serverSide": true,//for server side processing
@@ -304,120 +286,11 @@ function loadPreviousElectionsDatatable() {
         
     );
 
-    /*$(tableSelector).on('click', 'a', function (event) {
-        //var data = $(tableSelector).row($(this).parents('tr')).data();
-        //alert(data[0] + "'s salary is: " + data[2]);
-    });*/
+
     //the below line of code is special to jQuery, it adds a click event to an element which isn't drown in the dom yet
     //in our case it is adding the click event to two buttons in each row: 'Show Results button' and 'PDF button'
     $(tableSelector).on('click', 'a', getElectionResults);
 }
-/*function loadPreviousElections() {
-    
-    //this function load a list of previous elections using jQuery ajax
-    $.ajax({
-        type: "POST",
-        url: "/Election/GetPreviousElections",
-        //data: JSON.stringify(document.getElementById("candidate-id-holder").value),
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        error: function () {
-            alert("error");
-        },
-        success: function (response) {
-            //'response' represents the object returned from the api which is a list of previous elections
-            console.log(response);
-            //console.log(response.length);
-            displayPreviousElections(response);
-
-            //window.location.href = "Home/Index";
-        }
-    });
-   
-}
-function displayPreviousElections(previousElections) {
-    //console.log(previousElections);
-
-    let previousElectionsArea = document.getElementById("previous-elections-area");
-    let table = previousElectionsArea.querySelector(".table");
-
-    let tableBody = table.querySelector("tbody");
-
-    for (let i = 0; i < previousElections.length; i++) {
-
-        let tdName = document.createElement("td");
-        tdName.innerText = previousElections[i].Name;
-
-        let tdStartDate = document.createElement("td");
-        tdStartDate.innerText = previousElections[i].StartDate;
-
-        let tdDurationInDays = document.createElement("td");
-        tdDurationInDays.innerText = previousElections[i].DurationInDays;
-
-        let tdCandidatesCount = document.createElement("td");
-        tdCandidatesCount.innerText = previousElections[i].CandidatesCount;
-
-        let resultsButton = document.createElement("a");
-        resultsButton.setAttribute("electionId", previousElections[i].Id);
-        resultsButton.style.color = "#3d7e9a";
-        resultsButton.style.cursor = "pointer";
-        resultsButton.setAttribute("title", "Show Details");
-        resultsButton.innerText = "Results";
-        resultsButton.classList.add("results-in-div-btn");
-        resultsButton.addEventListener("click", getElectionResults);
-        let tdResultsButton_andSpinner = document.createElement("td");
-        tdResultsButton_andSpinner.appendChild(resultsButton);
-        let resultsButtonSpinner = document.createElement("span");
-        resultsButtonSpinner.className = "spinner-border text-primary";
-        resultsButtonSpinner.style.display = "none";
-        tdResultsButton_andSpinner.appendChild(resultsButtonSpinner);
-
-
-        let pdfButton = document.createElement("a");
-        pdfButton.setAttribute("electionId", previousElections[i].Id);
-        pdfButton.setAttribute("electionName", previousElections[i].Name);
-        pdfButton.setAttribute("electionCandidatesCount", previousElections[i].CandidatesCount);
-        pdfButton.setAttribute("electionStartDate", previousElections[i].StartDate);
-        pdfButton.setAttribute("electionDuration", previousElections[i].DurationInDays);
-        pdfButton.style.color = "#3d7e9a";
-        pdfButton.style.cursor = "pointer";
-        pdfButton.setAttribute("title", "Download PDF");
-        //pdfButton.innerHTML = '<i class="fa fa-file-pdf-o" aria-hidden="true"></i>';
-        pdfButton.classList.add("fa");
-        pdfButton.classList.add("fa-file-pdf-o");
-        //pdfButton.innerText = "Download PDF";
-        pdfButton.classList.add("results-in-pdf-btn");
-        pdfButton.addEventListener("click", getElectionResults);
-        let tdResultsPDF = document.createElement("td");
-        tdResultsPDF.appendChild(pdfButton);
-        let pdfButtonSpinner = document.createElement("span");
-        pdfButtonSpinner.className = "spinner-border text-primary";
-        pdfButtonSpinner.style.display = "none";
-        tdResultsPDF.appendChild(pdfButtonSpinner);
-
-
-
-        let electionRow = document.createElement("tr");
-        electionRow.appendChild(tdName);
-        electionRow.appendChild(tdStartDate);
-        electionRow.appendChild(tdDurationInDays);
-        electionRow.appendChild(tdCandidatesCount);
-        electionRow.appendChild(tdResultsButton_andSpinner);
-        electionRow.appendChild(tdResultsPDF);
-
-        tableBody.appendChild(electionRow);
-    }
-
-
-    //now lets display the tabl and hide the spinner
-    hideElement(previousElectionsArea.querySelector(".spinner-border"));
-    displayElement(table);
-    //now lets make it a jquery datatables
-    $('#previous-elections-table').DataTable();
-}
-*/
-
-
 
 
 
@@ -437,11 +310,7 @@ function hideElement(elt) {
 /*THE BELOW METHODS ARE ALWAYS USED TO GET THE RESULTS OF A GIVEN ELECTION AND WRITHE THEM AND DISPLAY THEM IN A SLIDING DIV
 THEY ARE USED WHEN LOADING: 1- CURRENT ELECTION RESULTS 2- PREVIOUS ELECTIONS RESULTS*/
 function getElectionResults(event) {
-    //lets hide the button and display the spinner
-    //console.log(event);
-    //console.log(event.target);
-    //console.log(event.target.getAttribute("electionid"));
-    
+    //lets hide the button and display the spinner    
     let clickedButton = event.target;
 
     
@@ -459,8 +328,7 @@ function getElectionResults(event) {
             //to know why I used 'response.responseJSON.message' to get the error text just log the response object and check its properties
 
             //so there is a server error, lets display the error msg
-            
-            //alert("Error! " + response.responseJSON.message);
+
             document.getElementById("redModal").querySelector("h4").innerText = resources[currentUserLanguage]["Error"] + "!";
             document.getElementById("redModal").querySelector("p").innerText = response.responseJSON.message;
             $('#redModal').modal('show');
@@ -471,9 +339,8 @@ function getElectionResults(event) {
         success: function (response) {
             
             //'response' represents the object returned from the api which is the an array of candodates ordered by their number of votes
-            //console.log(response);
+
             //lets hide the spinner and display the button
-            //hideElement(document.getElementById("current-election-results-spinner"));
 
             
             hideElement(clickedButton.parentElement.querySelector(".spinner-border"));
@@ -571,18 +438,11 @@ function displayElectionResults(response) {
 
 
     //now lets add a click event to the document so that it also hide the results ... we'll remove the click event once the results are hidden
-    //document.addEventListener("click", hideElectionResultsContainer);
     document.getElementById("close-button-container").querySelector("span").addEventListener("click", hideElectionResultsContainer);
 
 }
 function hideElectionResultsContainer() {
-    //let electionResultsContainer = document.getElementById("election-results-container");
-    //electionResultsContainer.className = "hidden_results_container";
     document.getElementById("election-results-container-parent").className = "hidden_results_container";
-
-
-    //lets remove the click event off the document
-    //document.removeEventListener("click", hideElectionResultsContainer);
 }
 
 
@@ -699,7 +559,6 @@ function buildPdf(electionInfo, results) {
                 bold: false,
                 margin: [0, 20, 0, 50],
                 alignment: 'justify',
-                //lineHeight: "18px"
             },
             points:
             {

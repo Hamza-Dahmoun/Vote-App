@@ -4,8 +4,6 @@
 document.addEventListener("DOMContentLoaded", loadCandidatesList);
 
 function loadCandidatesList() {
-
-    //console.log("trying to load data of " + JSON.stringify(electionId));
     //get the list of candidates using the id of the election
     $.ajax({
         type: "POST",
@@ -18,7 +16,6 @@ function loadCandidatesList() {
 
             //so there is a server error, lets display the error msg
 
-            //alert("Error! " + response.responseJSON.message);
             document.getElementById("redModal").querySelector("h4").innerText = resources[currentUserLanguage]["Error"] + "!";
             document.getElementById("redModal").querySelector("p").innerText = response.responseJSON.message;
             $('#redModal').modal('show');
@@ -28,13 +25,10 @@ function loadCandidatesList() {
         success: function (response) {
             //'response' represents the object returned from the api which is the Election object newly stored in the db
             console.log(response);
-            //console.log(response.length);
-            displayCandidates(response);
 
-            //window.location.href = "Home/Index";
+            displayCandidates(response);
         }
     });
-    //console.log("loaded data");
 }
 function displayElement(elt) {
     //this function displays an element
@@ -46,8 +40,6 @@ function hideElement(elt) {
 }
 
 function displayCandidates(candidatesList) {
-    //console.log(candidatesList.length);
-    //alert("I am displaying list of candidates");
     var tableBody = document.getElementsByTagName("tbody")[0];
     for (let i = 0; i < candidatesList.length; i++) {
         let tdFirstName = document.createElement("td");
