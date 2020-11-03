@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace WebApplication1.Models
 {
-    public class Candidate/*:Person*/
+    public class Candidate
     {
         //a Candidate may have a collection of Votes
         //a Candidate should in a relation btween the Voter and an Election. Voter can be candidate in many Elections.
@@ -16,7 +16,6 @@ namespace WebApplication1.Models
         public Election Election { get; set; }
         public Guid? ElectionId { get; set; }
 
-        /*public Voter VoterBeing { get; set; }*/
         public Guid VoterBeingId { get; set; }
 
         public bool isNeutralOpinion { get; set; }

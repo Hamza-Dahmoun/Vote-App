@@ -14,7 +14,6 @@ namespace WebApplication1.Models
         [Required(ErrorMessage = "Required")]
         public string Name { get; set; }
         
-        //public ICollection<ElectionVoter> ElectionVoters { get; set; }
         public ICollection<Candidate> Candidates { get; set; }
         
         public ICollection<Vote> Votes { get; set; }
@@ -30,6 +29,5 @@ namespace WebApplication1.Models
 
         [Display(Name = "Has Neutral Opinion?")]
         public bool HasNeutral { get; set; }
-        /*public Guid NeutralCandidateID { get; set; }*/
     }
 }
