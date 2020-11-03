@@ -21,7 +21,5 @@ namespace WebApplication1.Models.ViewModels
         public string StateName { get; set; }
         [Display(Name = "Votes")]
         public int VotesCount { get; set; }
-        //public string hasVoted { get; set; }
-        /*public Guid electionId { get; set; }*/
     }
 }
