@@ -68,7 +68,6 @@ namespace WebApplication1.Models.Repositories
             try
             {
                 return _dbSet.AsNoTracking().ToList();
-                //return _dbSet.ToList();
             }
             catch (Exception E)
             {
@@ -107,7 +106,6 @@ namespace WebApplication1.Models.Repositories
             try
             {
                 return _dbSet.SingleOrDefault(s => s.Id == Id);
-                //return _dbSet.Find(Id);
             }
             catch (Exception E)
             {
@@ -120,7 +118,6 @@ namespace WebApplication1.Models.Repositories
             try
             {
                 return _dbSet.AsNoTracking().SingleOrDefault(s => s.Id == Id);
-                //return _dbSet.Find(Id);
             }
             catch (Exception E)
             {

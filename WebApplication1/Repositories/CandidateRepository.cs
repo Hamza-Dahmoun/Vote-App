@@ -57,14 +57,12 @@ namespace WebApplication1.Models.Repositories
             try
             {
                 //use eager loading to bring State data 
-                return _dbSet/*.Include(c => c.State)*/.Include(c=>c.Election).Include(c => c.Votes)/*.Include(c => c.VoterBeing)*/.AsNoTracking().ToList();
+                return _dbSet.Include(c=>c.Election).Include(c => c.Votes).AsNoTracking().ToList();
             }
             catch (Exception E)
             {
                 throw E;
-            }
-            
-            //return _dbSet.ToList();
+            }            
         }
 
 
@@ -75,7 +73,7 @@ namespace WebApplication1.Models.Repositories
             try
             {
                 //use eager loading to bring other tables data 
-                return _dbSet.Where(predicate)/*.Include(c => c.State)*/.Include(c => c.Election).Include(c => c.Votes)/*.Include(c => c.VoterBeing)*/.AsNoTracking().ToList();
+                return _dbSet.Where(predicate).Include(c => c.Election).Include(c => c.Votes).AsNoTracking().ToList();
             }
             catch (Exception E)
             {
@@ -103,7 +101,7 @@ namespace WebApplication1.Models.Repositories
             try
             {
                 //use eager loading to bring State data and Votes data and VoterBeing data too
-                return _dbSet.Include(c => c.Election)/*.Include(c=>c.State)*/.Include(c => c.Votes)/*.Include(c => c.VoterBeing)*/.SingleOrDefault(c => c.Id == Id);
+                return _dbSet.Include(c => c.Election).Include(c => c.Votes).SingleOrDefault(c => c.Id == Id);
             }
             catch (Exception E)
             {
@@ -116,7 +114,7 @@ namespace WebApplication1.Models.Repositories
             try
             {
                 //use eager loading to bring State data and Votes data and VoterBeing data too
-                return _dbSet.Include(c => c.Election)/*.Include(c=>c.State)*/.Include(c => c.Votes)/*.Include(c => c.VoterBeing)*/.AsNoTracking().SingleOrDefault(c => c.Id == Id);
+                return _dbSet.Include(c => c.Election).Include(c => c.Votes).AsNoTracking().SingleOrDefault(c => c.Id == Id);
             }
             catch (Exception E)
             {
@@ -129,7 +127,7 @@ namespace WebApplication1.Models.Repositories
             try
             {
                 //use eager loading to bring State data and Votes data and VoterBeing data too
-                return _dbSet.Include(c => c.Election)/*.Include(c=>c.State)*/.Include(c => c.Votes)/*.Include(c => c.VoterBeing)*/.AsNoTracking().SingleOrDefault(predicate);
+                return _dbSet.Include(c => c.Election).Include(c => c.Votes).AsNoTracking().SingleOrDefault(predicate);
             }
             catch (Exception E)
             {
@@ -145,11 +143,6 @@ namespace WebApplication1.Models.Repositories
             return count;
         }
 
-        //public Candidate GetByVoterBeingId(Guid VoterBeingId)
-        //{
-        //    Candidate candidate = _dBContext.Candidate.Include(c => c.VoterBeing).SingleOrDefault(c => c.VoterBeing.Id == VoterBeingId);
-        //    //return _dbSet.SingleOrDefault(c => c.VoterBeing.Id == VoterBeingId);
-        //    return candidate;
-        //}
+       
     }
 }
