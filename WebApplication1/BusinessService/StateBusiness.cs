@@ -30,17 +30,7 @@ namespace WebApplication1.BusinessService
                 throw E;
             }
         }
-        public List<State> GetAllReadOnly()
-        {
-            try
-            {
-                return (List<State>)_stateRepository.GetAllReadOnly();
-            }
-            catch (Exception E)
-            {
-                throw E;
-            }
-        }
+
         public State GetById(Guid Id)
         {
             try
@@ -52,17 +42,7 @@ namespace WebApplication1.BusinessService
                 throw E;
             }
         }
-        public State GetByIdReadOnly(Guid Id)
-        {
-            try
-            {
-                return _stateRepository.GetByIdReadOnly(Id);
-            }
-            catch (Exception E)
-            {
-                throw E;
-            }
-        }
+
 
         public int Add(State state)
         {
@@ -111,17 +91,7 @@ namespace WebApplication1.BusinessService
                 throw E;
             }
         }
-        public List<State> GetAllFilteredReadOnly(Expression<Func<State, bool>> predicate)
-        {
-            try
-            {
-                return _stateRepository.GetAllFilteredReadOnly(predicate);
-            }
-            catch (Exception E)
-            {
-                throw E;
-            }
-        }
+
 
 
         public StateViewModel ConvertState_ToStateViewModel(State state)

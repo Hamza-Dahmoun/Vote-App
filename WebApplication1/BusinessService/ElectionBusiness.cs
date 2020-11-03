@@ -79,17 +79,7 @@ namespace WebApplication1.BusinessService
             }
         }
 
-        public List<Election> GetAllFilteredReadOnly(Expression<Func<Election, bool>> predicate)
-        {
-            try
-            {
-                return _electionRepository.GetAllFilteredReadOnly(predicate);
-            }
-            catch (Exception E)
-            {
-                throw E;
-            }
-        }
+
 
         public List<Election> GetAll()
         {
@@ -103,17 +93,7 @@ namespace WebApplication1.BusinessService
             }
         }
 
-        public List<Election> GetAllReadOnly()
-        {
-            try
-            {
-                return (List<Election>)_electionRepository.GetAllReadOnly();
-            }
-            catch (Exception E)
-            {
-                throw E;
-            }
-        }
+
 
         public int CountAll()
         {
@@ -163,17 +143,7 @@ namespace WebApplication1.BusinessService
             }
         }
 
-        public Election GetOneFilteredReadOnly(Expression<Func<Election, bool>> predicate)
-        {
-            try
-            {
-                return _electionRepository.GetOneFilteredReadOnly(predicate);
-            }
-            catch (Exception E)
-            {
-                throw E;
-            }
-        }
+
 
         public PagedResult<Election> GetAllFilteredPaged(Expression<Func<Election, bool>> predicate, string orderBy, string orderDirection, int startRowIndex = 0, int maxRows = 10)
         {
@@ -187,17 +157,7 @@ namespace WebApplication1.BusinessService
             }
         }
 
-        public PagedResult<Election> GetAllFilteredPagedReadOnly(Expression<Func<Election, bool>> predicate, string orderBy, string orderDirection, int startRowIndex = 0, int maxRows = 10)
-        {
-            try
-            {
-                return _electionRepository.GetAllFilteredPagedReadOnly(predicate, orderBy, orderDirection, startRowIndex, maxRows);
-            }
-            catch (Exception E)
-            {
-                throw E;
-            }
-        }
+        
 
         public int Edit(Guid Id, Election election)
         {

@@ -135,17 +135,7 @@ namespace WebApplication1.BusinessService
                 throw E;
             }
         }
-        public List<Vote> GetAllFilteredReadOnly(Expression<Func<Vote, bool>> predicate)
-        {
-            try
-            {
-                return _voteRepository.GetAllFilteredReadOnly(predicate);
-            }
-            catch (Exception E)
-            {
-                throw E;
-            }
-        }
+
 
         public int CountAll()
         {
