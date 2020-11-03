@@ -158,7 +158,7 @@ namespace WebApplication1.Models.Repositories
                 }*/
 
                 //in case there is no ordering requested
-                List<Voter> voters = _dbSet.Where(predicate).Include(v => v.State).AsNoTracking().ToList();
+                List<Voter> voters = _dbSet.Where(predicate).Include(v => v.State).ToList();
                 int totalCount = voters.Count;
                 voters = voters.Skip(startRowIndex).Take(maxRows).ToList();
                 PagedResult<Voter> p = new PagedResult<Voter>(voters, totalCount);
