@@ -57,7 +57,7 @@ namespace WebApplication1.Models.Repositories
             try
             {
                 //use eager loading to bring Candidate data too
-                return _dbSet.Include(v => v.Candidate).ToList();
+                return _dbSet.Include(v => v.Candidate).AsNoTracking().ToList();
             }
             catch (Exception E)
             {
@@ -65,34 +65,7 @@ namespace WebApplication1.Models.Repositories
             }            
         }
 
-        public IList<Vote> GetAllReadOnly()
-        {
-            try
-            {
-                //use eager loading to bring Candidate data too
-                return _dbSet.Include(v => v.Candidate).AsNoTracking().ToList();
-            }
-            catch (Exception E)
-            {
-                throw E;
-            }
-        }
-
         public List<Vote> GetAllFiltered(Expression<Func<Vote, bool>> predicate)
-        {
-            //this function uses the linq expression passed in the object 'predicate' of 'Expression' class to filter the rows from the db
-            try
-            {
-                //use eager loading to bring other tables data 
-                return _dbSet.Where(predicate).Include(v => v.Candidate).ToList();
-            }
-            catch (Exception E)
-            {
-                throw E;
-            }
-        }
-
-        public List<Vote> GetAllFilteredReadOnly(Expression<Func<Vote, bool>> predicate)
         {
             //this function uses the linq expression passed in the object 'predicate' of 'Expression' class to filter the rows from the db
             try
@@ -110,17 +83,8 @@ namespace WebApplication1.Models.Repositories
         {
             throw new NotImplementedException();
         }
-        public PagedResult<Vote> GetAllFilteredPagedReadOnly(Expression<Func<Vote, bool>> predicate, string orderBy, string orderDirection, int startRowIndex = 0, int maxRows = 10)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public PagedResult<Vote> GetAllPaged(string orderBy, string orderDirection, int startRowIndex = 0, int maxRows = 10)
-        {
-            throw new NotImplementedException();
-        }
-
-        public PagedResult<Vote> GetAllPagedReadOnly(string orderBy, string orderDirection, int startRowIndex = 0, int maxRows = 10)
         {
             throw new NotImplementedException();
         }
@@ -155,7 +119,7 @@ namespace WebApplication1.Models.Repositories
         {
             try
             {
-                return _dbSet.Include(v => v.Candidate).SingleOrDefault(predicate);
+                return _dbSet.Include(v => v.Candidate).AsNoTracking().SingleOrDefault(predicate);
             }
             catch (Exception E)
             {
@@ -163,17 +127,7 @@ namespace WebApplication1.Models.Repositories
             }            
         }
 
-        public Vote GetOneFilteredReadOnly(Expression<Func<Vote, bool>> predicate)
-        {
-            try
-            {
-                return _dbSet.Include(v => v.Candidate).AsNoTracking().SingleOrDefault(predicate);
-            }
-            catch (Exception E)
-            {
-                throw E;
-            }
-        }
+        
         public int CountAll()
         {
             int count = 0;

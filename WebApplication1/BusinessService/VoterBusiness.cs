@@ -60,7 +60,7 @@ namespace WebApplication1.BusinessService
         {
             try
             {
-                return _voterRepository.GetAllFilteredReadOnly(predicate);
+                return _voterRepository.GetAllFiltered(predicate);
             }
             catch (Exception E)
             {

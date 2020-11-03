@@ -71,7 +71,7 @@ namespace WebApplication1.Models.Repositories
             try
             {
                 //use eager loading to bring State data too
-                return _dbSet.Include(v => v.State).ToList();
+                return _dbSet.Include(v => v.State).AsNoTracking().ToList();
             }
             catch (Exception E)
             {
@@ -79,34 +79,7 @@ namespace WebApplication1.Models.Repositories
             }            
         }
 
-        public IList<Voter> GetAllReadOnly()
-        {
-            try
-            {
-                //use eager loading to bring State data too
-                return _dbSet.Include(v => v.State).AsNoTracking().ToList();
-            }
-            catch (Exception E)
-            {
-                throw E;
-            }
-        }
-
         public List<Voter> GetAllFiltered(Expression<Func<Voter, bool>> predicate)
-        {
-            //this function uses the linq expression passed in the object 'predicate' of 'Expression' class to filter the rows from the db
-            try
-            {
-                //use eager loading to bring other tables data 
-                return _dbSet.Where(predicate).Include(v => v.State).ToList();
-            }
-            catch (Exception E)
-            {
-                throw E;
-            }
-        }
-
-        public List<Voter> GetAllFilteredReadOnly(Expression<Func<Voter, bool>> predicate)
         {
             //this function uses the linq expression passed in the object 'predicate' of 'Expression' class to filter the rows from the db
             try
@@ -158,25 +131,6 @@ namespace WebApplication1.Models.Repositories
                 }*/
 
                 //in case there is no ordering requested
-                List<Voter> voters = _dbSet.Where(predicate).Include(v => v.State).ToList();
-                int totalCount = voters.Count;
-                voters = voters.Skip(startRowIndex).Take(maxRows).ToList();
-                PagedResult<Voter> p = new PagedResult<Voter>(voters, totalCount);
-                return p;
-            }
-            catch (Exception E)
-            {
-                throw E;
-            }
-        }
-
-        public PagedResult<Voter> GetAllFilteredPagedReadOnly(Expression<Func<Voter, bool>> predicate, string orderBy, string orderDirection, int startRowIndex = 0, int maxRows = 10)
-        {
-            //this function returns 'maxRows' row of voters, skipping 'startRowIndex', ordered by the column 'orderBy' and direction of ordering
-            //according to 'orderDirection' .... all filtered according to the expression 'predicate'
-            try
-            {
-                //in case there is no ordering requested
                 List<Voter> voters = _dbSet.Where(predicate).Include(v => v.State).AsNoTracking().ToList();
                 int totalCount = voters.Count;
                 voters = voters.Skip(startRowIndex).Take(maxRows).ToList();
@@ -223,26 +177,6 @@ namespace WebApplication1.Models.Repositories
                     return _dbSet.OrderByDescending(v => propertyName.GetValue(v)).Include(v => v.State).Skip(startRowIndex).Take(maxRows).ToList();
                 }*/
                 //in case there is no ordering requested
-                var voters = _dbSet.Include(v => v.State).ToList();
-                int totalCount = voters.Count;
-                voters = voters.Skip(startRowIndex).Take(maxRows).ToList();
-                PagedResult<Voter> p = new PagedResult<Voter>(voters, totalCount);
-                return p;
-            }
-            catch (Exception E)
-            {
-                throw E;
-            }
-
-        }
-
-        public PagedResult<Voter> GetAllPagedReadOnly(string orderBy, string orderDirection, int startRowIndex = 0, int maxRows = 10)
-        {
-            //this function returns 'maxRows' row of voters, skipping 'startRowIndex', ordered by the column 'orderBy' and direction of ordering
-            //according to 'orderDirection'
-            try
-            {
-                //in case there is no ordering requested
                 var voters = _dbSet.Include(v => v.State).AsNoTracking().ToList();
                 int totalCount = voters.Count;
                 voters = voters.Skip(startRowIndex).Take(maxRows).ToList();
@@ -285,25 +219,14 @@ namespace WebApplication1.Models.Repositories
         {
             try
             {
-                return _dbSet.Include(v => v.State).SingleOrDefault(predicate);
+                return _dbSet.Include(v => v.State).AsNoTracking().SingleOrDefault(predicate);
             }
             catch (Exception E)
             {
                 throw E;
             }            
         }
-        public Voter GetOneFilteredReadOnly(Expression<Func<Voter, bool>> predicate)
-        {
-            try
-            {
-                return _dbSet.Include(v => v.State).AsNoTracking().SingleOrDefault(predicate);
-            }
-            catch (Exception E)
-            {
-                throw E;
-            }
-        }
-
+        
         public int CountAll()
         {
             int count = 0;
