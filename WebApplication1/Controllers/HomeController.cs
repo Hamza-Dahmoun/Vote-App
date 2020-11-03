@@ -84,13 +84,11 @@ namespace WebApplication1.Controllers
                     var currentUser = await _userManager.GetUserAsync(HttpContext.User);
 
 
-                    //_logger.LogInformation("Calling DashboardUtilities.getDashboard() method");
                     _logger.LogInformation("Calling DashboardBusiness.GetDashboard() method");
                     //Now lets Get a Cached Dashboard or Create it and Cached it
                     var cachedDashboard = _memoryCache.GetOrCreate(typeof(DashboardViewModel), d =>
                     {
                         d.AbsoluteExpiration = DateTime.Now.AddMinutes(3);
-                        //return DashboardUtilities.getDashboard(_candidateRepository, _voterRepository, _voteRepository, _electionRepository, currentUser); ;
                         return _dashboardBusiness.GetDashboard();
                     });
                     if(cachedDashboard == null)
@@ -107,7 +105,6 @@ namespace WebApplication1.Controllers
 
 
                     _logger.LogInformation("Returning dashboard instance to the view");
-                    //DashboardViewModel d = DashboardUtilities.getDashboard(_candidateRepository, _voterRepository, _voteRepository, _electionRepository, currentUser);
                     return View(cachedDashboard);
 
 
@@ -165,10 +162,10 @@ namespace WebApplication1.Controllers
                 }
 
                 _logger.LogInformation("Calling method CandidateBusiness.GetCandidate_byElection()");
-                //var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, election);
+
                 var candidates = _candidateBusiness.GetCandidate_byElection(election);
                 _logger.LogInformation("Calling _candidateBusiness.ConvertCandidateList_ToCandidateViewModelList() method");
-                //List<CandidateViewModel> candidatesViewModel = Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, candidates);
+
                 List<CandidateViewModel> candidatesViewModel = _candidateBusiness.ConvertCandidateList_ToCandidateViewModelList(candidates);
 
                 //lets serialize the list of candidatesviewmodel as json object
@@ -273,11 +270,9 @@ namespace WebApplication1.Controllers
                     package.Save();
                 }
 
-                //string fileName = _messagesLoclizer["futureElections.xlsx"];
                 StringBuilder fileName = new StringBuilder();
                 fileName.Append(_messagesLoclizer["futureElections.xlsx"]);
 
-                //string fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                 StringBuilder fileType = new StringBuilder();
                 fileType.Append("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 
@@ -348,12 +343,9 @@ namespace WebApplication1.Controllers
                     package.Save();
                 }
 
-                //string fileName = _messagesLoclizer["previousElections.xlsx"];
                 StringBuilder fileName = new StringBuilder();
                 fileName.Append(_messagesLoclizer["previousElections.xlsx"]);
 
-
-                //string fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                 StringBuilder fileType = new StringBuilder();
                 fileType.Append("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
                 

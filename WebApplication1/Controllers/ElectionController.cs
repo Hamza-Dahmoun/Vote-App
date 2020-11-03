@@ -110,7 +110,6 @@ namespace WebApplication1.Controllers
                     throw new BusinessException(_messagesLoclizer["Election not found"]);
                 }
 
-                //return View(Utilities.convertElection_toElectionViewModel(e));
                 return View(_electionBusiness.ConvertElection_ToElectionViewModel(e));
             }
             catch (BusinessException be)
@@ -179,7 +178,6 @@ namespace WebApplication1.Controllers
                         throw new BusinessException(_messagesLoclizer["A New Election should take place in a future date."]);                            
                     }
 
-                    //if (ElectionUtilities.getElectionsInSamePeriod(_electionRepository, election.StartDate, election.DurationInDays)>0)
                     if (_electionBusiness.GetElectionsInSamePeriod(election.StartDate, election.DurationInDays) > 0)
                     {
                         //so there is other existing elections which the period overlap with this new election's period
@@ -235,7 +233,7 @@ namespace WebApplication1.Controllers
 
                     response_Voters_and_NewElection r;
                     r.ElectionId = election.Id;
-                    //r.Voters = Utilities.convertVoterList_toPersonViewModelList(_voterBusiness.GetAll());
+
                     r.Voters = _voterBusiness.ConvertVoterList_ToPersonViewModelList(_voterBusiness.GetAll());
 
                     //lets serialize the struct we've got and send it back as a reponse
@@ -353,7 +351,7 @@ namespace WebApplication1.Controllers
                 
                 //lets first get the list of voterswho are already candidates of this election
                 Election election = _electionBusiness.GetById(electionId);
-                //List<Voter> alreadyCandidates = CandidateUtilities.GetVoterBeing_ofCandidatesList_byElection(_candidateRepository, election, _voterRepository);
+
                 List<Voter> alreadyCandidates = _candidateBusiness.GetVoterBeing_ofCandidatesList_byElection(election);
                 List<Guid> excludedVotersIDs = alreadyCandidates.Select(v => v.Id).ToList();
 
@@ -387,7 +385,6 @@ namespace WebApplication1.Controllers
                         draw = draw,
                         recordsFiltered = totalRecords,
                         recordsTotal = totalRecords,
-                        //data = Utilities.convertVoterList_toPersonViewModelList(pagedResult.Items)
                         data = _voterBusiness.ConvertVoterList_ToPersonViewModelList(pagedResult.Items)
                     }) ;
                     return Ok(json);
@@ -432,10 +429,8 @@ namespace WebApplication1.Controllers
                     new Candidate
                     {
                         Id = Guid.NewGuid(),
-                        //VoterBeing = voter,
                         VoterBeingId = voter.Id,
                         ElectionId = mydata.electionId
-                        //Election = _electionRepository.GetById(mydata.electionId)
                     }
                     );
                 if (updatedRows > 0)
@@ -497,10 +492,8 @@ namespace WebApplication1.Controllers
                 Candidate newCandidate = new Candidate
                 {
                     Id = Guid.NewGuid(),
-                    //VoterBeing = voter,
                     VoterBeingId = voter.Id,
                     ElectionId = mydata.electionId,
-                    //Election = _electionRepository.GetById(mydata.electionId)
                 };
                 
                 int updatedRows = _candidateBusiness.Add(newCandidate); 
@@ -573,7 +566,7 @@ namespace WebApplication1.Controllers
                     throw new BusinessException(_messagesLoclizer["Election instance not found."]);
                 }
 
-                //Candidate myCandidate = CandidateUtilities.GetCandidate_byVoter_byElection(_candidateRepository, voter, election);
+
                 Candidate myCandidate = _candidateBusiness.GetCandidate_byVoter_byElection(voter, election);
 
                 int updatedRows = _candidateBusiness.Delete(myCandidate.Id);
@@ -705,16 +698,13 @@ namespace WebApplication1.Controllers
                 //candidates objects as they are I got this error "self referencing loop detected with type" it means json tried to serialize the candidate object
                 //but it found that each candidate has an Election object, and this election object has a list of candidates and so on, so i excluded election
                 //from the selection to avoid the infinite loop
-                //var candidates = e.Candidates/*.Select(p => new { p.FirstName, p.LastName, p.State})*/.ToList();
                 
-                //var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, e);
                 var candidates = _candidateBusiness.GetCandidate_byElection(e);
                 if (candidates == null)
                 {
                     throw new BusinessException(_messagesLoclizer["Candidates List not found."]);
                 }
 
-                //var json = JsonConvert.SerializeObject(Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, candidates));
                 var json = JsonConvert.SerializeObject(_candidateBusiness.ConvertCandidateList_ToCandidateViewModelList(candidates));
                 return Ok(json);
                 
@@ -757,7 +747,6 @@ namespace WebApplication1.Controllers
                 //candidates objects as they are I got this error "self referencing loop detected with type" it means json tried to serialize the candidate object
                 //but it found that each candidate has an Election object, and this election object has a list of candidates and so on, so i excluded election
                 //from the selection to avoid the infinite loop
-                //var candidates = e.Candidates/*.Select(p => new { p.FirstName, p.LastName, p.State})*/.ToList();
 
                 //declaring an expression that is special to Election objects
                 System.Linq.Expressions.Expression<Func<Candidate, bool>> expr = e => e.Election.Id == Guid.Parse(electionId) && e.isNeutralOpinion !=true;
@@ -769,7 +758,6 @@ namespace WebApplication1.Controllers
                 }
 
 
-                //var json = JsonConvert.SerializeObject(Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, candidates));
                 var json = JsonConvert.SerializeObject(_candidateBusiness.ConvertCandidateList_ToCandidateViewModelList(candidates));
                 return Ok(json);
 
@@ -823,7 +811,6 @@ namespace WebApplication1.Controllers
                 //from the selection to avoid the infinite loop
 
 
-                //var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, election);
                 var candidates = _candidateBusiness.GetCandidate_byElection(election);
                 if (candidates == null)
                 {
@@ -831,14 +818,12 @@ namespace WebApplication1.Controllers
                 }
 
                 List<VoterCandidateEntityViewModel> entityList = new List<VoterCandidateEntityViewModel>();
-                //entityList = Utilities.convertCandidateList_toVoterCandidateEntityViewModelList(_voterRepository, entityList, candidates);
+
                 entityList = _candidateBusiness.ConvertCandidateList_ToVoterCandidateEntityViewModelList(entityList, candidates);
 
 
-                //var otherVoters = VoterUtilities.getOtherVoters(_voterRepository, Utilities.getCorrespondingVoters(candidates, _voterRepository));
-                //var otherVoters = _voterBusiness.GetOtherVoters(Utilities.getCorrespondingVoters(candidates, _voterRepository));
                 var otherVoters = _voterBusiness.GetOtherVoters(_voterBusiness.GetCorrespondingVoters(candidates));
-                //entityList = Utilities.convertVoterList_toVoterCandidateEntityViewModelList(entityList, otherVoters);
+                
                 entityList = _voterBusiness.ConvertVoterList_ToVoterCandidateEntityViewModelList(entityList, otherVoters);
 
 
@@ -924,7 +909,7 @@ namespace WebApplication1.Controllers
                         //so there is a business rule not met, lets throw a businessException and catch it
                         throw new BusinessException(_messagesLoclizer["A New Election should take place in a future date."]);
                     }
-                    //if (ElectionUtilities.getElectionsInSamePeriod(_electionRepository, DateTime.Parse(election.StartDate), int.Parse(election.DurationInDays)) > 1)
+
                     if (_electionBusiness.GetElectionsInSamePeriod(DateTime.Parse(election.StartDate), int.Parse(election.DurationInDays)) > 1)
                     {
                         //so in addtion to the election instance to edit, there are other elections in the db from the same period
@@ -1047,7 +1032,7 @@ namespace WebApplication1.Controllers
                     throw new BusinessException(_messagesLoclizer["Election not found"]);
                 }
 
-                //return View(Utilities.convertElection_toElectionViewModel(election));
+
                 return View(_electionBusiness.ConvertElection_ToElectionViewModel(election));
             }
             catch (BusinessException be)
@@ -1321,14 +1306,11 @@ namespace WebApplication1.Controllers
                     }
                     else
                     {
-                        //userHasVoted = VoteUtilities.hasVoted(_voteRepository, currentElection.Id, VoterUtilities.getVoterByUserId(Guid.Parse(currentUser.Id), _voterRepository).Id);
-                        //userHasVoted = _voteBusiness.HasVoted(currentElection.Id, VoterUtilities.getVoterByUserId(Guid.Parse(currentUser.Id), _voterRepository).Id);
                         userHasVoted = _voteBusiness.HasVoted(currentElection.Id, _voterBusiness.GetVoterByUserId(Guid.Parse(currentUser.Id)).Id);
                     }
                     
                     a.HasUserVoted = userHasVoted;
 
-                    //a.ParticipationRate = (double)VoteUtilities.getNumberOfVotersVotedOnElection(_voteRepository, currentElection.Id) / _voterBusiness.GetAll().Count;
                     a.ParticipationRate = (double)_voteBusiness.GetNumberOfVotersVotedOnElection(currentElection.Id) / _voterBusiness.GetAll().Count;
 
                     //lets build the settings so that when serializing the object into json we will respect the datetime format according to the selected culture by user
@@ -1535,11 +1517,9 @@ namespace WebApplication1.Controllers
                     package.Save();
                 }
 
-                //string fileName = _messagesLoclizer["Elections"]+".xlsx";
                 StringBuilder fileName = new StringBuilder();
                 fileName.Append(_messagesLoclizer["Elections"] + ".xlsx");
 
-                //string fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                 StringBuilder fileType = new StringBuilder();
                 fileType.Append("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
                 

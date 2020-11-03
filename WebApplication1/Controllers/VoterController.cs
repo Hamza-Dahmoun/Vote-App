@@ -38,7 +38,6 @@ namespace WebApplication1.Controllers
         private readonly VoterBusiness _voterBusiness;
         private readonly StateBusiness _stateBusiness;
         private readonly CandidateBusiness _candidateBusiness;
-        //public IRepository<Candidate> _candidateRepository { get; }
 
         //Lets create a private readonly field IStringLocalizer<Messages> so that we can use Localization service, we'll inject it inside the constructor
         private readonly IStringLocalizer<Messages> _messagesLoclizer;
@@ -102,7 +101,7 @@ namespace WebApplication1.Controllers
                 }
 
                 _logger.LogInformation("Calling _voterBusiness.ConvertVoter_ToPersonViewModel() method");
-                //PersonViewModel p = Utilities.convertVoter_toPersonViewModel(v);
+
                 PersonViewModel p = _voterBusiness.ConvertVoter_ToPersonViewModel(v);
                 _logger.LogInformation("Returning a PersonViewModel to the Details view");
                 return View(p);
@@ -157,7 +156,7 @@ namespace WebApplication1.Controllers
                         Id = Guid.NewGuid(),
                         FirstName = vs.FirstName,
                         LastName = vs.LastName,
-                        //State = _stateBusiness.GetById(vs.StateID)
+
                          StateId= vs.StateID
                     };
 
@@ -253,7 +252,7 @@ namespace WebApplication1.Controllers
                 }
 
                 _logger.LogInformation("Calling _voterBusiness.ConvertVoter_ToPersonViewModel() method");
-                //PersonViewModel p = Utilities.convertVoter_toPersonViewModel(voter);
+
                 PersonViewModel p = _voterBusiness.ConvertVoter_ToPersonViewModel(voter);
                 _logger.LogInformation("Returning PersonViewModel to the view");
                 return View(p);
@@ -313,7 +312,6 @@ namespace WebApplication1.Controllers
 
                 //2- Remove corresponding Candidates objects
                 //declaring an expression that is special to Vote objects
-                //System.Linq.Expressions.Expression<Func<Candidate, bool>> expr2 = e => e.VoterBeing == voter;
                 System.Linq.Expressions.Expression<Func<Candidate, bool>> expr2 = e => e.VoterBeingId == voter.Id;
                 _logger.LogInformation("Going to get all Candidates instances of the Voter");
                 List<Candidate> candidatesList = _candidateBusiness.GetAllFiltered(expr2);
@@ -465,7 +463,6 @@ namespace WebApplication1.Controllers
                     Id = voterstate.Id,
                     FirstName = voterstate.FirstName,
                     LastName = voterstate.LastName,
-                    //State = _stateBusiness.GetById(voterstate.StateID)
                     StateId = voterstate.StateID
                 };
 
@@ -621,7 +618,6 @@ namespace WebApplication1.Controllers
                         draw = draw,
                         recordsFiltered = totalRecords,
                         recordsTotal = totalRecords,
-                        //data = Utilities.convertVoterList_toPersonViewModelList(pagedResult.Items)
                         data = _voterBusiness.ConvertVoterList_ToPersonViewModelList(pagedResult.Items)
                     }, settings);
                     _logger.LogInformation("Return the response as JSON");
@@ -647,7 +643,6 @@ namespace WebApplication1.Controllers
                         draw = draw,
                         recordsFiltered = totalRecords,
                         recordsTotal = totalRecords,
-                        //data = Utilities.convertVoterList_toPersonViewModelList(pagedResult.Items)
                         data = _voterBusiness.ConvertVoterList_ToPersonViewModelList(pagedResult.Items)
                     }, settings);                    
                     _logger.LogInformation("Return the response as JSON");
@@ -735,12 +730,9 @@ namespace WebApplication1.Controllers
                     package.Save();
                 }
 
-
-                //string fileName = _messagesLoclizer["Voters"]+".xlsx";
                 StringBuilder fileName = new StringBuilder();
                 fileName.Append(_messagesLoclizer["Voters"] + ".xlsx");
 
-                //string fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                 StringBuilder fileType = new StringBuilder();
                 fileType.Append("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 

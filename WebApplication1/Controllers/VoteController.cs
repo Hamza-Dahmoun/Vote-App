@@ -73,7 +73,7 @@ namespace WebApplication1.Controllers
                 }
 
                 _logger.LogInformation("Calling CandidateBusiness.GetCandidate_byElection() method");
-                //var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, election);
+
                 var candidates = _candidateBusiness.GetCandidate_byElection(election);
                 if (candidates == null || candidates.Count == 0)
                 {
@@ -82,7 +82,7 @@ namespace WebApplication1.Controllers
                 }
 
                 _logger.LogInformation("Calling _candidateBusiness.ConvertCandidateList_ToCandidateViewModelList() method");
-                //List<CandidateViewModel> cvmList = Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, candidates);
+
                 List<CandidateViewModel> cvmList = _candidateBusiness.ConvertCandidateList_ToCandidateViewModelList(candidates);
                 _logger.LogInformation("Returning a list of CandidateViewModel to Index view");
                 return View(cvmList);
@@ -138,10 +138,10 @@ namespace WebApplication1.Controllers
                 _logger.LogInformation("Calling CandidateBusiness.GetCandidate_byElection() method");
                 Candidate firstOne = _candidateBusiness.GetById(Guid.Parse(candidateIdList.FirstOrDefault()));
                 Election election = _electionBusiness.GetById(firstOne.Election.Id);
-                //var candidates = CandidateUtilities.GetCandidate_byElection(_candidateRepository, election);
+
                 var candidates = _candidateBusiness.GetCandidate_byElection(election);
                 _logger.LogInformation("Calling _candidateBusiness.ConvertCandidateList_ToCandidateViewModelList() method");
-                //List<CandidateViewModel> candidatesViewModel = Utilities.convertCandidateList_toCandidateViewModelList(_voterRepository, candidates);
+
                 List<CandidateViewModel> candidatesViewModel = _candidateBusiness.ConvertCandidateList_ToCandidateViewModelList(candidates);
                 //lets serialize the list of candidatesviewmodel as json object
                 _logger.LogInformation("Going to serialise the list of CandidateViewModels");

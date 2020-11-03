@@ -62,7 +62,7 @@ namespace WebApplication1.Controllers
                 ViewBag.statesCount = states.Count;
 
                 _logger.LogInformation("Calling _stateBusiness.ConvertStateList_ToStateViewModelList() method");
-                //List<StateViewModel> svmList = Utilities.convertStateList_toStateViewModelList(states);
+
                 List<StateViewModel> svmList = _stateBusiness.ConvertStateList_ToStateViewModelList(states);
                 _logger.LogInformation("Returning a list of StateViewModels to the Index view");
                 return View(svmList);
@@ -95,7 +95,7 @@ namespace WebApplication1.Controllers
                 }
 
                 _logger.LogInformation("Calling _stateBusiness.ConvertState_ToStateViewModel() method");
-                //StateViewModel svm = Utilities.convertState_toStateViewModel(s);
+
                 StateViewModel svm = _stateBusiness.ConvertState_ToStateViewModel(s);
 
                 _logger.LogInformation("Returning a StateViewModel to the Details view");
@@ -238,24 +238,6 @@ namespace WebApplication1.Controllers
                 }
 
                 _voterBusiness.MakeVotersStatesNull(id);
-                //declaring an expression that is special to Election objects
-                /*System.Linq.Expressions.Expression<Func<Voter, bool>> expr = v => v.State.Id == id;
-                _logger.LogInformation("Calling VotereRepository.GetAllFiltered() method");
-                var voters = _voterBusiness.GetAllFiltered(expr);
-                //now lets update each voter by removing its relation to the state
-                foreach (var voter in voters)
-                {
-                    voter.State = null;
-                    _logger.LogInformation("Updating the Voter id= " + voter.Id);
-
-                    int updatedRows = _voterBusiness.Edit(voter.Id, voter);
-                    if (updatedRows <1)
-                    {
-                        //row not updated in the DB
-                        throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
-                    }
-                }*/
-
 
 
                 _logger.LogInformation("Calling _stateBusiness.Delete() method");               
