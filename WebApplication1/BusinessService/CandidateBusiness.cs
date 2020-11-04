@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,9 @@ namespace WebApplication1.BusinessService
         private readonly IRepository<Voter> _voterRepository;
         private readonly IRepository<Election> _electionRepository;
         private readonly VoterBusiness _voterBusiness;
+        private readonly CandidateBusiness _candidateBusiness;
+        private readonly ElectionBusiness _electionBusiness;
+        private readonly ILogger _logger;
 
         public CandidateBusiness(IRepository<Vote> voteRepository,
             UserManager<IdentityUser> userManager,
@@ -33,7 +37,10 @@ namespace WebApplication1.BusinessService
             IRepository<Candidate> candidateRepository,
             IRepository<Voter> voterRepository,
             IRepository<Election> electionRepository,
-            VoterBusiness voterBusiness)
+            VoterBusiness voterBusiness,
+            CandidateBusiness candidateBusiness,
+            ILogger logger,
+            ElectionBusiness electionBusiness)
         {
             _voteRepository = voteRepository;
             _userManager = userManager;
@@ -43,6 +50,9 @@ namespace WebApplication1.BusinessService
             _voterRepository = voterRepository;
             _electionRepository = electionRepository;
             _voterBusiness = voterBusiness;
+            _candidateBusiness = candidateBusiness;
+            _electionBusiness = electionBusiness;
+            _logger = logger;
         }
 
         public Candidate GetById(Guid Id)
@@ -170,6 +180,24 @@ namespace WebApplication1.BusinessService
             {
                 throw E;
             }
+        }
+
+        public List<CandidateViewModel> GetCandidateViewModelList_byOneCandidateID(Guid candidateId)
+        {
+            //This method returns a list of CandidatesViewModel taking one paramater candidateId
+            try
+            {
+                _logger.LogInformation("Running _candidateBusiness.GetCandidateViewModelList_byOneCandidateID() method");
+                Candidate candid = _candidateBusiness.GetById(candidateId);
+                Election election = _electionBusiness.GetById(candid.Election.Id);
+                var candidates = _candidateBusiness.GetCandidate_byElection(election);     
+                List<CandidateViewModel> candidatesViewModel = _candidateBusiness.ConvertCandidateList_ToCandidateViewModelList(candidates);
+                return candidatesViewModel;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }            
         }
 
         public List<Voter> GetVoterBeing_ofCandidatesList_byElection(Election election)
