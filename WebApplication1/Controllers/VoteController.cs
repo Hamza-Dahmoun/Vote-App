@@ -107,19 +107,13 @@ namespace WebApplication1.Controllers
                 _logger.LogInformation("Added Vote instance to the DB foreach Candidate");
 
                 exceptionDifferentiator = 1;
-
-                
+                                
                 //everything is okey, lets return a list of candidates with votes counter ordered so that the winner is the first
-                _logger.LogInformation("Calling CandidateBusiness.GetCandidate_byElection() method");
-                Candidate firstOne = _candidateBusiness.GetById(Guid.Parse(candidateIdList.FirstOrDefault()));
-                Election election = _electionBusiness.GetById(firstOne.Election.Id);
-
-                var candidates = _candidateBusiness.GetCandidate_byElection(election);
-                _logger.LogInformation("Calling _candidateBusiness.ConvertCandidateList_ToCandidateViewModelList() method");
-
-                List<CandidateViewModel> candidatesViewModel = _candidateBusiness.ConvertCandidateList_ToCandidateViewModelList(candidates);
+                _logger.LogInformation("Calling CandidateBusiness.GetCandidateViewModelList_byOneCandidateID() method");                
+                List<CandidateViewModel>  candidatesViewModel = _candidateBusiness.GetCandidateViewModelList_byOneCandidateID(Guid.Parse(candidateIdList.FirstOrDefault()));
+                
                 //lets serialize the list of candidatesviewmodel as json object
-                _logger.LogInformation("Going to serialise the list of CandidateViewModels");
+                _logger.LogInformation("Going to serialize the list of CandidateViewModels");
                 var json = JsonConvert.SerializeObject(candidatesViewModel.OrderByDescending(c => c.VotesCount));
                 _logger.LogInformation("Returning the list of CadidateViewModel as a json");
                 return Ok(json);
