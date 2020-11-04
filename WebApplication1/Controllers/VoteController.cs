@@ -44,7 +44,8 @@ namespace WebApplication1.Controllers
             ILogger<VoteController> logger,
             IStringLocalizer<Messages> messagesLoclizer,
             CandidateBusiness candidateBusiness,
-            ElectionBusiness electionBusiness)
+            ElectionBusiness electionBusiness,
+            VoteBusiness voteBusiness)
         {
             _candidateBusiness = candidateBusiness;
             _candidateRepository = candidateRepository;
@@ -54,6 +55,7 @@ namespace WebApplication1.Controllers
             _logger = logger;
             _messagesLoclizer = messagesLoclizer;
             _electionBusiness = electionBusiness;
+            _voteBusiness = voteBusiness;
         }
 
 

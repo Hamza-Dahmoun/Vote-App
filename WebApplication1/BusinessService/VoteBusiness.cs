@@ -42,6 +42,7 @@ namespace WebApplication1.BusinessService
             IRepository<Election> electionRepository,
             VoterBusiness voterBusiness,
             ElectionBusiness electionBusiness,
+            CandidateBusiness candidateBusiness,
             ILogger logger)
         {
             _voteRepository = voteRepository;
@@ -49,6 +50,7 @@ namespace WebApplication1.BusinessService
             _contextAccessor = contextAccessor;
             _messagesLoclizer = messagesLoclizer;
             _candidateRepository = candidateRepository;
+            _candidateBusiness = candidateBusiness;
             _voterRepository = voterRepository;
             _electionRepository = electionRepository;
             _voterBusiness = voterBusiness;
