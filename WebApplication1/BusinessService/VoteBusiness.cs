@@ -101,10 +101,10 @@ namespace WebApplication1.BusinessService
                     {
                         throw new BusinessException(_messagesLocalizer["Candidate instance was not found for"] + " " + candidateId);
                     }
-                    v.Candidate = candidate;
-                    v.Voter = currentVoter;
+                    v.CandidateId = candidate.Id;
+                    v.VoterId = currentVoter.Id;
                     v.Datetime = DateTime.Now;
-                    v.Election = election;
+                    v.ElectionId = election.Id;
 
                     int updatedRows = _voteRepository.Add(v);
                     if (updatedRows < 1)
