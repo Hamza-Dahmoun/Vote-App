@@ -65,9 +65,8 @@ namespace WebApplication1.Controllers
             try
             {
                 //this action returns a view containing all candidates of the current election for the user to vote on five of them maximum
-                var candidates = _voteBusiness.GetCandidatesOfCurrentElection();
-                _logger.LogInformation("Calling _candidateBusiness.ConvertCandidateList_ToCandidateViewModelList() method");
-                List<CandidateViewModel> cvmList = _candidateBusiness.ConvertCandidateList_ToCandidateViewModelList(candidates);
+                _logger.LogInformation("Calling _voteBusiness.GetCandidatesViewModelList_OfCurrentElection() method");
+                List<CandidateViewModel> cvmList = _voteBusiness.GetCandidatesViewModelList_OfCurrentElection();
                 _logger.LogInformation("Returning a list of CandidateViewModel to Index view");
                 return View(cvmList);
             }
