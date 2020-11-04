@@ -193,6 +193,7 @@ namespace WebApplication1.BusinessService
             //this method returns a list of candidates that are related to the current election
             try
             {
+                _logger.LogInformation("Calling ElectionBusiness.GetCurrentElection() method");
                 Election election = _electionBusiness.GetCurrentElection();
                 if (election == null)
                 {

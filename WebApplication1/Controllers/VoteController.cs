@@ -62,27 +62,9 @@ namespace WebApplication1.Controllers
             _logger.LogInformation("VoteController/Index() action is called");
             try
             {
-                _logger.LogInformation("Calling ElectionBusiness.GetCurrentElection() method");
                 //this action returns a view containing all candidates of the current election for the user to vote on five of them maximum
-                //Election election = ElectionUtilities.getCurrentElection(_electionRepository);
-                Election election = _electionBusiness.GetCurrentElection();
-                if (election == null)
-                {
-                    _logger.LogError("Current election not found");
-                    throw new BusinessException(_messagesLoclizer["Current election not found"]);
-                }
-
-                _logger.LogInformation("Calling CandidateBusiness.GetCandidate_byElection() method");
-
-                var candidates = _candidateBusiness.GetCandidate_byElection(election);
-                if (candidates == null || candidates.Count == 0)
-                {
-                    _logger.LogError("No candidates found for this election");
-                    throw new BusinessException(_messagesLoclizer["No candidates found for this election"]);
-                }
-
+                var candidates = _voteBusiness.GetCandidatesOfCurrentElection();
                 _logger.LogInformation("Calling _candidateBusiness.ConvertCandidateList_ToCandidateViewModelList() method");
-
                 List<CandidateViewModel> cvmList = _candidateBusiness.ConvertCandidateList_ToCandidateViewModelList(candidates);
                 _logger.LogInformation("Returning a list of CandidateViewModel to Index view");
                 return View(cvmList);
