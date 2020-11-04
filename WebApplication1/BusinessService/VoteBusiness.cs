@@ -23,8 +23,6 @@ namespace WebApplication1.BusinessService
         //this is used to get the currentUser
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IHttpContextAccessor _contextAccessor;
-        //Lets create a private readonly field IStringLocalizer<Messages> so that we can use Localization service, we'll inject it inside the constructor
-        private readonly IStringLocalizer<Messages> _messagesLoclizer;
         private readonly IRepository<Candidate> _candidateRepository;
         private readonly IRepository<Voter> _voterRepository;
         private readonly IRepository<Election> _electionRepository;
@@ -33,11 +31,13 @@ namespace WebApplication1.BusinessService
         private readonly ElectionBusiness _electionBusiness;
         private readonly CandidateBusiness _candidateBusiness;
         private readonly ILogger _logger;
+        //Lets create a private readonly field IStringLocalizer<Messages> so that we can use Localization service, we'll inject it inside the constructor
+        private readonly IStringLocalizer<Messages> _messagesLocalizer;
 
         public VoteBusiness(IRepository<Vote> voteRepository,
             UserManager<IdentityUser> userManager,
             IHttpContextAccessor contextAccessor,
-            IStringLocalizer<Messages> messagesLoclizer,
+            IStringLocalizer<Messages> messagesLocalizer,
             IRepository<Candidate> candidateRepository,
             IRepository<Voter> voterRepository,
             IRepository<Election> electionRepository,
@@ -50,7 +50,6 @@ namespace WebApplication1.BusinessService
             _voteRepository = voteRepository;
             _userManager = userManager;
             _contextAccessor = contextAccessor;
-            _messagesLoclizer = messagesLoclizer;
             _candidateRepository = candidateRepository;
             _candidateBusiness = candidateBusiness;
             _voterRepository = voterRepository;
@@ -59,6 +58,7 @@ namespace WebApplication1.BusinessService
             _logger = logger;
             _electionBusiness = electionBusiness;
             _voteBusiness = voteBusiness;
+            _messagesLocalizer = messagesLocalizer;
         }
 
 
@@ -71,7 +71,7 @@ namespace WebApplication1.BusinessService
                 if (candidateIdList == null || candidateIdList.Count <= 0)
                 {
                     _logger.LogError("Cannot validate votes of empty list of candidates");
-                    throw new BusinessException(_messagesLoclizer["Cannot validate votes of empty list of candidates"]);
+                    throw new BusinessException(_messagesLocalizer["Cannot validate votes of empty list of candidates"]);
                 }
 
                 //lets first get the concerned election
@@ -80,7 +80,7 @@ namespace WebApplication1.BusinessService
                 if (election == null)
                 {
                     _logger.LogError("Cannot validate vote of null election");
-                    throw new BusinessException(_messagesLoclizer["Cannot validate vote of null election"]);
+                    throw new BusinessException(_messagesLocalizer["Cannot validate vote of null election"]);
                 }
 
                 //lets get the voter instance of the current user, so that we use its id with his votes
@@ -89,7 +89,7 @@ namespace WebApplication1.BusinessService
                 if (currentVoter == null)
                 {
                     _logger.LogError("Voter instance was not found for current user");
-                    throw new BusinessException(_messagesLoclizer["Voter instance was not found for current user"]);
+                    throw new BusinessException(_messagesLocalizer["Voter instance was not found for current user"]);
                 }
 
 
@@ -101,7 +101,7 @@ namespace WebApplication1.BusinessService
                     Candidate candidate = _candidateRepository.GetById(Guid.Parse(candidateId));
                     if (candidate == null)
                     {
-                        throw new BusinessException(_messagesLoclizer["Candidate instance was not found for"] + " " + candidateId);
+                        throw new BusinessException(_messagesLocalizer["Candidate instance was not found for"] + " " + candidateId);
                     }
                     v.Candidate = candidate;
                     v.Voter = currentVoter;
@@ -112,7 +112,7 @@ namespace WebApplication1.BusinessService
                     if (updatedRows < 1)
                     {
                         //row not updated in the DB
-                        throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
+                        throw new DataNotUpdatedException(_messagesLocalizer["Data not updated, operation failed."]);
                     }
                 }
                 return candidateIdList.Count();
@@ -132,7 +132,20 @@ namespace WebApplication1.BusinessService
         {
             try
             {
-                return _voteRepository.Delete(Id);
+                int updatedRows = _voteRepository.Delete(Id);
+                if (updatedRows > 0)
+                {
+                    return updatedRows;
+                }
+                else
+                {
+                    //row not updated in the DB
+                    throw new DataNotUpdatedException(_messagesLocalizer["Data not updated, operation failed."]);
+                }
+            }
+            catch (DataNotUpdatedException E)
+            {
+                throw E;
             }
             catch (Exception E)
             {
@@ -212,7 +225,7 @@ namespace WebApplication1.BusinessService
                 if (election == null)
                 {
                     _logger.LogError("Current election not found");
-                    throw new BusinessException(_messagesLoclizer["Current election not found"]);
+                    throw new BusinessException(_messagesLocalizer["Current election not found"]);
                 }
 
                 _logger.LogInformation("Calling CandidateBusiness.GetCandidate_byElection() method");
@@ -221,7 +234,7 @@ namespace WebApplication1.BusinessService
                 if (candidates == null || candidates.Count == 0)
                 {
                     _logger.LogError("No candidates found for this election");
-                    throw new BusinessException(_messagesLoclizer["No candidates found for this election"]);
+                    throw new BusinessException(_messagesLocalizer["No candidates found for this election"]);
                 }
                 return candidates;
             }

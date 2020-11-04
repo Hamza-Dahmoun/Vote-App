@@ -18,9 +18,10 @@ namespace WebApplication1.BusinessService
         //Lets create a private readonly field IStringLocalizer<Messages> so that we can use Localization service, we'll inject it inside the constructor
         private readonly IStringLocalizer<Messages> _messagesLocalizer;
 
-        public StateBusiness(IRepository<State> stateRepository)
+        public StateBusiness(IRepository<State> stateRepository, IStringLocalizer<Messages> messagesLocalizer)
         {
             _stateRepository = stateRepository;
+            _messagesLocalizer = messagesLocalizer;
         }
 
         public List<State> GetAll()
