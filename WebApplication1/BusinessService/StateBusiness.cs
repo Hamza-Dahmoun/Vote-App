@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Microsoft.Extensions.Localization;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using WebApplication1.Business;
 using WebApplication1.Models;
 using WebApplication1.Models.Repositories;
 using WebApplication1.Models.ViewModels;
@@ -13,6 +15,8 @@ namespace WebApplication1.BusinessService
     {
         //the below are services we're going to use in this file, they will be injected in the constructor
         private readonly IRepository<State> _stateRepository;
+        //Lets create a private readonly field IStringLocalizer<Messages> so that we can use Localization service, we'll inject it inside the constructor
+        private readonly IStringLocalizer<Messages> _messagesLocalizer;
 
         public StateBusiness(IRepository<State> stateRepository)
         {
@@ -48,7 +52,20 @@ namespace WebApplication1.BusinessService
         {
             try
             {
-                return _stateRepository.Add(state);
+                int updatedRows = _stateRepository.Add(state);
+                if (updatedRows > 0)
+                {
+                    return updatedRows;
+                }
+                else
+                {
+                    //row not updated in the DB
+                    throw new DataNotUpdatedException(_messagesLocalizer["Data not updated, operation failed."]);
+                }
+            }
+            catch (DataNotUpdatedException E)
+            {
+                throw E;
             }
             catch (Exception E)
             {
@@ -60,7 +77,20 @@ namespace WebApplication1.BusinessService
         {
             try
             {
-                return _stateRepository.Delete(Id);
+                int updatedRows = _stateRepository.Delete(Id);
+                if (updatedRows > 0)
+                {
+                    return updatedRows;
+                }
+                else
+                {
+                    //row not updated in the DB
+                    throw new DataNotUpdatedException(_messagesLocalizer["Data not updated, operation failed."]);
+                }
+            }
+            catch (DataNotUpdatedException E)
+            {
+                throw E;
             }
             catch (Exception E)
             {
@@ -72,7 +102,20 @@ namespace WebApplication1.BusinessService
         {
             try
             {
-                return _stateRepository.Edit(Id, state);
+                int updatedRows = _stateRepository.Edit(Id, state);
+                if (updatedRows > 0)
+                {
+                    return updatedRows;
+                }
+                else
+                {
+                    //row not updated in the DB
+                    throw new DataNotUpdatedException(_messagesLocalizer["Data not updated, operation failed."]);
+                }
+            }
+            catch (DataNotUpdatedException E)
+            {
+                throw E;
             }
             catch (Exception E)
             {
