@@ -29,6 +29,7 @@ namespace WebApplication1.BusinessService
         private readonly IRepository<Voter> _voterRepository;
         private readonly IRepository<Election> _electionRepository;
         private readonly VoterBusiness _voterBusiness;
+        private readonly VoteBusiness _voteBusiness;
         private readonly ElectionBusiness _electionBusiness;
         private readonly CandidateBusiness _candidateBusiness;
         private readonly ILogger _logger;
@@ -41,6 +42,7 @@ namespace WebApplication1.BusinessService
             IRepository<Voter> voterRepository,
             IRepository<Election> electionRepository,
             VoterBusiness voterBusiness,
+            VoteBusiness voteBusiness,
             ElectionBusiness electionBusiness,
             CandidateBusiness candidateBusiness,
             ILogger logger)
@@ -56,6 +58,7 @@ namespace WebApplication1.BusinessService
             _voterBusiness = voterBusiness;
             _logger = logger;
             _electionBusiness = electionBusiness;
+            _voteBusiness = voteBusiness;
         }
 
 
@@ -201,6 +204,7 @@ namespace WebApplication1.BusinessService
         public List<Candidate> GetCandidatesOfCurrentElection()
         {
             //this method returns a list of candidates that are related to the current election
+            _logger.LogInformation("VoteBusiness.GetCandidatesOfCurrentElection() is called");
             try
             {
                 _logger.LogInformation("Calling ElectionBusiness.GetCurrentElection() method");
@@ -220,6 +224,32 @@ namespace WebApplication1.BusinessService
                     throw new BusinessException(_messagesLoclizer["No candidates found for this election"]);
                 }
                 return candidates;
+            }
+            catch(BusinessException E)
+            {
+                throw E;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
+        public List<CandidateViewModel> GetCandidatesViewModelList_OfCurrentElection()
+        {
+            //this method returns a list of canddiatesViewModel of the current election
+            _logger.LogInformation("VoteBusiness.GetCandidatesViewModelList_OfCurrentElection() is called");
+            try
+            {
+                var candidates = _voteBusiness.GetCandidatesOfCurrentElection();
+                _logger.LogInformation("Calling _candidateBusiness.ConvertCandidateList_ToCandidateViewModelList() method");
+                List<CandidateViewModel> cvmList = _candidateBusiness.ConvertCandidateList_ToCandidateViewModelList(candidates);
+                _logger.LogInformation("Returning a list of CandidateViewModel to Index view");
+                return cvmList;
+            }
+            catch (BusinessException E)
+            {
+                throw E;
             }
             catch (Exception E)
             {
