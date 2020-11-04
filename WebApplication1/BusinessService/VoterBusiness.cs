@@ -27,6 +27,8 @@ namespace WebApplication1.BusinessService
         private readonly IRepository<Candidate> _candidateRepository;
         private readonly IRepository<Voter> _voterRepository;
         private readonly IRepository<Election> _electionRepository;
+        private readonly VoteBusiness _voteBusiness;
+        private readonly CandidateBusiness _candidateBusiness;
         //private readonly ILogger _logger;
 
         public VoterBusiness(IRepository<Vote> voteRepository,
@@ -35,7 +37,9 @@ namespace WebApplication1.BusinessService
             IStringLocalizer<Messages> messagesLocalizer,
             IRepository<Candidate> candidateRepository,
             IRepository<Voter> voterRepository,
-            IRepository<Election> electionRepository
+            IRepository<Election> electionRepository,
+            VoteBusiness voteBusiness,
+            CandidateBusiness candidateBusiness
             //ILogger logger
             )
         {
@@ -46,6 +50,8 @@ namespace WebApplication1.BusinessService
             _candidateRepository = candidateRepository;
             _voterRepository = voterRepository;
             _electionRepository = electionRepository;
+            _voteBusiness = voteBusiness;
+            _candidateBusiness = candidateBusiness;
             //_logger = logger;
         }
 
@@ -498,5 +504,8 @@ namespace WebApplication1.BusinessService
                 throw E;
             }
         }
+
+
+        
     }
 }
