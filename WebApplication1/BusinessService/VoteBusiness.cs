@@ -63,11 +63,18 @@ namespace WebApplication1.BusinessService
         {
             try
             {
+                if (candidateIdList == null || candidateIdList.Count <= 0)
+                {
+                    _logger.LogError("Cannot validate votes of empty list of candidates");
+                    throw new BusinessException(_messagesLoclizer["Cannot validate votes of empty list of candidates"]);
+                }
+
                 //lets first get the concerned election
                 Candidate firstOne = _candidateRepository.GetById(Guid.Parse(candidateIdList.FirstOrDefault()));
                 Election election = _electionRepository.GetById(firstOne.Election.Id);
                 if (election == null)
                 {
+                    _logger.LogError("Cannot validate vote of null election");
                     throw new BusinessException(_messagesLoclizer["Cannot validate vote of null election"]);
                 }
 
@@ -76,6 +83,7 @@ namespace WebApplication1.BusinessService
                 Voter currentVoter = _voterBusiness.GetVoterByUserId(Guid.Parse(currentUser.Id));
                 if (currentVoter == null)
                 {
+                    _logger.LogError("Voter instance was not found for current user");
                     throw new BusinessException(_messagesLoclizer["Voter instance was not found for current user"]);
                 }
 

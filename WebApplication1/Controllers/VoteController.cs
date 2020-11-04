@@ -98,13 +98,6 @@ namespace WebApplication1.Controllers
             int exceptionDifferentiator = 0;
             try
             {
-                if (candidateIdList == null || candidateIdList.Count <= 0)
-                {
-                    _logger.LogError("Cannot validate votes of empty list of candidates");
-
-                    throw new BusinessException(_messagesLoclizer["Cannot validate votes of empty list of candidates"]);
-                }
-
                 int updatedRows = await _voteBusiness.AddVotes(candidateIdList);
                 if (updatedRows != candidateIdList.Count())
                 {
