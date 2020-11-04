@@ -22,7 +22,7 @@ namespace WebApplication1.BusinessService
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IHttpContextAccessor _contextAccessor;
         //Lets create a private readonly field IStringLocalizer<Messages> so that we can use Localization service, we'll inject it inside the constructor
-        private readonly IStringLocalizer<Messages> _messagesLoclizer;
+        private readonly IStringLocalizer<Messages> _messagesLocalizer;
         private readonly IRepository<Candidate> _candidateRepository;
         private readonly IRepository<Voter> _voterRepository;
         private readonly IRepository<Election> _electionRepository;
@@ -30,7 +30,7 @@ namespace WebApplication1.BusinessService
         public VoterBusiness(IRepository<Vote> voteRepository,
             UserManager<IdentityUser> userManager,
             IHttpContextAccessor contextAccessor,
-            IStringLocalizer<Messages> messagesLoclizer,
+            IStringLocalizer<Messages> messagesLocalizer,
             IRepository<Candidate> candidateRepository,
             IRepository<Voter> voterRepository,
             IRepository<Election> electionRepository)
@@ -38,7 +38,7 @@ namespace WebApplication1.BusinessService
             _voteRepository = voteRepository;
             _userManager = userManager;
             _contextAccessor = contextAccessor;
-            _messagesLoclizer = messagesLoclizer;
+            _messagesLocalizer = messagesLocalizer;
             _candidateRepository = candidateRepository;
             _voterRepository = voterRepository;
             _electionRepository = electionRepository;
@@ -72,7 +72,20 @@ namespace WebApplication1.BusinessService
         {
             try
             {
-                return _voterRepository.Edit(Id, state);
+                int updatedRows = _voterRepository.Edit(Id, state);
+                if (updatedRows > 0)
+                {
+                    return updatedRows;
+                }
+                else
+                {
+                    //row not updated in the DB
+                    throw new DataNotUpdatedException(_messagesLocalizer["Data not updated, operation failed."]);
+                }
+            }
+            catch (DataNotUpdatedException E)
+            {
+                throw E;
             }
             catch (Exception E)
             {
@@ -110,7 +123,20 @@ namespace WebApplication1.BusinessService
         {
             try
             {
-                return _voterRepository.Add(state);
+                int updatedRows = _voterRepository.Add(state);
+                if (updatedRows > 0)
+                {
+                    return updatedRows;
+                }
+                else
+                {
+                    //row not updated in the DB
+                    throw new DataNotUpdatedException(_messagesLocalizer["Data not updated, operation failed."]);
+                }
+            }
+            catch (DataNotUpdatedException E)
+            {
+                throw E;
             }
             catch (Exception E)
             {
@@ -122,7 +148,20 @@ namespace WebApplication1.BusinessService
         {
             try
             {
-                return _voterRepository.Delete(Id);
+                int updatedRows = _voterRepository.Delete(Id);
+                if (updatedRows > 0)
+                {
+                    return updatedRows;
+                }
+                else
+                {
+                    //row not updated in the DB
+                    throw new DataNotUpdatedException(_messagesLocalizer["Data not updated, operation failed."]);
+                }
+            }
+            catch (DataNotUpdatedException E)
+            {
+                throw E;
             }
             catch (Exception E)
             {
@@ -341,7 +380,7 @@ namespace WebApplication1.BusinessService
                     if (isRowUpdated < 1)
                     {
                         //row not updated in the DB
-                        throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
+                        throw new DataNotUpdatedException(_messagesLocalizer["Data not updated, operation failed."]);
                     }
                 }
             }
