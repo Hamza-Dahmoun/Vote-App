@@ -149,58 +149,65 @@ namespace WebApplication1.Controllers
                 if (ModelState.IsValid)
                 {
                     _logger.LogInformation("Model is valid");
-                    //this method receives a VoterStateViewModel object, and based on it, it creates a voter object and stores it in the DB
-                    _logger.LogInformation("Creating a new Voter instance");
-                    Voter v = new Voter
-                    {
-                        Id = Guid.NewGuid(),
-                        FirstName = vs.FirstName,
-                        LastName = vs.LastName,
+                    await _voterBusiness.AddNewVoter(vs);
 
-                         StateId= vs.StateID
-                    };
+                    //row updated successfully in the DB
+                    _logger.LogInformation("The new voter is added to the DB successfully");
+                    _logger.LogInformation("Redirecting to the Voter Index view");
+                    return RedirectToAction(nameof(Index));
 
-                    //now lets add this new voter as a new user to the IdentityDB using UserManager<IdentityUser> service
-                    //we'll set its usernam/email, and set 'Pa$$w0rd' as the password
-                    string username = v.FirstName.ToLower() + "." + v.LastName.ToLower();
-                    _logger.LogInformation("Creating a new IdentityUser instance");
-                    var user = new IdentityUser { UserName = username };
-                    //CreateAsync() is an asynchronous method, we have to mark this method with 'async task'
-                    _logger.LogInformation("Storing the new IdentityUser instance in IdentityDB");
-                    var result = await _userManager.CreateAsync(user, "Pa$$w0rd");//this password will be automatically hashed
-                    
-                    if (result.Succeeded)
-                    {
-                        _logger.LogInformation("The new IdentityUser instance stored successfully in IdentityDB");
+                    ////this method receives a VoterStateViewModel object, and based on it, it creates a voter object and stores it in the DB
+                    //_logger.LogInformation("Creating a new Voter instance");
+                    //Voter v = new Voter
+                    //{
+                    //    Id = Guid.NewGuid(),
+                    //    FirstName = vs.FirstName,
+                    //    LastName = vs.LastName,
 
-                        _logger.LogInformation("Adding 'PreVoter' role to the new IdentityUser");
-                        var result1 = await _userManager.AddToRoleAsync(user, "PreVoter");
-                        
-                        if (result1.Succeeded)
-                        {
-                            _logger.LogInformation("'PreVoter' role to the new IdentityUser is added successfully");
+                    //     StateId= vs.StateID
+                    //};
 
-                            //the user has been stored successully lets insert now the new voter
-                            v.UserId = Guid.Parse(user.Id);
-                            _logger.LogInformation("Adding the new voter to the DB");                            
-                            int updatedRows = _voterBusiness.Add(v);
-                            if (updatedRows > 0)
-                            {
-                                //row updated successfully in the DB
-                                _logger.LogInformation("The new voter is added to the DB successfully");
-                                _logger.LogInformation("Redirecting to the Voter Index view");
-                                return RedirectToAction(nameof(Index));
-                            }
-                            else
-                            {
-                                //row not updated in the DB
-                                throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
-                            }                            
-                        }
-                    }
+                    ////now lets add this new voter as a new user to the IdentityDB using UserManager<IdentityUser> service
+                    ////we'll set its usernam/email, and set 'Pa$$w0rd' as the password
+                    //string username = v.FirstName.ToLower() + "." + v.LastName.ToLower();
+                    //_logger.LogInformation("Creating a new IdentityUser instance");
+                    //var user = new IdentityUser { UserName = username };
+                    ////CreateAsync() is an asynchronous method, we have to mark this method with 'async task'
+                    //_logger.LogInformation("Storing the new IdentityUser instance in IdentityDB");
+                    //var result = await _userManager.CreateAsync(user, "Pa$$w0rd");//this password will be automatically hashed
 
-                    //N.B: Is it possible to move the above block of code that is responsible of adding a user
-                    //to another file (e.g: UserRepository) so that we seperate concerns?
+                    //if (result.Succeeded)
+                    //{
+                    //    _logger.LogInformation("The new IdentityUser instance stored successfully in IdentityDB");
+
+                    //    _logger.LogInformation("Adding 'PreVoter' role to the new IdentityUser");
+                    //    var result1 = await _userManager.AddToRoleAsync(user, "PreVoter");
+
+                    //    if (result1.Succeeded)
+                    //    {
+                    //        _logger.LogInformation("'PreVoter' role to the new IdentityUser is added successfully");
+
+                    //        //the user has been stored successully lets insert now the new voter
+                    //        v.UserId = Guid.Parse(user.Id);
+                    //        _logger.LogInformation("Adding the new voter to the DB");                            
+                    //        int updatedRows = _voterBusiness.Add(v);
+                    //        if (updatedRows > 0)
+                    //        {
+                    //            //row updated successfully in the DB
+                    //            _logger.LogInformation("The new voter is added to the DB successfully");
+                    //            _logger.LogInformation("Redirecting to the Voter Index view");
+                    //            return RedirectToAction(nameof(Index));
+                    //        }
+                    //        else
+                    //        {
+                    //            //row not updated in the DB
+                    //            throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
+                    //        }                            
+                    //    }
+                    //}
+
+                    ////N.B: Is it possible to move the above block of code that is responsible of adding a user
+                    ////to another file (e.g: UserRepository) so that we seperate concerns?
                 }
                 _logger.LogInformation("Model is not valid");
                 //so there is a business rule not met, lets throw a businessException and catch it
@@ -227,8 +234,8 @@ namespace WebApplication1.Controllers
             catch (Exception E)
             {
                 _logger.LogError("Exception, " + E.Message);
-                throw E; 
-            }            
+                throw E;
+            }
         }
 
 
