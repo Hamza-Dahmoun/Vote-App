@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using WebApplication1.Business;
 using WebApplication1.Models;
 using WebApplication1.Models.Helpers;
 using WebApplication1.Models.Repositories;
@@ -21,7 +22,7 @@ namespace WebApplication1.BusinessService
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IHttpContextAccessor _contextAccessor;
         //Lets create a private readonly field IStringLocalizer<Messages> so that we can use Localization service, we'll inject it inside the constructor
-        private readonly IStringLocalizer<Messages> _messagesLoclizer;
+        private readonly IStringLocalizer<Messages> _messagesLocalizer;
         private readonly IRepository<Candidate> _candidateRepository;
         private readonly IRepository<Voter> _voterRepository;
         private readonly IRepository<Election> _electionRepository;
@@ -29,7 +30,7 @@ namespace WebApplication1.BusinessService
         public ElectionBusiness(IRepository<Vote> voteRepository,
             UserManager<IdentityUser> userManager,
             IHttpContextAccessor contextAccessor,
-            IStringLocalizer<Messages> messagesLoclizer,
+            IStringLocalizer<Messages> messagesLocalizer,
             IRepository<Candidate> candidateRepository,
             IRepository<Voter> voterRepository,
             IRepository<Election> electionRepository)
@@ -37,7 +38,7 @@ namespace WebApplication1.BusinessService
             _voteRepository = voteRepository;
             _userManager = userManager;
             _contextAccessor = contextAccessor;
-            _messagesLoclizer = messagesLoclizer;
+            _messagesLocalizer = messagesLocalizer;
             _candidateRepository = candidateRepository;
             _voterRepository = voterRepository;
             _electionRepository = electionRepository;
@@ -111,7 +112,20 @@ namespace WebApplication1.BusinessService
         {
             try
             {
-                return _electionRepository.Add(election);
+                int updatedRows = _electionRepository.Add(election);
+                if (updatedRows > 0)
+                {
+                    return updatedRows;
+                }
+                else
+                {
+                    //row not updated in the DB
+                    throw new DataNotUpdatedException(_messagesLocalizer["Data not updated, operation failed."]);
+                }
+            }
+            catch (DataNotUpdatedException E)
+            {
+                throw E;
             }
             catch (Exception E)
             {
@@ -123,7 +137,20 @@ namespace WebApplication1.BusinessService
         {
             try
             {
-                return _electionRepository.Delete(Id);
+                int updatedRows = _electionRepository.Delete(Id);
+                if (updatedRows > 0)
+                {
+                    return updatedRows;
+                }
+                else
+                {
+                    //row not updated in the DB
+                    throw new DataNotUpdatedException(_messagesLocalizer["Data not updated, operation failed."]);
+                }
+            }
+            catch (DataNotUpdatedException E)
+            {
+                throw E;
             }
             catch (Exception E)
             {
@@ -163,7 +190,20 @@ namespace WebApplication1.BusinessService
         {
             try
             {
-                return _electionRepository.Edit(Id, election);
+                int updatedRows = _electionRepository.Edit(Id, election);
+                if (updatedRows > 0)
+                {
+                    return updatedRows;
+                }
+                else
+                {
+                    //row not updated in the DB
+                    throw new DataNotUpdatedException(_messagesLocalizer["Data not updated, operation failed."]);
+                }
+            }
+            catch (DataNotUpdatedException E)
+            {
+                throw E;
             }
             catch (Exception E)
             {
