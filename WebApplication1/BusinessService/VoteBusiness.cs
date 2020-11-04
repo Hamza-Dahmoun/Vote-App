@@ -27,10 +27,9 @@ namespace WebApplication1.BusinessService
         private readonly IRepository<Voter> _voterRepository;
         private readonly IRepository<Election> _electionRepository;
         private readonly VoterBusiness _voterBusiness;
-        private readonly VoteBusiness _voteBusiness;
         private readonly ElectionBusiness _electionBusiness;
         private readonly CandidateBusiness _candidateBusiness;
-        private readonly ILogger _logger;
+        //private readonly ILogger _logger;
         //Lets create a private readonly field IStringLocalizer<Messages> so that we can use Localization service, we'll inject it inside the constructor
         private readonly IStringLocalizer<Messages> _messagesLocalizer;
 
@@ -42,10 +41,10 @@ namespace WebApplication1.BusinessService
             IRepository<Voter> voterRepository,
             IRepository<Election> electionRepository,
             VoterBusiness voterBusiness,
-            VoteBusiness voteBusiness,
             ElectionBusiness electionBusiness,
-            CandidateBusiness candidateBusiness,
-            ILogger logger)
+            CandidateBusiness candidateBusiness
+            //ILogger logger
+            )
         {
             _voteRepository = voteRepository;
             _userManager = userManager;
@@ -55,9 +54,8 @@ namespace WebApplication1.BusinessService
             _voterRepository = voterRepository;
             _electionRepository = electionRepository;
             _voterBusiness = voterBusiness;
-            _logger = logger;
+            //_logger = logger;
             _electionBusiness = electionBusiness;
-            _voteBusiness = voteBusiness;
             _messagesLocalizer = messagesLocalizer;
         }
 
@@ -70,7 +68,7 @@ namespace WebApplication1.BusinessService
             {
                 if (candidateIdList == null || candidateIdList.Count <= 0)
                 {
-                    _logger.LogError("Cannot validate votes of empty list of candidates");
+                    //_logger.LogError("Cannot validate votes of empty list of candidates");
                     throw new BusinessException(_messagesLocalizer["Cannot validate votes of empty list of candidates"]);
                 }
 
@@ -79,7 +77,7 @@ namespace WebApplication1.BusinessService
                 Election election = _electionRepository.GetById(firstOne.Election.Id);
                 if (election == null)
                 {
-                    _logger.LogError("Cannot validate vote of null election");
+                    //_logger.LogError("Cannot validate vote of null election");
                     throw new BusinessException(_messagesLocalizer["Cannot validate vote of null election"]);
                 }
 
@@ -88,7 +86,7 @@ namespace WebApplication1.BusinessService
                 Voter currentVoter = _voterBusiness.GetVoterByUserId(Guid.Parse(currentUser.Id));
                 if (currentVoter == null)
                 {
-                    _logger.LogError("Voter instance was not found for current user");
+                    //_logger.LogError("Voter instance was not found for current user");
                     throw new BusinessException(_messagesLocalizer["Voter instance was not found for current user"]);
                 }
 
@@ -217,23 +215,23 @@ namespace WebApplication1.BusinessService
         public List<Candidate> GetCandidatesOfCurrentElection()
         {
             //this method returns a list of candidates that are related to the current election
-            _logger.LogInformation("VoteBusiness.GetCandidatesOfCurrentElection() is called");
+            //_logger.LogInformation("VoteBusiness.GetCandidatesOfCurrentElection() is called");
             try
             {
-                _logger.LogInformation("Calling ElectionBusiness.GetCurrentElection() method");
+                //_logger.LogInformation("Calling ElectionBusiness.GetCurrentElection() method");
                 Election election = _electionBusiness.GetCurrentElection();
                 if (election == null)
                 {
-                    _logger.LogError("Current election not found");
+                    //_logger.LogError("Current election not found");
                     throw new BusinessException(_messagesLocalizer["Current election not found"]);
                 }
 
-                _logger.LogInformation("Calling CandidateBusiness.GetCandidate_byElection() method");
+                //_logger.LogInformation("Calling CandidateBusiness.GetCandidate_byElection() method");
 
                 var candidates = _candidateBusiness.GetCandidate_byElection(election);
                 if (candidates == null || candidates.Count == 0)
                 {
-                    _logger.LogError("No candidates found for this election");
+                    //_logger.LogError("No candidates found for this election");
                     throw new BusinessException(_messagesLocalizer["No candidates found for this election"]);
                 }
                 return candidates;
@@ -251,13 +249,13 @@ namespace WebApplication1.BusinessService
         public List<CandidateViewModel> GetCandidatesViewModelList_OfCurrentElection()
         {
             //this method returns a list of canddiatesViewModel of the current election
-            _logger.LogInformation("VoteBusiness.GetCandidatesViewModelList_OfCurrentElection() is called");
+            //_logger.LogInformation("VoteBusiness.GetCandidatesViewModelList_OfCurrentElection() is called");
             try
             {
-                var candidates = _voteBusiness.GetCandidatesOfCurrentElection();
-                _logger.LogInformation("Calling _candidateBusiness.ConvertCandidateList_ToCandidateViewModelList() method");
+                var candidates = GetCandidatesOfCurrentElection();
+                //_logger.LogInformation("Calling _candidateBusiness.ConvertCandidateList_ToCandidateViewModelList() method");
                 List<CandidateViewModel> cvmList = _candidateBusiness.ConvertCandidateList_ToCandidateViewModelList(candidates);
-                _logger.LogInformation("Returning a list of CandidateViewModel to Index view");
+                //_logger.LogInformation("Returning a list of CandidateViewModel to Index view");
                 return cvmList;
             }
             catch (BusinessException E)

@@ -27,7 +27,7 @@ namespace WebApplication1.BusinessService
         private readonly IRepository<Candidate> _candidateRepository;
         private readonly IRepository<Voter> _voterRepository;
         private readonly IRepository<Election> _electionRepository;
-        private readonly ILogger _logger;
+        //private readonly ILogger _logger;
 
         public VoterBusiness(IRepository<Vote> voteRepository,
             UserManager<IdentityUser> userManager,
@@ -35,8 +35,9 @@ namespace WebApplication1.BusinessService
             IStringLocalizer<Messages> messagesLocalizer,
             IRepository<Candidate> candidateRepository,
             IRepository<Voter> voterRepository,
-            IRepository<Election> electionRepository,
-            ILogger logger)
+            IRepository<Election> electionRepository
+            //ILogger logger
+            )
         {
             _voteRepository = voteRepository;
             _userManager = userManager;
@@ -45,7 +46,7 @@ namespace WebApplication1.BusinessService
             _candidateRepository = candidateRepository;
             _voterRepository = voterRepository;
             _electionRepository = electionRepository;
-            _logger = logger;
+            //_logger = logger;
         }
 
 
@@ -404,7 +405,7 @@ namespace WebApplication1.BusinessService
             {
                 //this method receives a VoterStateViewModel object, and based on it, it creates a voter object and stores it in the DB
                 //after adding his corresponding user
-                _logger.LogInformation("Creating a new Voter instance");
+                //_logger.LogInformation("Creating a new Voter instance");
                 Voter v = new Voter
                 {
                     Id = Guid.NewGuid(),
@@ -415,12 +416,12 @@ namespace WebApplication1.BusinessService
 
                 //lets add the new user and use its ID in our new voter instance
                 v.UserId = await AddNewUser_FromNewVoter(v);
-                _logger.LogInformation("Adding the new voter to the DB");
+                //_logger.LogInformation("Adding the new voter to the DB");
                 int updatedRows = Add(v);
                 if (updatedRows > 0)
                 {
                     //row updated successfully in the DB
-                    _logger.LogInformation("The new voter is added to the DB successfully");
+                    //_logger.LogInformation("The new voter is added to the DB successfully");
                 }
                 else
                 {
@@ -451,23 +452,23 @@ namespace WebApplication1.BusinessService
                 //we'll set its usernam/email, and set 'Pa$$w0rd' as the password
                 string username = v.FirstName.ToLower() + "." + v.LastName.ToLower();
 
-                _logger.LogInformation("Creating a new IdentityUser instance");
+                //_logger.LogInformation("Creating a new IdentityUser instance");
                 var user = new IdentityUser { UserName = username };
 
                 //CreateAsync() is an asynchronous method, we have to mark this method with 'async task'
-                _logger.LogInformation("Storing the new IdentityUser instance in IdentityDB");
+                //_logger.LogInformation("Storing the new IdentityUser instance in IdentityDB");
                 var result = await _userManager.CreateAsync(user, "Pa$$w0rd");//this password will be automatically hashed
 
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("The new IdentityUser instance stored successfully in IdentityDB");
+                    //_logger.LogInformation("The new IdentityUser instance stored successfully in IdentityDB");
 
-                    _logger.LogInformation("Adding 'PreVoter' role to the new IdentityUser");
+                    //_logger.LogInformation("Adding 'PreVoter' role to the new IdentityUser");
                     var result1 = await _userManager.AddToRoleAsync(user, "PreVoter");
 
                     if (result1.Succeeded)
                     {
-                        _logger.LogInformation("'PreVoter' role to the new IdentityUser is added successfully");
+                        //_logger.LogInformation("'PreVoter' role to the new IdentityUser is added successfully");
 
                         //the user has been stored successully lets return its ID
                         return Guid.Parse(user.Id);

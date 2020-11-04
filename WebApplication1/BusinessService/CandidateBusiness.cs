@@ -27,9 +27,8 @@ namespace WebApplication1.BusinessService
         private readonly IRepository<Voter> _voterRepository;
         private readonly IRepository<Election> _electionRepository;
         private readonly VoterBusiness _voterBusiness;
-        private readonly CandidateBusiness _candidateBusiness;
         private readonly ElectionBusiness _electionBusiness;
-        private readonly ILogger _logger;
+        //private readonly ILogger _logger;
 
         public CandidateBusiness(IRepository<Vote> voteRepository,
             UserManager<IdentityUser> userManager,
@@ -39,8 +38,7 @@ namespace WebApplication1.BusinessService
             IRepository<Voter> voterRepository,
             IRepository<Election> electionRepository,
             VoterBusiness voterBusiness,
-            CandidateBusiness candidateBusiness,
-            ILogger logger,
+            //ILogger logger,
             ElectionBusiness electionBusiness)
         {
             _voteRepository = voteRepository;
@@ -51,9 +49,8 @@ namespace WebApplication1.BusinessService
             _voterRepository = voterRepository;
             _electionRepository = electionRepository;
             _voterBusiness = voterBusiness;
-            _candidateBusiness = candidateBusiness;
             _electionBusiness = electionBusiness;
-            _logger = logger;
+            //_logger = logger;
         }
 
         public Candidate GetById(Guid Id)
@@ -214,11 +211,11 @@ namespace WebApplication1.BusinessService
             //This method returns a list of CandidatesViewModel taking one paramater candidateId
             try
             {
-                _logger.LogInformation("Running _candidateBusiness.GetCandidateViewModelList_byOneCandidateID() method");
-                Candidate candid = _candidateBusiness.GetById(candidateId);
+                //_logger.LogInformation("Running _candidateBusiness.GetCandidateViewModelList_byOneCandidateID() method");
+                Candidate candid = GetById(candidateId);
                 Election election = _electionBusiness.GetById(candid.Election.Id);
-                var candidates = _candidateBusiness.GetCandidate_byElection(election);     
-                List<CandidateViewModel> candidatesViewModel = _candidateBusiness.ConvertCandidateList_ToCandidateViewModelList(candidates);
+                var candidates = GetCandidate_byElection(election);     
+                List<CandidateViewModel> candidatesViewModel = ConvertCandidateList_ToCandidateViewModelList(candidates);
                 return candidatesViewModel;
             }
             catch (Exception E)
