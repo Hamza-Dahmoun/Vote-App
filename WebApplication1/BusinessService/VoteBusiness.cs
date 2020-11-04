@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,9 @@ namespace WebApplication1.BusinessService
         private readonly IRepository<Voter> _voterRepository;
         private readonly IRepository<Election> _electionRepository;
         private readonly VoterBusiness _voterBusiness;
+        private readonly ElectionBusiness _electionBusiness;
+        private readonly CandidateBusiness _candidateBusiness;
+        private readonly ILogger _logger;
 
         public VoteBusiness(IRepository<Vote> voteRepository,
             UserManager<IdentityUser> userManager,
@@ -36,7 +40,9 @@ namespace WebApplication1.BusinessService
             IRepository<Candidate> candidateRepository,
             IRepository<Voter> voterRepository,
             IRepository<Election> electionRepository,
-            VoterBusiness voterBusiness)
+            VoterBusiness voterBusiness,
+            ElectionBusiness electionBusiness,
+            ILogger logger)
         {
             _voteRepository = voteRepository;
             _userManager = userManager;
@@ -46,6 +52,8 @@ namespace WebApplication1.BusinessService
             _voterRepository = voterRepository;
             _electionRepository = electionRepository;
             _voterBusiness = voterBusiness;
+            _logger = logger;
+            _electionBusiness = electionBusiness;
         }
 
 
@@ -173,6 +181,34 @@ namespace WebApplication1.BusinessService
                 if (votes.Count() > 0)
                     return true;
                 else return false;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
+        public List<Candidate> GetCandidatesOfCurrentElection()
+        {
+            //this method returns a list of candidates that are related to the current election
+            try
+            {
+                Election election = _electionBusiness.GetCurrentElection();
+                if (election == null)
+                {
+                    _logger.LogError("Current election not found");
+                    throw new BusinessException(_messagesLoclizer["Current election not found"]);
+                }
+
+                _logger.LogInformation("Calling CandidateBusiness.GetCandidate_byElection() method");
+
+                var candidates = _candidateBusiness.GetCandidate_byElection(election);
+                if (candidates == null || candidates.Count == 0)
+                {
+                    _logger.LogError("No candidates found for this election");
+                    throw new BusinessException(_messagesLoclizer["No candidates found for this election"]);
+                }
+                return candidates;
             }
             catch (Exception E)
             {
