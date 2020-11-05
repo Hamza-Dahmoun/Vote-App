@@ -155,59 +155,6 @@ namespace WebApplication1.Controllers
                     _logger.LogInformation("The new voter is added to the DB successfully");
                     _logger.LogInformation("Redirecting to the Voter Index view");
                     return RedirectToAction(nameof(Index));
-
-                    ////this method receives a VoterStateViewModel object, and based on it, it creates a voter object and stores it in the DB
-                    //_logger.LogInformation("Creating a new Voter instance");
-                    //Voter v = new Voter
-                    //{
-                    //    Id = Guid.NewGuid(),
-                    //    FirstName = vs.FirstName,
-                    //    LastName = vs.LastName,
-
-                    //     StateId= vs.StateID
-                    //};
-
-                    ////now lets add this new voter as a new user to the IdentityDB using UserManager<IdentityUser> service
-                    ////we'll set its usernam/email, and set 'Pa$$w0rd' as the password
-                    //string username = v.FirstName.ToLower() + "." + v.LastName.ToLower();
-                    //_logger.LogInformation("Creating a new IdentityUser instance");
-                    //var user = new IdentityUser { UserName = username };
-                    ////CreateAsync() is an asynchronous method, we have to mark this method with 'async task'
-                    //_logger.LogInformation("Storing the new IdentityUser instance in IdentityDB");
-                    //var result = await _userManager.CreateAsync(user, "Pa$$w0rd");//this password will be automatically hashed
-
-                    //if (result.Succeeded)
-                    //{
-                    //    _logger.LogInformation("The new IdentityUser instance stored successfully in IdentityDB");
-
-                    //    _logger.LogInformation("Adding 'PreVoter' role to the new IdentityUser");
-                    //    var result1 = await _userManager.AddToRoleAsync(user, "PreVoter");
-
-                    //    if (result1.Succeeded)
-                    //    {
-                    //        _logger.LogInformation("'PreVoter' role to the new IdentityUser is added successfully");
-
-                    //        //the user has been stored successully lets insert now the new voter
-                    //        v.UserId = Guid.Parse(user.Id);
-                    //        _logger.LogInformation("Adding the new voter to the DB");                            
-                    //        int updatedRows = _voterBusiness.Add(v);
-                    //        if (updatedRows > 0)
-                    //        {
-                    //            //row updated successfully in the DB
-                    //            _logger.LogInformation("The new voter is added to the DB successfully");
-                    //            _logger.LogInformation("Redirecting to the Voter Index view");
-                    //            return RedirectToAction(nameof(Index));
-                    //        }
-                    //        else
-                    //        {
-                    //            //row not updated in the DB
-                    //            throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
-                    //        }                            
-                    //    }
-                    //}
-
-                    ////N.B: Is it possible to move the above block of code that is responsible of adding a user
-                    ////to another file (e.g: UserRepository) so that we seperate concerns?
                 }
                 _logger.LogInformation("Model is not valid");
                 //so there is a business rule not met, lets throw a businessException and catch it
@@ -299,69 +246,7 @@ namespace WebApplication1.Controllers
                     throw new BusinessException(_messagesLoclizer["Voter not found"]);
                 }
 
-                //1- Remove all this voter's votes
-                //declaring an expression that is special to Vote objects
-                System.Linq.Expressions.Expression<Func<Vote, bool>> expr1 = e => e.Voter == voter;
-                _logger.LogInformation("Calling VoteRepository.GetAllFiltered() method");
-                List<Vote> votesList = _voteBusiness.GetAllFiltered(expr1);
-
-                _logger.LogInformation("Going to delete all Vote instances of a Voter");
-                foreach (var vote in votesList)
-                {                    
-                    int updatedRows2 = _voteBusiness.Delete(vote.Id);
-                    if (updatedRows2 < 1)
-                    {
-                        //row not updated in the DB
-                        throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
-                    }
-                }
-                _logger.LogInformation("Done deleting to delete all Vote instances of a Voter");
-
-                //2- Remove corresponding Candidates objects
-                //declaring an expression that is special to Vote objects
-                System.Linq.Expressions.Expression<Func<Candidate, bool>> expr2 = e => e.VoterBeingId == voter.Id;
-                _logger.LogInformation("Going to get all Candidates instances of the Voter");
-                List<Candidate> candidatesList = _candidateBusiness.GetAllFiltered(expr2);
-
-                _logger.LogInformation("Going to delete all Candidates instances of the Voter");
-                foreach (var candidate in candidatesList)
-                {
-                    int updatedRows3 = _candidateBusiness.Delete(candidate.Id);
-                    if (updatedRows3 < 1)
-                    {
-                        //row not updated in the DB
-                        throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
-                    }
-                }
-                _logger.LogInformation("Done deleting all Candidates instances of the Voter");
-
-                //3- Delete this voter's account from the Identity Db
-                //lets get the User by his ID
-
-                _logger.LogInformation("Going to get the corresponding IdentityUser of the Voter instance");
-                var voterUserAccount = await _userManager.FindByIdAsync(_voterBusiness.GetById(id).UserId.ToString());
-                
-                //DeleteAsync() is an asynchronous method, we have to mark this method with 'async task'
-                _logger.LogInformation("Going to delete the corresponding IdentityUser of the Voter instance");
-                var result = await _userManager.DeleteAsync(voterUserAccount);
-                if (result.Succeeded)
-                {
-                    _logger.LogInformation("done deleting the corresponding IdentityUser of the Voter instance");
-
-                    //4- Remove the Voter
-                    _logger.LogInformation("Going to delete the Voter instance");                    
-                    int updatedRows5 = _voterBusiness.Delete(id);
-                    if (updatedRows5 > 0)
-                    {
-                        //row updated successfully in the DB
-                        _logger.LogInformation("Done deleting the Voter instance");
-                    }
-                    else
-                    {
-                        //row not updated in the DB
-                        throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
-                    }                    
-                }
+                await _voterBusiness.DeleteVoter(id);                
 
                 _logger.LogInformation("Redirecting to Index view");
                 return RedirectToAction(nameof(Index));
