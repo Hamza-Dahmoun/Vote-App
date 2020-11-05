@@ -162,8 +162,6 @@ namespace WebApplication1.Controllers
             //so if a business rule is not met we'll throw a businessException and catch it to create and internal server error and return its msg
             //as json
 
-
-
             //Step(1): Adding info of the election(name, duration,,,) and send them to backend using api method in inside the controller,
             //then send back the response to javascript to redirect to step2
 
@@ -171,69 +169,12 @@ namespace WebApplication1.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    //first of all lets check if this election is in future, if it is not then we'll not edit it
-                    if (election.StartDate <= DateTime.Now)
-                    {
-                        //so it is not a future election
-                        throw new BusinessException(_messagesLoclizer["A New Election should take place in a future date."]);                            
-                    }
-
-                    if (_electionBusiness.GetElectionsInSamePeriod(election.StartDate, election.DurationInDays) > 0)
-                    {
-                        //so there is other existing elections which the period overlap with this new election's period
-                        throw new BusinessException(_messagesLoclizer["There is an existing Election during the same period."]);
-                    }
-                    if (election.DurationInDays < 0 || election.DurationInDays > 5)
-                    {
-                        //so the number of days is invalid
-
-                        throw new BusinessException(_messagesLoclizer["The duration of the Election should be from one to five days."]);
-                    }
-
                     election.Id = Guid.NewGuid();
-                    //if election has a neutral opinion then we should add it to the db
-                    if (election.HasNeutral)
-                    {
-                        Candidate neutralOpinion = new Candidate
-                        {
-                            Id = Guid.NewGuid(),
-                            isNeutralOpinion = true,
-                            Election = election
-                        };
 
-                        int updatedRows = _electionBusiness.Add(election);
-                        if (updatedRows > 0)
-                        {
-                            //row updated successfully in the DB
-                            int updatedRows2 = _candidateBusiness.Add(neutralOpinion);
-                            if (updatedRows2 < 1)
-                            {
-                                //row not updated in the DB
-                                throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
-                            }
-                        }
-                        else
-                        {
-                            //row not updated in the DB
-                            throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
-                        }                        
-                        
-                    }
-                    else
-                    {
-                        int updatedRows = _electionBusiness.Add(election);
-                        if (updatedRows < 1)
-                        {
-                            //row not updated in the DB
-                            throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
-                        }
-                    }
-                    
-
+                    _electionBusiness.AddNewElection(election);
 
                     response_Voters_and_NewElection r;
                     r.ElectionId = election.Id;
-
                     r.Voters = _voterBusiness.ConvertVoterList_ToPersonViewModelList(_voterBusiness.GetAll());
 
                     //lets serialize the struct we've got and send it back as a reponse
@@ -267,9 +208,9 @@ namespace WebApplication1.Controllers
                 return Json(new { Message = E.Message });
                 //In above code I created an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
             }
-
-
         }
+        
+        
         [HttpPost]
         //If I leave [FromBody] next to the parameter the request will not even access this method, bcuz jquery already has passed parameters
         public async Task<IActionResult> VotersDataTable(Guid electionId)

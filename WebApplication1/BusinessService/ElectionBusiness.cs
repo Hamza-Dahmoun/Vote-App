@@ -328,7 +328,6 @@ namespace WebApplication1.BusinessService
                     throw new BusinessException(_messagesLocalizer["The duration of the Election should be from one to five days."]);
                 }
 
-                election.Id = Guid.NewGuid();
                 //if election has a neutral opinion then we should add it to the db
                 if (election.HasNeutral)
                 {
