@@ -302,5 +302,83 @@ namespace WebApplication1.BusinessService
             int count = GetFutureElections().Count();
             return count;
         }
+
+
+        public void AddNewElection(Election election)
+        {
+            //this method takes an election instance and add it to the db .. it is used when adding a new election by ElectionController/ValidateVote()
+            try
+            {
+                //first of all lets check if this election is in future, if it is not then we'll not edit it
+                if (election.StartDate <= DateTime.Now)
+                {
+                    //so it is not a future election
+                    throw new BusinessException(_messagesLocalizer["A New Election should take place in a future date."]);
+                }
+
+                if (GetElectionsInSamePeriod(election.StartDate, election.DurationInDays) > 0)
+                {
+                    //so there is other existing elections which the period overlap with this new election's period
+                    throw new BusinessException(_messagesLocalizer["There is an existing Election during the same period."]);
+                }
+                if (election.DurationInDays < 0 || election.DurationInDays > 5)
+                {
+                    //so the number of days is invalid
+
+                    throw new BusinessException(_messagesLocalizer["The duration of the Election should be from one to five days."]);
+                }
+
+                election.Id = Guid.NewGuid();
+                //if election has a neutral opinion then we should add it to the db
+                if (election.HasNeutral)
+                {
+                    Candidate neutralOpinion = new Candidate
+                    {
+                        Id = Guid.NewGuid(),
+                        isNeutralOpinion = true,
+                        Election = election
+                    };
+
+                    int updatedRows = Add(election);
+                    if (updatedRows > 0)
+                    {
+                        //row updated successfully in the DB
+                        int updatedRows2 = _candidateRepository.Add(neutralOpinion);
+                        if (updatedRows2 < 1)
+                        {
+                            //row not updated in the DB
+                            throw new DataNotUpdatedException(_messagesLocalizer["Data not updated, operation failed."]);
+                        }
+                    }
+                    else
+                    {
+                        //row not updated in the DB
+                        throw new DataNotUpdatedException(_messagesLocalizer["Data not updated, operation failed."]);
+                    }
+
+                }
+                else
+                {
+                    int updatedRows = Add(election);
+                    if (updatedRows < 1)
+                    {
+                        //row not updated in the DB
+                        throw new DataNotUpdatedException(_messagesLocalizer["Data not updated, operation failed."]);
+                    }
+                }
+            }
+            catch (DataNotUpdatedException E)
+            {
+                throw E;
+            }
+            catch (BusinessException E)
+            {
+                throw E;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
     }
 }
