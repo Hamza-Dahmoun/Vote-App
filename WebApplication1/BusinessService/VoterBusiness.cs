@@ -27,8 +27,6 @@ namespace WebApplication1.BusinessService
         private readonly IRepository<Candidate> _candidateRepository;
         private readonly IRepository<Voter> _voterRepository;
         private readonly IRepository<Election> _electionRepository;
-        private readonly VoteBusiness _voteBusiness;
-        private readonly CandidateBusiness _candidateBusiness;
         //private readonly ILogger _logger;
 
         public VoterBusiness(IRepository<Vote> voteRepository,
@@ -37,9 +35,7 @@ namespace WebApplication1.BusinessService
             IStringLocalizer<Messages> messagesLocalizer,
             IRepository<Candidate> candidateRepository,
             IRepository<Voter> voterRepository,
-            IRepository<Election> electionRepository,
-            VoteBusiness voteBusiness,
-            CandidateBusiness candidateBusiness
+            IRepository<Election> electionRepository
             //ILogger logger
             )
         {
@@ -50,8 +46,6 @@ namespace WebApplication1.BusinessService
             _candidateRepository = candidateRepository;
             _voterRepository = voterRepository;
             _electionRepository = electionRepository;
-            _voteBusiness = voteBusiness;
-            _candidateBusiness = candidateBusiness;
             //_logger = logger;
         }
 
@@ -505,7 +499,7 @@ namespace WebApplication1.BusinessService
             }
         }
 
-                
+             
         public async Task DeleteVoter(Guid voterId)
         {
             //this method takes a voter id and delete him from db
@@ -557,12 +551,12 @@ namespace WebApplication1.BusinessService
                 //declaring an expression that is special to Vote objects
                 System.Linq.Expressions.Expression<Func<Vote, bool>> expr1 = e => e.VoterId == voterId;
                 //_logger.LogInformation("Calling VoteRepository.GetAllFiltered() method");
-                List<Vote> votesList = _voteBusiness.GetAllFiltered(expr1);
+                List<Vote> votesList = _voteRepository.GetAllFiltered(expr1);
 
                 //_logger.LogInformation("Going to delete all Vote instances of a Voter");
                 foreach (var vote in votesList)
                 {
-                    int updatedRows2 = _voteBusiness.Delete(vote.Id);
+                    int updatedRows2 = _voteRepository.Delete(vote.Id);
                     if (updatedRows2 < 1)
                     {
                         //row not updated in the DB
@@ -593,12 +587,12 @@ namespace WebApplication1.BusinessService
                 //declaring an expression that is special to Vote objects
                 System.Linq.Expressions.Expression<Func<Candidate, bool>> expr2 = e => e.VoterBeingId == voterId;
                 //_logger.LogInformation("Going to get all Candidates instances of the Voter");
-                List<Candidate> candidatesList = _candidateBusiness.GetAllFiltered(expr2);
+                List<Candidate> candidatesList = _candidateRepository.GetAllFiltered(expr2);
 
                 //_logger.LogInformation("Going to delete all Candidates instances of the Voter");
                 foreach (var candidate in candidatesList)
                 {
-                    int updatedRows3 = _candidateBusiness.Delete(candidate.Id);
+                    int updatedRows3 = _candidateRepository.Delete(candidate.Id);
                     if (updatedRows3 < 1)
                     {
                         //row not updated in the DB
@@ -656,5 +650,6 @@ namespace WebApplication1.BusinessService
                 throw E;
             }
         }
+        
     }
 }
