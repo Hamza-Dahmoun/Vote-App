@@ -26,9 +26,6 @@ namespace WebApplication1.BusinessService
         private readonly IRepository<Candidate> _candidateRepository;
         private readonly IRepository<Voter> _voterRepository;
         private readonly IRepository<Election> _electionRepository;
-        private readonly VoterBusiness _voterBusiness;
-        private readonly ElectionBusiness _electionBusiness;
-        private readonly CandidateBusiness _candidateBusiness;
         //private readonly ILogger _logger;
         //Lets create a private readonly field IStringLocalizer<Messages> so that we can use Localization service, we'll inject it inside the constructor
         private readonly IStringLocalizer<Messages> _messagesLocalizer;
@@ -39,10 +36,7 @@ namespace WebApplication1.BusinessService
             IStringLocalizer<Messages> messagesLocalizer,
             IRepository<Candidate> candidateRepository,
             IRepository<Voter> voterRepository,
-            IRepository<Election> electionRepository,
-            VoterBusiness voterBusiness,
-            ElectionBusiness electionBusiness,
-            CandidateBusiness candidateBusiness
+            IRepository<Election> electionRepository
             //ILogger logger
             )
         {
@@ -50,12 +44,9 @@ namespace WebApplication1.BusinessService
             _userManager = userManager;
             _contextAccessor = contextAccessor;
             _candidateRepository = candidateRepository;
-            _candidateBusiness = candidateBusiness;
             _voterRepository = voterRepository;
             _electionRepository = electionRepository;
-            _voterBusiness = voterBusiness;
             //_logger = logger;
-            _electionBusiness = electionBusiness;
             _messagesLocalizer = messagesLocalizer;
         }
 
@@ -83,7 +74,11 @@ namespace WebApplication1.BusinessService
 
                 //lets get the voter instance of the current user, so that we use its id with his votes
                 var currentUser = await _userManager.GetUserAsync(_contextAccessor.HttpContext.User);
-                Voter currentVoter = _voterBusiness.GetVoterByUserId(Guid.Parse(currentUser.Id));
+
+                //declaring an expression that is special to Voter objects
+                System.Linq.Expressions.Expression<Func<Voter, bool>> expr = v => v.UserId == Guid.Parse(currentUser.Id);
+                Voter currentVoter = _voterRepository.GetOneFiltered(expr);
+
                 if (currentVoter == null)
                 {
                     //_logger.LogError("Voter instance was not found for current user");
@@ -212,60 +207,6 @@ namespace WebApplication1.BusinessService
             }
         }
 
-        public List<Candidate> GetCandidatesOfCurrentElection()
-        {
-            //this method returns a list of candidates that are related to the current election
-            //_logger.LogInformation("VoteBusiness.GetCandidatesOfCurrentElection() is called");
-            try
-            {
-                //_logger.LogInformation("Calling ElectionBusiness.GetCurrentElection() method");
-                Election election = _electionBusiness.GetCurrentElection();
-                if (election == null)
-                {
-                    //_logger.LogError("Current election not found");
-                    throw new BusinessException(_messagesLocalizer["Current election not found"]);
-                }
-
-                //_logger.LogInformation("Calling CandidateBusiness.GetCandidate_byElection() method");
-
-                var candidates = _candidateBusiness.GetCandidate_byElection(election);
-                if (candidates == null || candidates.Count == 0)
-                {
-                    //_logger.LogError("No candidates found for this election");
-                    throw new BusinessException(_messagesLocalizer["No candidates found for this election"]);
-                }
-                return candidates;
-            }
-            catch(BusinessException E)
-            {
-                throw E;
-            }
-            catch (Exception E)
-            {
-                throw E;
-            }
-        }
-
-        public List<CandidateViewModel> GetCandidatesViewModelList_OfCurrentElection()
-        {
-            //this method returns a list of canddiatesViewModel of the current election
-            //_logger.LogInformation("VoteBusiness.GetCandidatesViewModelList_OfCurrentElection() is called");
-            try
-            {
-                var candidates = GetCandidatesOfCurrentElection();
-                //_logger.LogInformation("Calling _candidateBusiness.ConvertCandidateList_ToCandidateViewModelList() method");
-                List<CandidateViewModel> cvmList = _candidateBusiness.ConvertCandidateList_ToCandidateViewModelList(candidates);
-                //_logger.LogInformation("Returning a list of CandidateViewModel to Index view");
-                return cvmList;
-            }
-            catch (BusinessException E)
-            {
-                throw E;
-            }
-            catch (Exception E)
-            {
-                throw E;
-            }
-        }
+        
     }
 }
