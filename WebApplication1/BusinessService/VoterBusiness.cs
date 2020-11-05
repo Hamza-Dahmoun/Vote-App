@@ -506,6 +506,48 @@ namespace WebApplication1.BusinessService
         }
 
                 
+        public async Task DeleteVoter(Guid voterId)
+        {
+            //this method takes a voter id and delete him from db
+            //but before that, it delete all his votes instances, all his candidates instances, and his user accound from identityDB
+            try
+            {
+                //1- delete all votes instances of this voter
+                DeleteAllVotesOfVoter(voterId);
+
+                //2- delete all candidates instances of this voter
+                DeleteAllCandidatesOfVoter(voterId);
+
+                //3- delete all candidates instances of this voter
+                await DeleteUserAccountOfVoter(voterId);
+
+                //4- delete voter from db
+                //_logger.LogInformation("Going to delete the Voter instance");
+                int updatedRows5 = Delete(voterId);
+                if (updatedRows5 > 0)
+                {
+                    //row updated successfully in the DB
+                    //_logger.LogInformation("Done deleting the Voter instance");
+                }
+                else
+                {
+                    //row not updated in the DB
+                    throw new DataNotUpdatedException(_messagesLocalizer["Data not updated, operation failed."]);
+                }
+            }
+            catch (DataNotUpdatedException E)
+            {
+                throw E;
+            }
+            catch (BusinessException E)
+            {
+                throw E;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
         
         private void DeleteAllVotesOfVoter(Guid voterId)
         {
