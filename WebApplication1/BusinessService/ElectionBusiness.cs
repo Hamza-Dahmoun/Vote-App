@@ -275,5 +275,18 @@ namespace WebApplication1.BusinessService
                 throw E;
             }
         }
+
+        public List<Election> GetPreviousElections()
+        {
+            //declaring an expression that is special to Election objects
+            System.Linq.Expressions.Expression<Func<Election, bool>> expr = e => e.StartDate.AddDays(e.DurationInDays) < DateTime.Now;
+            var previousElections = GetAllFiltered(expr).ToList();
+            return previousElections;
+        }
+        public int CountPreviousElections()
+        {
+            int count = GetPreviousElections().Count();
+            return count;
+        }
     }
 }

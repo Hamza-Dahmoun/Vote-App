@@ -101,7 +101,7 @@ namespace WebApplication1.Controllers
 
                     //Now lets count futureElections and previousElections and store them in a ViewBag to be displayed inside Excel Download buttons
                     ViewBag.futureElectionsCount = countFutureElections();
-                    ViewBag.previousElectionsCount = countPreviousElections();
+                    ViewBag.previousElectionsCount = _electionBusiness.CountPreviousElections();
 
 
                     _logger.LogInformation("Returning dashboard instance to the view");
@@ -293,7 +293,7 @@ namespace WebApplication1.Controllers
             var futureElections = _electionBusiness.GetAllFiltered(expr).ToList();
             return futureElections;
         }
-        private int countFutureElections()
+        public int countFutureElections()
         {
             //declaring an expression that is special to Election objects
             System.Linq.Expressions.Expression<Func<Election, bool>> expr = e => e.StartDate > DateTime.Now;
@@ -304,7 +304,7 @@ namespace WebApplication1.Controllers
 
         #region previousElectionsExcelExport
         [HttpPost]
-        public IActionResult previousElections_ExportToExcel()
+        public IActionResult PreviousElections_ExportToExcel()
         {
             //This function download list of all Future Elections as excel file
             try
@@ -312,7 +312,7 @@ namespace WebApplication1.Controllers
                 var stream = new System.IO.MemoryStream();
                 using (ExcelPackage package = new ExcelPackage(stream))
                 {
-                    var elections = previousElections();
+                    var elections = _electionBusiness.GetPreviousElections();
 
                     ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Elections");
 
@@ -357,22 +357,6 @@ namespace WebApplication1.Controllers
                 throw E;
             }
         }
-
-        public List<Election> previousElections()
-        {
-            //declaring an expression that is special to Election objects
-            System.Linq.Expressions.Expression<Func<Election, bool>> expr = e => e.StartDate.AddDays(e.DurationInDays) < DateTime.Now;
-            var previousElections = _electionBusiness.GetAllFiltered(expr).ToList();
-            return previousElections;
-        }
-        private int countPreviousElections()
-        {
-            //declaring an expression that is special to Election objects
-            System.Linq.Expressions.Expression<Func<Election, bool>> expr = e => e.StartDate.AddDays(e.DurationInDays) < DateTime.Now;
-            int count = _electionRepository.GetAllFiltered(expr).Count();
-            return count;
-        }
-
         #endregion
     }
 }
