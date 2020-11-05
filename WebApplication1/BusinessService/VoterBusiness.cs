@@ -505,7 +505,42 @@ namespace WebApplication1.BusinessService
             }
         }
 
-
+                
         
+        public void DeleteAllVotesOfVoter(Guid voterId)
+        {
+            try
+            {
+                //declaring an expression that is special to Vote objects
+                System.Linq.Expressions.Expression<Func<Vote, bool>> expr1 = e => e.VoterId == voterId;
+                //_logger.LogInformation("Calling VoteRepository.GetAllFiltered() method");
+                List<Vote> votesList = _voteBusiness.GetAllFiltered(expr1);
+
+                //_logger.LogInformation("Going to delete all Vote instances of a Voter");
+                foreach (var vote in votesList)
+                {
+                    int updatedRows2 = _voteBusiness.Delete(vote.Id);
+                    if (updatedRows2 < 1)
+                    {
+                        //row not updated in the DB
+                        throw new DataNotUpdatedException(_messagesLocalizer["Data not updated, operation failed."]);
+                    }
+                }
+                //_logger.LogInformation("Done deleting all Vote instances of a Voter");
+            }
+            catch(BusinessException E)
+            {
+                throw E;
+            }
+            catch (DataNotUpdatedException E)
+            {
+                throw E;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
     }
 }
