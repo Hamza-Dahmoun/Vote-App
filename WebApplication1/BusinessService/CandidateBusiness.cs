@@ -326,5 +326,71 @@ namespace WebApplication1.BusinessService
                 throw E;
             }
         }
+
+
+
+        private List<Candidate> GetCandidatesOfCurrentElection()
+        {
+            //this method returns a list of candidates that are related to the current election
+            //_logger.LogInformation("VoteBusiness.GetCandidatesOfCurrentElection() is called");
+            try
+            {
+                //_logger.LogInformation("Calling ElectionBusiness.GetCurrentElection() method");
+
+                //declaring an expression that is special to Election objects
+                //a current Election is the one that 'Date.Now' is between the startDate and the endDate(endDate = startDate + duration in days)
+                System.Linq.Expressions.Expression<Func<Election, bool>> electionExpr = e => DateTime.Now.Date >= e.StartDate && DateTime.Now.Date.AddDays(-e.DurationInDays) <= e.StartDate;
+
+                Election currentElection = _electionRepository.GetAllFiltered(electionExpr).FirstOrDefault();
+                if (currentElection == null)
+                {
+                    //_logger.LogError("Current election not found");
+                    throw new BusinessException(_messagesLocalizer["Current election not found"]);
+                }
+
+                //_logger.LogInformation("Calling CandidateBusiness.GetCandidate_byElection() method");
+
+                //declaring an expression that is special to Candidate objects and it compares the election instance of the candidates 
+                //with 'election' parameter
+                System.Linq.Expressions.Expression<Func<Candidate, bool>> candidateExpr = i => i.Election == currentElection;
+                var candidates = _candidateRepository.GetAllFiltered(candidateExpr);
+                if (candidates == null || candidates.Count == 0)
+                {
+                    //_logger.LogError("No candidates found for this election");
+                    throw new BusinessException(_messagesLocalizer["No candidates found for this election"]);
+                }
+                return candidates;
+            }
+            catch (BusinessException E)
+            {
+                throw E;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
+        public List<CandidateViewModel> GetCandidatesViewModelList_OfCurrentElection()
+        {
+            //this method returns a list of canddiatesViewModel of the current election
+            //_logger.LogInformation("VoteBusiness.GetCandidatesViewModelList_OfCurrentElection() is called");
+            try
+            {
+                var candidates = GetCandidatesOfCurrentElection();
+                //_logger.LogInformation("Calling _candidateBusiness.ConvertCandidateList_ToCandidateViewModelList() method");
+                List<CandidateViewModel> cvmList = ConvertCandidateList_ToCandidateViewModelList(candidates);
+                //_logger.LogInformation("Returning a list of CandidateViewModel to Index view");
+                return cvmList;
+            }
+            catch (BusinessException E)
+            {
+                throw E;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
     }
 }
