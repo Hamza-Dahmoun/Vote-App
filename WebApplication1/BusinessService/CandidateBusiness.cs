@@ -26,8 +26,6 @@ namespace WebApplication1.BusinessService
         private readonly IRepository<Candidate> _candidateRepository;
         private readonly IRepository<Voter> _voterRepository;
         private readonly IRepository<Election> _electionRepository;
-        private readonly VoterBusiness _voterBusiness;
-        private readonly ElectionBusiness _electionBusiness;
         //private readonly ILogger _logger;
 
         public CandidateBusiness(IRepository<Vote> voteRepository,
@@ -36,10 +34,9 @@ namespace WebApplication1.BusinessService
             IStringLocalizer<Messages> messagesLocalizer,
             IRepository<Candidate> candidateRepository,
             IRepository<Voter> voterRepository,
-            IRepository<Election> electionRepository,
-            VoterBusiness voterBusiness,
+            IRepository<Election> electionRepository
             //ILogger logger,
-            ElectionBusiness electionBusiness)
+            )
         {
             _voteRepository = voteRepository;
             _userManager = userManager;
@@ -48,8 +45,6 @@ namespace WebApplication1.BusinessService
             _candidateRepository = candidateRepository;
             _voterRepository = voterRepository;
             _electionRepository = electionRepository;
-            _voterBusiness = voterBusiness;
-            _electionBusiness = electionBusiness;
             //_logger = logger;
         }
 
@@ -213,7 +208,7 @@ namespace WebApplication1.BusinessService
             {
                 //_logger.LogInformation("Running _candidateBusiness.GetCandidateViewModelList_byOneCandidateID() method");
                 Candidate candid = GetById(candidateId);
-                Election election = _electionBusiness.GetById(candid.Election.Id);
+                Election election = _electionRepository.GetById(candid.Election.Id);
                 var candidates = GetCandidate_byElection(election);     
                 List<CandidateViewModel> candidatesViewModel = ConvertCandidateList_ToCandidateViewModelList(candidates);
                 return candidatesViewModel;
@@ -258,11 +253,19 @@ namespace WebApplication1.BusinessService
                 };
                 if (!candidate.isNeutralOpinion)
                 {
-                    Voter v = _voterBusiness.GetById(candidate.VoterBeingId);
+                    Voter v = _voterRepository.GetById(candidate.VoterBeingId);
                     c.FirstName = v.FirstName;
                     c.LastName = v.LastName;
-                    c.StateName = _voterBusiness.GetStateNameByVoterId(v.Id);
 
+                    if (v.State != null)
+                    {
+                        c.StateName = v.State.Name;
+                    }
+                    else
+                    {
+                        c.StateName = "";
+                    }
+                    
                 }
                 else
                 {
@@ -293,12 +296,21 @@ namespace WebApplication1.BusinessService
         {
             try
             {
-                Voter v = _voterBusiness.GetById(c.VoterBeingId);
+                Voter v = _voterRepository.GetById(c.VoterBeingId);
                 VoterCandidateEntityViewModel vc = new VoterCandidateEntityViewModel();
                 vc.VoterId = v.Id.ToString();
                 vc.FirstName = v.FirstName;
                 vc.LastName = v.LastName;
-                vc.StateName = _voterBusiness.GetStateNameByVoterId(v.Id);
+
+                if (v.State != null)
+                {
+                    vc.StateName = v.State.Name;
+                }
+                else
+                {
+                    vc.StateName = "";
+                }
+                
                 vc.CandidateId = c.Id.ToString();
                 return vc;
             }
