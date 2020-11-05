@@ -100,7 +100,7 @@ namespace WebApplication1.Controllers
 
 
                     //Now lets count futureElections and previousElections and store them in a ViewBag to be displayed inside Excel Download buttons
-                    ViewBag.futureElectionsCount = countFutureElections();
+                    ViewBag.futureElectionsCount = _electionBusiness.CountFutureElections();
                     ViewBag.previousElectionsCount = _electionBusiness.CountPreviousElections();
 
 
@@ -231,7 +231,7 @@ namespace WebApplication1.Controllers
 
         #region futureElectionsExcelExport
         [HttpPost]
-        public IActionResult futureElections_ExportToExcel()
+        public IActionResult FutureElections_ExportToExcel()
         {
             //This function download list of all Future Elections as excel file
             try
@@ -239,7 +239,7 @@ namespace WebApplication1.Controllers
                 var stream = new System.IO.MemoryStream();
                 using (ExcelPackage package = new ExcelPackage(stream))
                 {
-                    var elections = futureElections();
+                    var elections = _electionBusiness.GetFutureElections();
 
                     ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Elections");
 
@@ -283,22 +283,6 @@ namespace WebApplication1.Controllers
             {
                 throw E;
             }
-        }
-
-
-        public List<Election> futureElections()
-        {
-            //declaring an expression that is special to Election objects
-            System.Linq.Expressions.Expression<Func<Election, bool>> expr = e => e.StartDate > DateTime.Now;
-            var futureElections = _electionBusiness.GetAllFiltered(expr).ToList();
-            return futureElections;
-        }
-        public int countFutureElections()
-        {
-            //declaring an expression that is special to Election objects
-            System.Linq.Expressions.Expression<Func<Election, bool>> expr = e => e.StartDate > DateTime.Now;
-            int count = _electionBusiness.GetAllFiltered(expr).Count();
-            return count;
         }
         #endregion
 

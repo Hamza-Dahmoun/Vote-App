@@ -40,7 +40,7 @@
         <div class="margined-area" id="coming-elections-area">
             <h3>@labelsLocalizer["Future Elections"]</h3>
             <partial name="_downloadExcelStyle" />
-            <form class="excel-downlod-container" asp-action="futureElections_ExportToExcel">
+            <form class="excel-downlod-container" asp-action="FutureElections_ExportToExcel">
                 <button type="submit" title=@labelsLocalizer["Download Excel File"]>
                     <i class="fa fa-file-excel-o" aria-hidden="true"></i> @futureElectionsCount @labelsLocalizer["rows"]
                 </button>

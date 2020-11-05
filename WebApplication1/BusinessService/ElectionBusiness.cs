@@ -288,5 +288,19 @@ namespace WebApplication1.BusinessService
             int count = GetPreviousElections().Count();
             return count;
         }
+
+
+        public List<Election> GetFutureElections()
+        {
+            //declaring an expression that is special to Election objects
+            System.Linq.Expressions.Expression<Func<Election, bool>> expr = e => e.StartDate > DateTime.Now;
+            var futureElections = GetAllFiltered(expr).ToList();
+            return futureElections;
+        }
+        public int CountFutureElections()
+        {
+            int count = GetFutureElections().Count();
+            return count;
+        }
     }
 }
