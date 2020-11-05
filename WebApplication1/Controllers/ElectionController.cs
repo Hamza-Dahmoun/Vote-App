@@ -93,6 +93,7 @@ namespace WebApplication1.Controllers
             }
         }
 
+
         // GET: Election/Details/5
         [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
         public ActionResult Details(Guid id)
@@ -126,6 +127,7 @@ namespace WebApplication1.Controllers
             }            
         }
 
+
         // GET: Election/Create
         //if we try to imagine the scenario of adding a new Election I think it will be done in two steps:
         //--> Step1: Adding info of the election(name, duration,,,) and send them to backend using api method in inside the controller,
@@ -139,18 +141,11 @@ namespace WebApplication1.Controllers
             return View();
         }
 
-        
-        
+               
 
 
         
-        struct response_Voters_and_NewElection
-        {
-            //this Structure is used to return a javascript object containing the newly inserted election ID and a list of voters for user to select
-            //from them ass candidates
-            public Guid ElectionId;
-            public List<PersonViewModel> Voters;
-        }
+        
         //Step(1): Adding info of the election(name, duration,,,) and send them to backend using api method in inside the controller,
         //then send back the response to javascript to redirect to step2
         //this is a web api called when adding a new Election instance
@@ -279,7 +274,6 @@ namespace WebApplication1.Controllers
 
                 var sortColumnDirection = HttpContext.Request.Form["order[0][dir]"].FirstOrDefault();
 
-
                 //Page Size (10, 20, 50,100) 
                 int pageSize = length != null ? Convert.ToInt32(length) : 0;
 
@@ -288,8 +282,7 @@ namespace WebApplication1.Controllers
 
                 //totalRecords too inform user
                 int totalRecords = 0;
-
-                
+                                
                 //lets first get the list of voterswho are already candidates of this election
                 Election election = _electionBusiness.GetById(electionId);
 
@@ -300,7 +293,6 @@ namespace WebApplication1.Controllers
                 //now lets look for a value in FirstName/LastName/StateName if user asked to
                 if (!string.IsNullOrEmpty(searchValue))
                 {
-
                     //declaring an expression that is special to Voter objects according to the search value and the fact that we don't want
                     //voters who are already candidates
                     expr =
@@ -328,25 +320,25 @@ namespace WebApplication1.Controllers
                         recordsTotal = totalRecords,
                         data = _voterBusiness.ConvertVoterList_ToPersonViewModelList(pagedResult.Items)
                     }) ;
-                    return Ok(json);
-
-                
+                    return Ok(json);   
             }
-            catch(Exception E)
+            catch (BusinessException E)
             {
-
+                //lets create and return an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
+                HttpContext.Response.StatusCode = 500;
+                return Json(new { Message = E.Message });
+            }
+            catch (Exception E)
+            {
                 //lets create and return an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
                 HttpContext.Response.StatusCode = 500;
                 return Json(new { Message = E.Message});
             }
         }
 
+
         //Step(2): Adding one Candidate to the Election each time
-        public class CandidateElectionRelation
-        {//this class is used to get the data sent by jQuery ajax to the method AddCandidates() below
-            public Guid voterId { get; set; }
-            public Guid electionId { get; set; }
-        }
+
         //this is a web api called when user selects candidates from voters list to the election he created or he is editing
         [HttpPost]
         [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
@@ -406,6 +398,7 @@ namespace WebApplication1.Controllers
                 return Json(new { Message = E.Message });
             }
         }
+        
         //this is a web api called when user selects candidates from voters list to the election he created or he is editing
         [HttpPost]
         [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
@@ -823,14 +816,9 @@ namespace WebApplication1.Controllers
         }
 
 
-        public struct TemporaryElection
-        {
-            public string Id { get; set; }
-            public string Name { get; set; }
-            public string StartDate { get; set; }
-            public string DurationInDays { get; set; }
-            public string HasNeutral { get; set; }
-        }
+
+
+
         // POST: Election/Edit/5
         [HttpPost]
         [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
@@ -1187,19 +1175,6 @@ namespace WebApplication1.Controllers
 
 
 
-
-
-
-        public struct CurrentElectionDashboard
-        {
-            public Guid Id { get; set; }
-            public string Name { get; set; }
-            public DateTime StartDate { get; set; }
-            public int DurationInDays { get; set; }
-            public int CandidatesCount { get; set; }
-            public double ParticipationRate { get; set; }
-            public bool HasUserVoted { get; set; }
-        }
         //this method is called using jQuery ajax and it returns the current election
         //it is called when displaying the home page
         //I couldn't move it to ElectionUtilities.cs file bcuz if I did they will need _electionRepository to be passed
