@@ -507,8 +507,9 @@ namespace WebApplication1.BusinessService
 
                 
         
-        public void DeleteAllVotesOfVoter(Guid voterId)
+        private void DeleteAllVotesOfVoter(Guid voterId)
         {
+            //this function takes a voterId and delete all Votes instances of this Voter
             try
             {
                 //declaring an expression that is special to Vote objects
@@ -533,6 +534,42 @@ namespace WebApplication1.BusinessService
                 throw E;
             }
             catch (DataNotUpdatedException E)
+            {
+                throw E;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
+        private void DeleteAllCandidatesOfVoter(Guid voterId)
+        {
+            //this function takes a voter Id and delete his Candidates instances
+            try
+            {
+                //declaring an expression that is special to Vote objects
+                System.Linq.Expressions.Expression<Func<Candidate, bool>> expr2 = e => e.VoterBeingId == voterId;
+                //_logger.LogInformation("Going to get all Candidates instances of the Voter");
+                List<Candidate> candidatesList = _candidateBusiness.GetAllFiltered(expr2);
+
+                //_logger.LogInformation("Going to delete all Candidates instances of the Voter");
+                foreach (var candidate in candidatesList)
+                {
+                    int updatedRows3 = _candidateBusiness.Delete(candidate.Id);
+                    if (updatedRows3 < 1)
+                    {
+                        //row not updated in the DB
+                        throw new DataNotUpdatedException(_messagesLocalizer["Data not updated, operation failed."]);
+                    }
+                }
+                //_logger.LogInformation("Done deleting all Candidates instances of the Voter");
+            }
+            catch(DataNotUpdatedException E)
+            {
+                throw E;
+            }
+            catch (BusinessException E)
             {
                 throw E;
             }
