@@ -32,16 +32,16 @@ namespace WebApplication1.Controllers
         private readonly IStringLocalizer<Messages> _messagesLoclizer;
 
 
-        private readonly StateBusiness _stateBusiness;
+        private readonly StateBusinessService _stateBusiness;
 
-        private readonly VoterBusiness _voterBusiness;
+        private readonly VoterBusinessService _voterBusiness;
 
         //Lets inject the services using the constructor, this is called Constructor Dependency Injection
         public StateController(IRepository<State> stateRepository, 
             ILogger<StateController> logger, 
             IStringLocalizer<Messages> messagesLoclizer,
-            StateBusiness stateBusiness,
-            VoterBusiness voterBusiness)
+            StateBusinessService stateBusiness,
+            VoterBusinessService voterBusiness)
         {
             _logger = logger;
             _messagesLoclizer = messagesLoclizer;

@@ -25,7 +25,7 @@ namespace WebApplication1.Controllers
     {
         //the below are services we're going to use in this controller, they will be injected in the constructor
         public IRepository<Candidate> _candidateRepository { get; }
-        private readonly CandidateBusiness _candidateBusiness;
+        private readonly CandidateBusinessService _candidateBusiness;
         public IRepository<Voter> _voterRepository { get; }
         public IRepository<Election> _electionRepository { get; }
         //this is only used to get able to generate a 'code' needed to reset the password, and to get the currentUser ID
@@ -33,8 +33,8 @@ namespace WebApplication1.Controllers
         private readonly ILogger<VoteController> _logger;
         //Lets create a private readonly field IStringLocalizer<Messages> so that we can use Localization service, we'll inject it inside the constructor
         private readonly IStringLocalizer<Messages> _messagesLoclizer;
-        private readonly VoteBusiness _voteBusiness;
-        private readonly ElectionBusiness _electionBusiness;
+        private readonly VoteBusinessService _voteBusiness;
+        private readonly ElectionBusinessService _electionBusiness;
         //Lets inject the services using the constructor, this is called Constructor Dependency Injection
         public VoteController(
             IRepository<Candidate> candidateRepository, 
@@ -43,9 +43,9 @@ namespace WebApplication1.Controllers
             UserManager<IdentityUser> userManager,
             ILogger<VoteController> logger,
             IStringLocalizer<Messages> messagesLoclizer,
-            CandidateBusiness candidateBusiness,
-            ElectionBusiness electionBusiness,
-            VoteBusiness voteBusiness)
+            CandidateBusinessService candidateBusiness,
+            ElectionBusinessService electionBusiness,
+            VoteBusinessService voteBusiness)
         {
             _candidateBusiness = candidateBusiness;
             _candidateRepository = candidateRepository;

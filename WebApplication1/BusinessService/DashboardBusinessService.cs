@@ -8,20 +8,20 @@ using WebApplication1.Models.ViewModels;
 
 namespace WebApplication1.BusinessService
 {
-    public class DashboardBusiness
+    public class DashboardBusinessService
     {
-        private readonly CandidateBusiness _candidateBusiness;
-        private readonly VoterBusiness _voterBusiness;
-        private readonly VoteBusiness _voteBusiness;
-        private readonly ElectionBusiness _electionBusiness;
+        private readonly CandidateBusinessService _candidateBusiness;
+        private readonly VoterBusinessService _voterBusiness;
+        private readonly VoteBusinessService _voteBusiness;
+        private readonly ElectionBusinessService _electionBusiness;
         //this is used to get the currentUser
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IHttpContextAccessor _contextAccessor;
 
-        public DashboardBusiness(CandidateBusiness candidateBusiness,
-            VoterBusiness voterBusiness,
-            VoteBusiness voteBusiness,
-            ElectionBusiness electionBusiness
+        public DashboardBusinessService(CandidateBusinessService candidateBusiness,
+            VoterBusinessService voterBusiness,
+            VoteBusinessService voteBusiness,
+            ElectionBusinessService electionBusiness
             )
         {
             _candidateBusiness = candidateBusiness;

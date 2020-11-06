@@ -48,17 +48,17 @@ namespace WebApplication1
             //Lets register Memory Cach services
             services.AddMemoryCache();
             //Lets register the  StateBusiness so that it could be used whenever needed
-            services.AddTransient<StateBusiness>();
+            services.AddTransient<StateBusinessService>();
             //Lets register the  VoteBusiness so that it could be used whenever needed
-            services.AddTransient<VoteBusiness>();
+            services.AddTransient<VoteBusinessService>();
             //Lets register the  VoterBusiness so that it could be used whenever needed
-            services.AddTransient<VoterBusiness>();
+            services.AddTransient<VoterBusinessService>();
             //Lets register the  CandidateBusiness so that it could be used whenever needed
-            services.AddTransient<CandidateBusiness>();
+            services.AddTransient<CandidateBusinessService>();
             //Lets register the  ElectionBusiness so that it could be used whenever needed
-            services.AddTransient<ElectionBusiness>();
+            services.AddTransient<ElectionBusinessService>();
             //Lets register the  DashboardBusiness so that it could be used whenever needed
-            services.AddTransient<DashboardBusiness>();
+            services.AddTransient<DashboardBusinessService>();
 
 
             //1- in IdentityHostingStartup.cs file:

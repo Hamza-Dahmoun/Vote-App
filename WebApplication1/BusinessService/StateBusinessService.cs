@@ -11,14 +11,14 @@ using WebApplication1.Models.ViewModels;
 
 namespace WebApplication1.BusinessService
 {
-    public class StateBusiness
+    public class StateBusinessService
     {
         //the below are services we're going to use in this file, they will be injected in the constructor
         private readonly IRepository<State> _stateRepository;
         //Lets create a private readonly field IStringLocalizer<Messages> so that we can use Localization service, we'll inject it inside the constructor
         private readonly IStringLocalizer<Messages> _messagesLocalizer;
 
-        public StateBusiness(IRepository<State> stateRepository, IStringLocalizer<Messages> messagesLocalizer)
+        public StateBusinessService(IRepository<State> stateRepository, IStringLocalizer<Messages> messagesLocalizer)
         {
             _stateRepository = stateRepository;
             _messagesLocalizer = messagesLocalizer;

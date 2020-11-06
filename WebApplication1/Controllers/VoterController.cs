@@ -35,23 +35,23 @@ namespace WebApplication1.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<VoterController> _logger;
 
-        private readonly VoterBusiness _voterBusiness;
-        private readonly StateBusiness _stateBusiness;
-        private readonly CandidateBusiness _candidateBusiness;
+        private readonly VoterBusinessService _voterBusiness;
+        private readonly StateBusinessService _stateBusiness;
+        private readonly CandidateBusinessService _candidateBusiness;
 
         //Lets create a private readonly field IStringLocalizer<Messages> so that we can use Localization service, we'll inject it inside the constructor
         private readonly IStringLocalizer<Messages> _messagesLoclizer;
-        private readonly VoteBusiness _voteBusiness;
+        private readonly VoteBusinessService _voteBusiness;
 
         //Lets inject the services using the constructor, this is called Constructor Dependency Injection
         public VoterController(
-            VoteBusiness voteBusiness,
-            VoterBusiness voterBusiness,
-            CandidateBusiness candidateBusiness,
+            VoteBusinessService voteBusiness,
+            VoterBusinessService voterBusiness,
+            CandidateBusinessService candidateBusiness,
             UserManager<IdentityUser> userManager,
             ILogger<VoterController> logger,
             IStringLocalizer<Messages> messagesLoclizer,
-            StateBusiness stateBusiness)
+            StateBusinessService stateBusiness)
         {
             _voteBusiness = voteBusiness;
             _voterBusiness = voterBusiness;

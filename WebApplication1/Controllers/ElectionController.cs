@@ -32,28 +32,28 @@ namespace WebApplication1.Controllers
         public IRepository<Election> _electionRepository { get; }
 
         public IRepository<Voter> _voterRepository { get; }
-        private readonly VoterBusiness _voterBusiness;
-        private readonly ElectionBusiness _electionBusiness;
+        private readonly VoterBusinessService _voterBusiness;
+        private readonly ElectionBusinessService _electionBusiness;
 
         public IRepository<Candidate> _candidateRepository { get; }
-        private readonly CandidateBusiness _candidateBusiness;
+        private readonly CandidateBusinessService _candidateBusiness;
         //this is only used to get the currentUser so that we check whether he voted or not in order to generate the dashboard
         private readonly UserManager<IdentityUser> _userManager;
         //Lets create a private readonly field IStringLocalizer<Messages> so that we can use Localization service, we'll inject it inside the constructor
         private readonly IStringLocalizer<Messages> _messagesLoclizer;
-        private readonly VoteBusiness _voteBusiness;
+        private readonly VoteBusinessService _voteBusiness;
         //Lets inject the services using the constructor, this is called Constructor Dependency Injection
         public ElectionController(
-            VoteBusiness voteBusiness,
+            VoteBusinessService voteBusiness,
             IRepository<Vote> voteRepository,
             IRepository<Voter> voterRepository,
             IRepository<Candidate> candidateRepository,
             IRepository<Election> electionRepository,
             UserManager<IdentityUser> userManager,
             IStringLocalizer<Messages> messagesLoclizer,
-            VoterBusiness voterBusiness,
-            CandidateBusiness candidateBusiness,
-            ElectionBusiness electionBusiness)
+            VoterBusinessService voterBusiness,
+            CandidateBusinessService candidateBusiness,
+            ElectionBusinessService electionBusiness)
         {
             _voterBusiness = voterBusiness;
             _voteBusiness = voteBusiness;

@@ -43,9 +43,9 @@ namespace WebApplication1.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         //Creting  private readonly field of type IMemoryCach
         private readonly IMemoryCache _memoryCache;
-        private readonly ElectionBusiness _electionBusiness;
-        private readonly DashboardBusiness _dashboardBusiness;
-        private readonly CandidateBusiness _candidateBusiness;
+        private readonly ElectionBusinessService _electionBusiness;
+        private readonly DashboardBusinessService _dashboardBusiness;
+        private readonly CandidateBusinessService _candidateBusiness;
 
         //Lets inject the services using the constructor, this is called Constructor Dependency Injection
         public HomeController(
@@ -56,9 +56,9 @@ namespace WebApplication1.Controllers
             IRepository<Election> electionRepository,
             UserManager<IdentityUser> userManager,
             IStringLocalizer<Messages> messagesLoclizer,
-            ElectionBusiness electionBusiness,
-            DashboardBusiness dashboardBusiness,
-            CandidateBusiness candidateBusiness)
+            ElectionBusinessService electionBusiness,
+            DashboardBusinessService dashboardBusiness,
+            CandidateBusinessService candidateBusiness)
         {
             _logger = logger;
             _voterRepository = voterRepository;

@@ -14,7 +14,7 @@ using WebApplication1.Models.ViewModels;
 
 namespace WebApplication1.BusinessService
 {
-    public class CandidateBusiness
+    public class CandidateBusinessService
     {
         //the below are services we're going to use in this file, they will be injected in the constructor
         private readonly IRepository<Vote> _voteRepository;
@@ -28,7 +28,7 @@ namespace WebApplication1.BusinessService
         private readonly IRepository<Election> _electionRepository;
         //private readonly ILogger _logger;
 
-        public CandidateBusiness(IRepository<Vote> voteRepository,
+        public CandidateBusinessService(IRepository<Vote> voteRepository,
             UserManager<IdentityUser> userManager,
             IHttpContextAccessor contextAccessor,
             IStringLocalizer<Messages> messagesLocalizer,
