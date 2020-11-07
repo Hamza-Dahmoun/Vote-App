@@ -64,15 +64,16 @@ namespace WebApplication1.Controllers
         
         public IActionResult Index()
         {
+            //we'll return only the number of voters
+            //voters row we'll be returned using a jquery datatable
             _logger.LogInformation("Voter/Index() action is called");
             try
             {
-                _logger.LogInformation("Calling VoterRepository.GetAll() method");
-                List<Voter> voters = _voterBusiness.GetAll().ToList();
-                ViewBag.votersCount = voters.Count;
+                _logger.LogInformation("Calling voterBusiness.CountAll() method");                
+                ViewBag.votersCount = _voterBusiness.CountAll();
 
                 _logger.LogInformation("Returning a list of voters to Index view");
-                return View(voters);
+                return View();
             }
             catch(Exception E)
             {
@@ -411,6 +412,7 @@ namespace WebApplication1.Controllers
         public IActionResult DataTable()
         {
             //This method is called by jQuery datatables to get paged data
+            //this method is called inside Voter/Index.cshtml
             //First, we'll try to read the variables sent from the jQuery request, and then, based on these variables' values we'll query
             //the db
 
