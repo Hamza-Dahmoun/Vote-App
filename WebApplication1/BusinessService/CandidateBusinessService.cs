@@ -201,6 +201,21 @@ namespace WebApplication1.BusinessService
             }
         }
 
+        public List<Candidate> GetCandidate_byElectionId(Guid electionId)
+        {
+            try
+            {
+                //declaring an expression that is special to Candidate objects and it compares the election instance of the candidates 
+                //with 'election' parameter
+                System.Linq.Expressions.Expression<Func<Candidate, bool>> expr = i => i.ElectionId == electionId;
+                return GetAllFiltered(expr);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
         public List<CandidateViewModel> GetCandidateViewModelList_byOneCandidateID(Guid candidateId)
         {
             //This method returns a list of CandidatesViewModel taking one paramater candidateId
@@ -217,6 +232,27 @@ namespace WebApplication1.BusinessService
             {
                 throw E;
             }            
+        }
+
+        public List<Voter> GetVoterBeing_ofCandidatesList_byElectionId(Guid electionId)
+        {
+            //this methods returns a list of voters who are considered as candidates for this election except the neutral opinion
+            try
+            {
+                var candidates = GetCandidate_byElectionId(electionId);
+                List<Voter> voters = new List<Voter>();
+                foreach (var item in candidates)
+                {
+                    if (!item.isNeutralOpinion)
+                        voters.Add(_voterRepository.GetById(item.VoterBeingId));
+                }
+                return voters;
+
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
         }
 
         public List<Voter> GetVoterBeing_ofCandidatesList_byElection(Election election)
@@ -239,6 +275,7 @@ namespace WebApplication1.BusinessService
                 throw E;
             }
         }
+
 
 
         private CandidateViewModel ConvertCandidate_ToCandidateViewModel(Candidate candidate)

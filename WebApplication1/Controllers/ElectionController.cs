@@ -284,9 +284,9 @@ namespace WebApplication1.Controllers
                 int totalRecords = 0;
                                 
                 //lets first get the list of voterswho are already candidates of this election
-                Election election = _electionBusiness.GetById(electionId);
+                //Election election = _electionBusiness.GetById(electionId);
 
-                List<Voter> alreadyCandidates = _candidateBusiness.GetVoterBeing_ofCandidatesList_byElection(election);
+                List<Voter> alreadyCandidates = _candidateBusiness.GetVoterBeing_ofCandidatesList_byElectionId(electionId);
                 List<Guid> excludedVotersIDs = alreadyCandidates.Select(v => v.Id).ToList();
 
                 System.Linq.Expressions.Expression<Func<Voter, bool>> expr;
