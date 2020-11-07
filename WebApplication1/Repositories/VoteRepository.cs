@@ -137,7 +137,15 @@ namespace WebApplication1.Models.Repositories
 
         public int CountAllFiltered(Expression<Func<Vote, bool>> predicate)
         {
-            throw new NotImplementedException();
+            //this function uses the linq expression passed in the object 'predicate' of 'Expression' class to filter the rows from the db
+            try
+            {
+                return _dbSet.Count(predicate);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
         }
     }
 }
