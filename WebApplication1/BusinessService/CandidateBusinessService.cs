@@ -499,5 +499,55 @@ namespace WebApplication1.BusinessService
             }
 
         }
+
+        public void RemoveCandidateByElectionIdAndVoterId(Guid electionId, Guid voterId)
+        {
+            //this function takes an ElectionId and a VoterId and delete the corresponding Candidate from DB
+            try
+            {
+                if (electionId == null || voterId == null)
+                {
+                    throw new BusinessException(_messagesLocalizer["Properties voterId and electionId can not be null."]);
+                }
+
+                Voter voter = _voterRepository.GetById(voterId);
+                if (voter == null)
+                {
+                    throw new BusinessException(_messagesLocalizer["Corresponding Voter instance not found."]);
+                }
+
+                Election election = _electionRepository.GetById(electionId);
+                if (election == null)
+                {
+                    throw new BusinessException(_messagesLocalizer["Election instance not found."]);
+                }
+
+
+                Candidate myCandidate = GetCandidate_byVoter_byElection(voter, election);
+
+                int updatedRows = _candidateRepository.Delete(myCandidate.Id);
+                if (updatedRows > 0)
+                {
+                    //do nothing
+                }
+                else
+                {
+                    //row not updated in the DB
+                    throw new DataNotUpdatedException(_messagesLocalizer["Data not updated, operation failed."]);
+                }
+            }
+            catch(DataNotUpdatedException E)
+            {
+                throw E;
+            }
+            catch (BusinessException E)
+            {
+                throw E;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
     }
 }
