@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -650,6 +651,49 @@ namespace WebApplication1.BusinessService
                 throw E;
             }
         }
-        
+
+
+        public PagedResult<Voter> GetVoters_ForDataTable(
+            string searchValue, 
+            string sortColumnName, 
+            string sortColumnDirection, 
+            int pageSize,
+            int skip)
+        {
+            //This method is called by jQuery datatables to get paged data
+            //First, we'll try to read the variables sent from the jQuery request, and then, based on these variables' values we'll query
+            //the db
+
+            try
+            {
+                //now lets look for a value in FirstName/LastName/StateName if user asked to
+                if (!string.IsNullOrEmpty(searchValue))
+                {
+                    //declaring an expression that is special to Voter objects
+                    Expression<Func<Voter, bool>> expr =
+                        v => v.FirstName.Contains(searchValue) ||
+                        v.LastName.Contains(searchValue) ||
+                        (v.State != null && v.State.Name.Contains(searchValue));
+
+                    //lets get the list of voters filtered and paged
+                    PagedResult<Voter> pagedResult = GetAllFilteredPaged(expr, sortColumnName, sortColumnDirection, skip, pageSize);
+
+                    return pagedResult;
+                }
+                else
+                {
+                    //so user didn't ask for filtering, he only asked for paging
+
+                    //lets get the list of voters paged
+                    PagedResult<Voter> pagedResult = GetAllPaged(sortColumnName, sortColumnDirection, skip, pageSize);
+
+                    return pagedResult;
+                }
+            }
+            catch (Exception E)
+            {
+                throw E ;
+            }
+        }
     }
 }
