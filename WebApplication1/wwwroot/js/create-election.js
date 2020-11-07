@@ -205,7 +205,8 @@ function selectNewCandidate() {
     //Send the JSON data of voterId and electionId to Controller using AJAX.
     $.ajax({
         type: "POST",
-        url: "/Election/AddCandidates",
+        //url: "/Election/AddCandidates",
+        url: "/Election/AddCandidate",
         data: JSON.stringify({ electionId: electionId, voterId: voterid }),
         contentType: "application/json; charset=utf-8",
         dataType: "json",

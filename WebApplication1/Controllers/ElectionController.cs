@@ -322,73 +322,13 @@ namespace WebApplication1.Controllers
         }
 
         //Step(2): Adding one Candidate to the Election each time
-
-        //this is a web api called when user selects candidates from voters list to the election he created or he is editing
-        [HttpPost]
-        [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
-        public async Task<IActionResult> AddCandidates([FromBody] CandidateElectionRelation mydata)
-        {
-
-            //this method is called using ajax calls
-            //so if a business rule is not met we'll throw a businessException and catch it to create and internal server error and return its msg
-            //as json
-
-            try
-            {
-                if (mydata.electionId==null || mydata.voterId==null)
-                {
-                    //so it is not a future election
-                    throw new BusinessException(_messagesLoclizer["Properties voterId and electionId can not be null."]);
-                }
-                Voter voter = _voterBusiness.GetById(mydata.voterId);
-                
-                int updatedRows = _candidateBusiness.Add(
-                    new Candidate
-                    {
-                        Id = Guid.NewGuid(),
-                        VoterBeingId = voter.Id,
-                        ElectionId = mydata.electionId
-                    }
-                    );
-                if (updatedRows > 0)
-                {
-                    //row updated successfully in the DB
-                    return Json(new { success = true });
-                }
-                else
-                {
-                    //row not updated in the DB
-                    throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
-                }
-            }
-            catch (DataNotUpdatedException bnu)
-            {
-                //lets now create a suitable message for the user and store it inside a ViewBag (which is a Dynamic Object we can fill it
-                //by whatever we want
-                BusinessMessage bm = new BusinessMessage("Error", bnu.Message);
-                ViewBag.BusinessMessage = bm;
-                return View();
-            }
-            catch (BusinessException be)
-            {
-                //lets create an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
-                HttpContext.Response.StatusCode = 500;
-                return Json(new { Message = be.Message });
-            }
-            catch (Exception E)
-            {
-                //lets create and return an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
-                HttpContext.Response.StatusCode = 500;
-                return Json(new { Message = E.Message });
-            }
-        }
-        
         //this is a web api called when user selects candidates from voters list to the election he created or he is editing
         [HttpPost]
         [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
         public async Task<IActionResult> AddCandidate([FromBody] CandidateElectionRelation mydata)
         {
             //this method is called using ajax calls
+            //it takes {voterId, electionId} and create new candidate from it and add it to db ... used when creating/editing an old election
             //so if a business rule is not met we'll throw a businessException and catch it to create and internal server error and return its msg
             //as json
 
