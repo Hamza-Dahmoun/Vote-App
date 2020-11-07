@@ -52,7 +52,16 @@ namespace WebApplication1.BusinessService
         {
             try
             {
-                return _candidateRepository.GetById(Id);
+                Candidate candidate =  _candidateRepository.GetById(Id);
+                if (candidate == null)
+                {
+                    throw new BusinessException(_messagesLocalizer["Candidate not found"] + ".");
+                }
+                return candidate;
+            }
+            catch (BusinessException E)
+            {
+                throw E;
             }
             catch (Exception E)
             {

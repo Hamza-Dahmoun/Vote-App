@@ -40,7 +40,16 @@ namespace WebApplication1.BusinessService
         {
             try
             {
-                return _stateRepository.GetById(Id);
+                State state =_stateRepository.GetById(Id);
+                if (state == null)
+                {
+                    throw new BusinessException(_messagesLocalizer["State not found"] + ".");
+                }
+                return state;
+            }
+            catch (BusinessException E)
+            {
+                throw E;
             }
             catch (Exception E)
             {
