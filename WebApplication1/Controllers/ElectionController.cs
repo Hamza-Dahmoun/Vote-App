@@ -522,6 +522,10 @@ namespace WebApplication1.Controllers
                     throw new BusinessException(_messagesLoclizer["electionId cannot be null."]);
                 }
                 Election e = _electionBusiness.GetById(Guid.Parse(electionId));
+                if (e == null)
+                {
+                    throw new BusinessException(_messagesLoclizer["Election is not found."]);
+                }
                 //lets serialize the list of candidates of the election we've got and send it back as a reponse
                 //note that I didn't retrieve candidates as they are, I selected only needed attributes bcuz when i tried serializing
                 //candidates objects as they are I got this error "self referencing loop detected with type" it means json tried to serialize the candidate object
