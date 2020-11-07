@@ -378,6 +378,7 @@ namespace WebApplication1.Controllers
 
 
             //this function removes a candidate from the db using its electionID and its voterBeing ID
+            //.. used when creating an election
             try
             {
                 _candidateBusiness.RemoveCandidateByElectionIdAndVoterId(mydata.electionId, mydata.voterId);
@@ -417,35 +418,12 @@ namespace WebApplication1.Controllers
             //as json
 
 
-
-            //this function removes a candidate from the db using its ID
+            //this function removes a candidate from the db using its ID .. used when editing an election
             try
             {
-                if (String.IsNullOrEmpty(candidateId))
-                {
-                    throw new BusinessException(_messagesLoclizer["candidateId cannot be null."]);
-                }
-                
-                Candidate myCandidate = _candidateBusiness.GetById(Guid.Parse(candidateId)) ;
-                if (myCandidate == null)
-                {
-                    throw new BusinessException(_messagesLoclizer["Candidate not found."]);
-                }
-
-                
-                int updatedRows3 = _candidateBusiness.Delete(myCandidate.Id); 
-                if (updatedRows3 > 0)
-                {
-                    //row updated successfully in the DB
-                    return Json(new { success = true });
-                }
-                else
-                {
-                    //row not updated in the DB
-                    throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
-                }
-
-
+                _candidateBusiness.RemoveCandidateByID(candidateId);
+                //row updated successfully in the DB
+                return Json(new { success = true });
             }
             catch (DataNotUpdatedException bnu)
             {
