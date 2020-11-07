@@ -217,7 +217,7 @@ namespace WebApplication1.BusinessService
             {
                 //declaring an expression that is special to Election objects
                 //a current Election is the one that 'Date.Now' is between the startDate and the endDate(endDate = startDate + duration in days)
-                System.Linq.Expressions.Expression<Func<Election, bool>> expr = e => DateTime.Now.Date >= e.StartDate && DateTime.Now.Date.AddDays(-e.DurationInDays) <= e.StartDate;
+                Expression<Func<Election, bool>> expr = e => DateTime.Now.Date >= e.StartDate && DateTime.Now.Date.AddDays(-e.DurationInDays) <= e.StartDate;
 
                 Election currentElection = GetAllFiltered(expr).FirstOrDefault();
                 return currentElection;
@@ -241,7 +241,7 @@ namespace WebApplication1.BusinessService
                 //(tired to think of my own solution right now, lets just use this, it works)
                 DateTime endDate = startDate.AddDays(durationInDays);
                 //declaring an expression that is special to Election objects
-                System.Linq.Expressions.Expression<Func<Election, bool>> expr = e => e.StartDate <= endDate && startDate <= e.StartDate.AddDays(e.DurationInDays);
+                Expression<Func<Election, bool>> expr = e => e.StartDate <= endDate && startDate <= e.StartDate.AddDays(e.DurationInDays);
                 var elections = GetAllFiltered(expr).ToList();
 
                 return elections.Count;
@@ -459,7 +459,7 @@ namespace WebApplication1.BusinessService
             {
                 //declaring an expression that is special to Candidate objects and it compares the election instance of the candidates 
                 //with 'election' parameter
-                System.Linq.Expressions.Expression<Func<Candidate, bool>> expr = i => i.ElectionId == electionId;
+                Expression<Func<Candidate, bool>> expr = i => i.ElectionId == electionId;
                 return _candidateRepository.GetAllFiltered(expr);
             }
             catch (Exception E)

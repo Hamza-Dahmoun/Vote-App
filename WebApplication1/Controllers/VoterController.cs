@@ -17,6 +17,7 @@ using Microsoft.Extensions.Localization;
 using System.Globalization;
 using System.Text;
 using WebApplication1.BusinessService;
+using System.Linq.Expressions;
 
 namespace WebApplication1.Controllers
 {
@@ -535,7 +536,7 @@ namespace WebApplication1.Controllers
                 }
 
                 //declaring an expression that is special to State objects according to the search value
-                System.Linq.Expressions.Expression<Func<State, bool>> expr;
+                Expression<Func<State, bool>> expr;
                 expr = s => s.Name.StartsWith(q);
 
                 _logger.LogInformation("Calling StateRepository.GetAllFiltered() method");

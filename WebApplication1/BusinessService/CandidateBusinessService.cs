@@ -186,7 +186,7 @@ namespace WebApplication1.BusinessService
                 //declaring an expression that is special to Candidate objects and it compares the election instance of the candidates 
                 //with 'election' parameter and voterBeing with voter parameter
 
-                System.Linq.Expressions.Expression<Func<Candidate, bool>> expr = i => i.Election == election && i.VoterBeingId == voter.Id;
+                Expression<Func<Candidate, bool>> expr = i => i.Election == election && i.VoterBeingId == voter.Id;
                 return GetOneFiltered(expr);
             }
             catch (Exception E)
@@ -201,7 +201,7 @@ namespace WebApplication1.BusinessService
             {
                 //declaring an expression that is special to Candidate objects and it compares the election instance of the candidates 
                 //with 'election' parameter
-                System.Linq.Expressions.Expression<Func<Candidate, bool>> expr = i => i.Election == election;
+                Expression<Func<Candidate, bool>> expr = i => i.Election == election;
                 return GetAllFiltered(expr);
             }
             catch (Exception E)
@@ -216,7 +216,7 @@ namespace WebApplication1.BusinessService
             {
                 //declaring an expression that is special to Candidate objects and it compares the election instance of the candidates 
                 //with 'election' parameter
-                System.Linq.Expressions.Expression<Func<Candidate, bool>> expr = i => i.ElectionId == electionId;
+                Expression<Func<Candidate, bool>> expr = i => i.ElectionId == electionId;
                 return GetAllFiltered(expr);
             }
             catch (Exception E)
@@ -397,7 +397,7 @@ namespace WebApplication1.BusinessService
 
                 //declaring an expression that is special to Election objects
                 //a current Election is the one that 'Date.Now' is between the startDate and the endDate(endDate = startDate + duration in days)
-                System.Linq.Expressions.Expression<Func<Election, bool>> electionExpr = e => DateTime.Now.Date >= e.StartDate && DateTime.Now.Date.AddDays(-e.DurationInDays) <= e.StartDate;
+                Expression<Func<Election, bool>> electionExpr = e => DateTime.Now.Date >= e.StartDate && DateTime.Now.Date.AddDays(-e.DurationInDays) <= e.StartDate;
 
                 Election currentElection = _electionRepository.GetAllFiltered(electionExpr).FirstOrDefault();
                 if (currentElection == null)
@@ -410,7 +410,7 @@ namespace WebApplication1.BusinessService
 
                 //declaring an expression that is special to Candidate objects and it compares the election instance of the candidates 
                 //with 'election' parameter
-                System.Linq.Expressions.Expression<Func<Candidate, bool>> candidateExpr = i => i.Election == currentElection;
+                Expression<Func<Candidate, bool>> candidateExpr = i => i.Election == currentElection;
                 var candidates = _candidateRepository.GetAllFiltered(candidateExpr);
                 if (candidates == null || candidates.Count == 0)
                 {

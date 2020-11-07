@@ -76,7 +76,7 @@ namespace WebApplication1.BusinessService
                 var currentUser = await _userManager.GetUserAsync(_contextAccessor.HttpContext.User);
 
                 //declaring an expression that is special to Voter objects
-                System.Linq.Expressions.Expression<Func<Voter, bool>> expr = v => v.UserId == Guid.Parse(currentUser.Id);
+                Expression<Func<Voter, bool>> expr = v => v.UserId == Guid.Parse(currentUser.Id);
                 Voter currentVoter = _voterRepository.GetOneFiltered(expr);
 
                 if (currentVoter == null)
@@ -177,7 +177,7 @@ namespace WebApplication1.BusinessService
             try
             {
                 //declaring an expression that is special to Vote objects
-                System.Linq.Expressions.Expression<Func<Vote, bool>> expr = v => v.Election.Id == ElectionId;
+                Expression<Func<Vote, bool>> expr = v => v.Election.Id == ElectionId;
 
                 //I used GroupBy() so that I get the rows by voter to count how many voters, not how many vote ... It worked like Distinct()
                 int votesNumber = GetAllFiltered(expr).GroupBy(v => v.Voter).Count();
@@ -194,7 +194,7 @@ namespace WebApplication1.BusinessService
             try
             {
                 //declaring an expression that is special to Vote objects
-                System.Linq.Expressions.Expression<Func<Vote, bool>> expr = v => v.Election.Id == ElectionId && v.Voter.Id == VoterId;
+                Expression<Func<Vote, bool>> expr = v => v.Election.Id == ElectionId && v.Voter.Id == VoterId;
 
                 var votes = GetAllFiltered(expr);
                 if (votes.Count() > 0)

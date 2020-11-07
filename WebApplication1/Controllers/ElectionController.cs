@@ -17,6 +17,7 @@ using Microsoft.Extensions.Localization;
 using System.Globalization;
 using System.Text;
 using WebApplication1.BusinessService;
+using System.Linq.Expressions;
 
 namespace WebApplication1.Controllers
 {
@@ -533,7 +534,7 @@ namespace WebApplication1.Controllers
                 //from the selection to avoid the infinite loop
 
                 //declaring an expression that is special to Election objects
-                System.Linq.Expressions.Expression<Func<Candidate, bool>> expr = e => e.Election.Id == Guid.Parse(electionId) && e.isNeutralOpinion !=true;
+                Expression<Func<Candidate, bool>> expr = e => e.Election.Id == Guid.Parse(electionId) && e.isNeutralOpinion !=true;
 
                 var candidates = _candidateBusiness.GetAllFiltered(expr);
                 if (candidates == null)
@@ -677,7 +678,7 @@ namespace WebApplication1.Controllers
                         else
                         {
                             //lets remove a neutral candidate instance from db which is related to this instance of Election
-                            System.Linq.Expressions.Expression<Func<Candidate, bool>> expr = e => e.Election.Id == myElection.Id && e.isNeutralOpinion == true;
+                            Expression<Func<Candidate, bool>> expr = e => e.Election.Id == myElection.Id && e.isNeutralOpinion == true;
                             Candidate myNeutralCandidate = _candidateBusiness.GetOneFiltered(expr);                            
                             int updatedRows4 = _candidateBusiness.Delete(myNeutralCandidate.Id);
                             if (updatedRows4 < 1)
@@ -774,7 +775,7 @@ namespace WebApplication1.Controllers
 
                 //1- Remove all Votes related to this Election
                 //declaring an expression that is special to Vote objects
-                System.Linq.Expressions.Expression<Func<Vote, bool>> expr1 = e => e.Election.Id == id;
+                Expression<Func<Vote, bool>> expr1 = e => e.Election.Id == id;
                 List<Vote> votesList = _voteBusiness.GetAllFiltered(expr1);
                 foreach (var vote in votesList)
                 {                    
@@ -789,7 +790,7 @@ namespace WebApplication1.Controllers
 
                 //2- Remove all Candidates of this Election
                 //declaring an expression that is special to Election objects
-                System.Linq.Expressions.Expression<Func<Candidate, bool>> expr2 = e => e.Election.Id == id;
+                Expression<Func<Candidate, bool>> expr2 = e => e.Election.Id == id;
                 List<Candidate> candidatesList = _candidateBusiness.GetAllFiltered(expr2);
                 foreach (var candidate in candidatesList)
                 {                    
@@ -875,7 +876,7 @@ namespace WebApplication1.Controllers
                 //from the selection to avoid the infinite loop
 
                 //declaring an expression that is special to Election objects
-                System.Linq.Expressions.Expression<Func<Election, bool>> expr = e => e.StartDate > DateTime.Now;
+                Expression<Func<Election, bool>> expr = e => e.StartDate > DateTime.Now;
 
                 var futureElections = _electionBusiness.GetAllFiltered(expr).Select(e => new { e.Name, e.StartDate, e.DurationInDays, e.Candidates.Count});
 
@@ -918,7 +919,7 @@ namespace WebApplication1.Controllers
 
 
                 //declaring an expression that is special to Election objects
-                System.Linq.Expressions.Expression<Func<Election, bool>> expr =
+                Expression<Func<Election, bool>> expr =
                     e => e.StartDate <= DateTime.Now && DateTime.Now <= e.StartDate.AddDays(e.DurationInDays);
 
 
@@ -1051,7 +1052,7 @@ namespace WebApplication1.Controllers
 
 
                 //declaring an expression that is special to Election objects
-                System.Linq.Expressions.Expression<Func<Election, bool>> expr;
+                Expression<Func<Election, bool>> expr;
                 //now lets look for a value in FirstName/LastName/StateName if user asked to
                 if (!string.IsNullOrEmpty(searchValue))
                 {

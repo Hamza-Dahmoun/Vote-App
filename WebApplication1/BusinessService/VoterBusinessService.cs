@@ -232,7 +232,7 @@ namespace WebApplication1.BusinessService
             try
             {
                 //declaring an expression that is special to Voter objects
-                System.Linq.Expressions.Expression<Func<Voter, bool>> expr = v => v.UserId == userId;
+                Expression<Func<Voter, bool>> expr = v => v.UserId == userId;
 
                 return GetOneFiltered(expr);
             }
@@ -550,7 +550,7 @@ namespace WebApplication1.BusinessService
             try
             {
                 //declaring an expression that is special to Vote objects
-                System.Linq.Expressions.Expression<Func<Vote, bool>> expr1 = e => e.VoterId == voterId;
+                Expression<Func<Vote, bool>> expr1 = e => e.VoterId == voterId;
                 //_logger.LogInformation("Calling VoteRepository.GetAllFiltered() method");
                 List<Vote> votesList = _voteRepository.GetAllFiltered(expr1);
 
@@ -586,7 +586,7 @@ namespace WebApplication1.BusinessService
             try
             {
                 //declaring an expression that is special to Vote objects
-                System.Linq.Expressions.Expression<Func<Candidate, bool>> expr2 = e => e.VoterBeingId == voterId;
+                Expression<Func<Candidate, bool>> expr2 = e => e.VoterBeingId == voterId;
                 //_logger.LogInformation("Going to get all Candidates instances of the Voter");
                 List<Candidate> candidatesList = _candidateRepository.GetAllFiltered(expr2);
 
