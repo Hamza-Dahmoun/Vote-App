@@ -379,5 +379,85 @@ namespace WebApplication1.BusinessService
                 throw E;
             }
         }
+
+
+        public PagedResult<Voter> GetVotersByElection_ExcludingAlreadyCandidates_ForDataTable(
+            Guid electionId,
+            string searchValue,
+            string sortColumnName,
+            string sortColumnDirection,
+            int pageSize,
+            int skip)
+        {
+            //This method is called by jQuery datatables to get paged data
+            //First, we'll try to read the variables sent from the jQuery request, and then, based on these variables' values we'll query
+            //the db
+
+            try
+            {
+                //lets first get the list of voterswho are already candidates of this election                
+                List<Voter> alreadyCandidates = GetVoterBeing_ofCandidatesList_byElectionId(electionId);
+                List<Guid> excludedVotersIDs = alreadyCandidates.Select(v => v.Id).ToList();
+
+                Expression<Func<Voter, bool>> expr;
+                //now lets look for a value in FirstName/LastName/StateName if user asked to
+                if (!string.IsNullOrEmpty(searchValue))
+                {
+                    expr =
+                        v => v.FirstName.Contains(searchValue) ||
+                        v.LastName.Contains(searchValue) ||
+                        (v.State != null && v.State.Name.Contains(searchValue))
+                        && !excludedVotersIDs.Contains(v.Id);
+                }
+                else
+                {
+                    //lets send a linq Expression exrpessing that we don't want voters who are already candidates                                        
+                    expr = v => !excludedVotersIDs.Contains(v.Id);
+                }
+
+                //lets get the list of voters filtered and paged
+                PagedResult<Voter> pagedResult = _voterRepository.GetAllFilteredPaged(expr, sortColumnName, sortColumnDirection, skip, pageSize);
+                return pagedResult;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+
+        private List<Voter> GetVoterBeing_ofCandidatesList_byElectionId(Guid electionId)
+        {
+            //this methods returns a list of voters who are considered as candidates for this election except the neutral opinion
+            try
+            {
+                var candidates = GetCandidatesListByElectionId(electionId);
+                List<Voter> voters = new List<Voter>();
+                foreach (var item in candidates)
+                {
+                    if (!item.isNeutralOpinion)
+                        voters.Add(_voterRepository.GetById(item.VoterBeingId));
+                }
+                return voters;
+
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
+        private List<Candidate> GetCandidatesListByElectionId(Guid electionId)
+        {
+            try
+            {
+                //declaring an expression that is special to Candidate objects and it compares the election instance of the candidates 
+                //with 'election' parameter
+                System.Linq.Expressions.Expression<Func<Candidate, bool>> expr = i => i.ElectionId == electionId;
+                return _candidateRepository.GetAllFiltered(expr);
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
     }
 }
