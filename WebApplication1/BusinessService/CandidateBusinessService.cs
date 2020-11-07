@@ -223,8 +223,8 @@ namespace WebApplication1.BusinessService
             {
                 //_logger.LogInformation("Running _candidateBusiness.GetCandidateViewModelList_byOneCandidateID() method");
                 Candidate candid = GetById(candidateId);
-                Election election = _electionRepository.GetById(candid.Election.Id);
-                var candidates = GetCandidate_byElection(election);     
+                //Election election = _electionRepository.GetById(candid.Election.Id);
+                var candidates = GetCandidate_byElectionId(candid.Election.Id);     
                 List<CandidateViewModel> candidatesViewModel = ConvertCandidateList_ToCandidateViewModelList(candidates);
                 return candidatesViewModel;
             }
