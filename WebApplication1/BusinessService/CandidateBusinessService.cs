@@ -450,5 +450,54 @@ namespace WebApplication1.BusinessService
                 throw E;
             }
         }
+
+
+        public Candidate AddNewCandidate(Guid voterId, Guid electionId)
+        {
+            try
+            {
+                if (electionId == null || voterId == null)
+                {
+                    throw new BusinessException(_messagesLocalizer["Properties voterId and electionId can not be null."]);
+                }
+
+                Voter voter = _voterRepository.GetById(voterId);
+                if (voter == null)
+                {
+                    throw new BusinessException(_messagesLocalizer["Voter not found"] + ".");
+                }
+
+                Candidate newCandidate = new Candidate
+                {
+                    Id = Guid.NewGuid(),
+                    VoterBeingId = voter.Id,
+                    ElectionId = electionId,
+                };
+
+                int updatedRows = Add(newCandidate);
+                if (updatedRows >0)
+                {
+                    return newCandidate;
+                }
+                else
+                {
+                    //row not updated in the DB
+                    throw new DataNotUpdatedException(_messagesLocalizer["Data not updated, operation failed."]);
+                }
+            }
+            catch (DataNotUpdatedException E)
+            {
+                throw E;
+            }
+            catch (BusinessException E)
+            {
+                throw E;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+
+        }
     }
 }

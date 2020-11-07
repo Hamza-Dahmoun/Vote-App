@@ -328,48 +328,21 @@ namespace WebApplication1.Controllers
         public async Task<IActionResult> AddCandidate([FromBody] CandidateElectionRelation mydata)
         {
             //this method is called using ajax calls
+            //it is used when editing/creating an election
             //it takes {voterId, electionId} and create new candidate from it and add it to db ... used when creating/editing an old election
             //so if a business rule is not met we'll throw a businessException and catch it to create and internal server error and return its msg
             //as json
-
-
-            //difference from above is that it returns the new candidate ID ... it is used when editing an election (after using jquey datatables)
+            
             try
             {
-                if (mydata.electionId == null || mydata.voterId == null)
+                Candidate newCandidate = _candidateBusiness.AddNewCandidate(mydata.voterId, mydata.electionId);
+                //row updated successfully in the DB
+                //now lets return json data so that it is understandable by jQuery                
+                var json = JsonConvert.SerializeObject(new
                 {
-                    throw new BusinessException(_messagesLoclizer["Properties voterId and electionId can not be null."]);
-                }
-
-                Voter voter = _voterBusiness.GetById(mydata.voterId);
-                if (voter == null)
-                {
-                    throw new BusinessException(_messagesLoclizer["Voter not found"] + ".");
-                }
-
-                Candidate newCandidate = new Candidate
-                {
-                    Id = Guid.NewGuid(),
-                    VoterBeingId = voter.Id,
-                    ElectionId = mydata.electionId,
-                };
-                
-                int updatedRows = _candidateBusiness.Add(newCandidate); 
-                if (updatedRows > 0)
-                {
-                    //row updated successfully in the DB
-                    //now lets return json data so that it is understandable by jQuery                
-                    var json = JsonConvert.SerializeObject(new
-                    {
-                        candidateId = newCandidate.Id
-                    });
-                    return Ok(json);
-                }
-                else
-                {
-                    //row not updated in the DB
-                    throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
-                }
+                    candidateId = newCandidate.Id
+                });
+                return Ok(json);
             }
             catch (DataNotUpdatedException bnu)
             {
