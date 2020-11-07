@@ -690,6 +690,10 @@ namespace WebApplication1.BusinessService
                     return pagedResult;
                 }
             }
+            catch (BusinessException E)
+            {
+                throw E;
+            }
             catch (Exception E)
             {
                 throw E ;

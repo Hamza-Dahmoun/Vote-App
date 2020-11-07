@@ -419,6 +419,10 @@ namespace WebApplication1.BusinessService
                 PagedResult<Voter> pagedResult = _voterRepository.GetAllFilteredPaged(expr, sortColumnName, sortColumnDirection, skip, pageSize);
                 return pagedResult;
             }
+            catch (BusinessException E)
+            {
+                throw E;
+            }
             catch (Exception E)
             {
                 throw E;
