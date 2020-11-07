@@ -369,7 +369,7 @@ namespace WebApplication1.Controllers
         //this is a web api called when user remove a candidate from an election
         [HttpPost]
         [Authorize(Policy = nameof(VoteAppPolicies.ManageElections))]
-        public async Task<IActionResult> RemoveCandidate([FromBody] CandidateElectionRelation mydata)
+        public async Task<IActionResult> RemoveCandidateByElectionAndVoter([FromBody] CandidateElectionRelation mydata)
         {
             //this method is called using ajax calls
             //so if a business rule is not met we'll throw a businessException and catch it to create and internal server error and return its msg

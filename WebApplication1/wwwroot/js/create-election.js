@@ -274,7 +274,7 @@ function removeCandidateFromElection() {
     //Send the JSON data of voterId and electionId to Controller using AJAX.
     $.ajax({
         type: "POST",
-        url: "/Election/RemoveCandidate",
+        url: "/Election/RemoveCandidateByElectionAndVoter",
         data: JSON.stringify({ electionId: electionId, voterId: voterid }),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
