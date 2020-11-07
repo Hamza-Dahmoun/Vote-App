@@ -380,39 +380,10 @@ namespace WebApplication1.Controllers
             //this function removes a candidate from the db using its electionID and its voterBeing ID
             try
             {
-                if (mydata.electionId == null || mydata.voterId == null)
-                {
-                    throw new BusinessException(_messagesLoclizer["Properties voterId and electionId can not be null."]);
-                }
-
-                Voter voter = _voterBusiness.GetById(mydata.voterId);
-                if (voter == null)
-                {
-                    throw new BusinessException(_messagesLoclizer["Corresponding Voter instance not found."]);
-                }
-
-                Election election = _electionBusiness.GetById(mydata.electionId);
-                if (election == null)
-                {
-                    throw new BusinessException(_messagesLoclizer["Election instance not found."]);
-                }
-
-
-                Candidate myCandidate = _candidateBusiness.GetCandidate_byVoter_byElection(voter, election);
-
-                int updatedRows = _candidateBusiness.Delete(myCandidate.Id);
-                if (updatedRows > 0)
-                {
-                    //row updated successfully in the DB
-                    return Json(new { success = true });
-                }
-                else
-                {
-                    //row not updated in the DB
-                    throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
-                }
-
-
+                _candidateBusiness.RemoveCandidateByElectionIdAndVoterId(mydata.electionId, mydata.voterId);
+                
+                //row updated successfully in the DB
+                return Json(new { success = true });
             }
             catch (DataNotUpdatedException bnu)
             {
