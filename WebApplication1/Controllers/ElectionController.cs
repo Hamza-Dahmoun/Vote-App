@@ -208,6 +208,7 @@ namespace WebApplication1.Controllers
         
         [HttpPost]
         //If I leave [FromBody] next to the parameter the request will not even access this method, bcuz jquery already has passed parameters
+        
         public async Task<IActionResult> VotersDataTable(Guid electionId)
         {
             //returns a list of voters 
@@ -282,45 +283,29 @@ namespace WebApplication1.Controllers
 
                 //totalRecords too inform user
                 int totalRecords = 0;
-                                
-                //lets first get the list of voterswho are already candidates of this election
-                //Election election = _electionBusiness.GetById(electionId);
 
-                List<Voter> alreadyCandidates = _candidateBusiness.GetVoterBeing_ofCandidatesList_byElectionId(electionId);
-                List<Guid> excludedVotersIDs = alreadyCandidates.Select(v => v.Id).ToList();
-
-                System.Linq.Expressions.Expression<Func<Voter, bool>> expr;
-                //now lets look for a value in FirstName/LastName/StateName if user asked to
-                if (!string.IsNullOrEmpty(searchValue))
-                {
-                    //declaring an expression that is special to Voter objects according to the search value and the fact that we don't want
-                    //voters who are already candidates
-                    expr =
-                        v => (v.FirstName.Contains(searchValue) ||
-                        v.LastName.Contains(searchValue) ||
-                        v.State.Name.Contains(searchValue))
-                        && !excludedVotersIDs.Contains(v.Id);                    
-                }
-                else
-                {
-                    //lets send a linq Expression exrpessing that we don't want voters who are already candidates                                        
-                    expr = v => !excludedVotersIDs.Contains(v.Id);
-                }
                 //lets get the list of voters filtered and paged
-                PagedResult<Voter> pagedResult = _voterBusiness.GetAllFilteredPaged(expr, sortColumnName, sortColumnDirection, skip, pageSize);
-                
+                PagedResult<Voter> pagedResult = _electionBusiness.GetVotersByElection_ExcludingAlreadyCandidates_ForDataTable(
+                    electionId,
+                    searchValue,
+                    sortColumnName,
+                    sortColumnDirection,
+                    pageSize,
+                    skip);
+
+
                 //lets assign totalRecords the correct value
                 totalRecords = pagedResult.TotalCount;
 
-                    //now lets return json data so that it is understandable by jQuery                
-                    var json = JsonConvert.SerializeObject(new
-                    {
-                        draw = draw,
-                        recordsFiltered = totalRecords,
-                        recordsTotal = totalRecords,
-                        data = _voterBusiness.ConvertVoterList_ToPersonViewModelList(pagedResult.Items)
-                    }) ;
-                    return Ok(json);   
+                //now lets return json data so that it is understandable by jQuery                
+                var json = JsonConvert.SerializeObject(new
+                {
+                    draw = draw,
+                    recordsFiltered = totalRecords,
+                    recordsTotal = totalRecords,
+                    data = _voterBusiness.ConvertVoterList_ToPersonViewModelList(pagedResult.Items)
+                });
+                return Ok(json);
             }
             catch (BusinessException E)
             {
@@ -332,10 +317,9 @@ namespace WebApplication1.Controllers
             {
                 //lets create and return an internal server error so that the response returned is an ERROR, and jQuery ajax will understand that.
                 HttpContext.Response.StatusCode = 500;
-                return Json(new { Message = E.Message});
+                return Json(new { Message = E.Message });
             }
         }
-
 
         //Step(2): Adding one Candidate to the Election each time
 
