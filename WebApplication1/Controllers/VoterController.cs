@@ -484,66 +484,31 @@ namespace WebApplication1.Controllers
                 int totalRecords = 0;
 
 
-                
+                //lets get the list of voters filtered and paged
+                PagedResult<Voter> pagedResult = _voterBusiness.GetVoters_ForDataTable(
+                    searchValue,
+                    sortColumnName,
+                    sortColumnDirection,
+                    pageSize,
+                    skip);
 
-                //now lets look for a value in FirstName/LastName/StateName if user asked to
-                if (!string.IsNullOrEmpty(searchValue))
+                //lets assign totalRecords the correct value
+                totalRecords = pagedResult.TotalCount;
+
+                //now lets return json data so that it is understandable by jQuery   
+                _logger.LogInformation("Going to serialize the response");
+                JsonSerializerSettings settings = new JsonSerializerSettings { DateFormatString = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern };
+                var json = JsonConvert.SerializeObject(new
                 {
-                    _logger.LogInformation("Going to query the DB based on 'searchValue' in VoterRepository.GetAllFilteredPaged()");
-                    //declaring an expression that is special to Voter objects
-                    System.Linq.Expressions.Expression<Func<Voter, bool>> expr =
-                        v => v.FirstName.Contains(searchValue) ||
-                        v.LastName.Contains(searchValue) ||
-                        (v.State != null && v.State.Name.Contains(searchValue));
-
-                    //lets get the list of voters filtered and paged
-                    PagedResult<Voter> pagedResult = _voterBusiness.GetAllFilteredPaged(expr, sortColumnName, sortColumnDirection, skip, pageSize);
-
-                    _logger.LogInformation("pagedResult filled by data from DB GetAllFilteredPaged()");
-
-                    //lets assign totalRecords the correct value
-                    totalRecords = pagedResult.TotalCount;
-
-                    //now lets return json data so that it is understandable by jQuery   
-                    _logger.LogInformation("Going to serialize the response");
-                    JsonSerializerSettings settings = new JsonSerializerSettings { DateFormatString = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern };
-                    var json = JsonConvert.SerializeObject(new
-                    {
-                        draw = draw,
-                        recordsFiltered = totalRecords,
-                        recordsTotal = totalRecords,
-                        data = _voterBusiness.ConvertVoterList_ToPersonViewModelList(pagedResult.Items)
-                    }, settings);
-                    _logger.LogInformation("Return the response as JSON");
-                    return Ok(json);
-
-                }
-                else
-                {
-                    //so user didn't ask for filtering, he only asked for paging
-
-                    //lets get the list of voters paged
-                    _logger.LogInformation("Calling VoterRepository.GetAllPaged() method");
-                    PagedResult<Voter> pagedResult = _voterBusiness.GetAllPaged(sortColumnName, sortColumnDirection, skip, pageSize);
-
-                    //lets assign totalRecords the correct value
-                    totalRecords = pagedResult.TotalCount;
-
-                    //now lets return json data so that it is understandable by jQuery                
-                    _logger.LogInformation("Going to serialize the response");
-                    JsonSerializerSettings settings = new JsonSerializerSettings { DateFormatString = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern };
-                    var json = JsonConvert.SerializeObject(new
-                    {
-                        draw = draw,
-                        recordsFiltered = totalRecords,
-                        recordsTotal = totalRecords,
-                        data = _voterBusiness.ConvertVoterList_ToPersonViewModelList(pagedResult.Items)
-                    }, settings);                    
-                    _logger.LogInformation("Return the response as JSON");
-                    return Ok(json);
-                }
+                    draw = draw,
+                    recordsFiltered = totalRecords,
+                    recordsTotal = totalRecords,
+                    data = _voterBusiness.ConvertVoterList_ToPersonViewModelList(pagedResult.Items)
+                }, settings);
+                _logger.LogInformation("Return the response as JSON");
+                return Ok(json);
             }
-            catch(Exception E)
+            catch (Exception E)
             {
                 _logger.LogError("Exception, " + E.Message);
                 return BadRequest();
