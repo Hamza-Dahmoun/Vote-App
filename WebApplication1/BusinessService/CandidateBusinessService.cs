@@ -549,5 +549,47 @@ namespace WebApplication1.BusinessService
                 throw E;
             }
         }
+
+        public void RemoveCandidateByID(string candidateId)
+        {
+            //this function takes a candidateId and delete the corresponding Candidate from DB
+            try
+            {
+                if (String.IsNullOrEmpty(candidateId))
+                {
+                    throw new BusinessException(_messagesLocalizer["candidateId cannot be null."]);
+                }
+
+                Candidate myCandidate = GetById(Guid.Parse(candidateId));
+                if (myCandidate == null)
+                {
+                    throw new BusinessException(_messagesLocalizer["Candidate not found."]);
+                }
+
+
+                int updatedRows3 = Delete(myCandidate.Id);
+                if (updatedRows3 > 0)
+                {
+                    //do nothing
+                }
+                else
+                {
+                    //row not updated in the DB
+                    throw new DataNotUpdatedException(_messagesLocalizer["Data not updated, operation failed."]);
+                }
+            }
+            catch (DataNotUpdatedException E)
+            {
+                throw E;
+            }
+            catch (BusinessException E)
+            {
+                throw E;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
     }
 }
