@@ -20,6 +20,7 @@ namespace WebApplication1.Models.Repositories
         List<T> GetAllFiltered(Expression<Func<T, bool>> predicate);
         T GetOneFiltered(Expression<Func<T, bool>> predicate);
         int CountAll();
+        int CountAllFiltered(Expression<Func<T, bool>> predicate);
 
         //for jQuery datatables
         PagedResult<T> GetAllPaged(string orderBy, string orderDirection, int startRowIndex = 0, int maxRows = 10);

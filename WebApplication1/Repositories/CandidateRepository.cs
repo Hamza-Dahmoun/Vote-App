@@ -143,6 +143,10 @@ namespace WebApplication1.Models.Repositories
             return count;
         }
 
+        public int CountAllFiltered(Expression<Func<Candidate, bool>> predicate)
+        {
+            throw new NotImplementedException();
+        }
        
     }
 }

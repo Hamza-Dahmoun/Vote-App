@@ -143,5 +143,9 @@ namespace WebApplication1.Models.Repositories
             count = _dbSet.AsNoTracking().Count();
             return count;
         }
+        public int CountAllFiltered(Expression<Func<State, bool>> predicate)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
