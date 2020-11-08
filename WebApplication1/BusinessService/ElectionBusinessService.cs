@@ -467,5 +467,104 @@ namespace WebApplication1.BusinessService
                 throw E;
             }
         }
+
+
+        public void EditElection(TemporaryElection election)
+        {
+            try
+            {
+                //first of all lets check if this election is in future, if it is not then we'll not edit it
+                if (DateTime.Parse(election.StartDate) <= DateTime.Now)
+                {
+                    //so it is not a future election
+                    //so there is a business rule not met, lets throw a businessException and catch it
+                    throw new BusinessException(_messagesLocalizer["A New Election should take place in a future date."]);
+                }
+
+                if (GetElectionsInSamePeriod(DateTime.Parse(election.StartDate), int.Parse(election.DurationInDays)) > 1)
+                {
+                    //so in addtion to the election instance to edit, there are other elections in the db from the same period
+                    //so there is a business rule not met, lets throw a businessException and catch it
+                    throw new BusinessException(_messagesLocalizer["There is an existing Election during the same period."]);
+                }
+                if (int.Parse(election.DurationInDays) < 0 || int.Parse(election.DurationInDays) > 5)
+                {
+                    //so the number of days is invalid
+                    //so there is a business rule not met, lets throw a businessException and catch it
+                    throw new BusinessException(_messagesLocalizer["The duration of the Election should be from one to five days."]);
+                }
+                //this variable is going to be used when checking if user updated hasNeutral opinion
+                bool oldHasNeutral = GetById(Guid.Parse(election.Id)).HasNeutral;
+
+
+                Election myElection = new Election
+                {
+                    Id = Guid.Parse(election.Id),
+                    Name = election.Name,
+                    StartDate = DateTime.Parse(election.StartDate),
+                    DurationInDays = int.Parse(election.DurationInDays),
+                    HasNeutral = bool.Parse(election.HasNeutral)
+                };
+
+                int updatedRows = Edit(myElection.Id, myElection);
+                if (updatedRows < 1)
+                {
+                    //row not updated in the DB
+                    throw new DataNotUpdatedException(_messagesLocalizer["Data not updated, operation failed."]);
+                }
+
+                //if hasNeutral field was updated then we should add/delete neutralCandidate from the db                
+                if (myElection.HasNeutral == oldHasNeutral)
+                {
+                    //user didn't update hasNeutral property, lets proceed editing the Election instance
+                    //so do nothing
+                }
+                else
+                {
+                    //user did updated hasNeutral property
+                    if (myElection.HasNeutral)
+                    {
+                        //lets add a neutral candidate to the db related to this instance of Election
+                        Candidate neutralOpinion = new Candidate
+                        {
+                            Id = Guid.NewGuid(),
+                            isNeutralOpinion = true,
+                            Election = GetById(myElection.Id)
+                        };
+
+                        int updatedCandidateRows = _candidateRepository.Add(neutralOpinion);
+                        if (updatedCandidateRows < 1)
+                        {
+                            //row not updated in the DB
+                            throw new DataNotUpdatedException(_messagesLocalizer["Data not updated, operation failed."]);
+                        }
+                    }
+                    else
+                    {
+                        //lets remove a neutral candidate instance from db which is related to this instance of Election
+                        Expression<Func<Candidate, bool>> expr = e => e.Election.Id == myElection.Id && e.isNeutralOpinion == true;
+                        Candidate myNeutralCandidate = _candidateRepository.GetOneFiltered(expr);
+                        int updatedRows4 = _candidateRepository.Delete(myNeutralCandidate.Id);
+                        if (updatedRows4 < 1)
+                        {
+                            //row not updated in the DB
+                            throw new DataNotUpdatedException(_messagesLocalizer["Data not updated, operation failed."]);
+                        }
+                    }
+                }
+            }
+            catch(DataNotUpdatedException E)
+            {
+                throw E;
+            }
+            catch (BusinessException E)
+            {
+                throw E;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
     }
 }
