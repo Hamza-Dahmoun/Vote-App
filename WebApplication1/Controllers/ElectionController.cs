@@ -729,9 +729,6 @@ namespace WebApplication1.Controllers
 
         //this method is called using jQuery ajax and it returns a list of future elections
         //it is called when displaying the home page
-        //I couldn't move it to ElectionUtilities.cs file bcuz if I did they will need _electionRepository to be passed
-        //as a parameter (Method Dependancy Injection), and we know this method is called using jQuery ajax, there is no way to pass
-        //_repositoryElection as a paramter from frontend (jQuery ajax)
         //since it is used in dashboard, all authenticated users can use it
         [Authorize]
         [HttpPost]
@@ -776,9 +773,6 @@ namespace WebApplication1.Controllers
 
         //this method is called using jQuery ajax and it returns the current election
         //it is called when displaying the home page
-        //I couldn't move it to ElectionUtilities.cs file bcuz if I did they will need _electionRepository to be passed
-        //as a parameter (Method Dependancy Injection), and we know this method is called using jQuery ajax, there is no way to pass
-        //_repositoryElection as a paramter from frontend (jQuery ajax)
         //since it is used in dashboard, all authenticated users can use it
         [Authorize]
         [HttpPost]

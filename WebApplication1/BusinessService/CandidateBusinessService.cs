@@ -369,7 +369,7 @@ namespace WebApplication1.BusinessService
         public List<VoterCandidateEntityViewModel> ConvertCandidateList_ToVoterCandidateEntityViewModelList(
             List<VoterCandidateEntityViewModel> myList,
             List<Candidate> candidateList)
-        {//the parameter voterRepository is passed to be used in a Method Dependancy Injection in VoterUtilities.getStateName() method
+        {
             try
             {
                 foreach (var item in candidateList)
