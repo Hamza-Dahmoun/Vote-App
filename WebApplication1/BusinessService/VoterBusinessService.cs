@@ -27,7 +27,7 @@ namespace WebApplication1.BusinessService
         private readonly IStringLocalizer<Messages> _messagesLocalizer;
         private readonly IRepository<Candidate> _candidateRepository;
         private readonly IRepository<Voter> _voterRepository;
-        private readonly IRepository<Election> _electionRepository;
+        private readonly UserBusinessService _userBusiness;
         //private readonly ILogger _logger;
 
         public VoterBusinessService(IRepository<Vote> voteRepository,
@@ -36,7 +36,7 @@ namespace WebApplication1.BusinessService
             IStringLocalizer<Messages> messagesLocalizer,
             IRepository<Candidate> candidateRepository,
             IRepository<Voter> voterRepository,
-            IRepository<Election> electionRepository
+            UserBusinessService userBusiness
             //ILogger logger
             )
         {
@@ -46,7 +46,7 @@ namespace WebApplication1.BusinessService
             _messagesLocalizer = messagesLocalizer;
             _candidateRepository = candidateRepository;
             _voterRepository = voterRepository;
-            _electionRepository = electionRepository;
+            _userBusiness  = userBusiness;
             //_logger = logger;
         }
 
@@ -452,39 +452,8 @@ namespace WebApplication1.BusinessService
             {                
                 //we'll set its usernam/email, and set 'Pa$$w0rd' as the password
                 string username = v.FirstName.ToLower() + "." + v.LastName.ToLower();
-
-                //_logger.LogInformation("Creating a new IdentityUser instance");
-                var user = new IdentityUser { UserName = username };
-
-                //CreateAsync() is an asynchronous method, we have to mark this method with 'async task'
-                //_logger.LogInformation("Storing the new IdentityUser instance in IdentityDB");
-                var result = await _userManager.CreateAsync(user, "Pa$$w0rd");//this password will be automatically hashed
-
-                if (result.Succeeded)
-                {
-                    //_logger.LogInformation("The new IdentityUser instance stored successfully in IdentityDB");
-
-                    //_logger.LogInformation("Adding 'PreVoter' role to the new IdentityUser");
-                    var result1 = await _userManager.AddToRoleAsync(user, "PreVoter");
-
-                    if (result1.Succeeded)
-                    {
-                        //_logger.LogInformation("'PreVoter' role to the new IdentityUser is added successfully");
-
-                        //the user has been stored successully lets return its ID
-                        return Guid.Parse(user.Id);
-                    }
-                    else
-                    {
-                        //row not updated in the DB
-                        throw new DataNotUpdatedException(_messagesLocalizer["Data not updated, operation failed."]);
-                    }
-                }
-                else
-                {
-                    //row not updated in the DB
-                    throw new DataNotUpdatedException(_messagesLocalizer["Data not updated, operation failed."]);
-                }
+                return await _userBusiness.AddNewUser(username);
+                
             }
             catch(BusinessException E)
             {
