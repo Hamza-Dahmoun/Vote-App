@@ -34,14 +34,14 @@ namespace WebApplication1.Controllers
         private readonly ElectionBusinessService _electionBusiness;
         private readonly CandidateBusinessService _candidateBusiness;
         //this is only used to get the currentUser so that we check whether he voted or not in order to generate the dashboard
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserBusinessService _userBusiness;
         //Lets create a private readonly field IStringLocalizer<Messages> so that we can use Localization service, we'll inject it inside the constructor
         private readonly IStringLocalizer<Messages> _messagesLoclizer;
         private readonly VoteBusinessService _voteBusiness;
         //Lets inject the services using the constructor, this is called Constructor Dependency Injection
         public ElectionController(
             VoteBusinessService voteBusiness,
-            UserManager<IdentityUser> userManager,
+            UserBusinessService userBusiness,
             IStringLocalizer<Messages> messagesLoclizer,
             VoterBusinessService voterBusiness,
             CandidateBusinessService candidateBusiness,
@@ -51,7 +51,7 @@ namespace WebApplication1.Controllers
             _voteBusiness = voteBusiness;
             _candidateBusiness = candidateBusiness;
             _electionBusiness = electionBusiness;
-            _userManager = userManager;
+            _userBusiness = userBusiness;
             _messagesLoclizer = messagesLoclizer;
         }
 
@@ -794,10 +794,10 @@ namespace WebApplication1.Controllers
                     a.DurationInDays = currentElection.DurationInDays;
                     a.CandidatesCount = currentElection.Candidates.Count;
 
-                    var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+                    var currentUser = await _userBusiness.GetCurrentUser();
 
                     bool userHasVoted = false;
-                    if (!await _userManager.IsInRoleAsync(currentUser, "Voter"))
+                    if (!await _userBusiness.IsUserInRole(currentUser, "Voter"))
                     {
                         userHasVoted = false;
                     }

@@ -108,7 +108,7 @@ namespace WebApplication1.BusinessService
         {
             return await _userManager.IsInRoleAsync(user, role);
         }
-        public async Task<string> GeneratePasswordForUser(IdentityUser user)
+        public async Task<string> GeneratePasswordResetTokenForUser(IdentityUser user)
         {
             return await _userManager.GeneratePasswordResetTokenAsync(user);
         }

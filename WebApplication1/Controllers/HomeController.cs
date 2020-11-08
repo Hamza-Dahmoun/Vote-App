@@ -37,7 +37,7 @@ namespace WebApplication1.Controllers
 
         //the below are services we're going to use in this controller, they will be injected in the constructor
         //this is only used to get able to generate a 'code' needed to reset the password, and to get the currentUser ID
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserBusinessService _userBusiness;
         //Creting  private readonly field of type IMemoryCach
         private readonly IMemoryCache _memoryCache;
         private readonly ElectionBusinessService _electionBusiness;
@@ -49,7 +49,7 @@ namespace WebApplication1.Controllers
             IMemoryCache memoryCache,
             ILogger<HomeController> logger,
             IRepository<Election> electionRepository,
-            UserManager<IdentityUser> userManager,
+            UserBusinessService userBusiness,
             IStringLocalizer<Messages> messagesLoclizer,
             ElectionBusinessService electionBusiness,
             DashboardBusinessService dashboardBusiness,
@@ -57,7 +57,7 @@ namespace WebApplication1.Controllers
         {
             _logger = logger;
             _electionBusiness = electionBusiness;
-            _userManager = userManager;
+            _userBusiness = userBusiness;
             _memoryCache = memoryCache;
             _messagesLoclizer = messagesLoclizer;
             _dashboardBusiness = dashboardBusiness;
@@ -73,7 +73,7 @@ namespace WebApplication1.Controllers
                 {
                     _logger.LogInformation("Going to load the Dashbord");
                     //the user has a voter Role, lets display the dashboard
-                    var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+                    var currentUser = await _userBusiness.GetCurrentUser();
 
 
                     _logger.LogInformation("Calling DashboardBusiness.GetDashboard() method");
@@ -109,8 +109,8 @@ namespace WebApplication1.Controllers
                     //    Once he change his password he will be provided the role 'Voter' 
 
                     _logger.LogInformation("Redirecting User to reset his password before using the application");
-                    var user = await _userManager.GetUserAsync(HttpContext.User);
-                    var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                    var user = await _userBusiness.GetCurrentUser();
+                    var code = await _userBusiness.GeneratePasswordResetTokenForUser(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     return RedirectToPage("/Account/ResetPassword", new { area = "Identity", code }); //this returns 'code must be supplied o reset password'
                 }

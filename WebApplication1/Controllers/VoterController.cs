@@ -33,7 +33,6 @@ namespace WebApplication1.Controllers
         //the below are services we're going to use in this controller, they will be injected in the constructor
 
         //the below service is used to store a new user for each new voter
-        private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<VoterController> _logger;
 
         private readonly VoterBusinessService _voterBusiness;
@@ -57,7 +56,6 @@ namespace WebApplication1.Controllers
             _voteBusiness = voteBusiness;
             _voterBusiness = voterBusiness;
             _candidateBusiness = candidateBusiness;
-            _userManager = userManager;
             _logger = logger;
             _messagesLoclizer = messagesLoclizer;
             _stateBusiness = stateBusiness;

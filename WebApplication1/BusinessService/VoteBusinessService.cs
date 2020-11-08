@@ -21,8 +21,7 @@ namespace WebApplication1.BusinessService
         //the below are services we're going to use in this file, they will be injected in the constructor
         private readonly IRepository<Vote> _voteRepository;
         //this is used to get the currentUser
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly IHttpContextAccessor _contextAccessor;
+        private readonly UserBusinessService _userBusiness;
         private readonly IRepository<Candidate> _candidateRepository;
         private readonly IRepository<Voter> _voterRepository;
         private readonly IRepository<Election> _electionRepository;
@@ -31,23 +30,21 @@ namespace WebApplication1.BusinessService
         private readonly IStringLocalizer<Messages> _messagesLocalizer;
 
         public VoteBusinessService(IRepository<Vote> voteRepository,
-            UserManager<IdentityUser> userManager,
-            IHttpContextAccessor contextAccessor,
             IStringLocalizer<Messages> messagesLocalizer,
             IRepository<Candidate> candidateRepository,
             IRepository<Voter> voterRepository,
-            IRepository<Election> electionRepository
+            IRepository<Election> electionRepository,
+            UserBusinessService userBusiness
             //ILogger logger
             )
         {
             _voteRepository = voteRepository;
-            _userManager = userManager;
-            _contextAccessor = contextAccessor;
             _candidateRepository = candidateRepository;
             _voterRepository = voterRepository;
             _electionRepository = electionRepository;
             //_logger = logger;
             _messagesLocalizer = messagesLocalizer;
+            _userBusiness = userBusiness;
         }
 
 
@@ -73,7 +70,7 @@ namespace WebApplication1.BusinessService
                 }
 
                 //lets get the voter instance of the current user, so that we use its id with his votes
-                var currentUser = await _userManager.GetUserAsync(_contextAccessor.HttpContext.User);
+                var currentUser = await _userBusiness.GetCurrentUser();
 
                 //declaring an expression that is special to Voter objects
                 Expression<Func<Voter, bool>> expr = v => v.UserId == Guid.Parse(currentUser.Id);
