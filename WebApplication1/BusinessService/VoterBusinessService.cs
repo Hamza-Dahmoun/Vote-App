@@ -21,8 +21,6 @@ namespace WebApplication1.BusinessService
         //the below are services we're going to use in this file, they will be injected in the constructor
         private readonly IRepository<Vote> _voteRepository;
         //this is used to get the currentUser
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly IHttpContextAccessor _contextAccessor;
         //Lets create a private readonly field IStringLocalizer<Messages> so that we can use Localization service, we'll inject it inside the constructor
         private readonly IStringLocalizer<Messages> _messagesLocalizer;
         private readonly IRepository<Candidate> _candidateRepository;
@@ -31,8 +29,6 @@ namespace WebApplication1.BusinessService
         //private readonly ILogger _logger;
 
         public VoterBusinessService(IRepository<Vote> voteRepository,
-            UserManager<IdentityUser> userManager,
-            IHttpContextAccessor contextAccessor,
             IStringLocalizer<Messages> messagesLocalizer,
             IRepository<Candidate> candidateRepository,
             IRepository<Voter> voterRepository,
@@ -41,8 +37,6 @@ namespace WebApplication1.BusinessService
             )
         {
             _voteRepository = voteRepository;
-            _userManager = userManager;
-            _contextAccessor = contextAccessor;
             _messagesLocalizer = messagesLocalizer;
             _candidateRepository = candidateRepository;
             _voterRepository = voterRepository;

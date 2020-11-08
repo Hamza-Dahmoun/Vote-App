@@ -14,9 +14,6 @@ namespace WebApplication1.BusinessService
         private readonly VoterBusinessService _voterBusiness;
         private readonly VoteBusinessService _voteBusiness;
         private readonly ElectionBusinessService _electionBusiness;
-        //this is used to get the currentUser
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly IHttpContextAccessor _contextAccessor;
 
         public DashboardBusinessService(CandidateBusinessService candidateBusiness,
             VoterBusinessService voterBusiness,
