@@ -63,5 +63,41 @@ namespace WebApplication1.BusinessService
                 throw E;
             }            
         }
+
+        public async Task DeleteUser(string userId)
+        {
+            //this function takes a voter Id and delete his user accound from IdentityDB
+            try
+            {
+                //lets get the User by his ID
+                //_logger.LogInformation("Going to get the corresponding IdentityUser of the Voter instance");
+                var voterUserAccount = await _userManager.FindByIdAsync(userId);
+
+                //DeleteAsync() is an asynchronous method, we have to mark this method with 'async task'
+                //_logger.LogInformation("Going to delete the corresponding IdentityUser of the Voter instance");
+                var result = await _userManager.DeleteAsync(voterUserAccount);
+                if (result.Succeeded)
+                {
+                    //_logger.LogInformation("done deleting the corresponding IdentityUser of the Voter instance");                                        
+                }
+                else
+                {
+                    //row not updated in the DB
+                    throw new DataNotUpdatedException(_messagesLocalizer["Data not updated, operation failed."]);
+                }
+            }
+            catch (DataNotUpdatedException E)
+            {
+                throw E;
+            }
+            catch (BusinessException E)
+            {
+                throw E;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
     }
 }
