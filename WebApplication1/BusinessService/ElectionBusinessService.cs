@@ -566,5 +566,69 @@ namespace WebApplication1.BusinessService
                 throw E;
             }
         }
+
+        public void DeleteElection(Guid electionId)
+        {
+            //removing an election means removing all votes and candidates of it
+            try
+            {
+                if (electionId == null)
+                {
+                    throw new BusinessException(_messagesLocalizer["Passed parameter 'id' can not be null"]);
+                }
+
+                //1- Remove all Votes related to this Election
+                //declaring an expression that is special to Vote objects
+                Expression<Func<Vote, bool>> expr1 = e => e.ElectionId == electionId;
+                List<Vote> votesList = _voteRepository.GetAllFiltered(expr1);
+                foreach (var vote in votesList)
+                {
+                    int updatedRows5 = _voteRepository.Delete(vote.Id);
+                    if (updatedRows5 < 1)
+                    {
+                        //row not updated in the DB
+                        throw new DataNotUpdatedException(_messagesLocalizer["Data not updated, operation failed."]);
+                    }
+                }
+
+                //2- Remove all Candidates of this Election
+                //declaring an expression that is special to Election objects
+                Expression<Func<Candidate, bool>> expr2 = e => e.Election.Id == electionId;
+                List<Candidate> candidatesList = _candidateRepository.GetAllFiltered(expr2);
+                foreach (var candidate in candidatesList)
+                {
+                    int updatedRows6 = _candidateRepository.Delete(candidate.Id);
+                    if (updatedRows6 < 1)
+                    {
+                        //row not updated in the DB
+                        throw new DataNotUpdatedException(_messagesLocalizer["Data not updated, operation failed."]);
+                    }
+                }
+
+                //3- Now remove the Election from the db                
+                int updatedRows = _electionRepository.Delete(electionId);
+                if (updatedRows > 0)
+                {
+                    //do nothing
+                }
+                else
+                {
+                    //row not updated in the DB
+                    throw new DataNotUpdatedException(_messagesLocalizer["Data not updated, operation failed."]);
+                }
+            }
+            catch (DataNotUpdatedException E)
+            {
+                throw E;
+            }
+            catch (BusinessException E)
+            {
+                throw E;
+            }
+            catch (Exception E)
+            {
+                throw E;
+            }
+        }
     }
 }
