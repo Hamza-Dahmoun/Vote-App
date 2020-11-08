@@ -149,7 +149,7 @@ namespace WebApplication1.BusinessService
 
 
 
-        public Candidate GetOneFiltered(Expression<Func<Candidate, bool>> predicate)
+        private Candidate GetOneFiltered(Expression<Func<Candidate, bool>> predicate)
         {
             try
             {
@@ -177,7 +177,7 @@ namespace WebApplication1.BusinessService
 
 
 
-        public Candidate GetCandidate_byVoter_byElection(Voter voter, Election election)
+        private Candidate GetCandidate_byVoter_byElection(Voter voter, Election election)
         {
             //this method gets a candidate by its voterId and its ElectionId
 
@@ -210,7 +210,7 @@ namespace WebApplication1.BusinessService
             }
         }
 
-        public List<Candidate> GetCandidate_byElectionId(Guid electionId)
+        private List<Candidate> GetCandidate_byElectionId(Guid electionId)
         {
             try
             {

@@ -186,7 +186,7 @@ namespace WebApplication1.BusinessService
 
         
 
-        public int Edit(Guid Id, Election election)
+        private int Edit(Guid Id, Election election)
         {
             try
             {
@@ -228,7 +228,7 @@ namespace WebApplication1.BusinessService
             }
         }
 
-        public int GetElectionsInSamePeriod(DateTime startDate, int durationInDays)
+        private int GetElectionsInSamePeriod(DateTime startDate, int durationInDays)
         {
             //this method returns elections from db that are happening in the period between 'startDate' and 'durationInDays'
             //this method is used when adding a new Election, there should be no elections in the same period

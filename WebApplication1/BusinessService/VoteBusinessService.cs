@@ -146,7 +146,7 @@ namespace WebApplication1.BusinessService
             }
         }
 
-        public List<Vote> GetAllFiltered(Expression<Func<Vote, bool>> predicate)
+        private List<Vote> GetAllFiltered(Expression<Func<Vote, bool>> predicate)
         {
             try
             {
