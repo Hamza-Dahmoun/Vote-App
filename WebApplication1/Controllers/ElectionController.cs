@@ -688,54 +688,8 @@ namespace WebApplication1.Controllers
             //removing an election means removing all votes and candidates of it
             try
             {
-                
-                if (id == null)
-                {
-                    throw new BusinessException(_messagesLoclizer["Passed parameter 'id' can not be null"]);
-                }
-
-                //1- Remove all Votes related to this Election
-                //declaring an expression that is special to Vote objects
-                Expression<Func<Vote, bool>> expr1 = e => e.Election.Id == id;
-                List<Vote> votesList = _voteBusiness.GetAllFiltered(expr1);
-                foreach (var vote in votesList)
-                {                    
-                    int updatedRows5 = _voteBusiness.Delete(vote.Id);
-                    if (updatedRows5 < 1)
-                    {
-                        //row not updated in the DB
-                        throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
-                    }
-                }
-
-
-                //2- Remove all Candidates of this Election
-                //declaring an expression that is special to Election objects
-                Expression<Func<Candidate, bool>> expr2 = e => e.Election.Id == id;
-                List<Candidate> candidatesList = _candidateBusiness.GetAllFiltered(expr2);
-                foreach (var candidate in candidatesList)
-                {                    
-                    int updatedRows6 = _candidateBusiness.Delete(candidate.Id);
-                    if (updatedRows6 < 1)
-                    {
-                        //row not updated in the DB
-                        throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
-                    }
-                }
-
-
-                //3- Now remove the Election from the db                
-                int updatedRows = _electionBusiness.Delete(id);
-                if (updatedRows > 0)
-                {
-                    //row updated successfully in the DB
-                    return RedirectToAction(nameof(Index));
-                }
-                else
-                {
-                    //row not updated in the DB
-                    throw new DataNotUpdatedException(_messagesLoclizer["Data not updated, operation failed."]);
-                }                
+                _electionBusiness.DeleteElection(id);
+                return RedirectToAction(nameof(Index));              
             }
             catch (DataNotUpdatedException bnu)
             {
