@@ -104,5 +104,9 @@ namespace WebApplication1.BusinessService
         {
             return await _userManager.GetUserAsync(_contextAccessor.HttpContext.User);
         }
+        public async Task<bool> IsUserInRole(IdentityUser user, string role)
+        {
+            return await _userManager.IsInRoleAsync(user, role);
+        }
     }
 }
