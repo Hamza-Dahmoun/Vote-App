@@ -59,6 +59,8 @@ namespace WebApplication1
             services.AddTransient<ElectionBusinessService>();
             //Lets register the  DashboardBusiness so that it could be used whenever needed
             services.AddTransient<DashboardBusinessService>();
+            //Lets register the  UserBusinessService so that it could be used whenever needed
+            services.AddTransient<UserBusinessService>();
 
 
             //1- in IdentityHostingStartup.cs file:
