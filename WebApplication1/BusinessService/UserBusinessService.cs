@@ -99,5 +99,10 @@ namespace WebApplication1.BusinessService
                 throw E;
             }
         }
+
+        public async Task<IdentityUser> GetCurrentUser()
+        {
+            return await _userManager.GetUserAsync(_contextAccessor.HttpContext.User);
+        }
     }
 }
