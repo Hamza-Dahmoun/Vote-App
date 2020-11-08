@@ -36,9 +36,6 @@ namespace WebApplication1.Controllers
         private readonly IStringLocalizer<Messages> _messagesLoclizer;
 
         //the below are services we're going to use in this controller, they will be injected in the constructor
-        public IRepository<Voter> _voterRepository { get; }
-        public IRepository<Vote> _voteRepository { get; }
-        public IRepository<Election> _electionRepository { get; }
         //this is only used to get able to generate a 'code' needed to reset the password, and to get the currentUser ID
         private readonly UserManager<IdentityUser> _userManager;
         //Creting  private readonly field of type IMemoryCach
@@ -51,8 +48,6 @@ namespace WebApplication1.Controllers
         public HomeController(
             IMemoryCache memoryCache,
             ILogger<HomeController> logger,
-            IRepository<Voter> voterRepository,
-            IRepository<Vote> voteRepository,
             IRepository<Election> electionRepository,
             UserManager<IdentityUser> userManager,
             IStringLocalizer<Messages> messagesLoclizer,
@@ -61,9 +56,6 @@ namespace WebApplication1.Controllers
             CandidateBusinessService candidateBusiness)
         {
             _logger = logger;
-            _voterRepository = voterRepository;
-            _voteRepository = voteRepository;
-            _electionRepository = electionRepository;
             _electionBusiness = electionBusiness;
             _userManager = userManager;
             _memoryCache = memoryCache;

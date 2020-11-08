@@ -21,12 +21,10 @@ namespace WebApplication1.Controllers
     public class CandidateController : Controller
     {
         //the below are services we're going to use in this controller, they will be injected in the constructor
-        public IRepository<Candidate> _candidateRepository { get; }
         private readonly VoterBusinessService _voterBusiness;
         //Lets inject the services using the constructor, this is called Constructor Dependency Injection
-        public CandidateController(IRepository<Candidate> candidateRepository, VoterBusinessService voterBusiness)
+        public CandidateController(VoterBusinessService voterBusiness)
         {
-            _candidateRepository = candidateRepository;
             _voterBusiness = voterBusiness;
         }
 
