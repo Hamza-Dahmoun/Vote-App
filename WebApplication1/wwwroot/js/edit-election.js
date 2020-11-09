@@ -387,4 +387,8 @@ function displayNewCandidate(candidateFullName, candidateId) {
 
     let candidatesArea = document.getElementById("candidates-container");
     candidatesArea.appendChild(oneContainerWrapper);
+
+
+    //lets now display 'Finish' button
+    document.getElementById("finish-election-container").querySelector("a").style.display = "block";
 }

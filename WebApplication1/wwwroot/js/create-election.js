@@ -263,6 +263,9 @@ function displayAddedCandidate(candidateFullName, voterid) {
 
     let candidatesArea = document.getElementById("candidates-container");
     candidatesArea.appendChild(oneContainerWrapper);
+
+    //lets now display 'Finish' button
+    document.getElementById("finish-election-container").querySelector("a").style.display = "block";
 }
 function removeCandidateFromElection() {
     //this function removes a candidate from the newly created election (from db and from ui)

@@ -1,0 +1,41 @@
+﻿<style>
+    #finish-election-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        margin-bottom: 1%;
+        margin-top: 1%;
+    }
+
+        #finish-election-container a {
+            height: 35px;
+            line-height: 35px;
+            color: #fff;
+            background-color: #3262ec;
+            border: 1px solid #3262ec;
+            border-radius: 3px;
+            transition-duration: 0.5s;
+            padding-left: 10px;
+            padding-right: 10px;
+            text-decoration: none;
+            display:none;
+        }
+
+            #finish-election-container a:hover {
+                transition-duration: 0.5s;
+                cursor: pointer;
+                color: #3262ec;
+                background-color: transparent;
+            }
+</style>
+
+@{ /*Importing namespace Microsoft.Extensions.Localization; */}
+@using Microsoft.Extensions.Localization;
+
+@{/*Injecting IStringLocalizer for Labelsc.s shared resource in variable named labelsLocalizer */}
+@inject IStringLocalizer<Labels> btnLocalizer
+
+
+<div id="finish-election-container">
+    <a asp-controller="Election" asp-action="Index">@btnLocalizer["Finish"]</a>
+</div>

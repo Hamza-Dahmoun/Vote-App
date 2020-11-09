@@ -54,11 +54,11 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="StartDate" class="control-label"></label>
-                    <input type="date" asp-for="StartDate" class="form-control changeable" id="start-date-election" required />               
+                    <input type="date" asp-for="StartDate" class="form-control changeable" id="start-date-election" required />
                 </div>
                 <div class="form-group">
                     <label asp-for="DurationInDays" class="control-label"></label>
-                    <input type="number" asp-for="DurationInDays" class="form-control changeable" id="duration-in-days" min="1" max="5" required />                   
+                    <input type="number" asp-for="DurationInDays" class="form-control changeable" id="duration-in-days" min="1" max="5" required />
                 </div>
                 <div class="form-group">
                     <label asp-for="HasNeutral" class="control-label"></label>
@@ -90,7 +90,8 @@
 
         </div>
     </div>
-
+    
+    <partial name="_finishElectionButton" />
 
     <div id="step-two">
         <table class="table" id="voters-table">
