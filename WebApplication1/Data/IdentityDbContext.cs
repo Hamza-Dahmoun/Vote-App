@@ -33,27 +33,45 @@ namespace WebApplication1.Data
             var hasher = new PasswordHasher<IdentityUser>();
 
 
-            //Seeding the User to AspNetUsers table
+            //Seeding an admin user to AspNetUsers table
             modelBuilder.Entity<IdentityUser>().HasData(
                 new IdentityUser
                 {
-                    Id = "8e445865-a24d-4543-a6c6-9443d048cdb9", // primary key
-                    UserName = "myuser",
-                    NormalizedUserName = "MYUSER",
+                    Id = "1788cddf-09e3-4ea6-ab17-133cf5b57310", // primary key
+                    UserName = "myadmin",
+                    NormalizedUserName = "MYADMIN",
                     PasswordHash = hasher.HashPassword(null, "Pa$$w0rd")
                 }
             );
-
-
-            //Seeding the relation between our user and role to AspNetUserRoles table
+            //Seeding the relation between our user and Admin role to AspNetUserRoles table
             modelBuilder.Entity<IdentityUserRole<string>>().HasData(
                 new IdentityUserRole<string>
                 {
                     RoleId = "2c5e174e-3b0e-446f-86af-483d56fd7210", 
-                    UserId = "8e445865-a24d-4543-a6c6-9443d048cdb9"
+                    UserId = "1788cddf-09e3-4ea6-ab17-133cf5b57310"
                 }
             );
-            
+
+
+            //Seeding an admin user to AspNetUsers table
+            modelBuilder.Entity<IdentityUser>().HasData(
+                new IdentityUser
+                {
+                    Id = "f304d35f-a3bd-4b63-bba3-3411331edc34", // primary key
+                    UserName = "myvoter",
+                    NormalizedUserName = "MYVOTER",
+                    PasswordHash = hasher.HashPassword(null, "Pa$$w0rd")
+                }
+            );
+            //Seeding the relation between our user and Voter role to AspNetUserRoles table
+            modelBuilder.Entity<IdentityUserRole<string>>().HasData(
+                new IdentityUserRole<string>
+                {
+                    RoleId = "2618884a-2189-48b5-a1ee-0077dcf92239",
+                    UserId = "f304d35f-a3bd-4b63-bba3-3411331edc34"
+                }
+            );
+
 
         }
     }
