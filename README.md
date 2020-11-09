@@ -28,10 +28,17 @@ update-database -context VoteDBContext
 update-database -context IdentityDBContext
 
 
-Once done, you can use the app using the below user:
+Once done, you can use the app using the below users:
 
+- Admin Role: 
 
-username: myuser 
+username: myadmin
+
+password: Pa$$w0rd
+
+- Voter Role:
+
+username: myvoter 
 
 password: Pa$$w0rd
 
