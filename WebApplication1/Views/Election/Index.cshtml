@@ -53,7 +53,7 @@
                     @Html.DisplayFor(model => item.Name)
                 </th>
                 <th>
-                    @Html.DisplayFor(model => item.StartDate)
+                    @item.StartDate.ToShortDateString()                    
                 </th>
                 <th>
                     @Html.DisplayFor(model => item.DurationInDays)
