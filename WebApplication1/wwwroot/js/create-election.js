@@ -256,8 +256,13 @@ function displayAddedCandidate(candidateFullName, voterid) {
     div.appendChild(spinner);
     div.appendChild(closeButton);
 
+    //the below div is used to add vertical space between candidate-one-container
+    let oneContainerWrapper = document.createElement("div");
+    oneContainerWrapper.style.padding = "5px";
+    oneContainerWrapper.appendChild(div);
+
     let candidatesArea = document.getElementById("candidates-container");
-    candidatesArea.appendChild(div);
+    candidatesArea.appendChild(oneContainerWrapper);
 }
 function removeCandidateFromElection() {
     //this function removes a candidate from the newly created election (from db and from ui)
@@ -293,7 +298,7 @@ function removeCandidateFromElection() {
             //now lets remove the concerned candidate from the Candidates area
             console.log("i just removed the candidate from DB:");
             console.log(removeButton);
-            removeAddedCandidateFromUI(removeButton);
+            removeAddedCandidateFromUI(removeButton.parentElement);
             //Now lets refresh jquery datatables.. this is speial to iquery datatables
             $("#voters-table").DataTable().ajax.reload();            
         }
@@ -303,6 +308,11 @@ function removeAddedCandidateFromUI(element) {
     console.log("I'm going to remove candidate from UI:")
     console.log(element);
     //this function removes the candidate conntainer which the user has just removed from the election
-    let candidateContainer = element.parentElement; //event.target.parentElement();
-    document.getElementById("candidates-container").removeChild(candidateContainer);
+    element.classList.add("hiding-container");
+    let candidateWrapper = element.parentElement;
+    //now lets wait for the animation of hiding the container to complete, then remove the elt from dom
+    setTimeout(function () {
+        document.getElementById("candidates-container").removeChild(candidateWrapper);
+    }, 500);
+    console.log("done removing a candidate from UI");
 }
